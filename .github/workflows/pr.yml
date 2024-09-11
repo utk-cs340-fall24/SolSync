@@ -30,7 +30,7 @@ jobs:
         env:
           TITLE: ${{ github.event.pull_request.title }}
         run: |
-          if ! [[ $TITLE =~ ^(build|chore|ci|docs|feat|fix|perf|refactor|revert|style|test)(\(.*\))?: .*$ ]]; then
+          if [[ ! $TITLE =~ ^(build|chore|ci|docs|feat|fix|perf|refactor|revert|style|test)(\(.*\))?: .*$ ]]; then
             echo "PR title does not follow conventional commits format"
             echo "Prefix your PR title with a descriptor such as 'feat:' and then summarize your change"
             echo "See the following link for more information: https://www.conventionalcommits.org/en/v1.0.0/"
