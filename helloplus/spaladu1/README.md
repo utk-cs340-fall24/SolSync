@@ -1,10 +1,10 @@
-# spaladu1 - HelloPlus 
+# spaladu1 - HelloPlus
 
 ## Explanation
 
 This program is a basic React Native app used to display the capabilities of React Native.
 
-It displays the intro screen of the application including the name of the app, login and habits tabs.
+It displays the home screen of the application which includes the name of the app, the Login screen, and the Habits screen.
 
 ## Use of Tech In Real Project
 
