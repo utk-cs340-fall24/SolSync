@@ -40,17 +40,12 @@ jobs:
       - name: Install dependencies
         run: pnpm install
 
-      - name: Run linter
+      - name: Enforce linting rules
         run: pnpm run lint
 
-      - name: Run prettier
-        run: pnpm run format
+      - name: Enforce formatting rules
+        run: pnpm run check-format
 
-      - name: Commit changes (if any)
-        uses: stefanzweifel/git-auto-commit-action@v4
-        with:
-          commit_message: "style: Run formatter"
-          branch: ${{ github.head_ref }}
       - name: Check that PR title follows conventional commits using commitlint using regex
         env:
           TITLE: ${{ github.event.pull_request.title }}

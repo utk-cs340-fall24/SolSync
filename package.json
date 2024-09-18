@@ -8,6 +8,7 @@
     "ios": "expo start --ios",
     "web": "expo start --web",
     "lint": "eslint src App.tsx",
+    "check-format": "prettier --check src App.tsx",
     "format": "prettier --write src App.tsx"
   },
   "dependencies": {
