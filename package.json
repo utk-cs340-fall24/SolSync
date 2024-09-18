@@ -7,7 +7,8 @@
     "android": "expo start --android",
     "ios": "expo start --ios",
     "web": "expo start --web",
-    "lint": "eslint App.tsx src"
+    "lint": "eslint src App.tsx",
+    "format": "prettier --write src App.tsx"
   },
   "dependencies": {
     "@react-navigation/bottom-tabs": "^6.6.1",

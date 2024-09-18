@@ -1,8 +1,13 @@
 module.exports = {
-  extends: ["expo", "prettier"],
+  extends: [
+    "eslint:recommended",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:@typescript-eslint/stylistic",
+    "expo",
+    "prettier",
+  ],
   plugins: ["prettier"],
   rules: {
-    "@typescript-eslint/no-unused-vars": "error",
     "prettier/prettier": "warn",
   },
 };
