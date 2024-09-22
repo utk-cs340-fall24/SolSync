@@ -23,37 +23,32 @@ export default function Login() {
     signOut(firebaseAuth);
   };
 
-  const LoginForm = () => {
-    return (
-      <>
-        <Text>Login into SolSync</Text>
-        <Text>Email</Text>
-        <TextInput
-          autoCorrect={false}
-          style={styles.input}
-          onChangeText={setEmail}
-          value={email}
-        />
-        <Text>Password</Text>
-        <TextInput
-          autoCorrect={false}
-          secureTextEntry={true}
-          style={styles.input}
-          onChangeText={setPassword}
-          value={password}
-        />
-        <Button title="Login" onPress={userLogin} />
-      </>
-    );
-  };
-
   return (
     <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-      {!user && <LoginForm />}
-      {user && (
+      {user ? (
         <>
-          <Text>Hello, {user?.email}! You are logged in!</Text>
           <Button title="Sign Out" onPress={userSignOut} />
+          <Text>Hello, {user?.email}! You are logged in!</Text>
+        </>
+      ) : (
+        <>
+          <Text>Login into SolSync</Text>
+          <Text>Email</Text>
+          <TextInput
+            autoCorrect={false}
+            style={styles.input}
+            onChangeText={setEmail}
+            value={email}
+          />
+          <Text>Password</Text>
+          <TextInput
+            autoCorrect={false}
+            secureTextEntry={true}
+            style={styles.input}
+            onChangeText={setPassword}
+            value={password}
+          />
+          <Button title="Login" onPress={userLogin} />
         </>
       )}
       {error && <Text>{error}</Text>}
