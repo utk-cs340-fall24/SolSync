@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       '@react-native-async-storage/async-storage':
-        specifier: ^2.0.0
-        version: 2.0.0(react-native@0.74.5(@babel/core@7.25.2)(@babel/preset-env@7.25.4(@babel/core@7.25.2))(@types/react@18.2.79)(react@18.2.0))
+        specifier: 1.23.1
+        version: 1.23.1(react-native@0.74.5(@babel/core@7.25.2)(@babel/preset-env@7.25.4(@babel/core@7.25.2))(@types/react@18.2.79)(react@18.2.0))
       '@react-navigation/bottom-tabs':
         specifier: ^6.6.1
         version: 6.6.1(@react-navigation/native@6.1.18(react-native@0.74.5(@babel/core@7.25.2)(@babel/preset-env@7.25.4(@babel/core@7.25.2))(@types/react@18.2.79)(react@18.2.0))(react@18.2.0))(react-native-safe-area-context@4.11.0(react-native@0.74.5(@babel/core@7.25.2)(@babel/preset-env@7.25.4(@babel/core@7.25.2))(@types/react@18.2.79)(react@18.2.0))(react@18.2.0))(react-native-screens@3.34.0(react-native@0.74.5(@babel/core@7.25.2)(@babel/preset-env@7.25.4(@babel/core@7.25.2))(@types/react@18.2.79)(react@18.2.0))(react@18.2.0))(react-native@0.74.5(@babel/core@7.25.2)(@babel/preset-env@7.25.4(@babel/core@7.25.2))(@types/react@18.2.79)(react@18.2.0))(react@18.2.0)
@@ -25,7 +25,7 @@ importers:
         version: 1.12.1
       firebase:
         specifier: ^10.13.2
-        version: 10.13.2(@react-native-async-storage/async-storage@2.0.0(react-native@0.74.5(@babel/core@7.25.2)(@babel/preset-env@7.25.4(@babel/core@7.25.2))(@types/react@18.2.79)(react@18.2.0)))
+        version: 10.13.2(@react-native-async-storage/async-storage@1.23.1(react-native@0.74.5(@babel/core@7.25.2)(@babel/preset-env@7.25.4(@babel/core@7.25.2))(@types/react@18.2.79)(react@18.2.0)))
       react:
         specifier: 18.2.0
         version: 18.2.0
@@ -1307,10 +1307,10 @@ packages:
   '@protobufjs/utf8@1.1.0':
     resolution: {integrity: sha512-Vvn3zZrhQZkkBE8LSuW3em98c0FwgO4nxzv6OdSxPKJIEKY2bGbHn+mhGIPerzI4twdxaP8/0+06HBpwf345Lw==}
 
-  '@react-native-async-storage/async-storage@2.0.0':
-    resolution: {integrity: sha512-af6H9JjfL6G/PktBfUivvexoiFKQTJGQCtSWxMdivLzNIY94mu9DdiY0JqCSg/LyPCLGKhHPUlRQhNvpu3/KVA==}
+  '@react-native-async-storage/async-storage@1.23.1':
+    resolution: {integrity: sha512-Qd2kQ3yi6Y3+AcUlrHxSLlnBvpdCEMVGFlVBneVOjaFaPU61g1huc38g339ysXspwY1QZA2aNhrk/KlHGO+ewA==}
     peerDependencies:
-      react-native: ^0.0.0-0 || >=0.65 <1.0
+      react-native: ^0.0.0-0 || >=0.60 <1.0
 
   '@react-native-community/cli-clean@13.6.9':
     resolution: {integrity: sha512-7Dj5+4p9JggxuVNOjPbduZBAP1SUgNhLKVw5noBUzT/3ZpUZkDM+RCSwyoyg8xKWoE4OrdUAXwAFlMcFDPKykA==}
@@ -6247,10 +6247,10 @@ snapshots:
       idb: 7.1.1
       tslib: 2.7.0
 
-  '@firebase/auth-compat@0.5.14(@firebase/app-compat@0.2.41)(@firebase/app-types@0.9.2)(@firebase/app@0.10.11)(@react-native-async-storage/async-storage@2.0.0(react-native@0.74.5(@babel/core@7.25.2)(@babel/preset-env@7.25.4(@babel/core@7.25.2))(@types/react@18.2.79)(react@18.2.0)))':
+  '@firebase/auth-compat@0.5.14(@firebase/app-compat@0.2.41)(@firebase/app-types@0.9.2)(@firebase/app@0.10.11)(@react-native-async-storage/async-storage@1.23.1(react-native@0.74.5(@babel/core@7.25.2)(@babel/preset-env@7.25.4(@babel/core@7.25.2))(@types/react@18.2.79)(react@18.2.0)))':
     dependencies:
       '@firebase/app-compat': 0.2.41
-      '@firebase/auth': 1.7.9(@firebase/app@0.10.11)(@react-native-async-storage/async-storage@2.0.0(react-native@0.74.5(@babel/core@7.25.2)(@babel/preset-env@7.25.4(@babel/core@7.25.2))(@types/react@18.2.79)(react@18.2.0)))
+      '@firebase/auth': 1.7.9(@firebase/app@0.10.11)(@react-native-async-storage/async-storage@1.23.1(react-native@0.74.5(@babel/core@7.25.2)(@babel/preset-env@7.25.4(@babel/core@7.25.2))(@types/react@18.2.79)(react@18.2.0)))
       '@firebase/auth-types': 0.12.2(@firebase/app-types@0.9.2)(@firebase/util@1.10.0)
       '@firebase/component': 0.6.9
       '@firebase/util': 1.10.0
@@ -6268,7 +6268,7 @@ snapshots:
       '@firebase/app-types': 0.9.2
       '@firebase/util': 1.10.0
 
-  '@firebase/auth@1.7.9(@firebase/app@0.10.11)(@react-native-async-storage/async-storage@2.0.0(react-native@0.74.5(@babel/core@7.25.2)(@babel/preset-env@7.25.4(@babel/core@7.25.2))(@types/react@18.2.79)(react@18.2.0)))':
+  '@firebase/auth@1.7.9(@firebase/app@0.10.11)(@react-native-async-storage/async-storage@1.23.1(react-native@0.74.5(@babel/core@7.25.2)(@babel/preset-env@7.25.4(@babel/core@7.25.2))(@types/react@18.2.79)(react@18.2.0)))':
     dependencies:
       '@firebase/app': 0.10.11
       '@firebase/component': 0.6.9
@@ -6277,7 +6277,7 @@ snapshots:
       tslib: 2.7.0
       undici: 6.19.7
     optionalDependencies:
-      '@react-native-async-storage/async-storage': 2.0.0(react-native@0.74.5(@babel/core@7.25.2)(@babel/preset-env@7.25.4(@babel/core@7.25.2))(@types/react@18.2.79)(react@18.2.0))
+      '@react-native-async-storage/async-storage': 1.23.1(react-native@0.74.5(@babel/core@7.25.2)(@babel/preset-env@7.25.4(@babel/core@7.25.2))(@types/react@18.2.79)(react@18.2.0))
 
   '@firebase/component@0.6.9':
     dependencies:
@@ -6652,7 +6652,7 @@ snapshots:
 
   '@protobufjs/utf8@1.1.0': {}
 
-  '@react-native-async-storage/async-storage@2.0.0(react-native@0.74.5(@babel/core@7.25.2)(@babel/preset-env@7.25.4(@babel/core@7.25.2))(@types/react@18.2.79)(react@18.2.0))':
+  '@react-native-async-storage/async-storage@1.23.1(react-native@0.74.5(@babel/core@7.25.2)(@babel/preset-env@7.25.4(@babel/core@7.25.2))(@types/react@18.2.79)(react@18.2.0))':
     dependencies:
       merge-options: 3.0.4
       react-native: 0.74.5(@babel/core@7.25.2)(@babel/preset-env@7.25.4(@babel/core@7.25.2))(@types/react@18.2.79)(react@18.2.0)
@@ -8399,7 +8399,7 @@ snapshots:
     dependencies:
       micromatch: 4.0.8
 
-  firebase@10.13.2(@react-native-async-storage/async-storage@2.0.0(react-native@0.74.5(@babel/core@7.25.2)(@babel/preset-env@7.25.4(@babel/core@7.25.2))(@types/react@18.2.79)(react@18.2.0))):
+  firebase@10.13.2(@react-native-async-storage/async-storage@1.23.1(react-native@0.74.5(@babel/core@7.25.2)(@babel/preset-env@7.25.4(@babel/core@7.25.2))(@types/react@18.2.79)(react@18.2.0))):
     dependencies:
       '@firebase/analytics': 0.10.8(@firebase/app@0.10.11)
       '@firebase/analytics-compat': 0.2.14(@firebase/app-compat@0.2.41)(@firebase/app@0.10.11)
@@ -8408,8 +8408,8 @@ snapshots:
       '@firebase/app-check-compat': 0.3.15(@firebase/app-compat@0.2.41)(@firebase/app@0.10.11)
       '@firebase/app-compat': 0.2.41
       '@firebase/app-types': 0.9.2
-      '@firebase/auth': 1.7.9(@firebase/app@0.10.11)(@react-native-async-storage/async-storage@2.0.0(react-native@0.74.5(@babel/core@7.25.2)(@babel/preset-env@7.25.4(@babel/core@7.25.2))(@types/react@18.2.79)(react@18.2.0)))
-      '@firebase/auth-compat': 0.5.14(@firebase/app-compat@0.2.41)(@firebase/app-types@0.9.2)(@firebase/app@0.10.11)(@react-native-async-storage/async-storage@2.0.0(react-native@0.74.5(@babel/core@7.25.2)(@babel/preset-env@7.25.4(@babel/core@7.25.2))(@types/react@18.2.79)(react@18.2.0)))
+      '@firebase/auth': 1.7.9(@firebase/app@0.10.11)(@react-native-async-storage/async-storage@1.23.1(react-native@0.74.5(@babel/core@7.25.2)(@babel/preset-env@7.25.4(@babel/core@7.25.2))(@types/react@18.2.79)(react@18.2.0)))
+      '@firebase/auth-compat': 0.5.14(@firebase/app-compat@0.2.41)(@firebase/app-types@0.9.2)(@firebase/app@0.10.11)(@react-native-async-storage/async-storage@1.23.1(react-native@0.74.5(@babel/core@7.25.2)(@babel/preset-env@7.25.4(@babel/core@7.25.2))(@types/react@18.2.79)(react@18.2.0)))
       '@firebase/database': 1.0.8
       '@firebase/database-compat': 1.0.8
       '@firebase/firestore': 4.7.2(@firebase/app@0.10.11)
