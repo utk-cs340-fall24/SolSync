@@ -1,6 +1,4 @@
-import {
-  signInWithEmailAndPassword,
-} from "firebase/auth";
+import { signInWithEmailAndPassword, signOut  } from "firebase/auth";
 import { firebaseAuth } from "../../../firebaseConfig";
 import { useState } from "react";
 import { StyleSheet, View, Text, TextInput, Button } from "react-native";
@@ -13,32 +11,49 @@ export default function Login() {
   const user = useUser();
 
   // login into an existing user from firebase
-  const login = () => {
+  const userLogin = () => {
     signInWithEmailAndPassword(firebaseAuth, email, password).catch((error) => {
       useError(error.message);
     });
   };
 
+  const userSignOut = () =>{
+    signOut(firebaseAuth)
+  }
+
+  const LoginForm = () => {
+    return (
+      <>
+        <Text>Login into SolSync</Text>
+        <Text>Email</Text>
+        <TextInput
+          autoCorrect={false}
+          style={styles.input}
+          onChangeText={useEmail}
+          value={email}
+        />
+        <Text>Password</Text>
+        <TextInput
+          autoCorrect={false}
+          secureTextEntry={true}
+          style={styles.input}
+          onChangeText={usePassword}
+          value={password}
+        />
+        <Button title="Login" onPress={userLogin} />
+      </>
+    );
+  };
+
   return (
     <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-      <Text>Login into SolSync</Text>
-      <Text>Email</Text>
-      <TextInput
-        autoCorrect={false}
-        style={styles.input}
-        onChangeText={useEmail}
-        value={email}
-      />
-      <Text>Password</Text>
-      <TextInput
-        autoCorrect={false}
-        secureTextEntry={true}
-        style={styles.input}
-        onChangeText={usePassword}
-        value={password}
-      />
-      <Button title="Login" onPress={login} />
-      {user && <Text>Hello, {user?.email}! You are logged in!</Text>}
+      {!user && <LoginForm />}
+      {user && (
+        <>
+          <Text>Hello, {user?.email}! You are logged in!</Text>
+          <Button title="Sign Out" onPress={userSignOut} />
+        </>
+      )}
       {error && <Text>{error}</Text>}
     </View>
   );
