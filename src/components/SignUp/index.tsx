@@ -5,18 +5,18 @@ import { StyleSheet, View, Text, TextInput, Button } from "react-native";
 import useUser from "@/hooks/useUser";
 
 export default function SignUp() {
-  const [email, useEmail] = useState("");
-  const [password, usePassword] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const user = useUser();
-  const [error, useError] = useState("");
+  const [error, setError] = useState("");
 
   // create a new user in firebase
   const signUp = () => {
     createUserWithEmailAndPassword(firebaseAuth, email, password).catch(
       (error) => {
         // store error message and display it to the user
-        useError(error.message);
-      }
+        setError(error.message);
+      },
     );
   };
 
@@ -27,7 +27,7 @@ export default function SignUp() {
       <TextInput
         autoCorrect={false}
         style={styles.input}
-        onChangeText={useEmail}
+        onChangeText={setEmail}
         value={email}
       />
       <Text>Password</Text>
@@ -35,7 +35,7 @@ export default function SignUp() {
         autoCorrect={false}
         secureTextEntry={true}
         style={styles.input}
-        onChangeText={usePassword}
+        onChangeText={setPassword}
         value={password}
       />
       <Button title="Sign Up" onPress={signUp} />

@@ -3,11 +3,11 @@ import { useEffect, useState } from "react";
 import { firebaseAuth } from "../../firebaseConfig";
 
 const useUser = (): User | undefined => {
-  const [user, useUser] = useState<User | undefined>();
+  const [user, setUser] = useState<User | undefined>();
 
   useEffect(() => {
     onAuthStateChanged(firebaseAuth, (user) => {
-      useUser(user ? user : undefined);
+      setUser(user ? user : undefined);
     });
   }, []);
 
