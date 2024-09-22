@@ -1,4 +1,4 @@
-import { signInWithEmailAndPassword, signOut  } from "firebase/auth";
+import { signInWithEmailAndPassword, signOut } from "firebase/auth";
 import { firebaseAuth } from "../../../firebaseConfig";
 import { useState } from "react";
 import { StyleSheet, View, Text, TextInput, Button } from "react-native";
@@ -13,13 +13,15 @@ export default function Login() {
   // login into an existing user from firebase
   const userLogin = () => {
     signInWithEmailAndPassword(firebaseAuth, email, password).catch((error) => {
+      // store error message and display it to the user
       useError(error.message);
     });
   };
 
-  const userSignOut = () =>{
-    signOut(firebaseAuth)
-  }
+  // sign out of the current user
+  const userSignOut = () => {
+    signOut(firebaseAuth);
+  };
 
   const LoginForm = () => {
     return (

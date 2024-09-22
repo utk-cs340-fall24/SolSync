@@ -1,42 +1,23 @@
-import { User, createUserWithEmailAndPassword } from "firebase/auth";
+import { createUserWithEmailAndPassword } from "firebase/auth";
 import { firebaseAuth } from "../../../firebaseConfig";
 import { useState } from "react";
 import { StyleSheet, View, Text, TextInput, Button } from "react-native";
+import useUser from "@/hooks/useUser";
 
 export default function SignUp() {
   const [email, useEmail] = useState("");
   const [password, usePassword] = useState("");
-  const [user, useUser] = useState<User>();
+  const user = useUser();
   const [error, useError] = useState("");
 
+  // create a new user in firebase
   const signUp = () => {
-    // check for valid email
-    if (email === undefined) {
-      console.log("Please type in a email");
-      return;
-    }
-
-    // check for valid password
-    if (password === undefined) {
-      console.log("Please type in an password");
-      return;
-    }
-
-    // create a new user in firebase
-    createUserWithEmailAndPassword(firebaseAuth, email, password)
-      .then((userCredential) => {
-        console.log("Creating an account");
-
-        // set active user
-        useUser(userCredential.user);
-
-        // reset error message
-        useError("");
-      })
-      .catch((error) => {
+    createUserWithEmailAndPassword(firebaseAuth, email, password).catch(
+      (error) => {
         // store error message and display it to the user
         useError(error.message);
-      });
+      }
+    );
   };
 
   return (
