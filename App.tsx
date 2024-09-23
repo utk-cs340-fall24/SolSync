@@ -8,7 +8,7 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 
 function getIconName(
   routeName: string,
-  focused: boolean
+  focused: boolean,
 ): keyof typeof Ionicons.glyphMap {
   switch (routeName) {
     case "Home":
