@@ -10,14 +10,15 @@ export default function SignUp() {
   const user = useUser();
   const [error, setError] = useState("");
 
-  // create a new user in firebase
-  const signUp = () => {
-    createUserWithEmailAndPassword(firebaseAuth, email, password).catch(
-      (error) => {
-        // store error message and display it to the user
+  const signUp = async () => {
+    try {
+      await createUserWithEmailAndPassword(firebaseAuth, email, password);
+      setError("");
+    } catch (error) {
+      if (error instanceof Error) {
         setError(error.message);
-      },
-    );
+      }
+    }
   };
 
   return (
