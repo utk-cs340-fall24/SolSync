@@ -18,10 +18,11 @@ export default function SignUp() {
     longitude: number;
   } | null>(null);
 
-  const signUp = async () => {
+  const getLocation = async () => {
     // ask for location permissions
     const { status } = await requestForegroundPermissionsAsync();
 
+    // check if the user grants location permissions
     if (status !== "granted") {
       setError("Permission to access location was denied");
       return;
@@ -41,8 +42,10 @@ export default function SignUp() {
         return;
       }
     }
+  };
 
-    // create an account with there email and password
+  // create an account with there email and password
+  const createAccount = async () => {
     try {
       await createUserWithEmailAndPassword(firebaseAuth, email, password);
       setError("");
@@ -52,6 +55,14 @@ export default function SignUp() {
         return;
       }
     }
+  };
+
+  const signUp = async () => {
+    // ask and grab the user for location
+    getLocation();
+
+    // create account with email and password
+    createAccount();
   };
 
   return (
