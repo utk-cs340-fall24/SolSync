@@ -26,7 +26,7 @@ export default function SignUp() {
             latitude: location?.latitude || 0,
             longitude: location?.longitude || 0,
           });
-        }
+        },
       );
     } catch (error) {
       if (error instanceof Error) {
