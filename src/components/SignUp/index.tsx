@@ -3,46 +3,14 @@ import { firebaseAuth } from "../../../firebaseConfig";
 import { useState } from "react";
 import { StyleSheet, View, Text, TextInput, Button } from "react-native";
 import useUser from "@/hooks/useUser";
-import {
-  getCurrentPositionAsync,
-  requestForegroundPermissionsAsync,
-} from "expo-location";
+import useLocation from "@/hooks/useLocation";
 
 export default function SignUp() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const user = useUser();
+  const [location] = useLocation();
   const [error, setError] = useState("");
-  const [location, setLocation] = useState<{
-    latitude: number;
-    longitude: number;
-  } | null>(null);
-
-  const getLocation = async () => {
-    // ask for location permissions
-    const { status } = await requestForegroundPermissionsAsync();
-
-    // check if the user grants location permissions
-    if (status !== "granted") {
-      setError("Permission to access location was denied");
-      return;
-    }
-
-    // get the user's current location
-    try {
-      const { coords } = await getCurrentPositionAsync({});
-
-      setLocation({
-        latitude: coords.latitude,
-        longitude: coords.longitude,
-      });
-    } catch (error) {
-      if (error instanceof Error) {
-        setError(error.message);
-        return;
-      }
-    }
-  };
 
   // create an account with there email and password
   const createAccount = async () => {
@@ -58,9 +26,6 @@ export default function SignUp() {
   };
 
   const signUp = async () => {
-    // ask and grab the user for location
-    getLocation();
-
     // create account with email and password
     createAccount();
   };
