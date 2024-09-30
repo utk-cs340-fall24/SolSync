@@ -17,6 +17,9 @@ dependencies:
   expo:
     specifier: ~51.0.28
     version: 51.0.34(@babel/core@7.25.2)(@babel/preset-env@7.25.4)
+      expo-location:
+        specifier: ~17.0.1
+        version: 17.0.1(expo@51.0.32(@babel/core@7.25.2)(@babel/preset-env@7.25.4(@babel/core@7.25.2)))
   expo-status-bar:
     specifier: ~1.12.1
     version: 1.12.1
@@ -5322,6 +5325,10 @@ packages:
     dependencies:
       expo: 51.0.34(@babel/core@7.25.2)(@babel/preset-env@7.25.4)
     dev: false
+
+  expo-location@17.0.1(expo@51.0.32(@babel/core@7.25.2)(@babel/preset-env@7.25.4(@babel/core@7.25.2))):
+    dependencies:
+      expo: 51.0.32(@babel/core@7.25.2)(@babel/preset-env@7.25.4(@babel/core@7.25.2))
 
   /expo-modules-autolinking@1.11.2:
     resolution: {integrity: sha512-fdcaNO8ucHA3yLNY52ZUENBcAG7KEx8QyMmnVNavO1JVBGRMZG8JyVcbrhYQDtVtpxkbai5YzwvLutINvbDZDQ==}

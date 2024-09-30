@@ -1,8 +1,13 @@
 import { createUserWithEmailAndPassword } from "firebase/auth";
-import { firebaseAuth } from "../../../firebaseConfig";
+import { firebaseAuth, db } from "../../../firebaseConfig";
 import { useState } from "react";
 import { StyleSheet, View, Text, TextInput, Button } from "react-native";
 import useUser from "@/hooks/useUser";
+import { doc, setDoc } from "firebase/firestore";
+import {
+  getLastKnownPositionAsync,
+  requestForegroundPermissionsAsync,
+} from "expo-location";
 
 export default function SignUp() {
   const [email, setEmail] = useState("");
@@ -12,13 +17,48 @@ export default function SignUp() {
 
   const signUp = async () => {
     try {
-      await createUserWithEmailAndPassword(firebaseAuth, email, password);
-      setError("");
+      await createUserWithEmailAndPassword(firebaseAuth, email, password).then(
+        async (cred) => {
+          // if permission is granted, get the current location
+          const location = await getLocation();
+
+          setDoc(doc(db, "users", cred.user.uid), {
+            latitude: location?.latitude || 0,
+            longitude: location?.longitude || 0,
+          });
+        },
+      );
     } catch (error) {
       if (error instanceof Error) {
         setError(error.message);
+        return;
       }
     }
+  };
+
+  const getLocation = async (): Promise<
+    undefined | { latitude: number; longitude: number }
+  > => {
+    const userLocation = {
+      latitude: 0,
+      longitude: 0,
+    };
+
+    // request permission for foreground location
+    const { status } = await requestForegroundPermissionsAsync();
+
+    // if permission is not granted, set an error and return
+    if (status !== "granted") {
+      return;
+    }
+
+    // if permission is granted, get the current location
+    const location = await getLastKnownPositionAsync({});
+
+    userLocation.latitude = location?.coords.latitude || 0;
+    userLocation.longitude = location?.coords.longitude || 0;
+
+    return userLocation;
   };
 
   return (
