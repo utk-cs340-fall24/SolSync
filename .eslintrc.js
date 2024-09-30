@@ -9,5 +9,6 @@ module.exports = {
   plugins: ["prettier"],
   rules: {
     "prettier/prettier": "warn",
+    "@typescript-eslint/consistent-type-definitions": ["error", "type"],
   },
 };

@@ -5,7 +5,6 @@ import SignUpScreen from "@/screens/SignUpScreen";
 import LoginScreen from "@/screens/LoginScreen";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import ProfileScreen from "@/screens/ProfileScreen";
-import { createDrawerNavigator } from "@react-navigation/drawer";
 
 function getIconName(
   routeName: string,
@@ -22,7 +21,6 @@ function getIconName(
 }
 
 const Tab = createBottomTabNavigator();
-const Drawer = createDrawerNavigator();
 
 export default function App() {
   return (
@@ -39,7 +37,7 @@ export default function App() {
         })}
       >
         <Tab.Screen name="Home" component={HomeScreen} />
-        <Drawer.Screen name="Profile" component={ProfileScreen} />
+        <Tab.Screen name="Profile" component={ProfileScreen} />
         <Tab.Screen name="Sign Up" component={SignUpScreen} />
         <Tab.Screen name="Login" component={LoginScreen} />
       </Tab.Navigator>

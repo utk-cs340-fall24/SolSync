@@ -1,7 +1,9 @@
-import { DrawerNavigationProp } from "@react-navigation/drawer";
-import { useNavigation } from "@react-navigation/native";
 import { View, Text, Button } from "react-native";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import {
+  createNativeStackNavigator,
+  NativeStackScreenProps,
+} from "@react-navigation/native-stack";
+import { DrawerParamList } from ".";
 
 // two buttons, one to log in, one to sign up
 // export default function UnauthorizedProfile({ navigation }: ) {
@@ -33,7 +35,14 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
 const Stack = createNativeStackNavigator();
 
-export default function UnauthorizedProfile() {
+type UnauthorizedProfileProps = NativeStackScreenProps<
+  DrawerParamList,
+  "UnauthorizedProfile"
+>;
+
+export default function UnauthorizedProfile({
+  navigation,
+}: UnauthorizedProfileProps) {
   return (
     <View
       style={{
@@ -58,9 +67,4 @@ export default function UnauthorizedProfile() {
       />
     </View>
   );
-}
-
-{
-  /* <Drawer.Screen name="Login" component={Login} />
-<Drawer.Screen name="SignUp" component={SignUp} /> */
 }
