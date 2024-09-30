@@ -1,25 +1,16 @@
 import { StyleSheet, View, Text, Image } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 
-import sun from '../../../assets/sun.png';
-import cloud from '../../../assets/simple_cloud.png';
+import sun from "../../../assets/sun.png";
+import cloud from "../../../assets/simple_cloud.png";
 
 export default function Home() {
   return (
-    <LinearGradient
-      colors={['#B4CDD2', '#FFD18A']}
-      style={styles.container}
-    >
+    <LinearGradient colors={["#B4CDD2", "#FFD18A"]} style={styles.container}>
       <View style={styles.content}>
         <Text style={styles.Hello}>Hello Amy!</Text>
-        <Image
-          style={styles.sun}
-          source={sun}
-        />
-        <Image
-          style={styles.cloud}
-          source={cloud}
-        />
+        <Image style={styles.sun} source={sun} />
+        <Image style={styles.cloud} source={cloud} />
         <Text style={styles.Sunrise1}>Sunrise: 07:31 AM</Text>
         <Text style={styles.Sunset}>Sunset: 07:21 PM</Text>
         <Text style={styles.Sunrise2}>Next Sunrise: 07:31 AM</Text>
