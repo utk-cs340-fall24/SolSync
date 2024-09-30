@@ -1,8 +1,8 @@
 import { StyleSheet, View, Text, Image } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 
-import sun from "../../../assets/sun.png";
-import cloud from "../../../assets/simple_cloud.png";
+import sun from "@assets/sun.png";
+import cloud from "@assets/simple_cloud.png";
 
 export default function Home() {
   return (
