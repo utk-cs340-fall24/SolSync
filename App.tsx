@@ -1,10 +1,10 @@
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import HomeScreen from "@/screens/HomeScreen";
-import SettingsScreen from "@/screens/SettingsScreen";
 import SignUpScreen from "@/screens/SignUpScreen";
 import LoginScreen from "@/screens/LoginScreen";
 import Ionicons from "@expo/vector-icons/Ionicons";
+import ProfileScreen from "@/screens/ProfileScreen";
 
 function getIconName(
   routeName: string,
@@ -13,7 +13,7 @@ function getIconName(
   switch (routeName) {
     case "Home":
       return focused ? "home" : "home-outline";
-    case "Settings":
+    case "Profile":
       return focused ? "settings" : "settings-outline";
     default:
       return "caret-up";
@@ -37,7 +37,7 @@ export default function App() {
         })}
       >
         <Tab.Screen name="Home" component={HomeScreen} />
-        <Tab.Screen name="Settings" component={SettingsScreen} />
+        <Tab.Screen name="Profile" component={ProfileScreen} />
         <Tab.Screen name="Sign Up" component={SignUpScreen} />
         <Tab.Screen name="Login" component={LoginScreen} />
       </Tab.Navigator>
