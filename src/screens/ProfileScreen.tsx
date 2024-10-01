@@ -11,5 +11,5 @@ export default function ProfileScreen() {
 
   // return <UnauthorizedProfile />; --> stack navigator lives here
 
-  return <Profile isAuthed={false} />;
+  return <Profile isAuthed={true} />;
 }
