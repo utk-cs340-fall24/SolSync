@@ -17,9 +17,12 @@ dependencies:
   expo:
     specifier: ~51.0.28
     version: 51.0.34(@babel/core@7.25.2)(@babel/preset-env@7.25.4)
-      expo-location:
-        specifier: ~17.0.1
-        version: 17.0.1(expo@51.0.32(@babel/core@7.25.2)(@babel/preset-env@7.25.4(@babel/core@7.25.2)))
+  expo-linear-gradient:
+    specifier: ^13.0.2
+    version: 13.0.2(expo@51.0.34)
+  expo-location:
+    specifier: ~17.0.1
+    version: 17.0.1(expo@51.0.34)
   expo-status-bar:
     specifier: ~1.12.1
     version: 1.12.1
@@ -5326,9 +5329,21 @@ packages:
       expo: 51.0.34(@babel/core@7.25.2)(@babel/preset-env@7.25.4)
     dev: false
 
-  expo-location@17.0.1(expo@51.0.32(@babel/core@7.25.2)(@babel/preset-env@7.25.4(@babel/core@7.25.2))):
+  /expo-linear-gradient@13.0.2(expo@51.0.34):
+    resolution: {integrity: sha512-EDcILUjRKu4P1rtWcwciN6CSyGtH7Bq4ll3oTRV7h3h8oSzSilH1g6z7kTAMlacPBKvMnkkWOGzW6KtgMKEiTg==}
+    peerDependencies:
+      expo: '*'
     dependencies:
-      expo: 51.0.32(@babel/core@7.25.2)(@babel/preset-env@7.25.4(@babel/core@7.25.2))
+      expo: 51.0.34(@babel/core@7.25.2)(@babel/preset-env@7.25.4)
+    dev: false
+
+  /expo-location@17.0.1(expo@51.0.34):
+    resolution: {integrity: sha512-m+OzotzlAXO3ZZ1uqW5GC25nXW868zN+ROyBA1V4VF6jGay1ZEs4URPglCVUDzZby2F5wt24cMzqDKw2IX6nRw==}
+    peerDependencies:
+      expo: '*'
+    dependencies:
+      expo: 51.0.34(@babel/core@7.25.2)(@babel/preset-env@7.25.4)
+    dev: false
 
   /expo-modules-autolinking@1.11.2:
     resolution: {integrity: sha512-fdcaNO8ucHA3yLNY52ZUENBcAG7KEx8QyMmnVNavO1JVBGRMZG8JyVcbrhYQDtVtpxkbai5YzwvLutINvbDZDQ==}
