@@ -1,0 +1,287 @@
+file: SolSync/src/components/Profile/AuthorizedProfile.tsx
+
+db20242a (amy-huang16 2024-10-01 19:23:17 -0400   1) import { useState } from "react";
+db20242a (amy-huang16 2024-10-01 19:23:17 -0400   2) import { StyleSheet, View, Text, Button, Switch } from "react-native";
+db20242a (amy-huang16 2024-10-01 19:23:17 -0400   3) import Icon from "react-native-vector-icons/FontAwesome";
+db20242a (amy-huang16 2024-10-01 19:23:17 -0400   4) 
+db20242a (amy-huang16 2024-10-01 19:23:17 -0400   5) export default function AuthorizedProfile() {
+db20242a (amy-huang16 2024-10-01 19:23:17 -0400   6)   const [pushIsEnabled, setPushIsEnabled] = useState(false);
+db20242a (amy-huang16 2024-10-01 19:23:17 -0400   7)   const pushNotificationsSwitch = () => {
+db20242a (amy-huang16 2024-10-01 19:23:17 -0400   8)     setPushIsEnabled((previousState) => !previousState);
+db20242a (amy-huang16 2024-10-01 19:23:17 -0400   9)     if (!pushIsEnabled) {
+db20242a (amy-huang16 2024-10-01 19:23:17 -0400  10)       console.log("Push notifications are ON");
+db20242a (amy-huang16 2024-10-01 19:23:17 -0400  11)     } else {
+db20242a (amy-huang16 2024-10-01 19:23:17 -0400  12)       console.log("Push notifications are OFF");
+db20242a (amy-huang16 2024-10-01 19:23:17 -0400  13)     }
+db20242a (amy-huang16 2024-10-01 19:23:17 -0400  14)   };
+db20242a (amy-huang16 2024-10-01 19:23:17 -0400  15) 
+db20242a (amy-huang16 2024-10-01 19:23:17 -0400  16)   const [emailIsEnabled, setEmailIsEnabled] = useState(false);
+db20242a (amy-huang16 2024-10-01 19:23:17 -0400  17)   const emailNotificationsSwitch = () => {
+db20242a (amy-huang16 2024-10-01 19:23:17 -0400  18)     setEmailIsEnabled((previousState) => !previousState);
+db20242a (amy-huang16 2024-10-01 19:23:17 -0400  19)     if (!emailIsEnabled) {
+db20242a (amy-huang16 2024-10-01 19:23:17 -0400  20)       console.log("Email notifications are ON");
+db20242a (amy-huang16 2024-10-01 19:23:17 -0400  21)     } else {
+db20242a (amy-huang16 2024-10-01 19:23:17 -0400  22)       console.log("Email notifications are OFF");
+db20242a (amy-huang16 2024-10-01 19:23:17 -0400  23)     }
+db20242a (amy-huang16 2024-10-01 19:23:17 -0400  24)   };
+db20242a (amy-huang16 2024-10-01 19:23:17 -0400  25) 
+db20242a (amy-huang16 2024-10-01 19:23:17 -0400  26)   return (
+db20242a (amy-huang16 2024-10-01 19:23:17 -0400  27)     <View style={styles.page}>
+db20242a (amy-huang16 2024-10-01 19:23:17 -0400  28)       <Text style={styles.header}>Hello, Amy!</Text>
+db20242a (amy-huang16 2024-10-01 19:23:17 -0400  29)       <Icon
+db20242a (amy-huang16 2024-10-01 19:23:17 -0400  30)         name="user-circle"
+db20242a (amy-huang16 2024-10-01 19:23:17 -0400  31)         size={100}
+db20242a (amy-huang16 2024-10-01 19:23:17 -0400  32)         color="gray"
+db20242a (amy-huang16 2024-10-01 19:23:17 -0400  33)         style={{ marginBottom: 20 }}
+db20242a (amy-huang16 2024-10-01 19:23:17 -0400  34)       ></Icon>
+db20242a (amy-huang16 2024-10-01 19:23:17 -0400  35)       <View style={styles.option}>
+db20242a (amy-huang16 2024-10-01 19:23:17 -0400  36)         <Text>Name: </Text>
+db20242a (amy-huang16 2024-10-01 19:23:17 -0400  37)         <Text>Amy Huang</Text>
+db20242a (amy-huang16 2024-10-01 19:23:17 -0400  38)       </View>
+db20242a (amy-huang16 2024-10-01 19:23:17 -0400  39)       <View style={styles.option}>
+db20242a (amy-huang16 2024-10-01 19:23:17 -0400  40)         <Text>Email: </Text>
+db20242a (amy-huang16 2024-10-01 19:23:17 -0400  41)         <Text>filleremail@gmail.com</Text>
+db20242a (amy-huang16 2024-10-01 19:23:17 -0400  42)       </View>
+db20242a (amy-huang16 2024-10-01 19:23:17 -0400  43)       <View style={styles.option}>
+db20242a (amy-huang16 2024-10-01 19:23:17 -0400  44)         <Text>Push Notifications</Text>
+db20242a (amy-huang16 2024-10-01 19:23:17 -0400  45)         <Switch
+db20242a (amy-huang16 2024-10-01 19:23:17 -0400  46)           trackColor={{ false: "#767577", true: "#81b0ff" }}
+db20242a (amy-huang16 2024-10-01 19:23:17 -0400  47)           thumbColor={pushIsEnabled ? "#f5dd4b" : "#f4f3f4"}
+db20242a (amy-huang16 2024-10-01 19:23:17 -0400  48)           ios_backgroundColor="#3e3e3e"
+db20242a (amy-huang16 2024-10-01 19:23:17 -0400  49)           onValueChange={pushNotificationsSwitch}
+db20242a (amy-huang16 2024-10-01 19:23:17 -0400  50)           value={pushIsEnabled}
+db20242a (amy-huang16 2024-10-01 19:23:17 -0400  51)         />
+db20242a (amy-huang16 2024-10-01 19:23:17 -0400  52)       </View>
+db20242a (amy-huang16 2024-10-01 19:23:17 -0400  53)       <View style={[styles.option, { marginBottom: 20 }]}>
+db20242a (amy-huang16 2024-10-01 19:23:17 -0400  54)         <Text>Email Notifications</Text>
+db20242a (amy-huang16 2024-10-01 19:23:17 -0400  55)         <Switch
+db20242a (amy-huang16 2024-10-01 19:23:17 -0400  56)           trackColor={{ false: "#767577", true: "#81b0ff" }}
+db20242a (amy-huang16 2024-10-01 19:23:17 -0400  57)           thumbColor={emailIsEnabled ? "#f5dd4b" : "#f4f3f4"}
+db20242a (amy-huang16 2024-10-01 19:23:17 -0400  58)           ios_backgroundColor="#3e3e3e"
+db20242a (amy-huang16 2024-10-01 19:23:17 -0400  59)           onValueChange={emailNotificationsSwitch}
+db20242a (amy-huang16 2024-10-01 19:23:17 -0400  60)           value={emailIsEnabled}
+db20242a (amy-huang16 2024-10-01 19:23:17 -0400  61)         />
+db20242a (amy-huang16 2024-10-01 19:23:17 -0400  62)       </View>
+db20242a (amy-huang16 2024-10-01 19:23:17 -0400  63)       <View style={styles.button}>
+db20242a (amy-huang16 2024-10-01 19:23:17 -0400  64)         <Button
+db20242a (amy-huang16 2024-10-01 19:23:17 -0400  65)           title="Reset Location"
+db20242a (amy-huang16 2024-10-01 19:23:17 -0400  66)           color="white"
+db20242a (amy-huang16 2024-10-01 19:23:17 -0400  67)           onPress={() => {
+db20242a (amy-huang16 2024-10-01 19:23:17 -0400  68)             console.log("Reset Location");
+db20242a (amy-huang16 2024-10-01 19:23:17 -0400  69)           }}
+db20242a (amy-huang16 2024-10-01 19:23:17 -0400  70)         ></Button>
+db20242a (amy-huang16 2024-10-01 19:23:17 -0400  71)       </View>
+db20242a (amy-huang16 2024-10-01 19:23:17 -0400  72)       <View style={styles.button}>
+db20242a (amy-huang16 2024-10-01 19:23:17 -0400  73)         <Button
+db20242a (amy-huang16 2024-10-01 19:23:17 -0400  74)           title="Log Out"
+db20242a (amy-huang16 2024-10-01 19:23:17 -0400  75)           color="white"
+db20242a (amy-huang16 2024-10-01 19:23:17 -0400  76)           onPress={() => {
+db20242a (amy-huang16 2024-10-01 19:23:17 -0400  77)             console.log("Log Out");
+db20242a (amy-huang16 2024-10-01 19:23:17 -0400  78)           }}
+db20242a (amy-huang16 2024-10-01 19:23:17 -0400  79)         ></Button>
+db20242a (amy-huang16 2024-10-01 19:23:17 -0400  80)       </View>
+db20242a (amy-huang16 2024-10-01 19:23:17 -0400  81)     </View>
+db20242a (amy-huang16 2024-10-01 19:23:17 -0400  82)   );
+db20242a (amy-huang16 2024-10-01 19:23:17 -0400  83) }
+db20242a (amy-huang16 2024-10-01 19:23:17 -0400  84) 
+db20242a (amy-huang16 2024-10-01 19:23:17 -0400  85) const styles = StyleSheet.create({
+db20242a (amy-huang16 2024-10-01 19:23:17 -0400  86)   page: {
+db20242a (amy-huang16 2024-10-01 19:23:17 -0400  87)     flex: 1,
+db20242a (amy-huang16 2024-10-01 19:23:17 -0400  88)     backgroundColor: "white",
+db20242a (amy-huang16 2024-10-01 19:23:17 -0400  89)     justifyContent: "center",
+db20242a (amy-huang16 2024-10-01 19:23:17 -0400  90)     alignItems: "center",
+db20242a (amy-huang16 2024-10-01 19:23:17 -0400  91)   },
+db20242a (amy-huang16 2024-10-01 19:23:17 -0400  92)   header: {
+db20242a (amy-huang16 2024-10-01 19:23:17 -0400  93)     fontSize: 30,
+db20242a (amy-huang16 2024-10-01 19:23:17 -0400  94)     paddingBottom: 20,
+db20242a (amy-huang16 2024-10-01 19:23:17 -0400  95)   },
+db20242a (amy-huang16 2024-10-01 19:23:17 -0400  96)   option: {
+db20242a (amy-huang16 2024-10-01 19:23:17 -0400  97)     margin: 10,
+db20242a (amy-huang16 2024-10-01 19:23:17 -0400  98)     flexDirection: "row",
+db20242a (amy-huang16 2024-10-01 19:23:17 -0400  99)     justifyContent: "space-between",
+db20242a (amy-huang16 2024-10-01 19:23:17 -0400 100)     alignItems: "center",
+db20242a (amy-huang16 2024-10-01 19:23:17 -0400 101)     gap: 10,
+db20242a (amy-huang16 2024-10-01 19:23:17 -0400 102)     width: "80%",
+db20242a (amy-huang16 2024-10-01 19:23:17 -0400 103)   },
+db20242a (amy-huang16 2024-10-01 19:23:17 -0400 104)   button: {
+db20242a (amy-huang16 2024-10-01 19:23:17 -0400 105)     borderRadius: 10,
+db20242a (amy-huang16 2024-10-01 19:23:17 -0400 106)     backgroundColor: "purple",
+db20242a (amy-huang16 2024-10-01 19:23:17 -0400 107)     margin: 10,
+db20242a (amy-huang16 2024-10-01 19:23:17 -0400 108)     width: "40%",
+db20242a (amy-huang16 2024-10-01 19:23:17 -0400 109)   },
+db20242a (amy-huang16 2024-10-01 19:23:17 -0400 110) });
+
+file: SolSync/src/components/Profile/UnauthorizedProfile.tsx
+
+db20242a (amy-huang16 2024-10-01 19:23:17 -0400  1) import { View, Text, Button } from "react-native";
+db20242a (amy-huang16 2024-10-01 19:23:17 -0400  2) import { NativeStackScreenProps } from "@react-navigation/native-stack";
+db20242a (amy-huang16 2024-10-01 19:23:17 -0400  3) import { DrawerParamList } from ".";
+db20242a (amy-huang16 2024-10-01 19:23:17 -0400  4) 
+db20242a (amy-huang16 2024-10-01 19:23:17 -0400  5) type UnauthorizedProfileProps = NativeStackScreenProps<
+db20242a (amy-huang16 2024-10-01 19:23:17 -0400  6)   DrawerParamList,
+db20242a (amy-huang16 2024-10-01 19:23:17 -0400  7)   "UnauthorizedProfile"
+db20242a (amy-huang16 2024-10-01 19:23:17 -0400  8) >;
+db20242a (amy-huang16 2024-10-01 19:23:17 -0400  9) 
+db20242a (amy-huang16 2024-10-01 19:23:17 -0400 10) export default function UnauthorizedProfile({
+db20242a (amy-huang16 2024-10-01 19:23:17 -0400 11)   navigation,
+db20242a (amy-huang16 2024-10-01 19:23:17 -0400 12) }: UnauthorizedProfileProps) {
+db20242a (amy-huang16 2024-10-01 19:23:17 -0400 13)   return (
+db20242a (amy-huang16 2024-10-01 19:23:17 -0400 14)     <View
+db20242a (amy-huang16 2024-10-01 19:23:17 -0400 15)       style={{
+db20242a (amy-huang16 2024-10-01 19:23:17 -0400 16)         flex: 1,
+db20242a (amy-huang16 2024-10-01 19:23:17 -0400 17)         backgroundColor: "#fff",
+db20242a (amy-huang16 2024-10-01 19:23:17 -0400 18)         justifyContent: "center",
+db20242a (amy-huang16 2024-10-01 19:23:17 -0400 19)         alignItems: "center",
+db20242a (amy-huang16 2024-10-01 19:23:17 -0400 20)       }}
+db20242a (amy-huang16 2024-10-01 19:23:17 -0400 21)     >
+db20242a (amy-huang16 2024-10-01 19:23:17 -0400 22)       <Text style={{ marginBottom: 15 }}>
+db20242a (amy-huang16 2024-10-01 19:23:17 -0400 23)         Unauthorized profile page... ask to sign in or sign up
+db20242a (amy-huang16 2024-10-01 19:23:17 -0400 24)       </Text>
+db20242a (amy-huang16 2024-10-01 19:23:17 -0400 25)       <Button
+db20242a (amy-huang16 2024-10-01 19:23:17 -0400 26)         title="Log In"
+db20242a (amy-huang16 2024-10-01 19:23:17 -0400 27)         color="purple"
+db20242a (amy-huang16 2024-10-01 19:23:17 -0400 28)         onPress={() => navigation.navigate("Login")}
+db20242a (amy-huang16 2024-10-01 19:23:17 -0400 29)       />
+db20242a (amy-huang16 2024-10-01 19:23:17 -0400 30)       <Button
+db20242a (amy-huang16 2024-10-01 19:23:17 -0400 31)         title="Sign Up"
+db20242a (amy-huang16 2024-10-01 19:23:17 -0400 32)         color="purple"
+db20242a (amy-huang16 2024-10-01 19:23:17 -0400 33)         onPress={() => navigation.navigate("SignUp")}
+db20242a (amy-huang16 2024-10-01 19:23:17 -0400 34)       />
+db20242a (amy-huang16 2024-10-01 19:23:17 -0400 35)     </View>
+db20242a (amy-huang16 2024-10-01 19:23:17 -0400 36)   );
+db20242a (amy-huang16 2024-10-01 19:23:17 -0400 37) }
+
+file: SolSync/src/components/Profile/index.tsx
+
+db20242a (amy-huang16 2024-10-01 19:23:17 -0400  1) import React from "react";
+db20242a (amy-huang16 2024-10-01 19:23:17 -0400  2) import UnauthorizedProfile from "./UnauthorizedProfile";
+db20242a (amy-huang16 2024-10-01 19:23:17 -0400  3) import AuthorizedProfile from "./AuthorizedProfile";
+db20242a (amy-huang16 2024-10-01 19:23:17 -0400  4) import Login from "../Login";
+db20242a (amy-huang16 2024-10-01 19:23:17 -0400  5) import SignUp from "../SignUp";
+db20242a (amy-huang16 2024-10-01 19:23:17 -0400  6) import { createNativeStackNavigator } from "@react-navigation/native-stack";
+db20242a (amy-huang16 2024-10-01 19:23:17 -0400  7) 
+db20242a (amy-huang16 2024-10-01 19:23:17 -0400  8) type ProfileProps = {
+db20242a (amy-huang16 2024-10-01 19:23:17 -0400  9)   isAuthed: boolean;
+db20242a (amy-huang16 2024-10-01 19:23:17 -0400 10) };
+db20242a (amy-huang16 2024-10-01 19:23:17 -0400 11) 
+db20242a (amy-huang16 2024-10-01 19:23:17 -0400 12) export type DrawerParamList = {
+db20242a (amy-huang16 2024-10-01 19:23:17 -0400 13)   Login: undefined;
+db20242a (amy-huang16 2024-10-01 19:23:17 -0400 14)   SignUp: undefined;
+db20242a (amy-huang16 2024-10-01 19:23:17 -0400 15)   AuthorizedProfile: undefined;
+db20242a (amy-huang16 2024-10-01 19:23:17 -0400 16)   UnauthorizedProfile: undefined;
+db20242a (amy-huang16 2024-10-01 19:23:17 -0400 17) };
+db20242a (amy-huang16 2024-10-01 19:23:17 -0400 18) 
+db20242a (amy-huang16 2024-10-01 19:23:17 -0400 19) const Stack = createNativeStackNavigator<DrawerParamList>();
+db20242a (amy-huang16 2024-10-01 19:23:17 -0400 20) 
+db20242a (amy-huang16 2024-10-01 19:23:17 -0400 21) export default function Profile({ isAuthed }: ProfileProps) {
+db20242a (amy-huang16 2024-10-01 19:23:17 -0400 22)   return (
+db20242a (amy-huang16 2024-10-01 19:23:17 -0400 23)     <Stack.Navigator>
+db20242a (amy-huang16 2024-10-01 19:23:17 -0400 24)       {isAuthed ? (
+db20242a (amy-huang16 2024-10-01 19:23:17 -0400 25)         <Stack.Screen name="AuthorizedProfile" component={AuthorizedProfile} />
+db20242a (amy-huang16 2024-10-01 19:23:17 -0400 26)       ) : (
+db20242a (amy-huang16 2024-10-01 19:23:17 -0400 27)         <>
+db20242a (amy-huang16 2024-10-01 19:23:17 -0400 28)           <Stack.Screen
+db20242a (amy-huang16 2024-10-01 19:23:17 -0400 29)             name="UnauthorizedProfile"
+db20242a (amy-huang16 2024-10-01 19:23:17 -0400 30)             component={UnauthorizedProfile}
+db20242a (amy-huang16 2024-10-01 19:23:17 -0400 31)           />
+db20242a (amy-huang16 2024-10-01 19:23:17 -0400 32)           <Stack.Screen name="Login" component={Login} />
+db20242a (amy-huang16 2024-10-01 19:23:17 -0400 33)           <Stack.Screen name="SignUp" component={SignUp} />
+db20242a (amy-huang16 2024-10-01 19:23:17 -0400 34)         </>
+db20242a (amy-huang16 2024-10-01 19:23:17 -0400 35)       )}
+db20242a (amy-huang16 2024-10-01 19:23:17 -0400 36)     </Stack.Navigator>
+db20242a (amy-huang16 2024-10-01 19:23:17 -0400 37)   );
+db20242a (amy-huang16 2024-10-01 19:23:17 -0400 38) }
+
+file: SolSync/src/components/Login/index.tsx
+
+db20242a (amy-huang16  2024-10-01 19:23:17 -0400  7) import {
+db20242a (amy-huang16  2024-10-01 19:23:17 -0400  8)   StyleSheet,
+db20242a (amy-huang16  2024-10-01 19:23:17 -0400  9)   View,
+db20242a (amy-huang16  2024-10-01 19:23:17 -0400 10)   Text,
+db20242a (amy-huang16  2024-10-01 19:23:17 -0400 11)   TextInput,
+db20242a (amy-huang16  2024-10-01 19:23:17 -0400 12)   Button,
+db20242a (amy-huang16  2024-10-01 19:23:17 -0400 13)   TouchableWithoutFeedback,
+db20242a (amy-huang16  2024-10-01 19:23:17 -0400 14)   Keyboard,
+db20242a (amy-huang16  2024-10-01 19:23:17 -0400 15) } from "react-native";
+db20242a (amy-huang16  2024-10-01 19:23:17 -0400 39)     <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+db20242a (amy-huang16  2024-10-01 19:23:17 -0400 40)       <View
+db20242a (amy-huang16  2024-10-01 19:23:17 -0400 41)         style={{
+db20242a (amy-huang16  2024-10-01 19:23:17 -0400 42)           flex: 1,
+db20242a (amy-huang16  2024-10-01 19:23:17 -0400 43)           backgroundColor: "#fff",
+db20242a (amy-huang16  2024-10-01 19:23:17 -0400 44)           justifyContent: "center",
+db20242a (amy-huang16  2024-10-01 19:23:17 -0400 45)           alignItems: "center",
+db20242a (amy-huang16  2024-10-01 19:23:17 -0400 46)         }}
+db20242a (amy-huang16  2024-10-01 19:23:17 -0400 47)       >
+db20242a (amy-huang16  2024-10-01 19:23:17 -0400 48)         {user ? (
+db20242a (amy-huang16  2024-10-01 19:23:17 -0400 49)           <>
+db20242a (amy-huang16  2024-10-01 19:23:17 -0400 50)             <Button title="Sign Out" onPress={signOut} />
+db20242a (amy-huang16  2024-10-01 19:23:17 -0400 51)             <Text>Hello, {user.email}! You are logged in!</Text>
+db20242a (amy-huang16  2024-10-01 19:23:17 -0400 52)           </>
+db20242a (amy-huang16  2024-10-01 19:23:17 -0400 53)         ) : (
+db20242a (amy-huang16  2024-10-01 19:23:17 -0400 54)           <>
+db20242a (amy-huang16  2024-10-01 19:23:17 -0400 55)             <Text style={{ marginBottom: 15 }}>Hello! Please sign in</Text>
+db20242a (amy-huang16  2024-10-01 19:23:17 -0400 56)             <TextInput
+db20242a (amy-huang16  2024-10-01 19:23:17 -0400 57)               autoCorrect={false}
+db20242a (amy-huang16  2024-10-01 19:23:17 -0400 58)               style={styles.input}
+db20242a (amy-huang16  2024-10-01 19:23:17 -0400 59)               placeholder="Email"
+db20242a (amy-huang16  2024-10-01 19:23:17 -0400 60)               onChangeText={setEmail}
+db20242a (amy-huang16  2024-10-01 19:23:17 -0400 61)               value={email}
+db20242a (amy-huang16  2024-10-01 19:23:17 -0400 62)             />
+db20242a (amy-huang16  2024-10-01 19:23:17 -0400 63)             <TextInput
+db20242a (amy-huang16  2024-10-01 19:23:17 -0400 64)               autoCorrect={false}
+db20242a (amy-huang16  2024-10-01 19:23:17 -0400 65)               secureTextEntry={true}
+db20242a (amy-huang16  2024-10-01 19:23:17 -0400 66)               style={styles.input}
+db20242a (amy-huang16  2024-10-01 19:23:17 -0400 67)               placeholder="Password"
+db20242a (amy-huang16  2024-10-01 19:23:17 -0400 68)               onChangeText={setPassword}
+db20242a (amy-huang16  2024-10-01 19:23:17 -0400 69)               value={password}
+db20242a (amy-huang16  2024-10-01 19:23:17 -0400 70)             />
+db20242a (amy-huang16  2024-10-01 19:23:17 -0400 71)             <Button title="Log In" color="purple" onPress={signIn} />
+db20242a (amy-huang16  2024-10-01 19:23:17 -0400 72)           </>
+db20242a (amy-huang16  2024-10-01 19:23:17 -0400 73)         )}
+db20242a (amy-huang16  2024-10-01 19:23:17 -0400 74)         {error && <Text>{error}</Text>}
+db20242a (amy-huang16  2024-10-01 19:23:17 -0400 75)       </View>
+db20242a (amy-huang16  2024-10-01 19:23:17 -0400 76)     </TouchableWithoutFeedback>
+db20242a (amy-huang16  2024-10-01 19:23:17 -0400 85)     margin: 12,
+
+file: SolSync/src/components/SignUp/index.tsx
+
+db20242a (amy-huang16  2024-10-01 19:23:17 -0400   4) import {
+db20242a (amy-huang16  2024-10-01 19:23:17 -0400   5)   StyleSheet,
+db20242a (amy-huang16  2024-10-01 19:23:17 -0400   6)   View,
+db20242a (amy-huang16  2024-10-01 19:23:17 -0400   7)   Text,
+db20242a (amy-huang16  2024-10-01 19:23:17 -0400   8)   TextInput,
+db20242a (amy-huang16  2024-10-01 19:23:17 -0400   9)   Button,
+db20242a (amy-huang16  2024-10-01 19:23:17 -0400  10)   TouchableWithoutFeedback,
+db20242a (amy-huang16  2024-10-01 19:23:17 -0400  11)   Keyboard,
+db20242a (amy-huang16  2024-10-01 19:23:17 -0400  12) } from "react-native";
+db20242a (amy-huang16  2024-10-01 19:23:17 -0400  73)     <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+db20242a (amy-huang16  2024-10-01 19:23:17 -0400  74)       <View
+db20242a (amy-huang16  2024-10-01 19:23:17 -0400  75)         style={{
+db20242a (amy-huang16  2024-10-01 19:23:17 -0400  76)           flex: 1,
+db20242a (amy-huang16  2024-10-01 19:23:17 -0400  77)           backgroundColor: "#fff",
+db20242a (amy-huang16  2024-10-01 19:23:17 -0400  78)           justifyContent: "center",
+db20242a (amy-huang16  2024-10-01 19:23:17 -0400  79)           alignItems: "center",
+db20242a (amy-huang16  2024-10-01 19:23:17 -0400  80)         }}
+db20242a (amy-huang16  2024-10-01 19:23:17 -0400  81)       >
+db20242a (amy-huang16  2024-10-01 19:23:17 -0400  82)         <Text style={{ marginBottom: 15 }}>Sign up for SolSync</Text>
+db20242a (amy-huang16  2024-10-01 19:23:17 -0400  83)         <TextInput
+db20242a (amy-huang16  2024-10-01 19:23:17 -0400  84)           autoCorrect={false}
+db20242a (amy-huang16  2024-10-01 19:23:17 -0400  85)           style={styles.input}
+db20242a (amy-huang16  2024-10-01 19:23:17 -0400  86)           placeholder="Email"
+db20242a (amy-huang16  2024-10-01 19:23:17 -0400  87)           onChangeText={setEmail}
+db20242a (amy-huang16  2024-10-01 19:23:17 -0400  88)           value={email}
+db20242a (amy-huang16  2024-10-01 19:23:17 -0400  89)         />
+db20242a (amy-huang16  2024-10-01 19:23:17 -0400  90)         <TextInput
+db20242a (amy-huang16  2024-10-01 19:23:17 -0400  91)           autoCorrect={false}
+db20242a (amy-huang16  2024-10-01 19:23:17 -0400  92)           secureTextEntry={true}
+db20242a (amy-huang16  2024-10-01 19:23:17 -0400  93)           style={styles.input}
+db20242a (amy-huang16  2024-10-01 19:23:17 -0400  94)           placeholder="Password"
+db20242a (amy-huang16  2024-10-01 19:23:17 -0400  95)           onChangeText={setPassword}
+db20242a (amy-huang16  2024-10-01 19:23:17 -0400  96)           value={password}
+db20242a (amy-huang16  2024-10-01 19:23:17 -0400  97)         />
+db20242a (amy-huang16  2024-10-01 19:23:17 -0400  98)         <Button title="Sign Up" color="purple" onPress={signUp} />
+db20242a (amy-huang16  2024-10-01 19:23:17 -0400  99)         {user && <Text>Hello, {user?.email}! Thank You for signing up!</Text>}
+db20242a (amy-huang16  2024-10-01 19:23:17 -0400 100)         {error && <Text>{error}</Text>}
+db20242a (amy-huang16  2024-10-01 19:23:17 -0400 101)       </View>
+db20242a (amy-huang16  2024-10-01 19:23:17 -0400 102)     </TouchableWithoutFeedback>
+db20242a (amy-huang16  2024-10-01 19:23:17 -0400 111)     margin: 12,
