@@ -1,3 +1,4 @@
+file: app.json
 3104d35e (Trishu Patel   2024-09-30 11:26:01 -0400 25)     },
 3104d35e (Trishu Patel   2024-09-30 11:26:01 -0400 26)     "plugins": [
 3104d35e (Trishu Patel   2024-09-30 11:26:01 -0400 27)       [
@@ -7,10 +8,8 @@
 3104d35e (Trishu Patel   2024-09-30 11:26:01 -0400 31)         }
 3104d35e (Trishu Patel   2024-09-30 11:26:01 -0400 32)       ]
 3104d35e (Trishu Patel   2024-09-30 11:26:01 -0400 33)     ]
-ebf5117f (Trishu Patel   2024-09-23 14:44:02 -0400  6)     "start": "expo start --tunnel",
-ebf5117f (Trishu Patel   2024-09-23 14:44:02 -0400 15)     "@react-native-async-storage/async-storage": "1.23.1",
-3104d35e (Trishu Patel   2024-09-30 11:26:01 -0400 19)     "expo-location": "~17.0.1",
-ebf5117f (Trishu Patel   2024-09-23 14:44:02 -0400 22)     "firebase": "^10.13.2",
+
+file: src/components/SignUp/index.tsx
 ebf5117f (Trishu Patel 2024-09-23 14:44:02 -0400  1) import { createUserWithEmailAndPassword } from "firebase/auth";
 3104d35e (Trishu Patel 2024-09-30 11:26:01 -0400  2) import { firebaseAuth, db } from "../../../firebaseConfig";
 ebf5117f (Trishu Patel 2024-09-23 14:44:02 -0400  3) import { useState } from "react";
@@ -108,13 +107,53 @@ ebf5117f (Trishu Patel 2024-09-23 14:44:02 -0400 94)     borderWidth: 1,
 ebf5117f (Trishu Patel 2024-09-23 14:44:02 -0400 95)     padding: 10,
 ebf5117f (Trishu Patel 2024-09-23 14:44:02 -0400 96)   },
 ebf5117f (Trishu Patel 2024-09-23 14:44:02 -0400 97) });
+
+
+file: .gitignore
 ebf5117f (Trishu Patel 2024-09-23 14:44:02 -0400 33) .env
+
+file: App.tsx
 ebf5117f (Trishu Patel 2024-09-23 14:44:02 -0400  5) import SignUpScreen from "@/screens/SignUpScreen";
 ebf5117f (Trishu Patel 2024-09-23 14:44:02 -0400  6) import LoginScreen from "@/screens/LoginScreen";
 ebf5117f (Trishu Patel 2024-09-23 14:44:02 -0400 41)         <Tab.Screen name="Sign Up" component={SignUpScreen} />
 ebf5117f (Trishu Patel 2024-09-23 14:44:02 -0400 42)         <Tab.Screen name="Login" component={LoginScreen} />
+
+file: babel.config.js
 ebf5117f (Trishu Patel 2024-09-23 14:44:02 -0400 1) module.exports = function (api) {
 ebf5117f (Trishu Patel 2024-09-23 14:44:02 -0400 4)     presets: ["babel-preset-expo"],
+
+file: firebaseConfig.ts
+ebf5117f (Trishu Patel 2024-09-23 14:44:02 -0400  1) import { initializeApp } from "firebase/app";
+ebf5117f (Trishu Patel 2024-09-23 14:44:02 -0400  2) import { initializeAuth, getReactNativePersistence } from "firebase/auth";
+3104d35e (Trishu Patel 2024-09-30 11:26:01 -0400  3) import { getFirestore } from "firebase/firestore";
+ebf5117f (Trishu Patel 2024-09-23 14:44:02 -0400  4) import ReactNativeAsyncStorage from "@react-native-async-storage/async-storage";
+ebf5117f (Trishu Patel 2024-09-23 14:44:02 -0400  5) 
+ebf5117f (Trishu Patel 2024-09-23 14:44:02 -0400  6) // Firebase app configuration
+ebf5117f (Trishu Patel 2024-09-23 14:44:02 -0400  7) const firebaseConfig = {
+ebf5117f (Trishu Patel 2024-09-23 14:44:02 -0400  8)   apiKey: process.env.EXPO_PUBLIC_FIREBASE_API_KEY,
+ebf5117f (Trishu Patel 2024-09-23 14:44:02 -0400  9)   authDomain: process.env.EXPO_PUBLIC_FIREBASE_AUTH_DOMAIN,
+ebf5117f (Trishu Patel 2024-09-23 14:44:02 -0400 10)   projectId: process.env.EXPO_PUBLIC_FIREBASE_PROJECT_ID,
+ebf5117f (Trishu Patel 2024-09-23 14:44:02 -0400 11)   storageBucket: process.env.EXPO_PUBLIC_FIREBASE_STORAGE_BUCKET,
+ebf5117f (Trishu Patel 2024-09-23 14:44:02 -0400 12)   messagingSenderId: process.env.EXPO_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
+ebf5117f (Trishu Patel 2024-09-23 14:44:02 -0400 13)   appId: process.env.EXPO_PUBLIC_FIREBASE_APP_ID,
+ebf5117f (Trishu Patel 2024-09-23 14:44:02 -0400 14) };
+ebf5117f (Trishu Patel 2024-09-23 14:44:02 -0400 15) 
+ebf5117f (Trishu Patel 2024-09-23 14:44:02 -0400 16) // Initialize Firebase app and auth
+ebf5117f (Trishu Patel 2024-09-23 14:44:02 -0400 17) export const firebaseApp = initializeApp(firebaseConfig);
+ebf5117f (Trishu Patel 2024-09-23 14:44:02 -0400 18) export const firebaseAuth = initializeAuth(firebaseApp, {
+ebf5117f (Trishu Patel 2024-09-23 14:44:02 -0400 19)   persistence: getReactNativePersistence(ReactNativeAsyncStorage),
+ebf5117f (Trishu Patel 2024-09-23 14:44:02 -0400 20) });
+3104d35e (Trishu Patel 2024-09-30 11:26:01 -0400 21) export const db = getFirestore(firebaseApp);
+
+file: metro.config.js
+ebf5117f (Trishu Patel 2024-09-23 14:44:02 -0400 1) const { getDefaultConfig } = require('@expo/metro-config');
+ebf5117f (Trishu Patel 2024-09-23 14:44:02 -0400 2) 
+ebf5117f (Trishu Patel 2024-09-23 14:44:02 -0400 3) const defaultConfig = getDefaultConfig(__dirname);
+ebf5117f (Trishu Patel 2024-09-23 14:44:02 -0400 4) defaultConfig.resolver.sourceExts.push('cjs');
+ebf5117f (Trishu Patel 2024-09-23 14:44:02 -0400 5) 
+ebf5117f (Trishu Patel 2024-09-23 14:44:02 -0400 6) module.exports = defaultConfig;
+
+file: metro.config.js
 ebf5117f (Trishu Patel 2024-09-23 14:44:02 -0400  1) import { createUserWithEmailAndPassword } from "firebase/auth";
 3104d35e (Trishu Patel 2024-09-30 11:26:01 -0400  2) import { firebaseAuth, db } from "../../../firebaseConfig";
 ebf5117f (Trishu Patel 2024-09-23 14:44:02 -0400  3) import { useState } from "react";
@@ -212,6 +251,8 @@ ebf5117f (Trishu Patel 2024-09-23 14:44:02 -0400 94)     borderWidth: 1,
 ebf5117f (Trishu Patel 2024-09-23 14:44:02 -0400 95)     padding: 10,
 ebf5117f (Trishu Patel 2024-09-23 14:44:02 -0400 96)   },
 ebf5117f (Trishu Patel 2024-09-23 14:44:02 -0400 97) });
+
+file: src/components/Login/index.tsx
 ebf5117f (Trishu Patel 2024-09-23 14:44:02 -0400  1) import {
 ebf5117f (Trishu Patel 2024-09-23 14:44:02 -0400  2)   signInWithEmailAndPassword,
 ebf5117f (Trishu Patel 2024-09-23 14:44:02 -0400  3)   signOut as firebaseSignOut,
@@ -283,6 +324,8 @@ ebf5117f (Trishu Patel 2024-09-23 14:44:02 -0400 68)     borderWidth: 1,
 ebf5117f (Trishu Patel 2024-09-23 14:44:02 -0400 69)     padding: 10,
 ebf5117f (Trishu Patel 2024-09-23 14:44:02 -0400 70)   },
 ebf5117f (Trishu Patel 2024-09-23 14:44:02 -0400 71) });
+
+file: src/hooks/useUser.ts
 ebf5117f (Trishu Patel 2024-09-23 14:44:02 -0400  1) import { User, onAuthStateChanged } from "firebase/auth";
 ebf5117f (Trishu Patel 2024-09-23 14:44:02 -0400  2) import { useEffect, useState } from "react";
 ebf5117f (Trishu Patel 2024-09-23 14:44:02 -0400  3) import { firebaseAuth } from "../../firebaseConfig";
@@ -300,12 +343,15 @@ ebf5117f (Trishu Patel 2024-09-23 14:44:02 -0400 14)   return user;
 ebf5117f (Trishu Patel 2024-09-23 14:44:02 -0400 15) };
 ebf5117f (Trishu Patel 2024-09-23 14:44:02 -0400 16) 
 ebf5117f (Trishu Patel 2024-09-23 14:44:02 -0400 17) export default useUser;
+
+file: src/screens/LoginScreen.tsx
 ebf5117f (Trishu Patel 2024-09-23 14:44:02 -0400 1) import Login from "@/components/Login";
 ebf5117f (Trishu Patel 2024-09-23 14:44:02 -0400 2) 
 ebf5117f (Trishu Patel 2024-09-23 14:44:02 -0400 3) export default function LoginScreen() {
 ebf5117f (Trishu Patel 2024-09-23 14:44:02 -0400 4)   return <Login />;
 ebf5117f (Trishu Patel 2024-09-23 14:44:02 -0400 5) }
-ebf5117f (Trishu Patel 2024-09-23 14:44:02 -0400 1) import SignUp from "@/components/SignUp";
+
+file: src/screens/SignUpScreen.tsxebf5117f (Trishu Patel 2024-09-23 14:44:02 -0400 1) import SignUp from "@/components/SignUp";
 ebf5117f (Trishu Patel 2024-09-23 14:44:02 -0400 2) 
 ebf5117f (Trishu Patel 2024-09-23 14:44:02 -0400 3) export default function SignUpScreen() {
 ebf5117f (Trishu Patel 2024-09-23 14:44:02 -0400 4)   return <SignUp />;
