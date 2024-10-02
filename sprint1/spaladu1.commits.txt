@@ -1,0 +1,77 @@
+src/components/Home/index.tsx
+b672e265 (Valli Paladugu 2024-09-30 20:18:19 -0400  1) import { StyleSheet, View, Text, Image } from "react-native";
+b672e265 (Valli Paladugu 2024-09-30 20:18:19 -0400  2) import { LinearGradient } from "expo-linear-gradient";
+b672e265 (Valli Paladugu 2024-09-30 20:18:19 -0400  3) 
+b672e265 (Valli Paladugu 2024-09-30 20:18:19 -0400  4) import sun from "@assets/sun.png";
+b672e265 (Valli Paladugu 2024-09-30 20:18:19 -0400  5) import cloud from "@assets/simple_cloud.png";
+b672e265 (Valli Paladugu 2024-09-30 20:18:19 -0400  9)     <LinearGradient colors={["#B4CDD2", "#FFD18A"]} style={styles.container}>
+b672e265 (Valli Paladugu 2024-09-30 20:18:19 -0400 10)       <View style={styles.content}>
+b672e265 (Valli Paladugu 2024-09-30 20:18:19 -0400 11)         <Text style={styles.Hello}>Hello Amy!</Text>
+b672e265 (Valli Paladugu 2024-09-30 20:18:19 -0400 12)         <Image style={styles.sun} source={sun} />
+b672e265 (Valli Paladugu 2024-09-30 20:18:19 -0400 13)         <Image style={styles.cloud} source={cloud} />
+b672e265 (Valli Paladugu 2024-09-30 20:18:19 -0400 14)         <Text style={styles.Sunrise1}>Sunrise: 07:31 AM</Text>
+b672e265 (Valli Paladugu 2024-09-30 20:18:19 -0400 15)         <Text style={styles.Sunset}>Sunset: 07:21 PM</Text>
+b672e265 (Valli Paladugu 2024-09-30 20:18:19 -0400 16)         <Text style={styles.Sunrise2}>Next Sunrise: 07:31 AM</Text>
+b672e265 (Valli Paladugu 2024-09-30 20:18:19 -0400 17)       </View>
+b672e265 (Valli Paladugu 2024-09-30 20:18:19 -0400 18)     </LinearGradient>
+b672e265 (Valli Paladugu 2024-09-30 20:18:19 -0400 21) 
+b672e265 (Valli Paladugu 2024-09-30 20:18:19 -0400 22) const styles = StyleSheet.create({
+b672e265 (Valli Paladugu 2024-09-30 20:18:19 -0400 23)   container: {
+b672e265 (Valli Paladugu 2024-09-30 20:18:19 -0400 24)     flex: 1,
+b672e265 (Valli Paladugu 2024-09-30 20:18:19 -0400 25)   },
+b672e265 (Valli Paladugu 2024-09-30 20:18:19 -0400 26)   content: {
+b672e265 (Valli Paladugu 2024-09-30 20:18:19 -0400 27)     flex: 1,
+b672e265 (Valli Paladugu 2024-09-30 20:18:19 -0400 28)     justifyContent: "center",
+b672e265 (Valli Paladugu 2024-09-30 20:18:19 -0400 29)     alignItems: "center",
+b672e265 (Valli Paladugu 2024-09-30 20:18:19 -0400 30)   },
+b672e265 (Valli Paladugu 2024-09-30 20:18:19 -0400 31)   sun: {
+b672e265 (Valli Paladugu 2024-09-30 20:18:19 -0400 32)     width: 100,
+b672e265 (Valli Paladugu 2024-09-30 20:18:19 -0400 33)     height: 100,
+b672e265 (Valli Paladugu 2024-09-30 20:18:19 -0400 34)     marginTop: 30,
+b672e265 (Valli Paladugu 2024-09-30 20:18:19 -0400 35)     marginBottom: -115,
+b672e265 (Valli Paladugu 2024-09-30 20:18:19 -0400 36)   },
+b672e265 (Valli Paladugu 2024-09-30 20:18:19 -0400 37)   cloud: {
+b672e265 (Valli Paladugu 2024-09-30 20:18:19 -0400 38)     width: 180,
+b672e265 (Valli Paladugu 2024-09-30 20:18:19 -0400 39)     height: 180,
+b672e265 (Valli Paladugu 2024-09-30 20:18:19 -0400 40)     marginTop: 2,
+b672e265 (Valli Paladugu 2024-09-30 20:18:19 -0400 41)     marginBottom: 10,
+b672e265 (Valli Paladugu 2024-09-30 20:18:19 -0400 42)   },
+b672e265 (Valli Paladugu 2024-09-30 20:18:19 -0400 43)   Hello: {
+b672e265 (Valli Paladugu 2024-09-30 20:18:19 -0400 44)     color: "white",
+b672e265 (Valli Paladugu 2024-09-30 20:18:19 -0400 45)     fontWeight: "bold",
+b672e265 (Valli Paladugu 2024-09-30 20:18:19 -0400 46)     fontSize: 45,
+b672e265 (Valli Paladugu 2024-09-30 20:18:19 -0400 47)     paddingTop: -50,
+b672e265 (Valli Paladugu 2024-09-30 20:18:19 -0400 48)     paddingBottom: 10,
+b672e265 (Valli Paladugu 2024-09-30 20:18:19 -0400 49)   },
+b672e265 (Valli Paladugu 2024-09-30 20:18:19 -0400 50)   Sunrise1: {
+b672e265 (Valli Paladugu 2024-09-30 20:18:19 -0400 51)     color: "white",
+b672e265 (Valli Paladugu 2024-09-30 20:18:19 -0400 52)     fontWeight: "bold",
+b672e265 (Valli Paladugu 2024-09-30 20:18:19 -0400 53)     fontSize: 30,
+b672e265 (Valli Paladugu 2024-09-30 20:18:19 -0400 54)     paddingTop: 80,
+b672e265 (Valli Paladugu 2024-09-30 20:18:19 -0400 55)   },
+b672e265 (Valli Paladugu 2024-09-30 20:18:19 -0400 56)   Sunset: {
+b672e265 (Valli Paladugu 2024-09-30 20:18:19 -0400 57)     color: "white",
+b672e265 (Valli Paladugu 2024-09-30 20:18:19 -0400 58)     fontWeight: "bold",
+b672e265 (Valli Paladugu 2024-09-30 20:18:19 -0400 59)     fontSize: 30,
+b672e265 (Valli Paladugu 2024-09-30 20:18:19 -0400 60)   },
+b672e265 (Valli Paladugu 2024-09-30 20:18:19 -0400 61)   Sunrise2: {
+b672e265 (Valli Paladugu 2024-09-30 20:18:19 -0400 62)     color: "white",
+b672e265 (Valli Paladugu 2024-09-30 20:18:19 -0400 63)     fontWeight: "bold",
+b672e265 (Valli Paladugu 2024-09-30 20:18:19 -0400 64)     fontSize: 30,
+b672e265 (Valli Paladugu 2024-09-30 20:18:19 -0400 65)     paddingBottom: 100,
+b672e265 (Valli Paladugu 2024-09-30 20:18:19 -0400 66)   },
+b672e265 (Valli Paladugu 2024-09-30 20:18:19 -0400 67) });
+
+
+app.json
+4eb214bb (Valli Paladugu 2024-09-23 16:07:24 -0400  7)     "icon": "./assets/app-icon.png",
+4eb214bb (Valli Paladugu 2024-09-23 16:07:24 -0400 10)       "image": "./assets/app-splash-screen.png",
+4eb214bb (Valli Paladugu 2024-09-23 16:07:24 -0400 11)       "resizeMode": "cover",
+
+
+images.d.ts
+b672e265 (Valli Paladugu 2024-09-30 20:18:19 -0400 1) declare module '*.png';
+b672e265 (Valli Paladugu 2024-09-30 20:18:19 -0400 2) declare module '*.jpg';
+b672e265 (Valli Paladugu 2024-09-30 20:18:19 -0400 3) declare module '*.jpeg';
+b672e265 (Valli Paladugu 2024-09-30 20:18:19 -0400 4) declare module '*.bmp';
+b672e265 (Valli Paladugu 2024-09-30 20:18:19 -0400 5) declare module '*.gif';
