@@ -1,38 +1,47 @@
 # SolSync
 
+## Description
+
+SolSync is a mobile app available on iOS and Android that allows users to track habits that correspond with the sunrise and sunset.
+
+The initial inspiration for this product was the Hindu practice known as Agnihotra, but it can be used for any habit that corresponds with sunrise and sunset (stretching, drinking water, meditating, etc.)
+
+## Getting Started
+
+### Prerequisites
+
+- Node.js
+- Expo Go App
+- PNPM
+
+### Installation
+
+1. Clone the repo
+2. Obtain a copy of the .env file from one of the SolSync team members and place it in the root directory of the project
+3. Run `pnpm install` to install all dependencies
+4. Run `pnpm start` to start the app
+5. Scan the QR code with the Expo Go app to open the app on your phone, or, alternatively, use a locally installed emulator
+
 ## Contributing
 
-Before contributing, please run the setup-branch-protection.sh script so that you can't commit directly to the main branch.
+Branch protections are enabled on this repository.
+To contribute, please create a new branch and make a pull request.
 
-```bash
-./setup-branch-protection.sh
+Your pull request title must follow the conventional commits specification. An example of a valid pull request title is:
+
+```text
+feat: Add sunrise times to home page
 ```
 
-If needed, give the script executable permissions using the following command:
+It is also recommended to have the following VSCode extensions installed:
 
-```bash
-chmod +x setup-branch-protection.sh
-```
+- Prettier
+- ESLint
 
-If on Windows, you can run the script using Git Bash. Note, you may need to add Git Bash to your PATH if the `sh` command is not recognized.
+This will allow you to detect formatting and linting errors as you write code
 
-```bash
-sh setup-branch-protection.sh
-```
+Failure to pass the `pnpm lint` and `pnpm format` commands will mean that your PR cannot be merged.
 
-If these fail, manually create a .git/hooks/pre-commit file with the following content:
+## License
 
-```bash
-#!/bin/bash
-
-# File location: SolSync/.git/hooks/pre-commit
-branch="$(git rev-parse --abbrev-ref HEAD)"
-
-if [ "$branch" = "main" ]; then
-  echo "You can't commit directly to the main branch."
-  echo "This is done so that you cannot bypass our CI/CD pipeline before affecting the main branch."
-  echo "Please create your own branch with the command 'git checkout -b <branch-name>'"
-  echo "Once you are done with your work, open a pull request to merge your branch into the main branch."
-  exit 1
-fi
-```
+This project is licensed under the MIT License - see the [LICENSE.txt](LICENSE.txt) file for details.
