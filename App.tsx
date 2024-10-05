@@ -14,7 +14,7 @@ function getIconName(
     case "Home":
       return focused ? "home" : "home-outline";
     case "Profile":
-      return focused ? "settings" : "settings-outline";
+      return focused ? "person-circle" : "person-circle-outline";
     default:
       return "caret-up";
   }
@@ -38,8 +38,6 @@ export default function App() {
       >
         <Tab.Screen name="Home" component={HomeScreen} />
         <Tab.Screen name="Profile" component={ProfileScreen} />
-        <Tab.Screen name="Sign Up" component={SignUpScreen} />
-        <Tab.Screen name="Login" component={LoginScreen} />
       </Tab.Navigator>
     </NavigationContainer>
   );
