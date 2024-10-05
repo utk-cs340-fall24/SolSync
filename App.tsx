@@ -1,15 +1,13 @@
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import HomeScreen from "@/screens/HomeScreen";
-import SignUpScreen from "@/screens/SignUpScreen";
-import LoginScreen from "@/screens/LoginScreen";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import ProfileScreen from "@/screens/ProfileScreen";
 
-function getIconName(
+const getIconName = (
   routeName: string,
   focused: boolean,
-): keyof typeof Ionicons.glyphMap {
+): keyof typeof Ionicons.glyphMap => {
   switch (routeName) {
     case "Home":
       return focused ? "home" : "home-outline";
@@ -18,7 +16,7 @@ function getIconName(
     default:
       return "caret-up";
   }
-}
+};
 
 const Tab = createBottomTabNavigator();
 

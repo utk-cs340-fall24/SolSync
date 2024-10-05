@@ -1,5 +1,5 @@
-import { createUserWithEmailAndPassword } from "firebase/auth";
-import { firebaseAuth, db } from "../../../firebaseConfig";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { firebaseAuth } from "../../../firebaseConfig";
 import {
   StyleSheet,
   View,
@@ -9,50 +9,36 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
 } from "react-native";
-import { doc, setDoc } from "firebase/firestore";
-import getLocationFromDevice from "@/utils/getLocationFromDevice";
-import { z } from "zod";
-import { SubmitHandler, Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Controller, SubmitHandler, useForm } from "react-hook-form";
+import { z } from "zod";
 import { FirebaseError } from "firebase/app";
 import getFirebaseAuthErrorMessage from "@/utils/getFirebaseAuthErrorMessage";
 
-const signUpFormSchema = z.object({
-  displayName: z.string().min(1, { message: "Display name is required" }),
+const loginFormSchema = z.object({
   email: z.string().email({ message: "Invalid email" }),
   password: z
     .string()
     .min(6, { message: "Password must be at least 6 characters" }),
 });
 
-type SignUpForm = z.infer<typeof signUpFormSchema>;
+type LoginForm = z.infer<typeof loginFormSchema>;
 
-export default function SignUp() {
+export default function SignIn() {
   const {
     control,
     handleSubmit,
     formState: { errors },
     setError,
-  } = useForm<SignUpForm>({
-    resolver: zodResolver(signUpFormSchema),
+  } = useForm<LoginForm>({
+    resolver: zodResolver(loginFormSchema),
   });
 
-  const onSubmit: SubmitHandler<SignUpForm> = async (data) => {
-    const { email, password, displayName } = data;
+  const onSubmit: SubmitHandler<LoginForm> = async (data) => {
+    const { email, password } = data;
+
     try {
-      const credentials = await createUserWithEmailAndPassword(
-        firebaseAuth,
-        email,
-        password,
-      );
-
-      const location = await getLocationFromDevice();
-
-      setDoc(doc(db, "users", credentials.user.uid), {
-        displayName,
-        latitude: location.latitude,
-        longitude: location.longitude,
-      });
+      await signInWithEmailAndPassword(firebaseAuth, email, password);
     } catch (error) {
       if (error instanceof FirebaseError) {
         setError("root", {
@@ -72,26 +58,7 @@ export default function SignUp() {
           alignItems: "center",
         }}
       >
-        <Text style={{ marginBottom: 15 }}>Sign up for SolSync</Text>
-
-        <Controller
-          control={control}
-          name="displayName"
-          render={({ field: { onChange, onBlur, value } }) => (
-            <TextInput
-              autoCorrect={false}
-              style={styles.input}
-              placeholder="Display Name"
-              onChangeText={onChange}
-              onBlur={onBlur}
-              value={value}
-            />
-          )}
-        />
-
-        {errors.displayName && (
-          <Text style={{ color: "red" }}>{errors.displayName.message}</Text>
-        )}
+        <Text style={{ marginBottom: 15 }}>Hello! Please sign in</Text>
 
         <Controller
           control={control}
@@ -107,6 +74,7 @@ export default function SignUp() {
             />
           )}
         />
+
         {errors.email && (
           <Text style={{ color: "red" }}>{errors.email.message}</Text>
         )}
@@ -125,12 +93,13 @@ export default function SignUp() {
             />
           )}
         />
+
         {errors.password && (
           <Text style={{ color: "red" }}>{errors.password.message}</Text>
         )}
 
         <Button
-          title="Sign Up"
+          title="Sign In"
           color="purple"
           onPress={handleSubmit(onSubmit)}
         />

@@ -2,12 +2,12 @@ import { User, onAuthStateChanged } from "firebase/auth";
 import { useEffect, useState } from "react";
 import { firebaseAuth } from "../../firebaseConfig";
 
-const useUser = (): User | undefined => {
-  const [user, setUser] = useState<User | undefined>();
+const useUser = (): User | null => {
+  const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
     onAuthStateChanged(firebaseAuth, (user) => {
-      setUser(user ? user : undefined);
+      setUser(user ? user : null);
     });
   }, []);
 

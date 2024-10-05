@@ -1,13 +1,10 @@
 import React from "react";
 import UnauthorizedProfile from "./UnauthorizedProfile";
 import AuthorizedProfile from "./AuthorizedProfile";
-import Login from "../Login";
+import Login from "../SignIn";
 import SignUp from "../SignUp";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-
-type ProfileProps = {
-  isAuthed: boolean;
-};
+import useUser from "@/hooks/useUser";
 
 export type DrawerParamList = {
   Login: undefined;
@@ -18,16 +15,23 @@ export type DrawerParamList = {
 
 const Stack = createNativeStackNavigator<DrawerParamList>();
 
-export default function Profile({ isAuthed }: ProfileProps) {
+export default function Profile() {
+  const user = useUser();
+
   return (
-    <Stack.Navigator>
-      {isAuthed ? (
-        <Stack.Screen name="AuthorizedProfile" component={AuthorizedProfile} />
+    <Stack.Navigator screenOptions={{ headerTitle: "" }}>
+      {user ? (
+        <Stack.Screen
+          name="AuthorizedProfile"
+          component={AuthorizedProfile}
+          options={{ headerShown: false }}
+        />
       ) : (
         <>
           <Stack.Screen
             name="UnauthorizedProfile"
             component={UnauthorizedProfile}
+            options={{ headerShown: false }}
           />
           <Stack.Screen name="Login" component={Login} />
           <Stack.Screen name="SignUp" component={SignUp} />
