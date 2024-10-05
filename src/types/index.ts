@@ -18,3 +18,12 @@ export type SolSyncUser = User & {
   displayName: string;
   location: Location;
 };
+
+export type Habit = {
+  id: string;
+  userId: string;
+  name: string;
+  notificationTime: "sunrise" | "sunset" | "both";
+  emailNotificationEnabled: boolean;
+  pushNotificationEnabled: boolean;
+};

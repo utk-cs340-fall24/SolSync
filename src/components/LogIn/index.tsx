@@ -22,19 +22,19 @@ const loginFormSchema = z.object({
     .min(6, { message: "Password must be at least 6 characters" }),
 });
 
-type LoginForm = z.infer<typeof loginFormSchema>;
+type LoginFormValues = z.infer<typeof loginFormSchema>;
 
-export default function SignIn() {
+export default function LogIn() {
   const {
     control,
     handleSubmit,
     formState: { errors },
     setError,
-  } = useForm<LoginForm>({
+  } = useForm<LoginFormValues>({
     resolver: zodResolver(loginFormSchema),
   });
 
-  const onSubmit: SubmitHandler<LoginForm> = async (data) => {
+  const onSubmit: SubmitHandler<LoginFormValues> = async (data) => {
     const { email, password } = data;
 
     try {
@@ -50,15 +50,8 @@ export default function SignIn() {
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
-      <View
-        style={{
-          flex: 1,
-          backgroundColor: "#fff",
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
-        <Text style={{ marginBottom: 15 }}>Hello! Please sign in</Text>
+      <View style={styles.container}>
+        <Text style={{ marginBottom: 15 }}>Hello! Please log in</Text>
 
         <Controller
           control={control}
@@ -99,7 +92,7 @@ export default function SignIn() {
         )}
 
         <Button
-          title="Sign In"
+          title="Log In"
           color="purple"
           onPress={handleSubmit(onSubmit)}
         />
@@ -113,6 +106,12 @@ export default function SignIn() {
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "#fff",
+    alignItems: "center",
+    justifyContent: "center",
+  },
   input: {
     height: 40,
     width: "70%",

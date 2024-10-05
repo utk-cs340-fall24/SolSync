@@ -3,6 +3,8 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import HomeScreen from "@/screens/HomeScreen";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import ProfileScreen from "@/screens/ProfileScreen";
+import HabitsScreen from "@/screens/HabitsScreen";
+import HabitProvider from "@/components/Habits/HabitProvider";
 
 const getIconName = (
   routeName: string,
@@ -13,6 +15,8 @@ const getIconName = (
       return focused ? "home" : "home-outline";
     case "Profile":
       return focused ? "person-circle" : "person-circle-outline";
+    case "Habits":
+      return focused ? "list" : "list-outline";
     default:
       return "caret-up";
   }
@@ -22,21 +26,24 @@ const Tab = createBottomTabNavigator();
 
 export default function App() {
   return (
-    <NavigationContainer>
-      <Tab.Navigator
-        screenOptions={({ route }) => ({
-          tabBarIcon: ({ focused, color, size }) => {
-            const iconName = getIconName(route.name, focused);
-            return <Ionicons name={iconName} size={size} color={color} />;
-          },
-          tabBarActiveTintColor: "purple",
-          tabBarInactiveTintColor: "gray",
-          headerShown: false,
-        })}
-      >
-        <Tab.Screen name="Home" component={HomeScreen} />
-        <Tab.Screen name="Profile" component={ProfileScreen} />
-      </Tab.Navigator>
-    </NavigationContainer>
+    <HabitProvider>
+      <NavigationContainer>
+        <Tab.Navigator
+          screenOptions={({ route }) => ({
+            tabBarIcon: ({ focused, color, size }) => {
+              const iconName = getIconName(route.name, focused);
+              return <Ionicons name={iconName} size={size} color={color} />;
+            },
+            tabBarActiveTintColor: "purple",
+            tabBarInactiveTintColor: "gray",
+            headerShown: false,
+          })}
+        >
+          <Tab.Screen name="Home" component={HomeScreen} />
+          <Tab.Screen name="Habits" component={HabitsScreen} />
+          <Tab.Screen name="Profile" component={ProfileScreen} />
+        </Tab.Navigator>
+      </NavigationContainer>
+    </HabitProvider>
   );
 }

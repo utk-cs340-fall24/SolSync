@@ -25,7 +25,7 @@ const signUpFormSchema = z.object({
     .min(6, { message: "Password must be at least 6 characters" }),
 });
 
-type SignUpForm = z.infer<typeof signUpFormSchema>;
+type SignUpFormValues = z.infer<typeof signUpFormSchema>;
 
 export default function SignUp() {
   const {
@@ -33,11 +33,11 @@ export default function SignUp() {
     handleSubmit,
     formState: { errors },
     setError,
-  } = useForm<SignUpForm>({
+  } = useForm<SignUpFormValues>({
     resolver: zodResolver(signUpFormSchema),
   });
 
-  const onSubmit: SubmitHandler<SignUpForm> = async (data) => {
+  const onSubmit: SubmitHandler<SignUpFormValues> = async (data) => {
     const { email, password, displayName } = data;
     try {
       const credentials = await createUserWithEmailAndPassword(
@@ -64,14 +64,7 @@ export default function SignUp() {
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
-      <View
-        style={{
-          flex: 1,
-          backgroundColor: "#fff",
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
+      <View style={styles.container}>
         <Text style={{ marginBottom: 15 }}>Sign up for SolSync</Text>
 
         <Controller
@@ -144,6 +137,12 @@ export default function SignUp() {
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "#fff",
+    justifyContent: "center",
+    alignItems: "center",
+  },
   input: {
     height: 40,
     width: "70%",
