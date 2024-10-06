@@ -94,6 +94,7 @@ export default function SignUp() {
               autoCorrect={false}
               style={styles.input}
               placeholder="Email"
+              keyboardType="email-address"
               onChangeText={onChange}
               onBlur={onBlur}
               value={value}
@@ -112,6 +113,7 @@ export default function SignUp() {
               autoCorrect={false}
               style={styles.input}
               placeholder="Password"
+              secureTextEntry
               onChangeText={onChange}
               onBlur={onBlur}
               value={value}
