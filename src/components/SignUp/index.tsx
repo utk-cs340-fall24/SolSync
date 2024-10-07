@@ -17,8 +17,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { FirebaseError } from "firebase/app";
 import getFirebaseAuthErrorMessage from "@/utils/getFirebaseAuthErrorMessage";
 
-import DropDownPicker from "react-native-dropdown-picker";
-
 const signUpFormSchema = z.object({
   displayName: z.string().min(1, { message: "Display name is required" }),
   email: z.string().email({ message: "Invalid email" }),
