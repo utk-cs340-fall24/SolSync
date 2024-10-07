@@ -8,13 +8,16 @@ import useUser from "@/hooks/useUser";
 import { Button, Switch, Text, TextInput } from "react-native";
 import { randomUUID } from "expo-crypto";
 import { SafeAreaView, StyleSheet } from "react-native";
-import { Picker } from "@react-native-picker/picker";
+import { Dropdown } from "react-native-element-dropdown";
+import RNDateTimePicker from "@react-native-community/datetimepicker";
 
 const habitFormSchema = z.object({
   name: z.string().min(1, { message: "Name is required" }),
-  notificationTime: z.enum(["sunrise", "sunset", "both"]),
+  notificationPeriod: z.enum(["sunrise", "sunset", "both"]),
   emailNotificationEnabled: z.boolean(),
   pushNotificationEnabled: z.boolean(),
+  hasExactNotificationTime: z.boolean(),
+  exactNotificationTime: z.date(),
 });
 
 type HabitFormValues = z.infer<typeof habitFormSchema>;
@@ -26,14 +29,18 @@ export default function HabitForm({ navigation }: HabitFormProps) {
     control,
     handleSubmit,
     formState: { errors },
+    watch,
   } = useForm<HabitFormValues>({
     resolver: zodResolver(habitFormSchema),
     defaultValues: {
-      notificationTime: "sunrise",
+      notificationPeriod: "sunrise",
       emailNotificationEnabled: true,
       pushNotificationEnabled: true,
+      hasExactNotificationTime: false,
+      exactNotificationTime: new Date(),
     },
   });
+  const hasExactNotificationTime = watch("hasExactNotificationTime");
 
   const { addHabit } = useHabit();
 
@@ -46,18 +53,26 @@ export default function HabitForm({ navigation }: HabitFormProps) {
   const onSubmit: SubmitHandler<HabitFormValues> = async (data) => {
     const {
       name,
-      notificationTime,
+      notificationPeriod,
       emailNotificationEnabled,
       pushNotificationEnabled,
+      hasExactNotificationTime,
+      exactNotificationTime,
     } = data;
+
+    const isoTime = exactNotificationTime.toISOString();
+
+    console.log(data);
 
     addHabit({
       id: randomUUID(),
       userId: user.uid,
       name,
-      notificationTime,
+      notificationPeriod,
       emailNotificationEnabled,
       pushNotificationEnabled,
+      hasExactNotificationTime,
+      exactNotificationTime: isoTime,
     });
 
     navigation.navigate("HabitList");
@@ -85,22 +100,28 @@ export default function HabitForm({ navigation }: HabitFormProps) {
       )}
       <Controller
         control={control}
-        name="notificationTime"
+        name="notificationPeriod"
         render={({ field: { onChange, value } }) => (
-          <Picker
-            selectedValue={value}
-            onValueChange={onChange}
+          <Dropdown
+            data={[
+              { label: "Sunrise", value: "sunrise" },
+              { label: "Sunset", value: "sunset" },
+              { label: "Both", value: "both" },
+            ]}
+            onChange={(item) => onChange(item.value)}
             style={styles.picker}
-          >
-            <Picker.Item label="Sunrise" value="sunrise" />
-            <Picker.Item label="Sunset" value="sunset" />
-            <Picker.Item label="Both" value="both" />
-          </Picker>
+            value={value}
+            labelField={"label"}
+            valueField={"value"}
+          />
         )}
       />
-      {errors.notificationTime && (
-        <Text style={{ color: "red" }}>{errors.notificationTime.message}</Text>
+      {errors.notificationPeriod && (
+        <Text style={{ color: "red" }}>
+          {errors.notificationPeriod.message}
+        </Text>
       )}
+
       <Text>Email Notifications</Text>
       <Controller
         control={control}
@@ -139,6 +160,50 @@ export default function HabitForm({ navigation }: HabitFormProps) {
           {errors.pushNotificationEnabled.message}
         </Text>
       )}
+      <Text>Exact Notification Time</Text>
+      <Controller
+        control={control}
+        name="hasExactNotificationTime"
+        render={({ field: { onChange, value } }) => (
+          <Switch
+            trackColor={{ false: "#767577", true: "#81b0ff" }}
+            thumbColor={value ? "#f5dd4b" : "#f4f3f4"}
+            ios_backgroundColor="#3e3e3e"
+            onValueChange={onChange}
+            value={value}
+          />
+        )}
+      />
+
+      {errors.hasExactNotificationTime && (
+        <Text style={{ color: "red" }}>
+          {errors.hasExactNotificationTime.message}
+        </Text>
+      )}
+
+      {hasExactNotificationTime && (
+        <Controller
+          control={control}
+          name="exactNotificationTime"
+          render={({ field: { onChange, value } }) => (
+            <RNDateTimePicker
+              value={value}
+              mode="time"
+              is24Hour={true}
+              onChange={(event, selectedDate) => {
+                onChange(selectedDate);
+              }}
+            />
+          )}
+        />
+      )}
+
+      {errors.exactNotificationTime && (
+        <Text style={{ color: "red" }}>
+          {errors.exactNotificationTime.message}
+        </Text>
+      )}
+
       <Button
         title="Add Habit"
         color="purple"

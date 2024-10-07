@@ -23,7 +23,9 @@ export type Habit = {
   id: string;
   userId: string;
   name: string;
-  notificationTime: "sunrise" | "sunset" | "both";
+  notificationPeriod: "sunrise" | "sunset" | "both";
   emailNotificationEnabled: boolean;
   pushNotificationEnabled: boolean;
+  hasExactNotificationTime: boolean;
+  exactNotificationTime: string;
 };
