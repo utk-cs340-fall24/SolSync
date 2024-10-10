@@ -11,7 +11,6 @@ import {
   Switch,
   Text,
   TextInput,
-  TouchableOpacity,
   TouchableWithoutFeedback,
 } from "react-native";
 import { randomUUID } from "expo-crypto";
