@@ -6,7 +6,7 @@ import sun from "@assets/sun.png";
 import cloud from "@assets/simple_cloud.png";
 
 const Hour = new Date().getHours();
-const isDay = Hour >= 0 && Hour < 13;
+const isDay = Hour >= 0 && Hour < 12;
 
 let gradientColors = ["#FFFFFF"];
 let colorsLocations = [0];
@@ -20,9 +20,10 @@ if (isDay) {
 }
 
 export default function Home() {
-  const [sunrise, setSunrise] = useState<Date>();
-  const [sunset, setSunset] = useState<Date>();
-  const [nextsunrise, setNextSunrise] = useState<Date>();
+  const [sunrise, setSunrise] = useState<Date | null>();
+  const [sunset, setSunset] = useState<Date | null>();
+  const [nextsunrise, setNextSunrise] = useState<Date | null>();
+
   useEffect(() => {
     fetchData();
   }, []);
@@ -37,17 +38,22 @@ export default function Home() {
             "x-api-key": process.env.EXPO_PUBLIC_SUNRISE_TIME_API_KEY as string,
           },
           body: JSON.stringify({
-            lat: "38.907192",
-            lng: "-77.036873",
+            lat: "51.4934",
+            lng: "-0.0098",
           }),
         },
       );
       const jsonData = await response.json();
-      setSunrise(new Date(jsonData.todaySunrise));
-      setSunset(new Date(jsonData.todaySunset));
-      setNextSunrise(new Date(jsonData.tomorrowSunrise));
-      console.log(sunrise);
-      console.log(sunrise?.toTimeString());
+      if (jsonData.message) {
+        setSunrise(null);
+        setSunset(null);
+        setNextSunrise(null);
+      } else {
+        setSunrise(new Date(jsonData.todaySunrise));
+        setSunset(new Date(jsonData.todaySunset));
+        setNextSunrise(new Date(jsonData.tomorrowSunrise));
+      }
+      console.log(jsonData);
     } catch (err) {
       console.log(err);
     }
@@ -62,23 +68,45 @@ export default function Home() {
         <Text style={styles.Hello}>Hello Amy!</Text>
         <Image style={styles.sun} source={sun} />
         <Image style={styles.cloud} source={cloud} />
-        {sunrise && (
-          <Text style={styles.Sunrise1}>
-            Sunrise: {sunrise?.toLocaleTimeString()}
-          </Text>
+        {sunrise ? (
+          <>
+            <Text style={styles.Sunrise1}>Sunrise:</Text>
+            <Text style={styles.Sunrise1Data}>
+              {sunrise?.toLocaleTimeString()}
+            </Text>
+          </>
+        ) : (
+          <>
+            <Text style={styles.Sunrise1}>Sunrise:</Text>
+            <Text style={styles.Sunrise1Data}>Time Not Available</Text>
+          </>
         )}
-        {sunset && (
-          <Text style={styles.Sunrise1}>
-            Sunrise: {sunset?.toLocaleTimeString()}
-          </Text>
+        {sunset ? (
+          <>
+            <Text style={styles.Sunset}>Sunset:</Text>
+            <Text style={styles.SunsetData}>
+              {sunset?.toLocaleTimeString()}
+            </Text>
+          </>
+        ) : (
+          <>
+            <Text style={styles.Sunset}>Sunset:</Text>
+            <Text style={styles.SunsetData}>Time Not Available</Text>
+          </>
         )}
-        {nextsunrise && (
-          <Text style={styles.Sunrise1}>
-            Sunrise: {nextsunrise?.toLocaleTimeString()}
-          </Text>
+        {nextsunrise ? (
+          <>
+            <Text style={styles.Sunrise2}>Tomorrow's Sunrise:</Text>
+            <Text style={styles.Sunrise2Data}>
+              {nextsunrise?.toLocaleTimeString()}
+            </Text>
+          </>
+        ) : (
+          <>
+            <Text style={styles.Sunrise2}>Tomorrow's Sunrise:</Text>
+            <Text style={styles.Sunrise2Data}>Time Not Available</Text>
+          </>
         )}
-        {/* <Text style={styles.Sunset}>Sunset: {sunset} </Text>
-        <Text style={styles.Sunrise2}>Next Sunrise: {nextsunrise}</Text> */}
       </View>
     </LinearGradient>
   );
@@ -108,25 +136,47 @@ const styles = StyleSheet.create({
   Hello: {
     color: "white",
     fontWeight: "bold",
-    fontSize: 45,
-    paddingTop: -50,
-    paddingBottom: 10,
+    fontSize: 50,
+    marginTop: 40,
+    marginBottom: 5,
   },
   Sunrise1: {
     color: "white",
     fontWeight: "bold",
-    fontSize: 30,
-    paddingTop: 80,
+    fontSize: 35,
+    marginTop: 25,
+    alignItems: "center",
+  },
+  Sunrise1Data: {
+    color: "white",
+    fontWeight: "bold",
+    fontSize: 35,
+    alignItems: "center",
+    marginBottom: 15,
   },
   Sunset: {
     color: "white",
     fontWeight: "bold",
-    fontSize: 30,
+    fontSize: 35,
+    alignItems: "center",
+  },
+  SunsetData: {
+    color: "white",
+    fontWeight: "bold",
+    fontSize: 35,
+    alignItems: "center",
+    marginBottom: 15,
   },
   Sunrise2: {
     color: "white",
     fontWeight: "bold",
-    fontSize: 30,
-    paddingBottom: 100,
+    fontSize: 35,
+    alignItems: "center",
+  },
+  Sunrise2Data: {
+    color: "white",
+    fontWeight: "bold",
+    fontSize: 35,
+    alignItems: "center",
   },
 });
