@@ -25,14 +25,12 @@ const habitFormSchema = z.object({
   hourOffset: z
     .number()
     .min(0, { message: "Hour offset must be a positive number" })
-    .max(6, { message: "Hour offset must be less than 6" })
-    .optional(),
+    .max(6, { message: "Hour offset must be less than 6" }),
   minuteOffset: z
     .number()
     .min(0, { message: "Minute offset must be a positive number" })
-    .max(59, { message: "Minute offset must be less than 60" })
-    .optional(),
-  offsetDirection: z.enum(["before", "after"]).optional(),
+    .max(59, { message: "Minute offset must be less than 60" }),
+  offsetDirection: z.enum(["before", "after"]),
 });
 
 type HabitFormValues = z.infer<typeof habitFormSchema>;
@@ -58,11 +56,7 @@ export default function HabitForm({ navigation }: HabitFormProps) {
     },
   });
 
-  const emailNotificationEnabled = watch("emailNotificationEnabled");
-  const pushNotificationEnabled = watch("pushNotificationEnabled");
   const notificationPeriod = watch("notificationPeriod");
-
-  const showTimeControls = emailNotificationEnabled || pushNotificationEnabled;
 
   const { addHabit } = useHabit();
 
@@ -184,77 +178,69 @@ export default function HabitForm({ navigation }: HabitFormProps) {
           </Text>
         )}
 
-        {showTimeControls && (
-          <>
-            <Text>Hour offset</Text>
-            <Controller
-              control={control}
-              name="hourOffset"
-              render={({ field: { onChange, onBlur, value } }) => (
-                <TextInput
-                  autoCorrect={false}
-                  style={styles.input}
-                  placeholder="Hour offset"
-                  onChangeText={(text) => onChange(Number(text))}
-                  onBlur={onBlur}
-                  keyboardType="numeric"
-                  value={String(value)}
-                />
-              )}
+        <Text>Hour offset</Text>
+        <Controller
+          control={control}
+          name="hourOffset"
+          render={({ field: { onChange, onBlur, value } }) => (
+            <TextInput
+              autoCorrect={false}
+              style={styles.input}
+              placeholder="Hour offset"
+              onChangeText={(text) => onChange(Number(text))}
+              onBlur={onBlur}
+              keyboardType="numeric"
+              value={String(value)}
             />
-            {errors.hourOffset && (
-              <Text style={{ color: "red" }}>{errors.hourOffset.message}</Text>
-            )}
+          )}
+        />
+        {errors.hourOffset && (
+          <Text style={{ color: "red" }}>{errors.hourOffset.message}</Text>
+        )}
 
-            <Text>Minute offset</Text>
-            <Controller
-              control={control}
-              name="minuteOffset"
-              render={({ field: { onChange, onBlur, value } }) => (
-                <TextInput
-                  autoCorrect={false}
-                  style={styles.input}
-                  placeholder="Minute offset"
-                  onChangeText={(text) => onChange(Number(text))}
-                  onBlur={onBlur}
-                  keyboardType="numeric"
-                  value={String(value)}
-                />
-              )}
+        <Text>Minute offset</Text>
+        <Controller
+          control={control}
+          name="minuteOffset"
+          render={({ field: { onChange, onBlur, value } }) => (
+            <TextInput
+              autoCorrect={false}
+              style={styles.input}
+              placeholder="Minute offset"
+              onChangeText={(text) => onChange(Number(text))}
+              onBlur={onBlur}
+              keyboardType="numeric"
+              value={String(value)}
             />
-            {errors.minuteOffset && (
-              <Text style={{ color: "red" }}>
-                {errors.minuteOffset.message}
-              </Text>
-            )}
+          )}
+        />
+        {errors.minuteOffset && (
+          <Text style={{ color: "red" }}>{errors.minuteOffset.message}</Text>
+        )}
 
-            <Text>Offset direction</Text>
-            <Controller
-              control={control}
-              name="offsetDirection"
-              render={({ field: { onChange, value } }) => (
-                <Dropdown
-                  data={[
-                    {
-                      label: `Before ${notificationPeriod}`,
-                      value: "before",
-                    },
-                    { label: `After ${notificationPeriod}`, value: "after" },
-                  ]}
-                  onChange={(item) => onChange(item.value)}
-                  style={styles.picker}
-                  value={value}
-                  labelField={"label"}
-                  valueField={"value"}
-                />
-              )}
+        <Text>Offset direction</Text>
+        <Controller
+          control={control}
+          name="offsetDirection"
+          render={({ field: { onChange, value } }) => (
+            <Dropdown
+              data={[
+                {
+                  label: `Before ${notificationPeriod}`,
+                  value: "before",
+                },
+                { label: `After ${notificationPeriod}`, value: "after" },
+              ]}
+              onChange={(item) => onChange(item.value)}
+              style={styles.picker}
+              value={value}
+              labelField={"label"}
+              valueField={"value"}
             />
-            {errors.offsetDirection && (
-              <Text style={{ color: "red" }}>
-                {errors.offsetDirection.message}
-              </Text>
-            )}
-          </>
+          )}
+        />
+        {errors.offsetDirection && (
+          <Text style={{ color: "red" }}>{errors.offsetDirection.message}</Text>
         )}
 
         <Button

@@ -26,7 +26,7 @@ export type Habit = {
   notificationPeriod: "sunrise" | "sunset";
   emailNotificationEnabled: boolean;
   pushNotificationEnabled: boolean;
-  hourOffset?: number;
-  minuteOffset?: number;
-  offsetDirection?: "before" | "after";
+  hourOffset: number;
+  minuteOffset: number;
+  offsetDirection: "before" | "after";
 };
