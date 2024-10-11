@@ -1,6 +1,9 @@
 import { createContext, useState, useEffect, useRef } from "react";
 
 import { Habit } from "@/types";
+import { collection, getDocs, query, where } from "firebase/firestore";
+import { db } from "../../../firebaseConfig";
+import useUser from "@/hooks/useUser";
 
 export type HabitContextType = {
   habits: Habit[];
@@ -17,65 +20,27 @@ type HabitProviderProps = {
 export default function HabitProvider({ children }: HabitProviderProps) {
   const [habits, setHabits] = useState<Habit[]>([]);
   const hasFetchedHabits = useRef(false);
+  const user = useUser();
 
   useEffect(() => {
-    // TODO: Trishu fetch habits from database
-    // const fetchHabitsFromDatabase = async () => {
-    // };
-    // await fetchHabitsFromDatabase();
-    setHabits([
-      {
-        id: "1",
-        userId: "1",
-        name: "Meditate",
-        notificationTime: "sunrise",
-        emailNotificationEnabled: true,
-        pushNotificationEnabled: true,
-      },
-      {
-        id: "2",
-        userId: "1",
-        name: "Drink water",
-        notificationTime: "sunset",
-        emailNotificationEnabled: true,
-        pushNotificationEnabled: true,
-      },
-      {
-        id: "3",
-        userId: "1",
-        name: "Meditate",
-        notificationTime: "sunrise",
-        emailNotificationEnabled: true,
-        pushNotificationEnabled: true,
-      },
-      {
-        id: "4",
-        userId: "1",
-        name: "Meditate",
-        notificationTime: "sunset",
-        emailNotificationEnabled: true,
-        pushNotificationEnabled: true,
-      },
-      {
-        id: "5",
-        userId: "1",
-        name: "Meditate",
-        notificationTime: "both",
-        emailNotificationEnabled: true,
-        pushNotificationEnabled: true,
-      },
-      {
-        id: "6",
-        userId: "1",
-        name: "Meditate",
-        notificationTime: "both",
-        emailNotificationEnabled: true,
-        pushNotificationEnabled: true,
-      },
-    ]);
+    if (!user) return;
+
+    const getHabits = async () => {
+      const habitsQuery = await getDocs(
+        query(collection(db, "habits"), where("userId", "==", user?.uid)),
+      );
+
+      const habits = habitsQuery.docs.map(
+        (doc) => ({ id: doc.id, ...doc.data() }) as Habit,
+      );
+
+      setHabits(habits);
+    };
+
+    getHabits();
 
     hasFetchedHabits.current = true;
-  }, []);
+  }, [habits, user]);
 
   useEffect(() => {
     if (!hasFetchedHabits.current) {
