@@ -77,9 +77,7 @@ export default function HabitForm({ navigation }: HabitFormProps) {
       offsetDirection,
     } = data;
 
-    console.log(data);
-
-    addHabit({
+    await addHabit({
       id: randomUUID(),
       userId: user.uid,
       name,
