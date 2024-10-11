@@ -20,6 +20,9 @@ if (isDay) {
 }
 
 export default function Home() {
+  const [sunrise, setSunrise] = useState<Date>();
+  const [sunset, setSunset] = useState<Date>();
+  const [nextsunrise, setNextSunrise] = useState<Date>();
   useEffect(() => {
     fetchData();
   }, []);
@@ -40,7 +43,11 @@ export default function Home() {
         },
       );
       const jsonData = await response.json();
-      console.log(jsonData);
+      setSunrise(new Date(jsonData.todaySunrise));
+      setSunset(new Date(jsonData.todaySunset));
+      setNextSunrise(new Date(jsonData.tomorrowSunrise));
+      console.log(sunrise);
+      console.log(sunrise?.toTimeString());
     } catch (err) {
       console.log(err);
     }
@@ -55,9 +62,23 @@ export default function Home() {
         <Text style={styles.Hello}>Hello Amy!</Text>
         <Image style={styles.sun} source={sun} />
         <Image style={styles.cloud} source={cloud} />
-        <Text style={styles.Sunrise1}>Sunrise: </Text>
-        <Text style={styles.Sunset}>Sunset: 07:21 PM</Text>
-        <Text style={styles.Sunrise2}>Next Sunrise: 07:31 AM</Text>
+        {sunrise && (
+          <Text style={styles.Sunrise1}>
+            Sunrise: {sunrise?.toLocaleTimeString()}
+          </Text>
+        )}
+        {sunset && (
+          <Text style={styles.Sunrise1}>
+            Sunrise: {sunset?.toLocaleTimeString()}
+          </Text>
+        )}
+        {nextsunrise && (
+          <Text style={styles.Sunrise1}>
+            Sunrise: {nextsunrise?.toLocaleTimeString()}
+          </Text>
+        )}
+        {/* <Text style={styles.Sunset}>Sunset: {sunset} </Text>
+        <Text style={styles.Sunrise2}>Next Sunrise: {nextsunrise}</Text> */}
       </View>
     </LinearGradient>
   );
