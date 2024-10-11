@@ -34,7 +34,7 @@ export default function App() {
               const iconName = getIconName(route.name, focused);
               return <Ionicons name={iconName} size={size} color={color} />;
             },
-            tabBarActiveTintColor: "purple",
+            tabBarActiveTintColor: "#908BE8",
             tabBarInactiveTintColor: "gray",
             headerShown: false,
           })}
