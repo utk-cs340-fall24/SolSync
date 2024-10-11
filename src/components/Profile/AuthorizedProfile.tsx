@@ -1,6 +1,8 @@
+import { signOut } from "firebase/auth";
 import { useState } from "react";
 import { StyleSheet, View, Text, Button, Switch } from "react-native";
 import Icon from "react-native-vector-icons/FontAwesome";
+import { firebaseAuth } from "../../../firebaseConfig";
 
 export default function AuthorizedProfile() {
   const [pushIsEnabled, setPushIsEnabled] = useState(false);
@@ -74,7 +76,7 @@ export default function AuthorizedProfile() {
           title="Log Out"
           color="white"
           onPress={() => {
-            console.log("Log Out");
+            signOut(firebaseAuth);
           }}
         ></Button>
       </View>
