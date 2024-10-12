@@ -59,6 +59,16 @@ export default function Habits() {
         userId: "zUEEZuHjfmE2ftRjocJ7",
       },
       {
+        date: new Date("2024-10-01"),
+        habitId: "4",
+        userId: "zUEEZuHjfmE2ftRjocJ7",
+      },
+      {
+        date: new Date("2024-10-02"),
+        habitId: "4",
+        userId: "zUEEZuHjfmE2ftRjocJ7",
+      },
+      {
         date: new Date("2024-10-03"),
         habitId: "1",
         userId: "zUEEZuHjfmE2ftRjocJ7",
@@ -74,6 +84,11 @@ export default function Habits() {
         userId: "zUEEZuHjfmE2ftRjocJ7",
       },
       {
+        date: new Date("2024-10-02"),
+        habitId: "3",
+        userId: "zUEEZuHjfmE2ftRjocJ7",
+      },
+      {
         date: new Date("2024-10-07"),
         habitId: "2",
         userId: "zUEEZuHjfmE2ftRjocJ7",
@@ -82,20 +97,22 @@ export default function Habits() {
         date: new Date("2024-10-08"),
         habitId: "1",
         userId: "zUEEZuHjfmE2ftRjocJ7",
+      },{
+        date: new Date("2024-10-12"),
+        habitId: "1",
+        userId: "zUEEZuHjfmE2ftRjocJ7",
       },
     ];
 
-    const currentHabitDates = data.filter(
-      (history) => history.habitId === currentHabit.id,
-    );
-
     const habitHistory = {};
 
-    currentHabitDates.forEach((history) => {
-      const date = dayjs(history.date);
+    data
+      .filter((history) => history.habitId === currentHabit.id)
+      .forEach((history) => {
+        const date = dayjs(history.date);
 
-      habitHistory[date.format("YYYY-MM-DD")] = { selected: true };
-    });
+        habitHistory[date.format("YYYY-MM-DD")] = { selected: true };
+      });
 
     return habitHistory;
   };
