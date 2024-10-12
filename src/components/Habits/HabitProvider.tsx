@@ -1,6 +1,17 @@
-import { createContext, useState, useEffect, useRef } from "react";
+import { createContext, useState, useEffect } from "react";
 
 import { Habit } from "@/types";
+import {
+  collection,
+  deleteDoc,
+  doc,
+  getDocs,
+  query,
+  setDoc,
+  where,
+} from "firebase/firestore";
+import { db } from "../../../firebaseConfig";
+import useUser from "@/hooks/useUser";
 
 export type HabitContextType = {
   habits: Habit[];
@@ -16,85 +27,38 @@ type HabitProviderProps = {
 
 export default function HabitProvider({ children }: HabitProviderProps) {
   const [habits, setHabits] = useState<Habit[]>([]);
-  const hasFetchedHabits = useRef(false);
+  const user = useUser();
 
   useEffect(() => {
-    // TODO: Trishu fetch habits from database
-    // const fetchHabitsFromDatabase = async () => {
-    // };
-    // await fetchHabitsFromDatabase();
-    setHabits([
-      {
-        id: "1",
-        userId: "1",
-        name: "Meditate",
-        notificationTime: "sunrise",
-        emailNotificationEnabled: true,
-        pushNotificationEnabled: true,
-      },
-      {
-        id: "2",
-        userId: "1",
-        name: "Drink water",
-        notificationTime: "sunset",
-        emailNotificationEnabled: true,
-        pushNotificationEnabled: true,
-      },
-      {
-        id: "3",
-        userId: "1",
-        name: "Meditate",
-        notificationTime: "sunrise",
-        emailNotificationEnabled: true,
-        pushNotificationEnabled: true,
-      },
-      {
-        id: "4",
-        userId: "1",
-        name: "Meditate",
-        notificationTime: "sunset",
-        emailNotificationEnabled: true,
-        pushNotificationEnabled: true,
-      },
-      {
-        id: "5",
-        userId: "1",
-        name: "Meditate",
-        notificationTime: "both",
-        emailNotificationEnabled: true,
-        pushNotificationEnabled: true,
-      },
-      {
-        id: "6",
-        userId: "1",
-        name: "Meditate",
-        notificationTime: "both",
-        emailNotificationEnabled: true,
-        pushNotificationEnabled: true,
-      },
-    ]);
+    if (!user) return;
 
-    hasFetchedHabits.current = true;
-  }, []);
+    const fetchHabits = async () => {
+      const habitsQuery = await getDocs(
+        query(collection(db, "habits"), where("userId", "==", user?.uid)),
+      );
 
-  useEffect(() => {
-    if (!hasFetchedHabits.current) {
-      return;
-    }
+      const habits = habitsQuery.docs.map(
+        (doc) => ({ id: doc.id, ...doc.data() }) as Habit,
+      );
 
-    // TODO: update habits in database
-  }, [habits]);
+      setHabits(habits);
+    };
 
-  const addHabit = (habit: Habit) => {
-    // TODO: Trishu add habit to database
+    fetchHabits();
+  }, [user]);
+
+  const addHabit = async (habit: Habit) => {
     setHabits((prevHabits) => [...prevHabits, habit]);
+
+    await setDoc(doc(db, "habits", habit.id), habit);
   };
 
-  const removeHabit = (habit: Habit) => {
-    // TODO: Trishu remove habit from database
+  const removeHabit = async (habit: Habit) => {
     setHabits((prevHabits) =>
       prevHabits.filter((prevHabit) => prevHabit.id !== habit.id),
     );
+
+    await deleteDoc(doc(db, "habits", habit.id));
   };
 
   return (
