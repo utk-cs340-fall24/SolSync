@@ -1,6 +1,6 @@
 import useUser from "@/hooks/useUser";
-import { useEffect, useState } from "react";
-import { set } from "react-hook-form";
+import dayjs from "dayjs";
+import { useState } from "react";
 import { View, StyleSheet, Text } from "react-native";
 import { Calendar } from "react-native-calendars";
 import { Dropdown } from "react-native-element-dropdown";
@@ -11,9 +11,7 @@ export default function Habits() {
     name: "walking",
     id: "1",
   });
-  useEffect(() => {
-    console.log("currentHabit", currentHabit);
-  }, [currentHabit]);
+
   if (!user) {
     return (
       <View style={styles.container}>
@@ -88,15 +86,15 @@ export default function Habits() {
     ];
 
     const currentHabitDates = data.filter(
-      (history) => history.habitId === currentHabit?.id,
+      (history) => history.habitId === currentHabit.id,
     );
 
     const habitHistory = {};
 
     currentHabitDates.forEach((history) => {
-      const date = history.date.toISOString().split("T")[0];
+      const date = dayjs(history.date);
 
-      habitHistory[date] = { selected: true };
+      habitHistory[date.format("YYYY-MM-DD")] = { selected: true };
     });
 
     return habitHistory;
@@ -108,7 +106,6 @@ export default function Habits() {
       <Dropdown
         data={getHabitsList()}
         onChange={(item) => {
-          console.log("item:", item);
           setCurrentHabit({
             name: item.label,
             id: item.value,
@@ -119,7 +116,7 @@ export default function Habits() {
         labelField={"label"}
         valueField={"value"}
       />
-      <Calendar style={styles.calendar} markedDates={getHistory} />
+      <Calendar style={styles.calendar} markedDates={getHistory()} />
     </View>
   );
 }
