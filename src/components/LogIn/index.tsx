@@ -5,7 +5,6 @@ import {
   View,
   Text,
   TextInput,
-  Button,
   TouchableWithoutFeedback,
   Keyboard,
   TouchableOpacity,
@@ -56,7 +55,10 @@ export default function LogIn({ navigation }: LogInPageProps) {
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
       <View style={styles.container}>
-        <Text style={styles.title}>SolSync</Text>
+        <View style={styles.titleContainer}>
+          <Text style={styles.title}>SolSync</Text>
+        </View>
+        {/* <Text style={styles.title}>SolSync</Text> */}
 
         <View style={styles.inputContainer}>
           <Controller
@@ -134,11 +136,15 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     padding: 16,
   },
+  titleContainer: {
+    alignItems: "center",
+  },
   title: {
-    fontSize: 32,
+    fontSize: 42,
     fontWeight: "bold",
     color: "#4a3f4c",
-    marginBottom: 60,
+    marginBottom: 90,
+    marginTop: -40,
   },
   inputContainer: {
     width: "95%",
