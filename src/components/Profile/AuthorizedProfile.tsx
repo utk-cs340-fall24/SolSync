@@ -1,99 +1,96 @@
 import { signOut } from "firebase/auth";
 import { useState } from "react";
-import { StyleSheet, View, Text, Button, Switch } from "react-native";
-import Icon from "react-native-vector-icons/FontAwesome";
+import { StyleSheet, View, Text, TouchableOpacity } from "react-native";
+import { default as FAIcon } from "react-native-vector-icons/FontAwesome";
 import { firebaseAuth } from "../../../firebaseConfig";
+import getLocationFromDevice from "@/utils/getLocationFromDevice";
+import { LinearGradient } from "expo-linear-gradient";
+import { default as FeatherIcon } from "react-native-vector-icons/Feather";
+
+const gradientColors = ["#FFD18A", "#C6B9E4", "#81A8F4"];
+const colorsLocations = [0.15, 0.65, 1];
+
+
 
 export default function AuthorizedProfile() {
-  const [pushIsEnabled, setPushIsEnabled] = useState(false);
-  const pushNotificationsSwitch = () => {
-    setPushIsEnabled((previousState) => !previousState);
-    if (!pushIsEnabled) {
-      console.log("Push notifications are ON");
-    } else {
-      console.log("Push notifications are OFF");
-    }
-  };
-
-  const [emailIsEnabled, setEmailIsEnabled] = useState(false);
-  const emailNotificationsSwitch = () => {
-    setEmailIsEnabled((previousState) => !previousState);
-    if (!emailIsEnabled) {
-      console.log("Email notifications are ON");
-    } else {
-      console.log("Email notifications are OFF");
-    }
-  };
-
   return (
-    <View style={styles.page}>
-      <Text style={styles.header}>Hello, Amy!</Text>
-      <Icon
-        name="user-circle"
-        size={100}
-        color="gray"
-        style={{ marginBottom: 20 }}
-      ></Icon>
-      <View style={styles.option}>
-        <Text>Name: </Text>
-        <Text>Amy Huang</Text>
+    <LinearGradient
+      colors={gradientColors}
+      locations={colorsLocations}
+      style={styles.container}
+    >
+      <View style={styles.content}>
+        <TouchableOpacity style={styles.editButton}>
+          <FeatherIcon name="edit" size={38} color="white"></FeatherIcon>
+        </TouchableOpacity>
+
+        <Text style={styles.header}>Hello, Amy!</Text>
+
+        <FAIcon
+          name="user-circle"
+          size={100}
+          color="black"
+          style={{ marginBottom: 60 }}
+        ></FAIcon>
+
+        <View style={styles.option}>
+          <Text>Name: </Text>
+          <Text>Amy Huang</Text>
+        </View>
+        <View style={styles.line}></View>
+        <View style={styles.option}>
+          <Text>Email: </Text>
+          <Text>filleremail@gmail.com</Text>
+        </View>
+
+        <TouchableOpacity
+          style={styles.locationButton}
+          onPress={() => getLocationFromDevice()}
+        >
+          <FAIcon
+            name="location-arrow"
+            size={25}
+            color="white"
+            style={{ marginHorizontal: 6 }}
+          ></FAIcon>
+          <Text style={styles.buttonText}>Reset Your Location</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={styles.logOutButton}
+          onPress={() => signOut(firebaseAuth)}
+        >
+          <FAIcon
+            name="sign-out"
+            size={25}
+            color="white"
+            style={{ marginHorizontal: 6 }}
+          ></FAIcon>
+          <Text style={styles.buttonText}>Log Out</Text>
+        </TouchableOpacity>
       </View>
-      <View style={styles.option}>
-        <Text>Email: </Text>
-        <Text>filleremail@gmail.com</Text>
-      </View>
-      <View style={styles.option}>
-        <Text>Push Notifications</Text>
-        <Switch
-          trackColor={{ false: "#767577", true: "#81b0ff" }}
-          thumbColor={pushIsEnabled ? "#f5dd4b" : "#f4f3f4"}
-          ios_backgroundColor="#3e3e3e"
-          onValueChange={pushNotificationsSwitch}
-          value={pushIsEnabled}
-        />
-      </View>
-      <View style={[styles.option, { marginBottom: 20 }]}>
-        <Text>Email Notifications</Text>
-        <Switch
-          trackColor={{ false: "#767577", true: "#81b0ff" }}
-          thumbColor={emailIsEnabled ? "#f5dd4b" : "#f4f3f4"}
-          ios_backgroundColor="#3e3e3e"
-          onValueChange={emailNotificationsSwitch}
-          value={emailIsEnabled}
-        />
-      </View>
-      <View style={styles.button}>
-        <Button
-          title="Reset Location"
-          color="white"
-          onPress={() => {
-            console.log("Reset Location");
-          }}
-        ></Button>
-      </View>
-      <View style={styles.button}>
-        <Button
-          title="Log Out"
-          color="white"
-          onPress={() => {
-            signOut(firebaseAuth);
-          }}
-        ></Button>
-      </View>
-    </View>
+    </LinearGradient>
   );
 }
 
 const styles = StyleSheet.create({
-  page: {
+  container: {
     flex: 1,
-    backgroundColor: "white",
+  },
+  content: {
+    flex: 1,
     justifyContent: "center",
     alignItems: "center",
+    marginTop: 20,
+  },
+  editButton: {
+    position: "absolute",
+    top: "5%",
+    right: "8%",
   },
   header: {
     fontSize: 30,
-    paddingBottom: 20,
+    paddingBottom: 60,
   },
   option: {
     margin: 10,
@@ -103,10 +100,36 @@ const styles = StyleSheet.create({
     gap: 10,
     width: "80%",
   },
-  button: {
-    borderRadius: 10,
-    backgroundColor: "purple",
-    margin: 10,
-    width: "40%",
+  line: {
+    height: 1,
+    width: "80%",
+    backgroundColor: "#918E8E",
+    marginVertical: 14,
+  },
+  buttonText: {
+    color: "#fff",
+    fontSize: 16,
+    fontWeight: "600",
+    marginHorizontal: 12,
+  },
+  locationButton: {
+    backgroundColor: "#9B98E9",
+    width: "64%",
+    paddingVertical: 10,
+    borderRadius: 8,
+    alignItems: "center",
+    marginTop: 60,
+    flexDirection: "row",
+    justifyContent: "center",
+  },
+  logOutButton: {
+    backgroundColor: "#908BE8",
+    width: "64%",
+    paddingVertical: 10,
+    borderRadius: 8,
+    alignItems: "center",
+    marginTop: 24,
+    flexDirection: "row",
+    justifyContent: "center",
   },
 });
