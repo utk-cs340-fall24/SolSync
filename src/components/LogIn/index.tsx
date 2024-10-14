@@ -58,7 +58,6 @@ export default function LogIn({ navigation }: LogInPageProps) {
         <View style={styles.titleContainer}>
           <Text style={styles.title}>SolSync</Text>
         </View>
-        {/* <Text style={styles.title}>SolSync</Text> */}
 
         <View style={styles.inputContainer}>
           <Controller
