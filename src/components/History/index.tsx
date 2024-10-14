@@ -43,7 +43,7 @@ export default function Habits() {
 
     console.log(currentHabit?.id);
 
-    const calenderDates : Record<string, {}> = {};
+    const calenderDates: Record<string, {}> = {};
 
     dates?.forEach((date) => {
       calenderDates[date.format("YYYY-MM-DD")] = {
