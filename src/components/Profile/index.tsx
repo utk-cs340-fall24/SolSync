@@ -1,5 +1,4 @@
 import React from "react";
-import UnauthorizedProfile from "./UnauthorizedProfile";
 import AuthorizedProfile from "./AuthorizedProfile";
 import LogIn from "../LogIn";
 import SignUp from "../SignUp";
