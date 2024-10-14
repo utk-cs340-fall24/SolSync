@@ -1,16 +1,102 @@
+import { useHabit } from "@/hooks/useHabit";
 import useUser from "@/hooks/useUser";
+import { Habit, History } from "@/types";
 import dayjs from "dayjs";
-import { useState } from "react";
+import { collection, getDocs, query, where } from "firebase/firestore";
+import { useEffect, useState } from "react";
 import { View, StyleSheet, Text } from "react-native";
 import { Calendar } from "react-native-calendars";
 import { Dropdown } from "react-native-element-dropdown";
+import { db } from "../../../firebaseConfig";
+
+type DropdownItem = {
+  label: string;
+  value: string;
+};
 
 export default function Habits() {
   const user = useUser();
-  const [currentHabit, setCurrentHabit] = useState({
-    name: "walking",
-    id: "1",
-  });
+  const { habits } = useHabit();
+  const [currentHabit, setCurrentHabit] = useState<Habit>();
+  const [history, setHistory] = useState<History[]>();
+  const [calendarDates, setCalendarDates] = useState<unknown>();
+
+  const habitToDropdownItem = (habit: Habit) => {
+    return {
+      label: habit.name,
+      value: habit.id,
+    } as DropdownItem;
+  };
+
+  const dropdownItemToHabit = (dropdownItem: DropdownItem) => {
+    return habits.find((habit) => habit.id === dropdownItem.value);
+  };
+
+  const getHabits = () => {
+    return habits.map((habit) => habitToDropdownItem(habit));
+  };
+
+  const habitToCalenderDates = () => {
+    const dates = history
+      ?.filter((history) => history.habitId === currentHabit?.id)
+      .map((history) => dayjs(history.date));
+
+    console.log(currentHabit?.id);
+
+    const calenderDates : Record<string, {}> = {};
+
+    dates?.forEach((date) => {
+      calenderDates[date.format("YYYY-MM-DD")] = {
+        selected: true,
+      };
+    });
+
+    setCalendarDates(calenderDates);
+  };
+
+  const onHabitChange = (item: DropdownItem) => {
+    setCurrentHabit(dropdownItemToHabit(item));
+  };
+
+  useEffect(() => {
+    if (!user) return;
+
+    const fetchHabits = async () => {
+      const historyQuery = await getDocs(
+        query(collection(db, "history"), where("userId", "==", user?.uid)),
+      );
+
+      const history = historyQuery.docs.map(
+        (doc) =>
+          ({
+            id: doc.id,
+            date: doc.data().date.toDate(),
+            habitId: doc.data().habitId,
+            userId: doc.data().userId,
+          }) as History,
+      );
+
+      setHistory(history);
+    };
+
+    fetchHabits();
+  }, [user]);
+
+  useEffect(() => {
+    const dates = history
+      ?.filter((history) => history.habitId === currentHabit?.id)
+      .map((history) => dayjs(history.date));
+
+    const calenderDates: StringByString = {};
+
+    dates?.forEach((date) => {
+      calenderDates[date.format("YYYY-MM-DD")] = {
+        selected: true,
+      };
+    });
+
+    setCalendarDates(calenderDates);
+  }, [currentHabit?.id, history]);
 
   if (!user) {
     return (
@@ -20,120 +106,22 @@ export default function Habits() {
     );
   }
 
-  const getHabitsList = () => {
-    const data = [
-      {
-        name: "walking",
-        id: "1",
-      },
-      {
-        name: "praying",
-        id: "2",
-      },
-      {
-        name: "sleeping",
-        id: "3",
-      },
-      {
-        name: "reading",
-        id: "4",
-      },
-    ];
-
-    return data.map((habit) => ({
-      label: habit.name,
-      value: habit.id,
-    }));
-  };
-
-  const getHistory = () => {
-    const data = [
-      {
-        date: new Date("2024-10-01"),
-        habitId: "1",
-        userId: "zUEEZuHjfmE2ftRjocJ7",
-      },
-      {
-        date: new Date("2024-10-02"),
-        habitId: "1",
-        userId: "zUEEZuHjfmE2ftRjocJ7",
-      },
-      {
-        date: new Date("2024-10-01"),
-        habitId: "4",
-        userId: "zUEEZuHjfmE2ftRjocJ7",
-      },
-      {
-        date: new Date("2024-10-02"),
-        habitId: "4",
-        userId: "zUEEZuHjfmE2ftRjocJ7",
-      },
-      {
-        date: new Date("2024-10-03"),
-        habitId: "1",
-        userId: "zUEEZuHjfmE2ftRjocJ7",
-      },
-      {
-        date: new Date("2024-10-05"),
-        habitId: "2",
-        userId: "zUEEZuHjfmE2ftRjocJ7",
-      },
-      {
-        date: new Date("2024-10-06"),
-        habitId: "2",
-        userId: "zUEEZuHjfmE2ftRjocJ7",
-      },
-      {
-        date: new Date("2024-10-02"),
-        habitId: "3",
-        userId: "zUEEZuHjfmE2ftRjocJ7",
-      },
-      {
-        date: new Date("2024-10-07"),
-        habitId: "2",
-        userId: "zUEEZuHjfmE2ftRjocJ7",
-      },
-      {
-        date: new Date("2024-10-08"),
-        habitId: "1",
-        userId: "zUEEZuHjfmE2ftRjocJ7",
-      },{
-        date: new Date("2024-10-12"),
-        habitId: "1",
-        userId: "zUEEZuHjfmE2ftRjocJ7",
-      },
-    ];
-
-    const habitHistory = {};
-
-    data
-      .filter((history) => history.habitId === currentHabit.id)
-      .forEach((history) => {
-        const date = dayjs(history.date);
-
-        habitHistory[date.format("YYYY-MM-DD")] = { selected: true };
-      });
-
-    return habitHistory;
-  };
-
   return (
     <View style={styles.container}>
       <Text>History</Text>
       <Dropdown
-        data={getHabitsList()}
-        onChange={(item) => {
-          setCurrentHabit({
-            name: item.label,
-            id: item.value,
-          });
-        }}
+        data={getHabits()}
+        onChange={onHabitChange}
         style={styles.picker}
-        value={currentHabit.id}
+        value={currentHabit?.id}
         labelField={"label"}
         valueField={"value"}
       />
-      <Calendar style={styles.calendar} markedDates={getHistory()} />
+      <Calendar
+        style={styles.calendar}
+        markedDates={calendarDates}
+        maxDate={dayjs().format("YYYY-MM-DD")}
+      />
     </View>
   );
 }
