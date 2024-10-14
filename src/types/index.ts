@@ -30,3 +30,10 @@ export type Habit = {
   minuteOffset: number;
   offsetDirection: "before" | "after";
 };
+
+export type History = {
+  id: string;
+  date: Date;
+  habitId: string;
+  userId: string;
+};

@@ -5,6 +5,7 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import ProfileScreen from "@/screens/ProfileScreen";
 import HabitsScreen from "@/screens/HabitsScreen";
 import HabitProvider from "@/components/Habits/HabitProvider";
+import HistoryScreen from "@/screens/HistoryScreen";
 
 const getIconName = (
   routeName: string,
@@ -41,6 +42,7 @@ export default function App() {
         >
           <Tab.Screen name="Home" component={HomeScreen} />
           <Tab.Screen name="Habits" component={HabitsScreen} />
+          <Tab.Screen name="History" component={HistoryScreen} />
           <Tab.Screen name="Profile" component={ProfileScreen} />
         </Tab.Navigator>
       </NavigationContainer>
