@@ -5,9 +5,9 @@ import {
   View,
   Text,
   TextInput,
-  Button,
   TouchableWithoutFeedback,
   Keyboard,
+  TouchableOpacity,
 } from "react-native";
 import { doc, setDoc } from "firebase/firestore";
 import getLocationFromDevice from "@/utils/getLocationFromDevice";
@@ -65,70 +65,77 @@ export default function SignUp() {
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
       <View style={styles.container}>
-        <Text style={{ marginBottom: 15 }}>Sign up for SolSync</Text>
+        <View style={styles.titleContainer}>
+          <Text style={[styles.title]}>SolSync</Text>
+        </View>
+        <View style={styles.inputContainer}>
+          <Controller
+            control={control}
+            name="displayName"
+            render={({ field: { onChange, onBlur, value } }) => (
+              <TextInput
+                autoCorrect={false}
+                autoCapitalize="words"
+                style={styles.input}
+                placeholder="Username"
+                onChangeText={onChange}
+                onBlur={onBlur}
+                value={value}
+              />
+            )}
+          />
 
-        <Controller
-          control={control}
-          name="displayName"
-          render={({ field: { onChange, onBlur, value } }) => (
-            <TextInput
-              autoCorrect={false}
-              style={styles.input}
-              placeholder="Display Name"
-              onChangeText={onChange}
-              onBlur={onBlur}
-              value={value}
-            />
+          {errors.displayName && (
+            <Text style={{ color: "red" }}>{errors.displayName.message}</Text>
           )}
-        />
 
-        {errors.displayName && (
-          <Text style={{ color: "red" }}>{errors.displayName.message}</Text>
-        )}
-
-        <Controller
-          control={control}
-          name="email"
-          render={({ field: { onChange, onBlur, value } }) => (
-            <TextInput
-              autoCorrect={false}
-              style={styles.input}
-              placeholder="Email"
-              keyboardType="email-address"
-              onChangeText={onChange}
-              onBlur={onBlur}
-              value={value}
-            />
+          <Controller
+            control={control}
+            name="email"
+            render={({ field: { onChange, onBlur, value } }) => (
+              <TextInput
+                autoCorrect={false}
+                autoCapitalize="none"
+                style={styles.input}
+                placeholder="Email"
+                keyboardType="email-address"
+                onChangeText={onChange}
+                onBlur={onBlur}
+                value={value}
+              />
+            )}
+          />
+          {errors.email && (
+            <Text style={{ color: "red" }}>{errors.email.message}</Text>
           )}
-        />
-        {errors.email && (
-          <Text style={{ color: "red" }}>{errors.email.message}</Text>
-        )}
 
-        <Controller
-          control={control}
-          name="password"
-          render={({ field: { onChange, onBlur, value } }) => (
-            <TextInput
-              autoCorrect={false}
-              style={styles.input}
-              placeholder="Password"
-              secureTextEntry
-              onChangeText={onChange}
-              onBlur={onBlur}
-              value={value}
-            />
+          <Controller
+            control={control}
+            name="password"
+            render={({ field: { onChange, onBlur, value } }) => (
+              <TextInput
+                autoCorrect={false}
+                autoCapitalize="none"
+                style={styles.input}
+                placeholder="Password"
+                secureTextEntry
+                onChangeText={onChange}
+                onBlur={onBlur}
+                value={value}
+              />
+            )}
+          />
+          {errors.password && (
+            <Text style={{ color: "red" }}>{errors.password.message}</Text>
           )}
-        />
-        {errors.password && (
-          <Text style={{ color: "red" }}>{errors.password.message}</Text>
-        )}
+        </View>
 
-        <Button
-          title="Sign Up"
-          color="purple"
+        <TouchableOpacity
+          style={styles.signUpButton}
           onPress={handleSubmit(onSubmit)}
-        />
+        >
+          <Text style={styles.buttonText}>Sign Up</Text>
+        </TouchableOpacity>
 
         {errors.root && (
           <Text style={{ color: "red" }}>{errors.root.message}</Text>
@@ -144,13 +151,59 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     justifyContent: "center",
     alignItems: "center",
+    padding: 16,
+  },
+  content: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 20,
+    marginBottom: 30,
+  },
+  titleContainer: {
+    alignItems: "center",
+  },
+  title: {
+    fontSize: 42,
+    fontWeight: "bold",
+    color: "#4a3f4c",
+    marginBottom: 70,
+    marginTop: -60,
+  },
+  gradientText: {
+    padding: 10,
+    borderRadius: 10,
   },
   input: {
-    height: 40,
-    width: "70%",
-    marginHorizontal: 12,
-    margin: 12,
+    height: 50,
+    width: "100%",
+    borderColor: "#ccc",
     borderWidth: 1,
     padding: 10,
+    borderRadius: 8,
+    paddingHorizontal: 10,
+    marginBottom: 12,
+  },
+  inputContainer: {
+    width: "95%",
+    padding: 25,
+    borderColor: "#ccc",
+    borderWidth: 1,
+    borderRadius: 8,
+    marginBottom: 20,
+    alignItems: "center",
+  },
+  signUpButton: {
+    backgroundColor: "#b38acb",
+    width: "80%",
+    paddingVertical: 10,
+    borderRadius: 8,
+    alignItems: "center",
+    marginTop: 10,
+  },
+  buttonText: {
+    color: "#fff",
+    fontSize: 16,
+    fontWeight: "600",
   },
 });
