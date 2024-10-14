@@ -31,7 +31,7 @@ export default function Profile() {
             component={LogIn}
             options={{ headerShown: false }}
           />
-          <Stack.Screen name="SignUp" component={SignUp}  />
+          <Stack.Screen name="SignUp" component={SignUp} />
         </>
       )}
     </Stack.Navigator>
