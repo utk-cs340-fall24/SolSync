@@ -134,7 +134,7 @@ export default function SignUp() {
           style={styles.signUpButton}
           onPress={handleSubmit(onSubmit)}
         >
-          <Text style={styles.buttonText}>Sign Up</Text>
+          <Text style={styles.buttonText}>Create Account</Text>
         </TouchableOpacity>
 
         {errors.root && (
@@ -190,7 +190,7 @@ const styles = StyleSheet.create({
     borderColor: "#ccc",
     borderWidth: 1,
     borderRadius: 8,
-    marginBottom: 20,
+    marginBottom: 15,
     alignItems: "center",
   },
   signUpButton: {
@@ -199,7 +199,7 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     borderRadius: 8,
     alignItems: "center",
-    marginTop: 10,
+    marginTop: 12,
   },
   buttonText: {
     color: "#fff",
