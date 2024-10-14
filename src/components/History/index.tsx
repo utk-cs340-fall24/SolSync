@@ -36,24 +36,6 @@ export default function Habits() {
     return habits.map((habit) => habitToDropdownItem(habit));
   };
 
-  const habitToCalenderDates = () => {
-    const dates = history
-      ?.filter((history) => history.habitId === currentHabit?.id)
-      .map((history) => dayjs(history.date));
-
-    console.log(currentHabit?.id);
-
-    const calenderDates: Record<string, {}> = {};
-
-    dates?.forEach((date) => {
-      calenderDates[date.format("YYYY-MM-DD")] = {
-        selected: true,
-      };
-    });
-
-    setCalendarDates(calenderDates);
-  };
-
   const onHabitChange = (item: DropdownItem) => {
     setCurrentHabit(dropdownItemToHabit(item));
   };
@@ -87,7 +69,7 @@ export default function Habits() {
       ?.filter((history) => history.habitId === currentHabit?.id)
       .map((history) => dayjs(history.date));
 
-    const calenderDates: StringByString = {};
+    const calenderDates: Record<string, {}> = {};
 
     dates?.forEach((date) => {
       calenderDates[date.format("YYYY-MM-DD")] = {
