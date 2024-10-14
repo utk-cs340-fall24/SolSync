@@ -20,7 +20,7 @@ const gradientColors = ["#FFD18A", "#C6B9E4", "#81A8F4"];
 const colorsLocations = [0.15, 0.65, 1];
 
 export default function AuthorizedProfile() {
-  const [modalVisible, setModalVisible] = useState(false);
+  const [isModalVisible, setIsModalVisible] = useState(false);
   return (
     <LinearGradient
       colors={gradientColors}
@@ -31,10 +31,10 @@ export default function AuthorizedProfile() {
         <Modal
           animationType="slide"
           transparent={true}
-          visible={modalVisible}
+          visible={isModalVisible}
           onRequestClose={() => {
             Alert.alert("Modal has been closed.");
-            setModalVisible(!modalVisible);
+            setIsModalVisible(!isModalVisible);
           }}
         >
           <View style={styles.content}>
@@ -42,7 +42,7 @@ export default function AuthorizedProfile() {
               <Text style={styles.modalText}>Edit Name and Email here</Text>
               <Pressable
                 style={[styles.button, styles.buttonClose]}
-                onPress={() => setModalVisible(!modalVisible)}
+                onPress={() => setIsModalVisible(!isModalVisible)}
               >
                 <Text style={styles.textStyle}>Save</Text>
               </Pressable>
@@ -55,7 +55,7 @@ export default function AuthorizedProfile() {
             name="edit"
             size={38}
             color="white"
-            onPress={() => setModalVisible(true)}
+            onPress={() => setIsModalVisible(true)}
           ></FeatherIcon>
         </TouchableOpacity>
 
