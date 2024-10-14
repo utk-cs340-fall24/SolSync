@@ -73,7 +73,7 @@ export default function Home() {
         {loading ? (
           <>
             <Text style={styles.Sunrise1}>Sunrise:</Text>
-            <ActivityIndicator size="small" color="#0000ff" />
+            <ActivityIndicator size="small" color="#FFFFFF" />
           </>
         ) : sunrise ? (
           <>
@@ -91,7 +91,7 @@ export default function Home() {
         {loading ? (
           <>
             <Text style={styles.Sunset}>Sunset:</Text>
-            <ActivityIndicator size="small" color="#0000ff" />
+            <ActivityIndicator size="small" color="#FFFFFF" />
           </>
         ) : sunset ? (
           <>
@@ -109,7 +109,7 @@ export default function Home() {
         {loading ? (
           <>
             <Text style={styles.Sunrise2}>Tomorrow's Sunrise:</Text>
-            <ActivityIndicator size="small" color="#0000ff" />
+            <ActivityIndicator size="small" color="#FFFFFF" />
           </>
         ) : nextsunrise ? (
           <>
