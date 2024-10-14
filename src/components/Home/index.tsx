@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { StyleSheet, View, Text, Image } from "react-native";
+import { StyleSheet, View, Text, Image, ActivityIndicator } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 
 import sun from "@assets/sun.png";
@@ -23,6 +23,7 @@ export default function Home() {
   const [sunrise, setSunrise] = useState<Date | null>();
   const [sunset, setSunset] = useState<Date | null>();
   const [nextsunrise, setNextSunrise] = useState<Date | null>();
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     fetchData();
@@ -38,8 +39,8 @@ export default function Home() {
             "x-api-key": process.env.EXPO_PUBLIC_SUNRISE_TIME_API_KEY as string,
           },
           body: JSON.stringify({
-            lat: "51.4934",
-            lng: "-0.0098",
+            lat: "38.907192",
+            lng: "-77.036873",
           }),
         },
       );
@@ -53,9 +54,10 @@ export default function Home() {
         setSunset(new Date(jsonData.todaySunset));
         setNextSunrise(new Date(jsonData.tomorrowSunrise));
       }
-      console.log(jsonData);
     } catch (err) {
       console.log(err);
+    } finally {
+      setLoading(false);
     }
   };
   return (
@@ -68,7 +70,12 @@ export default function Home() {
         <Text style={styles.Hello}>Hello Amy!</Text>
         <Image style={styles.sun} source={sun} />
         <Image style={styles.cloud} source={cloud} />
-        {sunrise ? (
+        {loading ? (
+          <>
+            <Text style={styles.Sunrise1}>Sunrise:</Text>
+            <ActivityIndicator size="small" color="#0000ff" />
+          </>
+        ) : sunrise ? (
           <>
             <Text style={styles.Sunrise1}>Sunrise:</Text>
             <Text style={styles.Sunrise1Data}>
@@ -81,7 +88,12 @@ export default function Home() {
             <Text style={styles.Sunrise1Data}>Time Not Available</Text>
           </>
         )}
-        {sunset ? (
+        {loading ? (
+          <>
+            <Text style={styles.Sunset}>Sunset:</Text>
+            <ActivityIndicator size="small" color="#0000ff" />
+          </>
+        ) : sunset ? (
           <>
             <Text style={styles.Sunset}>Sunset:</Text>
             <Text style={styles.SunsetData}>
@@ -94,7 +106,12 @@ export default function Home() {
             <Text style={styles.SunsetData}>Time Not Available</Text>
           </>
         )}
-        {nextsunrise ? (
+        {loading ? (
+          <>
+            <Text style={styles.Sunrise2}>Tomorrow's Sunrise:</Text>
+            <ActivityIndicator size="small" color="#0000ff" />
+          </>
+        ) : nextsunrise ? (
           <>
             <Text style={styles.Sunrise2}>Tomorrow's Sunrise:</Text>
             <Text style={styles.Sunrise2Data}>
@@ -120,17 +137,19 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+    marginTop: 20,
+    marginBottom: 30,
   },
   sun: {
-    width: 100,
+    width: 110,
     height: 100,
     marginTop: 30,
     marginBottom: -115,
   },
   cloud: {
-    width: 180,
+    width: 190,
     height: 180,
-    marginTop: 2,
+    marginTop: 4,
     marginBottom: 10,
   },
   Hello: {
