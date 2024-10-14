@@ -1,19 +1,129 @@
-import { StyleSheet, View, Text, Image } from "react-native";
+import React, { useEffect, useState } from "react";
+import { StyleSheet, View, Text, Image, ActivityIndicator } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 
 import sun from "@assets/sun.png";
 import cloud from "@assets/simple_cloud.png";
 
+const Hour = new Date().getHours();
+const isDay = Hour >= 0 && Hour < 12;
+
+let gradientColors = ["#FFFFFF"];
+let colorsLocations = [0];
+
+if (isDay) {
+  gradientColors = ["#81A8F4", "#A4B3D6", "#E1C7A3", "#FFD18A"];
+  colorsLocations = [0.03, 0.21, 0.65, 0.97];
+} else {
+  gradientColors = ["#FFD18A", "#FDC28D", "#FAB38F", "#F6A494"];
+  colorsLocations = [0.2, 0.4, 0.7, 0.9];
+}
+
 export default function Home() {
+  const [sunrise, setSunrise] = useState<Date | null>();
+  const [sunset, setSunset] = useState<Date | null>();
+  const [nextsunrise, setNextSunrise] = useState<Date | null>();
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const fetchData = async () => {
+    try {
+      const response = await fetch(
+        "https://u7t0yd53l2.execute-api.us-east-2.amazonaws.com/default/getSunriseTime",
+        {
+          method: "POST",
+          headers: {
+            "x-api-key": process.env.EXPO_PUBLIC_SUNRISE_TIME_API_KEY as string,
+          },
+          body: JSON.stringify({
+            lat: "38.907192",
+            lng: "-77.036873",
+          }),
+        },
+      );
+      const jsonData = await response.json();
+      if (jsonData.message) {
+        setSunrise(null);
+        setSunset(null);
+        setNextSunrise(null);
+      } else {
+        setSunrise(new Date(jsonData.todaySunrise));
+        setSunset(new Date(jsonData.todaySunset));
+        setNextSunrise(new Date(jsonData.tomorrowSunrise));
+      }
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setLoading(false);
+    }
+  };
   return (
-    <LinearGradient colors={["#B4CDD2", "#FFD18A"]} style={styles.container}>
+    <LinearGradient
+      colors={gradientColors}
+      locations={colorsLocations}
+      style={styles.container}
+    >
       <View style={styles.content}>
         <Text style={styles.Hello}>Hello Amy!</Text>
         <Image style={styles.sun} source={sun} />
         <Image style={styles.cloud} source={cloud} />
-        <Text style={styles.Sunrise1}>Sunrise: 07:31 AM</Text>
-        <Text style={styles.Sunset}>Sunset: 07:21 PM</Text>
-        <Text style={styles.Sunrise2}>Next Sunrise: 07:31 AM</Text>
+        {loading ? (
+          <>
+            <Text style={styles.Sunrise1}>Sunrise:</Text>
+            <ActivityIndicator size="small" color="#0000ff" />
+          </>
+        ) : sunrise ? (
+          <>
+            <Text style={styles.Sunrise1}>Sunrise:</Text>
+            <Text style={styles.Sunrise1Data}>
+              {sunrise?.toLocaleTimeString()}
+            </Text>
+          </>
+        ) : (
+          <>
+            <Text style={styles.Sunrise1}>Sunrise:</Text>
+            <Text style={styles.Sunrise1Data}>Time Not Available</Text>
+          </>
+        )}
+        {loading ? (
+          <>
+            <Text style={styles.Sunset}>Sunset:</Text>
+            <ActivityIndicator size="small" color="#0000ff" />
+          </>
+        ) : sunset ? (
+          <>
+            <Text style={styles.Sunset}>Sunset:</Text>
+            <Text style={styles.SunsetData}>
+              {sunset?.toLocaleTimeString()}
+            </Text>
+          </>
+        ) : (
+          <>
+            <Text style={styles.Sunset}>Sunset:</Text>
+            <Text style={styles.SunsetData}>Time Not Available</Text>
+          </>
+        )}
+        {loading ? (
+          <>
+            <Text style={styles.Sunrise2}>Tomorrow's Sunrise:</Text>
+            <ActivityIndicator size="small" color="#0000ff" />
+          </>
+        ) : nextsunrise ? (
+          <>
+            <Text style={styles.Sunrise2}>Tomorrow's Sunrise:</Text>
+            <Text style={styles.Sunrise2Data}>
+              {nextsunrise?.toLocaleTimeString()}
+            </Text>
+          </>
+        ) : (
+          <>
+            <Text style={styles.Sunrise2}>Tomorrow's Sunrise:</Text>
+            <Text style={styles.Sunrise2Data}>Time Not Available</Text>
+          </>
+        )}
       </View>
     </LinearGradient>
   );
@@ -27,41 +137,65 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+    marginTop: 20,
+    marginBottom: 30,
   },
   sun: {
-    width: 100,
+    width: 110,
     height: 100,
     marginTop: 30,
     marginBottom: -115,
   },
   cloud: {
-    width: 180,
+    width: 190,
     height: 180,
-    marginTop: 2,
+    marginTop: 4,
     marginBottom: 10,
   },
   Hello: {
     color: "white",
     fontWeight: "bold",
-    fontSize: 45,
-    paddingTop: -50,
-    paddingBottom: 10,
+    fontSize: 50,
+    marginTop: 40,
+    marginBottom: 5,
   },
   Sunrise1: {
     color: "white",
     fontWeight: "bold",
-    fontSize: 30,
-    paddingTop: 80,
+    fontSize: 35,
+    marginTop: 25,
+    alignItems: "center",
+  },
+  Sunrise1Data: {
+    color: "white",
+    fontWeight: "bold",
+    fontSize: 35,
+    alignItems: "center",
+    marginBottom: 15,
   },
   Sunset: {
     color: "white",
     fontWeight: "bold",
-    fontSize: 30,
+    fontSize: 35,
+    alignItems: "center",
+  },
+  SunsetData: {
+    color: "white",
+    fontWeight: "bold",
+    fontSize: 35,
+    alignItems: "center",
+    marginBottom: 15,
   },
   Sunrise2: {
     color: "white",
     fontWeight: "bold",
-    fontSize: 30,
-    paddingBottom: 100,
+    fontSize: 35,
+    alignItems: "center",
+  },
+  Sunrise2Data: {
+    color: "white",
+    fontWeight: "bold",
+    fontSize: 35,
+    alignItems: "center",
   },
 });
