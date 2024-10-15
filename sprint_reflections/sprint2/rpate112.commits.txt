@@ -1,0 +1,678 @@
+HabitList.tsx (rudra patel on 10/09/2024 at 13:11): import { NativeStackScreenProps } from "@react-navigation/native-stack";
+HabitList.tsx (rudra patel on 10/09/2024 at 13:11): import { HabitStackParamList } from ".";
+HabitList.tsx (rudra patel on 10/09/2024 at 13:11): import { useHabit } from "@/hooks/useHabit";
+HabitList.tsx (rudra patel on 10/09/2024 at 13:11): import React from "react";
+HabitList.tsx (rudra patel on 10/09/2024 at 13:11): import {
+HabitList.tsx (rudra patel on 10/09/2024 at 13:11):   SafeAreaView,
+HabitList.tsx (rudra patel on 10/09/2024 at 13:11):   Button,
+HabitList.tsx (rudra patel on 10/09/2024 at 13:11):   FlatList,
+HabitList.tsx (rudra patel on 10/09/2024 at 13:11):   Pressable,
+HabitList.tsx (rudra patel on 10/09/2024 at 13:11):   Text,
+HabitList.tsx (rudra patel on 10/09/2024 at 13:11):   StyleSheet,
+HabitList.tsx (rudra patel on 10/09/2024 at 13:11): } from "react-native";
+HabitList.tsx (rudra patel on 10/09/2024 at 13:11): type HabitListProps = NativeStackScreenProps<HabitStackParamList, "HabitList">;
+HabitList.tsx (rudra patel on 10/09/2024 at 13:11): export default function HabitList({ navigation }: HabitListProps) {
+HabitList.tsx (rudra patel on 10/09/2024 at 13:11):   const { habits, removeHabit } = useHabit();
+HabitList.tsx (rudra patel on 10/09/2024 at 13:11):   return (
+HabitList.tsx (rudra patel on 10/09/2024 at 13:11):     <SafeAreaView style={styles.container}>
+HabitList.tsx (rudra patel on 10/09/2024 at 13:11):       <FlatList
+HabitList.tsx (rudra patel on 10/09/2024 at 13:11):         data={habits}
+HabitList.tsx (rudra patel on 10/09/2024 at 13:11):         renderItem={({ item }) => (
+HabitList.tsx (rudra patel on 10/09/2024 at 13:11):           <Button
+HabitList.tsx (rudra patel on 10/09/2024 at 13:11):             title={item.name}
+HabitList.tsx (rudra patel on 10/09/2024 at 13:11):             color="purple"
+HabitList.tsx (rudra patel on 10/09/2024 at 13:11):             onPress={() => removeHabit(item)}
+HabitList.tsx (rudra patel on 10/09/2024 at 13:11):           />
+HabitList.tsx (rudra patel on 10/09/2024 at 13:11):         )}
+HabitList.tsx (rudra patel on 10/09/2024 at 13:11):       />
+HabitList.tsx (rudra patel on 10/09/2024 at 13:11):       <Pressable
+HabitList.tsx (rudra patel on 10/09/2024 at 13:11):         style={{
+HabitList.tsx (rudra patel on 10/09/2024 at 13:11):           backgroundColor: "purple",
+HabitList.tsx (rudra patel on 10/09/2024 at 13:11):           padding: 10,
+HabitList.tsx (rudra patel on 10/09/2024 at 13:11):           marginTop: "auto",
+HabitList.tsx (rudra patel on 10/09/2024 at 13:11):           marginBottom: 20,
+HabitList.tsx (rudra patel on 10/09/2024 at 13:11):           width: "80%",
+HabitList.tsx (rudra patel on 10/09/2024 at 13:11):           alignSelf: "center",
+HabitList.tsx (rudra patel on 10/09/2024 at 13:11):           borderRadius: 10,
+HabitList.tsx (rudra patel on 10/09/2024 at 13:11):         }}
+HabitList.tsx (rudra patel on 10/09/2024 at 13:11):         onPress={() => navigation.navigate("HabitForm")}
+HabitList.tsx (rudra patel on 10/09/2024 at 13:11):       >
+HabitList.tsx (rudra patel on 10/09/2024 at 13:11):         <Text style={{ color: "white", textAlign: "center" }}>Add Habit</Text>
+HabitList.tsx (rudra patel on 10/09/2024 at 13:11):       </Pressable>
+HabitList.tsx (rudra patel on 10/09/2024 at 13:11):     </SafeAreaView>
+HabitList.tsx (rudra patel on 10/09/2024 at 13:11):   );
+HabitList.tsx (rudra patel on 10/09/2024 at 13:11): }
+HabitList.tsx (rudra patel on 10/09/2024 at 13:11): const styles = StyleSheet.create({
+HabitList.tsx (rudra patel on 10/09/2024 at 13:11):   container: {
+HabitList.tsx (rudra patel on 10/09/2024 at 13:11):     flex: 1,
+HabitList.tsx (rudra patel on 10/09/2024 at 13:11):     backgroundColor: "#fff",
+HabitList.tsx (rudra patel on 10/09/2024 at 13:11):   },
+HabitList.tsx (rudra patel on 10/09/2024 at 13:11): });
+package.json (rudra patel on 10/09/2024 at 13:11):     "@hookform/resolvers": "^3.9.0",
+package.json (rudra patel on 10/09/2024 at 13:11):     "expo-crypto": "~13.0.2",
+package.json (rudra patel on 10/09/2024 at 13:11):     "react-hook-form": "^7.53.0",
+package.json (rudra patel on 10/09/2024 at 13:11):     "react-native-element-dropdown": "^2.12.1",
+package.json (rudra patel on 10/09/2024 at 13:11):     "react-native-vector-icons": "^10.2.0",
+package.json (rudra patel on 10/09/2024 at 13:11):     "zod": "^3.23.8"
+getFirebaseAuthErrorMessage.ts (rudra patel on 10/09/2024 at 13:11): const getFirebaseAuthErrorMessage = (errorCode: string) => {
+getFirebaseAuthErrorMessage.ts (rudra patel on 10/09/2024 at 13:11):   switch (errorCode) {
+getFirebaseAuthErrorMessage.ts (rudra patel on 10/09/2024 at 13:11):     case "auth/email-already-exists":
+getFirebaseAuthErrorMessage.ts (rudra patel on 10/09/2024 at 13:11):     case "auth/email-already-in-use":
+getFirebaseAuthErrorMessage.ts (rudra patel on 10/09/2024 at 13:11):       return "Email already exists";
+getFirebaseAuthErrorMessage.ts (rudra patel on 10/09/2024 at 13:11):     case "auth/invalid-email":
+getFirebaseAuthErrorMessage.ts (rudra patel on 10/09/2024 at 13:11):       return "Invalid email";
+getFirebaseAuthErrorMessage.ts (rudra patel on 10/09/2024 at 13:11):     case "auth/invalid-password":
+getFirebaseAuthErrorMessage.ts (rudra patel on 10/09/2024 at 13:11):       return "Invalid password";
+getFirebaseAuthErrorMessage.ts (rudra patel on 10/09/2024 at 13:11):     case "auth/invalid-credential":
+getFirebaseAuthErrorMessage.ts (rudra patel on 10/09/2024 at 13:11):       return "Invalid credentials";
+getFirebaseAuthErrorMessage.ts (rudra patel on 10/09/2024 at 13:11):     case "auth/too-many-requests":
+getFirebaseAuthErrorMessage.ts (rudra patel on 10/09/2024 at 13:11):       return "Too many requests";
+getFirebaseAuthErrorMessage.ts (rudra patel on 10/09/2024 at 13:11):     default:
+getFirebaseAuthErrorMessage.ts (rudra patel on 10/09/2024 at 13:11):       return "There was an error signing in";
+getFirebaseAuthErrorMessage.ts (rudra patel on 10/09/2024 at 13:11):   }
+getFirebaseAuthErrorMessage.ts (rudra patel on 10/09/2024 at 13:11): };
+getFirebaseAuthErrorMessage.ts (rudra patel on 10/09/2024 at 13:11): export default getFirebaseAuthErrorMessage;
+LICENSE.txt  (rudra patel on 10/09/2024 at 13:11): MIT License
+LICENSE.txt  (rudra patel on 10/09/2024 at 13:11): Copyright (c) 2024 SolSync
+LICENSE.txt  (rudra patel on 10/09/2024 at 13:11): Permission is hereby granted, free of charge, to any person obtaining a copy
+LICENSE.txt  (rudra patel on 10/09/2024 at 13:11): of this software and associated documentation files (the "Software"), to deal
+LICENSE.txt  (rudra patel on 10/09/2024 at 13:11): in the Software without restriction, including without limitation the rights
+LICENSE.txt  (rudra patel on 10/09/2024 at 13:11): to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+LICENSE.txt  (rudra patel on 10/09/2024 at 13:11): copies of the Software, and to permit persons to whom the Software is
+LICENSE.txt  (rudra patel on 10/09/2024 at 13:11): furnished to do so, subject to the following conditions:
+LICENSE.txt  (rudra patel on 10/09/2024 at 13:11): The above copyright notice and this permission notice shall be included in all
+LICENSE.txt  (rudra patel on 10/09/2024 at 13:11): copies or substantial portions of the Software.
+LICENSE.txt  (rudra patel on 10/09/2024 at 13:11): THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+LICENSE.txt  (rudra patel on 10/09/2024 at 13:11): IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+LICENSE.txt  (rudra patel on 10/09/2024 at 13:11): FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+LICENSE.txt  (rudra patel on 10/09/2024 at 13:11): AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LICENSE.txt  (rudra patel on 10/09/2024 at 13:11): LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+LICENSE.txt  (rudra patel on 10/09/2024 at 13:11): OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+LICENSE.txt  (rudra patel on 10/09/2024 at 13:11): SOFTWARE.
+AuthorizedProfile.tsx (rudra patel on 10/11/2024 at 12:53): import { signOut } from "firebase/auth";
+AuthorizedProfile.tsx (rudra patel on 10/11/2024 at 12:53): import { firebaseAuth } from "../../../firebaseConfig";
+App.tsx      (rudra patel on 10/09/2024 at 13:11): import HabitsScreen from "@/screens/HabitsScreen";
+App.tsx      (rudra patel on 10/09/2024 at 13:11): import HabitProvider from "@/components/Habits/HabitProvider";
+App.tsx      (rudra patel on 10/09/2024 at 13:11): const getIconName = (
+App.tsx      (rudra patel on 10/09/2024 at 13:11): ): keyof typeof Ionicons.glyphMap => {
+App.tsx      (rudra patel on 10/09/2024 at 13:11):       return focused ? "person-circle" : "person-circle-outline";
+App.tsx      (rudra patel on 10/09/2024 at 13:11):     case "Habits":
+App.tsx      (rudra patel on 10/09/2024 at 13:11):       return focused ? "list" : "list-outline";
+App.tsx      (rudra patel on 10/09/2024 at 13:11): };
+App.tsx      (rudra patel on 10/09/2024 at 13:11):     <HabitProvider>
+App.tsx      (rudra patel on 10/09/2024 at 13:11):       <NavigationContainer>
+App.tsx      (rudra patel on 10/09/2024 at 13:11):         <Tab.Navigator
+App.tsx      (rudra patel on 10/09/2024 at 13:11):           screenOptions={({ route }) => ({
+App.tsx      (rudra patel on 10/09/2024 at 13:11):             tabBarIcon: ({ focused, color, size }) => {
+App.tsx      (rudra patel on 10/09/2024 at 13:11):               const iconName = getIconName(route.name, focused);
+App.tsx      (rudra patel on 10/09/2024 at 13:11):               return <Ionicons name={iconName} size={size} color={color} />;
+App.tsx      (rudra patel on 10/09/2024 at 13:11):             },
+App.tsx      (rudra patel on 10/09/2024 at 13:11):             tabBarInactiveTintColor: "gray",
+App.tsx      (rudra patel on 10/09/2024 at 13:11):             headerShown: false,
+App.tsx      (rudra patel on 10/09/2024 at 13:11):           })}
+App.tsx      (rudra patel on 10/09/2024 at 13:11):         >
+App.tsx      (rudra patel on 10/09/2024 at 13:11):           <Tab.Screen name="Home" component={HomeScreen} />
+App.tsx      (rudra patel on 10/09/2024 at 13:11):           <Tab.Screen name="Habits" component={HabitsScreen} />
+App.tsx      (rudra patel on 10/09/2024 at 13:11):           <Tab.Screen name="Profile" component={ProfileScreen} />
+App.tsx      (rudra patel on 10/09/2024 at 13:11):         </Tab.Navigator>
+App.tsx      (rudra patel on 10/09/2024 at 13:11):       </NavigationContainer>
+App.tsx      (rudra patel on 10/09/2024 at 13:11):     </HabitProvider>
+HabitsScreen.tsx (rudra patel on 10/09/2024 at 13:11): import Habits from "@/components/Habits";
+HabitsScreen.tsx (rudra patel on 10/09/2024 at 13:11): export default function HabitsScreen() {
+HabitsScreen.tsx (rudra patel on 10/09/2024 at 13:11):   return <Habits />;
+HabitsScreen.tsx (rudra patel on 10/09/2024 at 13:11): }
+index.tsx    (rudra patel on 10/09/2024 at 13:11): import { signInWithEmailAndPassword } from "firebase/auth";
+index.tsx    (rudra patel on 10/09/2024 at 13:11): import { firebaseAuth } from "../../../firebaseConfig";
+index.tsx    (rudra patel on 10/09/2024 at 13:11): import {
+index.tsx    (rudra patel on 10/09/2024 at 13:11):   StyleSheet,
+index.tsx    (rudra patel on 10/09/2024 at 13:11):   View,
+index.tsx    (rudra patel on 10/09/2024 at 13:11):   Text,
+index.tsx    (rudra patel on 10/09/2024 at 13:11):   TextInput,
+index.tsx    (rudra patel on 10/09/2024 at 13:11):   TouchableWithoutFeedback,
+index.tsx    (rudra patel on 10/09/2024 at 13:11):   Keyboard,
+index.tsx    (rudra patel on 10/09/2024 at 13:11): } from "react-native";
+index.tsx    (rudra patel on 10/09/2024 at 13:11): import { zodResolver } from "@hookform/resolvers/zod";
+index.tsx    (rudra patel on 10/09/2024 at 13:11): import { Controller, SubmitHandler, useForm } from "react-hook-form";
+index.tsx    (rudra patel on 10/09/2024 at 13:11): import { z } from "zod";
+index.tsx    (rudra patel on 10/09/2024 at 13:11): import { FirebaseError } from "firebase/app";
+index.tsx    (rudra patel on 10/09/2024 at 13:11): import getFirebaseAuthErrorMessage from "@/utils/getFirebaseAuthErrorMessage";
+index.tsx    (rudra patel on 10/09/2024 at 13:11): const loginFormSchema = z.object({
+index.tsx    (rudra patel on 10/09/2024 at 13:11):   email: z.string().email({ message: "Invalid email" }),
+index.tsx    (rudra patel on 10/09/2024 at 13:11):   password: z
+index.tsx    (rudra patel on 10/09/2024 at 13:11):     .string()
+index.tsx    (rudra patel on 10/09/2024 at 13:11):     .min(6, { message: "Password must be at least 6 characters" }),
+index.tsx    (rudra patel on 10/09/2024 at 13:11): });
+index.tsx    (rudra patel on 10/09/2024 at 13:11): type LoginFormValues = z.infer<typeof loginFormSchema>;
+index.tsx    (rudra patel on 10/09/2024 at 13:11):   const {
+index.tsx    (rudra patel on 10/09/2024 at 13:11):     control,
+index.tsx    (rudra patel on 10/09/2024 at 13:11):     handleSubmit,
+index.tsx    (rudra patel on 10/09/2024 at 13:11):     formState: { errors },
+index.tsx    (rudra patel on 10/09/2024 at 13:11):     setError,
+index.tsx    (rudra patel on 10/09/2024 at 13:11):   } = useForm<LoginFormValues>({
+index.tsx    (rudra patel on 10/09/2024 at 13:11):     resolver: zodResolver(loginFormSchema),
+index.tsx    (rudra patel on 10/09/2024 at 13:11):   });
+index.tsx    (rudra patel on 10/09/2024 at 13:11):   const onSubmit: SubmitHandler<LoginFormValues> = async (data) => {
+index.tsx    (rudra patel on 10/09/2024 at 13:11):     const { email, password } = data;
+index.tsx    (rudra patel on 10/09/2024 at 13:11):     try {
+index.tsx    (rudra patel on 10/09/2024 at 13:11):       await signInWithEmailAndPassword(firebaseAuth, email, password);
+index.tsx    (rudra patel on 10/09/2024 at 13:11):     } catch (error) {
+index.tsx    (rudra patel on 10/09/2024 at 13:11):       if (error instanceof FirebaseError) {
+index.tsx    (rudra patel on 10/09/2024 at 13:11):         setError("root", {
+index.tsx    (rudra patel on 10/09/2024 at 13:11):           message: getFirebaseAuthErrorMessage(error.code),
+index.tsx    (rudra patel on 10/09/2024 at 13:11):         });
+index.tsx    (rudra patel on 10/09/2024 at 13:11):       }
+index.tsx    (rudra patel on 10/09/2024 at 13:11):     }
+index.tsx    (rudra patel on 10/09/2024 at 13:11):   };
+index.tsx    (rudra patel on 10/09/2024 at 13:11):   return (
+index.tsx    (rudra patel on 10/09/2024 at 13:11):     <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+index.tsx    (rudra patel on 10/09/2024 at 13:11):       <View style={styles.container}>
+index.tsx    (rudra patel on 10/09/2024 at 13:11):           )}
+index.tsx    (rudra patel on 10/09/2024 at 13:11):           )}
+index.tsx    (rudra patel on 10/09/2024 at 13:11):       </View>
+index.tsx    (rudra patel on 10/09/2024 at 13:11):     </TouchableWithoutFeedback>
+index.tsx    (rudra patel on 10/09/2024 at 13:11):   );
+index.tsx    (rudra patel on 10/09/2024 at 13:11): }
+index.tsx    (rudra patel on 10/09/2024 at 13:11): const styles = StyleSheet.create({
+index.tsx    (rudra patel on 10/09/2024 at 13:11):   container: {
+index.tsx    (rudra patel on 10/09/2024 at 13:11):     flex: 1,
+index.tsx    (rudra patel on 10/09/2024 at 13:11):     backgroundColor: "#fff",
+index.tsx    (rudra patel on 10/09/2024 at 13:11):     alignItems: "center",
+index.tsx    (rudra patel on 10/09/2024 at 13:11):     justifyContent: "center",
+index.tsx    (rudra patel on 10/09/2024 at 13:11):   },
+index.tsx    (rudra patel on 10/09/2024 at 13:11):   input: {
+index.tsx    (rudra patel on 10/09/2024 at 13:11):     borderWidth: 1,
+index.tsx    (rudra patel on 10/09/2024 at 13:11):   },
+index.tsx    (rudra patel on 10/09/2024 at 13:11): });
+getLocationFromDevice.ts (rudra patel on 10/09/2024 at 13:11): import {
+getLocationFromDevice.ts (rudra patel on 10/09/2024 at 13:11):   requestForegroundPermissionsAsync,
+getLocationFromDevice.ts (rudra patel on 10/09/2024 at 13:11):   getLastKnownPositionAsync,
+getLocationFromDevice.ts (rudra patel on 10/09/2024 at 13:11): } from "expo-location";
+getLocationFromDevice.ts (rudra patel on 10/09/2024 at 13:11): import { Location } from "@/types";
+getLocationFromDevice.ts (rudra patel on 10/09/2024 at 13:11): const getLocationFromDevice = async (): Promise<Location> => {
+getLocationFromDevice.ts (rudra patel on 10/09/2024 at 13:11):   const { status } = await requestForegroundPermissionsAsync();
+getLocationFromDevice.ts (rudra patel on 10/09/2024 at 13:11):   if (status !== "granted") {
+getLocationFromDevice.ts (rudra patel on 10/09/2024 at 13:11):     return {
+getLocationFromDevice.ts (rudra patel on 10/09/2024 at 13:11):       latitude: null,
+getLocationFromDevice.ts (rudra patel on 10/09/2024 at 13:11):       longitude: null,
+getLocationFromDevice.ts (rudra patel on 10/09/2024 at 13:11):     };
+getLocationFromDevice.ts (rudra patel on 10/09/2024 at 13:11):   }
+getLocationFromDevice.ts (rudra patel on 10/09/2024 at 13:11):   // if permission is granted, get the current location
+getLocationFromDevice.ts (rudra patel on 10/09/2024 at 13:11):   const location = await getLastKnownPositionAsync({});
+getLocationFromDevice.ts (rudra patel on 10/09/2024 at 13:11):   if (location?.coords.latitude && location?.coords.longitude) {
+getLocationFromDevice.ts (rudra patel on 10/09/2024 at 13:11):     return {
+getLocationFromDevice.ts (rudra patel on 10/09/2024 at 13:11):       latitude: location.coords.latitude,
+getLocationFromDevice.ts (rudra patel on 10/09/2024 at 13:11):       longitude: location.coords.longitude,
+getLocationFromDevice.ts (rudra patel on 10/09/2024 at 13:11):     };
+getLocationFromDevice.ts (rudra patel on 10/09/2024 at 13:11):   }
+getLocationFromDevice.ts (rudra patel on 10/09/2024 at 13:11):   return {
+getLocationFromDevice.ts (rudra patel on 10/09/2024 at 13:11):     latitude: null,
+getLocationFromDevice.ts (rudra patel on 10/09/2024 at 13:11):     longitude: null,
+getLocationFromDevice.ts (rudra patel on 10/09/2024 at 13:11):   };
+getLocationFromDevice.ts (rudra patel on 10/09/2024 at 13:11): };
+getLocationFromDevice.ts (rudra patel on 10/09/2024 at 13:11): export default getLocationFromDevice;
+index.tsx    (rudra patel on 10/09/2024 at 13:11): import LogIn from "../LogIn";
+index.tsx    (rudra patel on 10/09/2024 at 13:11): import useUser from "@/hooks/useUser";
+index.tsx    (rudra patel on 10/09/2024 at 13:11): export type ProfileStackParamList = {
+index.tsx    (rudra patel on 10/09/2024 at 13:11):   LogIn: undefined;
+index.tsx    (rudra patel on 10/09/2024 at 13:11): const Stack = createNativeStackNavigator<ProfileStackParamList>();
+index.tsx    (rudra patel on 10/09/2024 at 13:11): export default function Profile() {
+index.tsx    (rudra patel on 10/09/2024 at 13:11):   const user = useUser();
+index.tsx    (rudra patel on 10/09/2024 at 13:11):     <Stack.Navigator screenOptions={{ headerTitle: "" }}>
+index.tsx    (rudra patel on 10/09/2024 at 13:11):       {user ? (
+index.tsx    (rudra patel on 10/09/2024 at 13:11):         <Stack.Screen
+index.tsx    (rudra patel on 10/09/2024 at 13:11):           name="AuthorizedProfile"
+index.tsx    (rudra patel on 10/09/2024 at 13:11):           component={AuthorizedProfile}
+index.tsx    (rudra patel on 10/09/2024 at 13:11):           options={{ headerShown: false }}
+index.tsx    (rudra patel on 10/09/2024 at 13:11):         />
+index.tsx    (rudra patel on 10/09/2024 at 13:11):             options={{ headerShown: false }}
+ProfileScreen.tsx (rudra patel on 10/09/2024 at 13:11):   return <Profile />;
+README.md    (rudra patel on 10/09/2024 at 13:11): ## Description
+README.md    (rudra patel on 10/09/2024 at 13:11): SolSync is a mobile app available on iOS and Android that allows users to track habits that correspond with the sunrise and sunset.
+README.md    (rudra patel on 10/09/2024 at 13:11): The initial inspiration for this product was the Hindu practice known as Agnihotra, but it can be used for any habit that corresponds with sunrise and sunset (stretching, drinking water, meditating, etc.)
+README.md    (rudra patel on 10/09/2024 at 13:11): ## Getting Started
+README.md    (rudra patel on 10/09/2024 at 13:11): ### Prerequisites
+README.md    (rudra patel on 10/09/2024 at 13:11): - Node.js
+README.md    (rudra patel on 10/09/2024 at 13:11): - Expo Go App
+README.md    (rudra patel on 10/09/2024 at 13:11): - PNPM
+README.md    (rudra patel on 10/09/2024 at 13:11): ### Installation
+README.md    (rudra patel on 10/09/2024 at 13:11): 1. Clone the repo
+README.md    (rudra patel on 10/09/2024 at 13:11): 2. Obtain a copy of the .env file from one of the SolSync team members and place it in the root directory of the project
+README.md    (rudra patel on 10/09/2024 at 13:11): 3. Run `pnpm install` to install all dependencies
+README.md    (rudra patel on 10/09/2024 at 13:11): 4. Run `pnpm start` to start the app
+README.md    (rudra patel on 10/09/2024 at 13:11): 5. Scan the QR code with the Expo Go app to open the app on your phone, or, alternatively, use a locally installed emulator
+README.md    (rudra patel on 10/09/2024 at 13:11): ## Contributing
+README.md    (rudra patel on 10/09/2024 at 13:11): Branch protections are enabled on this repository.
+README.md    (rudra patel on 10/09/2024 at 13:11): To contribute, please create a new branch and make a pull request.
+README.md    (rudra patel on 10/09/2024 at 13:11): Your pull request title must follow the conventional commits specification. An example of a valid pull request title is:
+README.md    (rudra patel on 10/09/2024 at 13:11): ```text
+README.md    (rudra patel on 10/09/2024 at 13:11): feat: Add sunrise times to home page
+README.md    (rudra patel on 10/09/2024 at 13:11): It is also recommended to have the following VSCode extensions installed:
+README.md    (rudra patel on 10/09/2024 at 13:11): - Prettier
+README.md    (rudra patel on 10/09/2024 at 13:11): - ESLint
+README.md    (rudra patel on 10/09/2024 at 13:11): This will allow you to detect formatting and linting errors as you write code
+README.md    (rudra patel on 10/09/2024 at 13:11): Failure to pass the `pnpm lint` and `pnpm format` commands will mean that your PR cannot be merged.
+README.md    (rudra patel on 10/09/2024 at 13:11): ## License
+README.md    (rudra patel on 10/09/2024 at 13:11): This project is licensed under the MIT License - see the [LICENSE.txt](LICENSE.txt) file for details.
+useUser.ts   (rudra patel on 10/09/2024 at 13:11): const useUser = (): User | null => {
+useUser.ts   (rudra patel on 10/09/2024 at 13:11):   const [user, setUser] = useState<User | null>(null);
+useUser.ts   (rudra patel on 10/09/2024 at 13:11):       setUser(user ? user : null);
+index.ts     (rudra patel on 10/09/2024 at 13:11): import { User } from "firebase/auth";
+index.ts     (rudra patel on 10/09/2024 at 13:11): // Discriminated union: both are numbers or both are null
+index.ts     (rudra patel on 10/09/2024 at 13:11): type ValidLocation = {
+index.ts     (rudra patel on 10/09/2024 at 13:11):   latitude: number;
+index.ts     (rudra patel on 10/09/2024 at 13:11):   longitude: number;
+index.ts     (rudra patel on 10/09/2024 at 13:11): };
+index.ts     (rudra patel on 10/09/2024 at 13:11): type NullLocation = {
+index.ts     (rudra patel on 10/09/2024 at 13:11):   latitude: null;
+index.ts     (rudra patel on 10/09/2024 at 13:11):   longitude: null;
+index.ts     (rudra patel on 10/09/2024 at 13:11): };
+index.ts     (rudra patel on 10/09/2024 at 13:11): export type Location = ValidLocation | NullLocation;
+index.ts     (rudra patel on 10/09/2024 at 13:11): // TODO: Trishu spec this out and also how do we get this from the database?
+index.ts     (rudra patel on 10/09/2024 at 13:11): export type SolSyncUser = User & {
+index.ts     (rudra patel on 10/09/2024 at 13:11):   displayName: string;
+index.ts     (rudra patel on 10/09/2024 at 13:11):   location: Location;
+index.ts     (rudra patel on 10/09/2024 at 13:11): };
+index.ts     (rudra patel on 10/09/2024 at 13:11): export type Habit = {
+index.ts     (rudra patel on 10/09/2024 at 13:11):   id: string;
+index.ts     (rudra patel on 10/09/2024 at 13:11):   userId: string;
+index.ts     (rudra patel on 10/09/2024 at 13:11):   name: string;
+index.ts     (rudra patel on 10/11/2024 at 12:53):   notificationPeriod: "sunrise" | "sunset";
+index.ts     (rudra patel on 10/09/2024 at 13:11):   emailNotificationEnabled: boolean;
+index.ts     (rudra patel on 10/09/2024 at 13:11):   pushNotificationEnabled: boolean;
+index.ts     (rudra patel on 10/11/2024 at 12:53):   hourOffset: number;
+index.ts     (rudra patel on 10/11/2024 at 12:53):   minuteOffset: number;
+index.ts     (rudra patel on 10/11/2024 at 12:53):   offsetDirection: "before" | "after";
+index.ts     (rudra patel on 10/09/2024 at 13:11): };
+images.d.ts  (rudra patel on 10/09/2024 at 13:11): declare module "*.png";
+images.d.ts  (rudra patel on 10/09/2024 at 13:11): declare module "*.jpg";
+images.d.ts  (rudra patel on 10/09/2024 at 13:11): declare module "*.jpeg";
+images.d.ts  (rudra patel on 10/09/2024 at 13:11): declare module "*.bmp";
+images.d.ts  (rudra patel on 10/09/2024 at 13:11): declare module "*.gif";
+HabitProvider.tsx (rudra patel on 10/09/2024 at 13:11): import { Habit } from "@/types";
+HabitProvider.tsx (rudra patel on 10/09/2024 at 13:11): export type HabitContextType = {
+HabitProvider.tsx (rudra patel on 10/09/2024 at 13:11):   habits: Habit[];
+HabitProvider.tsx (rudra patel on 10/09/2024 at 13:11):   addHabit: (habit: Habit) => void;
+HabitProvider.tsx (rudra patel on 10/09/2024 at 13:11):   removeHabit: (habit: Habit) => void;
+HabitProvider.tsx (rudra patel on 10/09/2024 at 13:11): };
+HabitProvider.tsx (rudra patel on 10/09/2024 at 13:11): export const HabitContext = createContext<HabitContextType | null>(null);
+HabitProvider.tsx (rudra patel on 10/09/2024 at 13:11): type HabitProviderProps = {
+HabitProvider.tsx (rudra patel on 10/09/2024 at 13:11):   children: React.ReactNode;
+HabitProvider.tsx (rudra patel on 10/09/2024 at 13:11): };
+HabitProvider.tsx (rudra patel on 10/09/2024 at 13:11): export default function HabitProvider({ children }: HabitProviderProps) {
+HabitProvider.tsx (rudra patel on 10/09/2024 at 13:11):   const [habits, setHabits] = useState<Habit[]>([]);
+HabitProvider.tsx (rudra patel on 10/09/2024 at 13:11):   useEffect(() => {
+HabitProvider.tsx (rudra patel on 10/09/2024 at 13:11):     setHabits((prevHabits) => [...prevHabits, habit]);
+HabitProvider.tsx (rudra patel on 10/09/2024 at 13:11):   };
+HabitProvider.tsx (rudra patel on 10/09/2024 at 13:11):     setHabits((prevHabits) =>
+HabitProvider.tsx (rudra patel on 10/09/2024 at 13:11):       prevHabits.filter((prevHabit) => prevHabit.id !== habit.id),
+HabitProvider.tsx (rudra patel on 10/09/2024 at 13:11):     );
+HabitProvider.tsx (rudra patel on 10/09/2024 at 13:11):   };
+HabitProvider.tsx (rudra patel on 10/09/2024 at 13:11):   return (
+HabitProvider.tsx (rudra patel on 10/09/2024 at 13:11):     <HabitContext.Provider
+HabitProvider.tsx (rudra patel on 10/09/2024 at 13:11):       value={{
+HabitProvider.tsx (rudra patel on 10/09/2024 at 13:11):         habits,
+HabitProvider.tsx (rudra patel on 10/09/2024 at 13:11):         addHabit,
+HabitProvider.tsx (rudra patel on 10/09/2024 at 13:11):         removeHabit,
+HabitProvider.tsx (rudra patel on 10/09/2024 at 13:11):       }}
+HabitProvider.tsx (rudra patel on 10/09/2024 at 13:11):     >
+HabitProvider.tsx (rudra patel on 10/09/2024 at 13:11):       {children}
+HabitProvider.tsx (rudra patel on 10/09/2024 at 13:11):     </HabitContext.Provider>
+HabitProvider.tsx (rudra patel on 10/09/2024 at 13:11):   );
+HabitProvider.tsx (rudra patel on 10/09/2024 at 13:11): }
+tsconfig.json (rudra patel on 10/09/2024 at 13:11):       // used to import getReactNativePersistence
+tsconfig.json (rudra patel on 10/09/2024 at 13:11):       // https://stackoverflow.com/a/77021337
+tsconfig.json (rudra patel on 10/09/2024 at 13:11):       ],
+HabitForm.tsx (rudra patel on 10/09/2024 at 13:11): import { NativeStackScreenProps } from "@react-navigation/native-stack";
+HabitForm.tsx (rudra patel on 10/09/2024 at 13:11): import { HabitStackParamList } from ".";
+HabitForm.tsx (rudra patel on 10/09/2024 at 13:11): import { z } from "zod";
+HabitForm.tsx (rudra patel on 10/09/2024 at 13:11): import { useHabit } from "@/hooks/useHabit";
+HabitForm.tsx (rudra patel on 10/09/2024 at 13:11): import { zodResolver } from "@hookform/resolvers/zod";
+HabitForm.tsx (rudra patel on 10/09/2024 at 13:11): import { useForm, SubmitHandler, Controller } from "react-hook-form";
+HabitForm.tsx (rudra patel on 10/09/2024 at 13:11): import useUser from "@/hooks/useUser";
+HabitForm.tsx (rudra patel on 10/11/2024 at 12:53): import {
+HabitForm.tsx (rudra patel on 10/11/2024 at 12:53):   Button,
+HabitForm.tsx (rudra patel on 10/11/2024 at 12:53):   Keyboard,
+HabitForm.tsx (rudra patel on 10/11/2024 at 12:53):   Switch,
+HabitForm.tsx (rudra patel on 10/11/2024 at 12:53):   Text,
+HabitForm.tsx (rudra patel on 10/11/2024 at 12:53):   TextInput,
+HabitForm.tsx (rudra patel on 10/11/2024 at 12:53):   TouchableWithoutFeedback,
+HabitForm.tsx (rudra patel on 10/11/2024 at 12:53): } from "react-native";
+HabitForm.tsx (rudra patel on 10/09/2024 at 13:11): import { randomUUID } from "expo-crypto";
+HabitForm.tsx (rudra patel on 10/09/2024 at 13:11): import { SafeAreaView, StyleSheet } from "react-native";
+HabitForm.tsx (rudra patel on 10/09/2024 at 13:11): import { Dropdown } from "react-native-element-dropdown";
+HabitForm.tsx (rudra patel on 10/09/2024 at 13:11): const habitFormSchema = z.object({
+HabitForm.tsx (rudra patel on 10/09/2024 at 13:11):   name: z.string().min(1, { message: "Name is required" }),
+HabitForm.tsx (rudra patel on 10/11/2024 at 12:53):   notificationPeriod: z.enum(["sunrise", "sunset"]),
+HabitForm.tsx (rudra patel on 10/09/2024 at 13:11):   emailNotificationEnabled: z.boolean(),
+HabitForm.tsx (rudra patel on 10/09/2024 at 13:11):   pushNotificationEnabled: z.boolean(),
+HabitForm.tsx (rudra patel on 10/11/2024 at 12:53):   hourOffset: z
+HabitForm.tsx (rudra patel on 10/11/2024 at 12:53):     .number()
+HabitForm.tsx (rudra patel on 10/11/2024 at 12:53):     .min(0, { message: "Hour offset must be a positive number" })
+HabitForm.tsx (rudra patel on 10/11/2024 at 12:53):     .max(6, { message: "Hour offset must be less than 6" }),
+HabitForm.tsx (rudra patel on 10/11/2024 at 12:53):   minuteOffset: z
+HabitForm.tsx (rudra patel on 10/11/2024 at 12:53):     .number()
+HabitForm.tsx (rudra patel on 10/11/2024 at 12:53):     .min(0, { message: "Minute offset must be a positive number" })
+HabitForm.tsx (rudra patel on 10/11/2024 at 12:53):     .max(59, { message: "Minute offset must be less than 60" }),
+HabitForm.tsx (rudra patel on 10/11/2024 at 12:53):   offsetDirection: z.enum(["before", "after"]),
+HabitForm.tsx (rudra patel on 10/09/2024 at 13:11): });
+HabitForm.tsx (rudra patel on 10/09/2024 at 13:11): type HabitFormValues = z.infer<typeof habitFormSchema>;
+HabitForm.tsx (rudra patel on 10/09/2024 at 13:11): type HabitFormProps = NativeStackScreenProps<HabitStackParamList, "HabitForm">;
+HabitForm.tsx (rudra patel on 10/09/2024 at 13:11): export default function HabitForm({ navigation }: HabitFormProps) {
+HabitForm.tsx (rudra patel on 10/09/2024 at 13:11):   const {
+HabitForm.tsx (rudra patel on 10/09/2024 at 13:11):     control,
+HabitForm.tsx (rudra patel on 10/09/2024 at 13:11):     handleSubmit,
+HabitForm.tsx (rudra patel on 10/09/2024 at 13:11):     formState: { errors },
+HabitForm.tsx (rudra patel on 10/09/2024 at 13:11):     watch,
+HabitForm.tsx (rudra patel on 10/09/2024 at 13:11):   } = useForm<HabitFormValues>({
+HabitForm.tsx (rudra patel on 10/09/2024 at 13:11):     resolver: zodResolver(habitFormSchema),
+HabitForm.tsx (rudra patel on 10/09/2024 at 13:11):     defaultValues: {
+HabitForm.tsx (rudra patel on 10/11/2024 at 12:53):       name: "",
+HabitForm.tsx (rudra patel on 10/09/2024 at 13:11):       notificationPeriod: "sunrise",
+HabitForm.tsx (rudra patel on 10/09/2024 at 13:11):       emailNotificationEnabled: true,
+HabitForm.tsx (rudra patel on 10/09/2024 at 13:11):       pushNotificationEnabled: true,
+HabitForm.tsx (rudra patel on 10/11/2024 at 12:53):       minuteOffset: 0,
+HabitForm.tsx (rudra patel on 10/11/2024 at 12:53):       hourOffset: 0,
+HabitForm.tsx (rudra patel on 10/11/2024 at 12:53):       offsetDirection: "before",
+HabitForm.tsx (rudra patel on 10/09/2024 at 13:11):     },
+HabitForm.tsx (rudra patel on 10/09/2024 at 13:11):   });
+HabitForm.tsx (rudra patel on 10/11/2024 at 12:53):   const notificationPeriod = watch("notificationPeriod");
+HabitForm.tsx (rudra patel on 10/09/2024 at 13:11):   const { addHabit } = useHabit();
+HabitForm.tsx (rudra patel on 10/09/2024 at 13:11):   const user = useUser();
+HabitForm.tsx (rudra patel on 10/09/2024 at 13:11):   if (!user) {
+HabitForm.tsx (rudra patel on 10/09/2024 at 13:11):     return <Text>Please log in to add a habit</Text>;
+HabitForm.tsx (rudra patel on 10/09/2024 at 13:11):   }
+HabitForm.tsx (rudra patel on 10/09/2024 at 13:11):   const onSubmit: SubmitHandler<HabitFormValues> = async (data) => {
+HabitForm.tsx (rudra patel on 10/09/2024 at 13:11):     const {
+HabitForm.tsx (rudra patel on 10/09/2024 at 13:11):       name,
+HabitForm.tsx (rudra patel on 10/09/2024 at 13:11):       notificationPeriod,
+HabitForm.tsx (rudra patel on 10/09/2024 at 13:11):       emailNotificationEnabled,
+HabitForm.tsx (rudra patel on 10/09/2024 at 13:11):       pushNotificationEnabled,
+HabitForm.tsx (rudra patel on 10/11/2024 at 12:53):       hourOffset,
+HabitForm.tsx (rudra patel on 10/11/2024 at 12:53):       minuteOffset,
+HabitForm.tsx (rudra patel on 10/11/2024 at 12:53):       offsetDirection,
+HabitForm.tsx (rudra patel on 10/09/2024 at 13:11):     } = data;
+HabitForm.tsx (rudra patel on 10/09/2024 at 13:11):       id: randomUUID(),
+HabitForm.tsx (rudra patel on 10/09/2024 at 13:11):       userId: user.uid,
+HabitForm.tsx (rudra patel on 10/09/2024 at 13:11):       name,
+HabitForm.tsx (rudra patel on 10/09/2024 at 13:11):       notificationPeriod,
+HabitForm.tsx (rudra patel on 10/09/2024 at 13:11):       emailNotificationEnabled,
+HabitForm.tsx (rudra patel on 10/09/2024 at 13:11):       pushNotificationEnabled,
+HabitForm.tsx (rudra patel on 10/11/2024 at 12:53):       hourOffset,
+HabitForm.tsx (rudra patel on 10/11/2024 at 12:53):       minuteOffset,
+HabitForm.tsx (rudra patel on 10/11/2024 at 12:53):       offsetDirection,
+HabitForm.tsx (rudra patel on 10/09/2024 at 13:11):     });
+HabitForm.tsx (rudra patel on 10/09/2024 at 13:11):     navigation.navigate("HabitList");
+HabitForm.tsx (rudra patel on 10/09/2024 at 13:11):   };
+HabitForm.tsx (rudra patel on 10/09/2024 at 13:11):   return (
+HabitForm.tsx (rudra patel on 10/11/2024 at 12:53):     <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+HabitForm.tsx (rudra patel on 10/11/2024 at 12:53):       <SafeAreaView style={styles.container}>
+HabitForm.tsx (rudra patel on 10/11/2024 at 12:53):         <Text>Add a habit</Text>
+HabitForm.tsx (rudra patel on 10/11/2024 at 12:53):         <Controller
+HabitForm.tsx (rudra patel on 10/11/2024 at 12:53):           control={control}
+HabitForm.tsx (rudra patel on 10/11/2024 at 12:53):           name="name"
+HabitForm.tsx (rudra patel on 10/11/2024 at 12:53):           render={({ field: { onChange, onBlur, value } }) => (
+HabitForm.tsx (rudra patel on 10/11/2024 at 12:53):             <TextInput
+HabitForm.tsx (rudra patel on 10/11/2024 at 12:53):               autoCorrect={false}
+HabitForm.tsx (rudra patel on 10/11/2024 at 12:53):               style={styles.input}
+HabitForm.tsx (rudra patel on 10/11/2024 at 12:53):               placeholder="Name"
+HabitForm.tsx (rudra patel on 10/11/2024 at 12:53):               onChangeText={onChange}
+HabitForm.tsx (rudra patel on 10/11/2024 at 12:53):               onBlur={onBlur}
+HabitForm.tsx (rudra patel on 10/11/2024 at 12:53):               value={value}
+HabitForm.tsx (rudra patel on 10/11/2024 at 12:53):             />
+HabitForm.tsx (rudra patel on 10/11/2024 at 12:53):           )}
+HabitForm.tsx (rudra patel on 10/11/2024 at 12:53):         />
+HabitForm.tsx (rudra patel on 10/11/2024 at 12:53):         {errors.name && (
+HabitForm.tsx (rudra patel on 10/11/2024 at 12:53):           <Text style={{ color: "red" }}>{errors.name.message}</Text>
+HabitForm.tsx (rudra patel on 10/09/2024 at 13:11):         )}
+HabitForm.tsx (rudra patel on 10/11/2024 at 12:53):         <Controller
+HabitForm.tsx (rudra patel on 10/11/2024 at 12:53):           control={control}
+HabitForm.tsx (rudra patel on 10/11/2024 at 12:53):           name="notificationPeriod"
+HabitForm.tsx (rudra patel on 10/11/2024 at 12:53):           render={({ field: { onChange, value } }) => (
+HabitForm.tsx (rudra patel on 10/11/2024 at 12:53):             <Dropdown
+HabitForm.tsx (rudra patel on 10/11/2024 at 12:53):               data={[
+HabitForm.tsx (rudra patel on 10/11/2024 at 12:53):                 { label: "Sunrise", value: "sunrise" },
+HabitForm.tsx (rudra patel on 10/11/2024 at 12:53):                 { label: "Sunset", value: "sunset" },
+HabitForm.tsx (rudra patel on 10/11/2024 at 12:53):               ]}
+HabitForm.tsx (rudra patel on 10/11/2024 at 12:53):               onChange={(item) => onChange(item.value)}
+HabitForm.tsx (rudra patel on 10/11/2024 at 12:53):               style={styles.picker}
+HabitForm.tsx (rudra patel on 10/11/2024 at 12:53):               value={value}
+HabitForm.tsx (rudra patel on 10/11/2024 at 12:53):               labelField={"label"}
+HabitForm.tsx (rudra patel on 10/11/2024 at 12:53):               valueField={"value"}
+HabitForm.tsx (rudra patel on 10/11/2024 at 12:53):             />
+HabitForm.tsx (rudra patel on 10/11/2024 at 12:53):           )}
+HabitForm.tsx (rudra patel on 10/11/2024 at 12:53):         />
+HabitForm.tsx (rudra patel on 10/11/2024 at 12:53):         {errors.notificationPeriod && (
+HabitForm.tsx (rudra patel on 10/11/2024 at 12:53):           <Text style={{ color: "red" }}>
+HabitForm.tsx (rudra patel on 10/11/2024 at 12:53):             {errors.notificationPeriod.message}
+HabitForm.tsx (rudra patel on 10/11/2024 at 12:53):           </Text>
+HabitForm.tsx (rudra patel on 10/09/2024 at 13:11):         )}
+HabitForm.tsx (rudra patel on 10/11/2024 at 12:53):         <Text>Email Notifications</Text>
+HabitForm.tsx (rudra patel on 10/11/2024 at 12:53):         <Controller
+HabitForm.tsx (rudra patel on 10/11/2024 at 12:53):           control={control}
+HabitForm.tsx (rudra patel on 10/11/2024 at 12:53):           name="emailNotificationEnabled"
+HabitForm.tsx (rudra patel on 10/11/2024 at 12:53):           render={({ field: { onChange, value } }) => (
+HabitForm.tsx (rudra patel on 10/11/2024 at 12:53):             <Switch
+HabitForm.tsx (rudra patel on 10/11/2024 at 12:53):               trackColor={{ false: "#767577", true: "#81b0ff" }}
+HabitForm.tsx (rudra patel on 10/11/2024 at 12:53):               thumbColor={value ? "#f5dd4b" : "#f4f3f4"}
+HabitForm.tsx (rudra patel on 10/11/2024 at 12:53):               ios_backgroundColor="#3e3e3e"
+HabitForm.tsx (rudra patel on 10/11/2024 at 12:53):               onValueChange={onChange}
+HabitForm.tsx (rudra patel on 10/11/2024 at 12:53):               value={value}
+HabitForm.tsx (rudra patel on 10/11/2024 at 12:53):             />
+HabitForm.tsx (rudra patel on 10/11/2024 at 12:53):           )}
+HabitForm.tsx (rudra patel on 10/11/2024 at 12:53):         />
+HabitForm.tsx (rudra patel on 10/11/2024 at 12:53):         {errors.emailNotificationEnabled && (
+HabitForm.tsx (rudra patel on 10/11/2024 at 12:53):           <Text style={{ color: "red" }}>
+HabitForm.tsx (rudra patel on 10/11/2024 at 12:53):             {errors.emailNotificationEnabled.message}
+HabitForm.tsx (rudra patel on 10/11/2024 at 12:53):           </Text>
+HabitForm.tsx (rudra patel on 10/09/2024 at 13:11):         )}
+HabitForm.tsx (rudra patel on 10/11/2024 at 12:53):         <Text>Push Notifications</Text>
+HabitForm.tsx (rudra patel on 10/11/2024 at 12:53):         <Controller
+HabitForm.tsx (rudra patel on 10/11/2024 at 12:53):           control={control}
+HabitForm.tsx (rudra patel on 10/11/2024 at 12:53):           name="pushNotificationEnabled"
+HabitForm.tsx (rudra patel on 10/11/2024 at 12:53):           render={({ field: { onChange, value } }) => (
+HabitForm.tsx (rudra patel on 10/11/2024 at 12:53):             <Switch
+HabitForm.tsx (rudra patel on 10/11/2024 at 12:53):               trackColor={{ false: "#767577", true: "#81b0ff" }}
+HabitForm.tsx (rudra patel on 10/11/2024 at 12:53):               thumbColor={value ? "#f5dd4b" : "#f4f3f4"}
+HabitForm.tsx (rudra patel on 10/11/2024 at 12:53):               ios_backgroundColor="#3e3e3e"
+HabitForm.tsx (rudra patel on 10/11/2024 at 12:53):               onValueChange={onChange}
+HabitForm.tsx (rudra patel on 10/11/2024 at 12:53):               value={value}
+HabitForm.tsx (rudra patel on 10/11/2024 at 12:53):             />
+HabitForm.tsx (rudra patel on 10/11/2024 at 12:53):           )}
+HabitForm.tsx (rudra patel on 10/11/2024 at 12:53):         />
+HabitForm.tsx (rudra patel on 10/11/2024 at 12:53):         {errors.pushNotificationEnabled && (
+HabitForm.tsx (rudra patel on 10/11/2024 at 12:53):           <Text style={{ color: "red" }}>
+HabitForm.tsx (rudra patel on 10/11/2024 at 12:53):             {errors.pushNotificationEnabled.message}
+HabitForm.tsx (rudra patel on 10/11/2024 at 12:53):           </Text>
+HabitForm.tsx (rudra patel on 10/09/2024 at 13:11):         )}
+HabitForm.tsx (rudra patel on 10/11/2024 at 12:53):         <Text>Hour offset</Text>
+HabitForm.tsx (rudra patel on 10/11/2024 at 12:53):         <Controller
+HabitForm.tsx (rudra patel on 10/11/2024 at 12:53):           control={control}
+HabitForm.tsx (rudra patel on 10/11/2024 at 12:53):           name="hourOffset"
+HabitForm.tsx (rudra patel on 10/11/2024 at 12:53):           render={({ field: { onChange, onBlur, value } }) => (
+HabitForm.tsx (rudra patel on 10/11/2024 at 12:53):             <TextInput
+HabitForm.tsx (rudra patel on 10/11/2024 at 12:53):               autoCorrect={false}
+HabitForm.tsx (rudra patel on 10/11/2024 at 12:53):               style={styles.input}
+HabitForm.tsx (rudra patel on 10/11/2024 at 12:53):               placeholder="Hour offset"
+HabitForm.tsx (rudra patel on 10/11/2024 at 12:53):               onChangeText={(text) => onChange(Number(text))}
+HabitForm.tsx (rudra patel on 10/11/2024 at 12:53):               onBlur={onBlur}
+HabitForm.tsx (rudra patel on 10/11/2024 at 12:53):               keyboardType="numeric"
+HabitForm.tsx (rudra patel on 10/11/2024 at 12:53):               value={String(value)}
+HabitForm.tsx (rudra patel on 10/11/2024 at 12:53):             />
+HabitForm.tsx (rudra patel on 10/11/2024 at 12:53):           )}
+HabitForm.tsx (rudra patel on 10/11/2024 at 12:53):         />
+HabitForm.tsx (rudra patel on 10/11/2024 at 12:53):         {errors.hourOffset && (
+HabitForm.tsx (rudra patel on 10/11/2024 at 12:53):           <Text style={{ color: "red" }}>{errors.hourOffset.message}</Text>
+HabitForm.tsx (rudra patel on 10/09/2024 at 13:11):         )}
+HabitForm.tsx (rudra patel on 10/11/2024 at 12:53):         <Text>Minute offset</Text>
+HabitForm.tsx (rudra patel on 10/11/2024 at 12:53):         <Controller
+HabitForm.tsx (rudra patel on 10/11/2024 at 12:53):           control={control}
+HabitForm.tsx (rudra patel on 10/11/2024 at 12:53):           name="minuteOffset"
+HabitForm.tsx (rudra patel on 10/11/2024 at 12:53):           render={({ field: { onChange, onBlur, value } }) => (
+HabitForm.tsx (rudra patel on 10/11/2024 at 12:53):             <TextInput
+HabitForm.tsx (rudra patel on 10/11/2024 at 12:53):               autoCorrect={false}
+HabitForm.tsx (rudra patel on 10/11/2024 at 12:53):               style={styles.input}
+HabitForm.tsx (rudra patel on 10/11/2024 at 12:53):               placeholder="Minute offset"
+HabitForm.tsx (rudra patel on 10/11/2024 at 12:53):               onChangeText={(text) => onChange(Number(text))}
+HabitForm.tsx (rudra patel on 10/11/2024 at 12:53):               onBlur={onBlur}
+HabitForm.tsx (rudra patel on 10/11/2024 at 12:53):               keyboardType="numeric"
+HabitForm.tsx (rudra patel on 10/11/2024 at 12:53):               value={String(value)}
+HabitForm.tsx (rudra patel on 10/11/2024 at 12:53):             />
+HabitForm.tsx (rudra patel on 10/11/2024 at 12:53):           )}
+HabitForm.tsx (rudra patel on 10/11/2024 at 12:53):         />
+HabitForm.tsx (rudra patel on 10/11/2024 at 12:53):         {errors.minuteOffset && (
+HabitForm.tsx (rudra patel on 10/11/2024 at 12:53):           <Text style={{ color: "red" }}>{errors.minuteOffset.message}</Text>
+HabitForm.tsx (rudra patel on 10/11/2024 at 12:53):         )}
+HabitForm.tsx (rudra patel on 10/11/2024 at 12:53):         <Text>Offset direction</Text>
+HabitForm.tsx (rudra patel on 10/09/2024 at 13:11):         <Controller
+HabitForm.tsx (rudra patel on 10/09/2024 at 13:11):           control={control}
+HabitForm.tsx (rudra patel on 10/11/2024 at 12:53):           name="offsetDirection"
+HabitForm.tsx (rudra patel on 10/09/2024 at 13:11):           render={({ field: { onChange, value } }) => (
+HabitForm.tsx (rudra patel on 10/11/2024 at 12:53):             <Dropdown
+HabitForm.tsx (rudra patel on 10/11/2024 at 12:53):               data={[
+HabitForm.tsx (rudra patel on 10/11/2024 at 12:53):                 {
+HabitForm.tsx (rudra patel on 10/11/2024 at 12:53):                   label: `Before ${notificationPeriod}`,
+HabitForm.tsx (rudra patel on 10/11/2024 at 12:53):                   value: "before",
+HabitForm.tsx (rudra patel on 10/11/2024 at 12:53):                 },
+HabitForm.tsx (rudra patel on 10/11/2024 at 12:53):                 { label: `After ${notificationPeriod}`, value: "after" },
+HabitForm.tsx (rudra patel on 10/11/2024 at 12:53):               ]}
+HabitForm.tsx (rudra patel on 10/11/2024 at 12:53):               onChange={(item) => onChange(item.value)}
+HabitForm.tsx (rudra patel on 10/11/2024 at 12:53):               style={styles.picker}
+HabitForm.tsx (rudra patel on 10/09/2024 at 13:11):               value={value}
+HabitForm.tsx (rudra patel on 10/11/2024 at 12:53):               labelField={"label"}
+HabitForm.tsx (rudra patel on 10/11/2024 at 12:53):               valueField={"value"}
+HabitForm.tsx (rudra patel on 10/09/2024 at 13:11):             />
+HabitForm.tsx (rudra patel on 10/09/2024 at 13:11):           )}
+HabitForm.tsx (rudra patel on 10/09/2024 at 13:11):         />
+HabitForm.tsx (rudra patel on 10/11/2024 at 12:53):         {errors.offsetDirection && (
+HabitForm.tsx (rudra patel on 10/11/2024 at 12:53):           <Text style={{ color: "red" }}>{errors.offsetDirection.message}</Text>
+HabitForm.tsx (rudra patel on 10/11/2024 at 12:53):         )}
+HabitForm.tsx (rudra patel on 10/11/2024 at 12:53):         <Button
+HabitForm.tsx (rudra patel on 10/11/2024 at 12:53):           title="Add Habit"
+HabitForm.tsx (rudra patel on 10/11/2024 at 12:53):           color="purple"
+HabitForm.tsx (rudra patel on 10/11/2024 at 12:53):           onPress={handleSubmit(onSubmit)}
+HabitForm.tsx (rudra patel on 10/11/2024 at 12:53):         />
+HabitForm.tsx (rudra patel on 10/11/2024 at 12:53):       </SafeAreaView>
+HabitForm.tsx (rudra patel on 10/11/2024 at 12:53):     </TouchableWithoutFeedback>
+HabitForm.tsx (rudra patel on 10/09/2024 at 13:11):   );
+HabitForm.tsx (rudra patel on 10/09/2024 at 13:11): }
+HabitForm.tsx (rudra patel on 10/09/2024 at 13:11): const styles = StyleSheet.create({
+HabitForm.tsx (rudra patel on 10/09/2024 at 13:11):   container: {
+HabitForm.tsx (rudra patel on 10/09/2024 at 13:11):     flex: 1,
+HabitForm.tsx (rudra patel on 10/09/2024 at 13:11):     backgroundColor: "#fff",
+HabitForm.tsx (rudra patel on 10/09/2024 at 13:11):     alignItems: "center",
+HabitForm.tsx (rudra patel on 10/09/2024 at 13:11):     justifyContent: "center",
+HabitForm.tsx (rudra patel on 10/09/2024 at 13:11):   },
+HabitForm.tsx (rudra patel on 10/09/2024 at 13:11):   input: {
+HabitForm.tsx (rudra patel on 10/09/2024 at 13:11):     height: 40,
+HabitForm.tsx (rudra patel on 10/09/2024 at 13:11):     width: "70%",
+HabitForm.tsx (rudra patel on 10/09/2024 at 13:11):     marginHorizontal: 12,
+HabitForm.tsx (rudra patel on 10/09/2024 at 13:11):     margin: 12,
+HabitForm.tsx (rudra patel on 10/09/2024 at 13:11):     borderWidth: 1,
+HabitForm.tsx (rudra patel on 10/09/2024 at 13:11):     padding: 10,
+HabitForm.tsx (rudra patel on 10/09/2024 at 13:11):   },
+HabitForm.tsx (rudra patel on 10/09/2024 at 13:11):   picker: {
+HabitForm.tsx (rudra patel on 10/09/2024 at 13:11):     width: "70%",
+HabitForm.tsx (rudra patel on 10/09/2024 at 13:11):     borderWidth: 1,
+HabitForm.tsx (rudra patel on 10/09/2024 at 13:11):   },
+HabitForm.tsx (rudra patel on 10/09/2024 at 13:11): });
+index.tsx    (rudra patel on 10/09/2024 at 13:11): import getLocationFromDevice from "@/utils/getLocationFromDevice";
+index.tsx    (rudra patel on 10/09/2024 at 13:11): import { z } from "zod";
+index.tsx    (rudra patel on 10/09/2024 at 13:11): import { SubmitHandler, Controller, useForm } from "react-hook-form";
+index.tsx    (rudra patel on 10/09/2024 at 13:11): import { zodResolver } from "@hookform/resolvers/zod";
+index.tsx    (rudra patel on 10/09/2024 at 13:11): import { FirebaseError } from "firebase/app";
+index.tsx    (rudra patel on 10/09/2024 at 13:11): import getFirebaseAuthErrorMessage from "@/utils/getFirebaseAuthErrorMessage";
+index.tsx    (rudra patel on 10/09/2024 at 13:11): const signUpFormSchema = z.object({
+index.tsx    (rudra patel on 10/09/2024 at 13:11):   displayName: z.string().min(1, { message: "Display name is required" }),
+index.tsx    (rudra patel on 10/09/2024 at 13:11):   email: z.string().email({ message: "Invalid email" }),
+index.tsx    (rudra patel on 10/09/2024 at 13:11):   password: z
+index.tsx    (rudra patel on 10/09/2024 at 13:11):     .string()
+index.tsx    (rudra patel on 10/09/2024 at 13:11):     .min(6, { message: "Password must be at least 6 characters" }),
+index.tsx    (rudra patel on 10/09/2024 at 13:11): });
+index.tsx    (rudra patel on 10/09/2024 at 13:11): type SignUpFormValues = z.infer<typeof signUpFormSchema>;
+index.tsx    (rudra patel on 10/09/2024 at 13:11):   const {
+index.tsx    (rudra patel on 10/09/2024 at 13:11):     control,
+index.tsx    (rudra patel on 10/09/2024 at 13:11):     handleSubmit,
+index.tsx    (rudra patel on 10/09/2024 at 13:11):     formState: { errors },
+index.tsx    (rudra patel on 10/09/2024 at 13:11):     setError,
+index.tsx    (rudra patel on 10/09/2024 at 13:11):   } = useForm<SignUpFormValues>({
+index.tsx    (rudra patel on 10/09/2024 at 13:11):     resolver: zodResolver(signUpFormSchema),
+index.tsx    (rudra patel on 10/09/2024 at 13:11):   });
+index.tsx    (rudra patel on 10/09/2024 at 13:11):   const onSubmit: SubmitHandler<SignUpFormValues> = async (data) => {
+index.tsx    (rudra patel on 10/09/2024 at 13:11):     const { email, password, displayName } = data;
+index.tsx    (rudra patel on 10/09/2024 at 13:11):       const credentials = await createUserWithEmailAndPassword(
+index.tsx    (rudra patel on 10/09/2024 at 13:11):         firebaseAuth,
+index.tsx    (rudra patel on 10/09/2024 at 13:11):         email,
+index.tsx    (rudra patel on 10/09/2024 at 13:11):         password,
+index.tsx    (rudra patel on 10/09/2024 at 13:11):       const location = await getLocationFromDevice();
+index.tsx    (rudra patel on 10/09/2024 at 13:11):       setDoc(doc(db, "users", credentials.user.uid), {
+index.tsx    (rudra patel on 10/09/2024 at 13:11):         displayName,
+index.tsx    (rudra patel on 10/09/2024 at 13:11):         latitude: location.latitude,
+index.tsx    (rudra patel on 10/09/2024 at 13:11):         longitude: location.longitude,
+index.tsx    (rudra patel on 10/09/2024 at 13:11):       });
+index.tsx    (rudra patel on 10/09/2024 at 13:11):       if (error instanceof FirebaseError) {
+index.tsx    (rudra patel on 10/09/2024 at 13:11):         setError("root", {
+index.tsx    (rudra patel on 10/09/2024 at 13:11):           message: getFirebaseAuthErrorMessage(error.code),
+index.tsx    (rudra patel on 10/09/2024 at 13:11):         });
+index.tsx    (rudra patel on 10/09/2024 at 13:11):   return (
+index.tsx    (rudra patel on 10/09/2024 at 13:11):     <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+index.tsx    (rudra patel on 10/09/2024 at 13:11):       <View style={styles.container}>
+index.tsx    (rudra patel on 10/09/2024 at 13:11):           )}
+index.tsx    (rudra patel on 10/09/2024 at 13:11):           )}
+index.tsx    (rudra patel on 10/09/2024 at 13:11):           )}
+index.tsx    (rudra patel on 10/09/2024 at 13:11):           onPress={handleSubmit(onSubmit)}
+index.tsx    (rudra patel on 10/09/2024 at 13:11):         {errors.root && (
+index.tsx    (rudra patel on 10/09/2024 at 13:11):           <Text style={{ color: "red" }}>{errors.root.message}</Text>
+index.tsx    (rudra patel on 10/09/2024 at 13:11):         )}
+index.tsx    (rudra patel on 10/09/2024 at 13:11):   container: {
+index.tsx    (rudra patel on 10/09/2024 at 13:11):     flex: 1,
+index.tsx    (rudra patel on 10/09/2024 at 13:11):     backgroundColor: "#fff",
+index.tsx    (rudra patel on 10/09/2024 at 13:11):     justifyContent: "center",
+index.tsx    (rudra patel on 10/09/2024 at 13:11):     alignItems: "center",
+index.tsx    (rudra patel on 10/09/2024 at 13:11):   },
+index.tsx    (rudra patel on 10/09/2024 at 13:11): import useUser from "@/hooks/useUser";
+index.tsx    (rudra patel on 10/09/2024 at 13:11): import { createNativeStackNavigator } from "@react-navigation/native-stack";
+index.tsx    (rudra patel on 10/09/2024 at 13:11): import { View, StyleSheet, Text } from "react-native";
+index.tsx    (rudra patel on 10/09/2024 at 13:11): import HabitList from "./HabitList";
+index.tsx    (rudra patel on 10/09/2024 at 13:11): import HabitForm from "./HabitForm";
+index.tsx    (rudra patel on 10/09/2024 at 13:11): export type HabitStackParamList = {
+index.tsx    (rudra patel on 10/09/2024 at 13:11):   HabitList: undefined;
+index.tsx    (rudra patel on 10/09/2024 at 13:11):   HabitForm: undefined;
+index.tsx    (rudra patel on 10/09/2024 at 13:11): };
+index.tsx    (rudra patel on 10/09/2024 at 13:11): const Stack = createNativeStackNavigator<HabitStackParamList>();
+index.tsx    (rudra patel on 10/09/2024 at 13:11): export default function Habits() {
+index.tsx    (rudra patel on 10/09/2024 at 13:11):   const user = useUser();
+index.tsx    (rudra patel on 10/09/2024 at 13:11):   if (!user) {
+index.tsx    (rudra patel on 10/09/2024 at 13:11):     return (
+index.tsx    (rudra patel on 10/09/2024 at 13:11):       <View style={styles.container}>
+index.tsx    (rudra patel on 10/09/2024 at 13:11):         <Text>Please sign in to view your habits</Text>
+index.tsx    (rudra patel on 10/09/2024 at 13:11):       </View>
+index.tsx    (rudra patel on 10/09/2024 at 13:11):     );
+index.tsx    (rudra patel on 10/09/2024 at 13:11):   }
+index.tsx    (rudra patel on 10/09/2024 at 13:11):   return (
+index.tsx    (rudra patel on 10/09/2024 at 13:11):     <Stack.Navigator screenOptions={{ headerShown: false }}>
+index.tsx    (rudra patel on 10/09/2024 at 13:11):       <Stack.Group>
+index.tsx    (rudra patel on 10/09/2024 at 13:11):         <Stack.Screen name="HabitList" component={HabitList} />
+index.tsx    (rudra patel on 10/09/2024 at 13:11):       </Stack.Group>
+index.tsx    (rudra patel on 10/09/2024 at 13:11):       <Stack.Group screenOptions={{ presentation: "modal" }}>
+index.tsx    (rudra patel on 10/09/2024 at 13:11):         <Stack.Screen name="HabitForm" component={HabitForm} />
+index.tsx    (rudra patel on 10/09/2024 at 13:11):       </Stack.Group>
+index.tsx    (rudra patel on 10/09/2024 at 13:11):     </Stack.Navigator>
+index.tsx    (rudra patel on 10/09/2024 at 13:11):   );
+index.tsx    (rudra patel on 10/09/2024 at 13:11): }
+index.tsx    (rudra patel on 10/09/2024 at 13:11): const styles = StyleSheet.create({
+index.tsx    (rudra patel on 10/09/2024 at 13:11):   container: {
+index.tsx    (rudra patel on 10/09/2024 at 13:11):     flex: 1,
+index.tsx    (rudra patel on 10/09/2024 at 13:11):     backgroundColor: "#fff",
+index.tsx    (rudra patel on 10/09/2024 at 13:11):     alignItems: "center",
+index.tsx    (rudra patel on 10/09/2024 at 13:11):     justifyContent: "center",
+index.tsx    (rudra patel on 10/09/2024 at 13:11):   },
+index.tsx    (rudra patel on 10/09/2024 at 13:11): });
+useHabit.ts  (rudra patel on 10/09/2024 at 13:11): import { useContext } from "react";
+useHabit.ts  (rudra patel on 10/09/2024 at 13:11): import { HabitContext } from "@/components/Habits/HabitProvider";
+useHabit.ts  (rudra patel on 10/09/2024 at 13:11): export const useHabit = () => {
+useHabit.ts  (rudra patel on 10/09/2024 at 13:11):   const context = useContext(HabitContext);
+useHabit.ts  (rudra patel on 10/09/2024 at 13:11):   if (!context) {
+useHabit.ts  (rudra patel on 10/09/2024 at 13:11):     throw new Error("useHabit must be used within a HabitProvider");
+useHabit.ts  (rudra patel on 10/09/2024 at 13:11):   }
+useHabit.ts  (rudra patel on 10/09/2024 at 13:11):   return context;
+useHabit.ts  (rudra patel on 10/09/2024 at 13:11): };
