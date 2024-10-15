@@ -1,0 +1,268 @@
+src/components/Home/index.tsx
+a38afe36 (Valli Paladugu 2024-10-13 22:27:26 -0400   1) import React, { useEffect, useState } from "react";
+a38afe36 (Valli Paladugu 2024-10-13 22:27:26 -0400   2) import { StyleSheet, View, Text, Image, ActivityIndicator } from "react-native";
+a38afe36 (Valli Paladugu 2024-10-13 22:27:26 -0400   8) const Hour = new Date().getHours();
+a38afe36 (Valli Paladugu 2024-10-13 22:27:26 -0400   9) const isDay = Hour >= 0 && Hour < 12;
+a38afe36 (Valli Paladugu 2024-10-13 22:27:26 -0400  10) 
+a38afe36 (Valli Paladugu 2024-10-13 22:27:26 -0400  11) let gradientColors = ["#FFFFFF"];
+a38afe36 (Valli Paladugu 2024-10-13 22:27:26 -0400  12) let colorsLocations = [0];
+a38afe36 (Valli Paladugu 2024-10-13 22:27:26 -0400  13) 
+a38afe36 (Valli Paladugu 2024-10-13 22:27:26 -0400  14) if (isDay) {
+a38afe36 (Valli Paladugu 2024-10-13 22:27:26 -0400  15)   gradientColors = ["#81A8F4", "#A4B3D6", "#E1C7A3", "#FFD18A"];
+a38afe36 (Valli Paladugu 2024-10-13 22:27:26 -0400  16)   colorsLocations = [0.03, 0.21, 0.65, 0.97];
+a38afe36 (Valli Paladugu 2024-10-13 22:27:26 -0400  17) } else {
+a38afe36 (Valli Paladugu 2024-10-13 22:27:26 -0400  18)   gradientColors = ["#FFD18A", "#FDC28D", "#FAB38F", "#F6A494"];
+a38afe36 (Valli Paladugu 2024-10-13 22:27:26 -0400  19)   colorsLocations = [0.2, 0.4, 0.7, 0.9];
+a38afe36 (Valli Paladugu 2024-10-13 22:27:26 -0400  20) }
+a38afe36 (Valli Paladugu 2024-10-13 22:27:26 -0400  21) 
+a38afe36 (Valli Paladugu 2024-10-13 22:27:26 -0400  23)   const [sunrise, setSunrise] = useState<Date | null>();
+a38afe36 (Valli Paladugu 2024-10-13 22:27:26 -0400  24)   const [sunset, setSunset] = useState<Date | null>();
+a38afe36 (Valli Paladugu 2024-10-13 22:27:26 -0400  25)   const [nextsunrise, setNextSunrise] = useState<Date | null>();
+a38afe36 (Valli Paladugu 2024-10-13 22:27:26 -0400  26)   const [loading, setLoading] = useState(true);
+a38afe36 (Valli Paladugu 2024-10-13 22:27:26 -0400  27) 
+a38afe36 (Valli Paladugu 2024-10-13 22:27:26 -0400  28)   useEffect(() => {
+a38afe36 (Valli Paladugu 2024-10-13 22:27:26 -0400  29)     fetchData();
+a38afe36 (Valli Paladugu 2024-10-13 22:27:26 -0400  30)   }, []);
+a38afe36 (Valli Paladugu 2024-10-13 22:27:26 -0400  31) 
+a38afe36 (Valli Paladugu 2024-10-13 22:27:26 -0400  32)   const fetchData = async () => {
+a38afe36 (Valli Paladugu 2024-10-13 22:27:26 -0400  33)     try {
+a38afe36 (Valli Paladugu 2024-10-13 22:27:26 -0400  34)       const response = await fetch(
+a38afe36 (Valli Paladugu 2024-10-13 22:27:26 -0400  35)         "https://u7t0yd53l2.execute-api.us-east-2.amazonaws.com/default/getSunriseTime",
+a38afe36 (Valli Paladugu 2024-10-13 22:27:26 -0400  36)         {
+a38afe36 (Valli Paladugu 2024-10-13 22:27:26 -0400  37)           method: "POST",
+a38afe36 (Valli Paladugu 2024-10-13 22:27:26 -0400  38)           headers: {
+a38afe36 (Valli Paladugu 2024-10-13 22:27:26 -0400  39)             "x-api-key": process.env.EXPO_PUBLIC_SUNRISE_TIME_API_KEY as string,
+a38afe36 (Valli Paladugu 2024-10-13 22:27:26 -0400  40)           },
+a38afe36 (Valli Paladugu 2024-10-13 22:27:26 -0400  41)           body: JSON.stringify({
+a38afe36 (Valli Paladugu 2024-10-13 22:27:26 -0400  42)             lat: "38.907192",
+a38afe36 (Valli Paladugu 2024-10-13 22:27:26 -0400  43)             lng: "-77.036873",
+a38afe36 (Valli Paladugu 2024-10-13 22:27:26 -0400  44)           }),
+a38afe36 (Valli Paladugu 2024-10-13 22:27:26 -0400  45)         },
+a38afe36 (Valli Paladugu 2024-10-13 22:27:26 -0400  46)       );
+a38afe36 (Valli Paladugu 2024-10-13 22:27:26 -0400  47)       const jsonData = await response.json();
+a38afe36 (Valli Paladugu 2024-10-13 22:27:26 -0400  48)       if (jsonData.message) {
+a38afe36 (Valli Paladugu 2024-10-13 22:27:26 -0400  49)         setSunrise(null);
+a38afe36 (Valli Paladugu 2024-10-13 22:27:26 -0400  50)         setSunset(null);
+a38afe36 (Valli Paladugu 2024-10-13 22:27:26 -0400  51)         setNextSunrise(null);
+a38afe36 (Valli Paladugu 2024-10-13 22:27:26 -0400  52)       } else {
+a38afe36 (Valli Paladugu 2024-10-13 22:27:26 -0400  53)         setSunrise(new Date(jsonData.todaySunrise));
+a38afe36 (Valli Paladugu 2024-10-13 22:27:26 -0400  54)         setSunset(new Date(jsonData.todaySunset));
+a38afe36 (Valli Paladugu 2024-10-13 22:27:26 -0400  55)         setNextSunrise(new Date(jsonData.tomorrowSunrise));
+a38afe36 (Valli Paladugu 2024-10-13 22:27:26 -0400  56)       }
+a38afe36 (Valli Paladugu 2024-10-13 22:27:26 -0400  57)     } catch (err) {
+a38afe36 (Valli Paladugu 2024-10-13 22:27:26 -0400  58)       console.log(err);
+a38afe36 (Valli Paladugu 2024-10-13 22:27:26 -0400  59)     } finally {
+a38afe36 (Valli Paladugu 2024-10-13 22:27:26 -0400  60)       setLoading(false);
+a38afe36 (Valli Paladugu 2024-10-13 22:27:26 -0400  61)     }
+a38afe36 (Valli Paladugu 2024-10-13 22:27:26 -0400  62)   };
+a38afe36 (Valli Paladugu 2024-10-13 22:27:26 -0400  64)     <LinearGradient
+a38afe36 (Valli Paladugu 2024-10-13 22:27:26 -0400  65)       colors={gradientColors}
+a38afe36 (Valli Paladugu 2024-10-13 22:27:26 -0400  66)       locations={colorsLocations}
+a38afe36 (Valli Paladugu 2024-10-13 22:27:26 -0400  67)       style={styles.container}
+a38afe36 (Valli Paladugu 2024-10-13 22:27:26 -0400  68)     >
+a38afe36 (Valli Paladugu 2024-10-13 22:27:26 -0400  73)         {loading ? (
+a38afe36 (Valli Paladugu 2024-10-13 22:27:26 -0400  74)           <>
+a38afe36 (Valli Paladugu 2024-10-13 22:27:26 -0400  75)             <Text style={styles.Sunrise1}>Sunrise:</Text>
+9e4f1ba6 (Valli Paladugu 2024-10-14 11:33:36 -0400  76)             <ActivityIndicator size="small" color="#FFFFFF" />
+a38afe36 (Valli Paladugu 2024-10-13 22:27:26 -0400  77)           </>
+a38afe36 (Valli Paladugu 2024-10-13 22:27:26 -0400  78)         ) : sunrise ? (
+a38afe36 (Valli Paladugu 2024-10-13 22:27:26 -0400  79)           <>
+a38afe36 (Valli Paladugu 2024-10-13 22:27:26 -0400  80)             <Text style={styles.Sunrise1}>Sunrise:</Text>
+a38afe36 (Valli Paladugu 2024-10-13 22:27:26 -0400  81)             <Text style={styles.Sunrise1Data}>
+a38afe36 (Valli Paladugu 2024-10-13 22:27:26 -0400  82)               {sunrise?.toLocaleTimeString()}
+a38afe36 (Valli Paladugu 2024-10-13 22:27:26 -0400  83)             </Text>
+a38afe36 (Valli Paladugu 2024-10-13 22:27:26 -0400  84)           </>
+a38afe36 (Valli Paladugu 2024-10-13 22:27:26 -0400  85)         ) : (
+a38afe36 (Valli Paladugu 2024-10-13 22:27:26 -0400  86)           <>
+a38afe36 (Valli Paladugu 2024-10-13 22:27:26 -0400  87)             <Text style={styles.Sunrise1}>Sunrise:</Text>
+a38afe36 (Valli Paladugu 2024-10-13 22:27:26 -0400  88)             <Text style={styles.Sunrise1Data}>Time Not Available</Text>
+a38afe36 (Valli Paladugu 2024-10-13 22:27:26 -0400  89)           </>
+a38afe36 (Valli Paladugu 2024-10-13 22:27:26 -0400  90)         )}
+a38afe36 (Valli Paladugu 2024-10-13 22:27:26 -0400  91)         {loading ? (
+a38afe36 (Valli Paladugu 2024-10-13 22:27:26 -0400  92)           <>
+a38afe36 (Valli Paladugu 2024-10-13 22:27:26 -0400  93)             <Text style={styles.Sunset}>Sunset:</Text>
+9e4f1ba6 (Valli Paladugu 2024-10-14 11:33:36 -0400  94)             <ActivityIndicator size="small" color="#FFFFFF" />
+a38afe36 (Valli Paladugu 2024-10-13 22:27:26 -0400  95)           </>
+a38afe36 (Valli Paladugu 2024-10-13 22:27:26 -0400  96)         ) : sunset ? (
+a38afe36 (Valli Paladugu 2024-10-13 22:27:26 -0400  97)           <>
+a38afe36 (Valli Paladugu 2024-10-13 22:27:26 -0400  98)             <Text style={styles.Sunset}>Sunset:</Text>
+a38afe36 (Valli Paladugu 2024-10-13 22:27:26 -0400  99)             <Text style={styles.SunsetData}>
+a38afe36 (Valli Paladugu 2024-10-13 22:27:26 -0400 100)               {sunset?.toLocaleTimeString()}
+a38afe36 (Valli Paladugu 2024-10-13 22:27:26 -0400 101)             </Text>
+a38afe36 (Valli Paladugu 2024-10-13 22:27:26 -0400 102)           </>
+a38afe36 (Valli Paladugu 2024-10-13 22:27:26 -0400 103)         ) : (
+a38afe36 (Valli Paladugu 2024-10-13 22:27:26 -0400 104)           <>
+a38afe36 (Valli Paladugu 2024-10-13 22:27:26 -0400 105)             <Text style={styles.Sunset}>Sunset:</Text>
+a38afe36 (Valli Paladugu 2024-10-13 22:27:26 -0400 106)             <Text style={styles.SunsetData}>Time Not Available</Text>
+a38afe36 (Valli Paladugu 2024-10-13 22:27:26 -0400 107)           </>
+a38afe36 (Valli Paladugu 2024-10-13 22:27:26 -0400 108)         )}
+a38afe36 (Valli Paladugu 2024-10-13 22:27:26 -0400 109)         {loading ? (
+a38afe36 (Valli Paladugu 2024-10-13 22:27:26 -0400 110)           <>
+a38afe36 (Valli Paladugu 2024-10-13 22:27:26 -0400 111)             <Text style={styles.Sunrise2}>Tomorrow's Sunrise:</Text>
+9e4f1ba6 (Valli Paladugu 2024-10-14 11:33:36 -0400 112)             <ActivityIndicator size="small" color="#FFFFFF" />
+a38afe36 (Valli Paladugu 2024-10-13 22:27:26 -0400 113)           </>
+a38afe36 (Valli Paladugu 2024-10-13 22:27:26 -0400 114)         ) : nextsunrise ? (
+a38afe36 (Valli Paladugu 2024-10-13 22:27:26 -0400 115)           <>
+a38afe36 (Valli Paladugu 2024-10-13 22:27:26 -0400 116)             <Text style={styles.Sunrise2}>Tomorrow's Sunrise:</Text>
+a38afe36 (Valli Paladugu 2024-10-13 22:27:26 -0400 117)             <Text style={styles.Sunrise2Data}>
+a38afe36 (Valli Paladugu 2024-10-13 22:27:26 -0400 118)               {nextsunrise?.toLocaleTimeString()}
+a38afe36 (Valli Paladugu 2024-10-13 22:27:26 -0400 119)             </Text>
+a38afe36 (Valli Paladugu 2024-10-13 22:27:26 -0400 120)           </>
+a38afe36 (Valli Paladugu 2024-10-13 22:27:26 -0400 121)         ) : (
+a38afe36 (Valli Paladugu 2024-10-13 22:27:26 -0400 122)           <>
+a38afe36 (Valli Paladugu 2024-10-13 22:27:26 -0400 123)             <Text style={styles.Sunrise2}>Tomorrow's Sunrise:</Text>
+a38afe36 (Valli Paladugu 2024-10-13 22:27:26 -0400 124)             <Text style={styles.Sunrise2Data}>Time Not Available</Text>
+a38afe36 (Valli Paladugu 2024-10-13 22:27:26 -0400 125)           </>
+a38afe36 (Valli Paladugu 2024-10-13 22:27:26 -0400 126)         )}
+a38afe36 (Valli Paladugu 2024-10-13 22:27:26 -0400 140)     marginTop: 20,
+a38afe36 (Valli Paladugu 2024-10-13 22:27:26 -0400 141)     marginBottom: 30,
+a38afe36 (Valli Paladugu 2024-10-13 22:27:26 -0400 144)     width: 110,
+a38afe36 (Valli Paladugu 2024-10-13 22:27:26 -0400 150)     width: 190,
+a38afe36 (Valli Paladugu 2024-10-13 22:27:26 -0400 152)     marginTop: 4,
+a38afe36 (Valli Paladugu 2024-10-13 22:27:26 -0400 158)     fontSize: 50,
+a38afe36 (Valli Paladugu 2024-10-13 22:27:26 -0400 159)     marginTop: 40,
+a38afe36 (Valli Paladugu 2024-10-13 22:27:26 -0400 160)     marginBottom: 5,
+a38afe36 (Valli Paladugu 2024-10-13 22:27:26 -0400 165)     fontSize: 35,
+a38afe36 (Valli Paladugu 2024-10-13 22:27:26 -0400 166)     marginTop: 25,
+a38afe36 (Valli Paladugu 2024-10-13 22:27:26 -0400 167)     alignItems: "center",
+a38afe36 (Valli Paladugu 2024-10-13 22:27:26 -0400 168)   },
+a38afe36 (Valli Paladugu 2024-10-13 22:27:26 -0400 169)   Sunrise1Data: {
+a38afe36 (Valli Paladugu 2024-10-13 22:27:26 -0400 170)     color: "white",
+a38afe36 (Valli Paladugu 2024-10-13 22:27:26 -0400 171)     fontWeight: "bold",
+a38afe36 (Valli Paladugu 2024-10-13 22:27:26 -0400 172)     fontSize: 35,
+a38afe36 (Valli Paladugu 2024-10-13 22:27:26 -0400 173)     alignItems: "center",
+a38afe36 (Valli Paladugu 2024-10-13 22:27:26 -0400 174)     marginBottom: 15,
+a38afe36 (Valli Paladugu 2024-10-13 22:27:26 -0400 179)     fontSize: 35,
+a38afe36 (Valli Paladugu 2024-10-13 22:27:26 -0400 180)     alignItems: "center",
+a38afe36 (Valli Paladugu 2024-10-13 22:27:26 -0400 181)   },
+a38afe36 (Valli Paladugu 2024-10-13 22:27:26 -0400 182)   SunsetData: {
+a38afe36 (Valli Paladugu 2024-10-13 22:27:26 -0400 183)     color: "white",
+a38afe36 (Valli Paladugu 2024-10-13 22:27:26 -0400 184)     fontWeight: "bold",
+a38afe36 (Valli Paladugu 2024-10-13 22:27:26 -0400 185)     fontSize: 35,
+a38afe36 (Valli Paladugu 2024-10-13 22:27:26 -0400 186)     alignItems: "center",
+a38afe36 (Valli Paladugu 2024-10-13 22:27:26 -0400 187)     marginBottom: 15,
+a38afe36 (Valli Paladugu 2024-10-13 22:27:26 -0400 192)     fontSize: 35,
+a38afe36 (Valli Paladugu 2024-10-13 22:27:26 -0400 193)     alignItems: "center",
+a38afe36 (Valli Paladugu 2024-10-13 22:27:26 -0400 194)   },
+a38afe36 (Valli Paladugu 2024-10-13 22:27:26 -0400 195)   Sunrise2Data: {
+a38afe36 (Valli Paladugu 2024-10-13 22:27:26 -0400 196)     color: "white",
+a38afe36 (Valli Paladugu 2024-10-13 22:27:26 -0400 197)     fontWeight: "bold",
+a38afe36 (Valli Paladugu 2024-10-13 22:27:26 -0400 198)     fontSize: 35,
+a38afe36 (Valli Paladugu 2024-10-13 22:27:26 -0400 199)     alignItems: "center",
+
+
+src/components/SignUp/index.tsx
+9e4f1ba6 (Valli Paladugu 2024-10-14 11:33:36 -0400  10)   TouchableOpacity,
+9e4f1ba6 (Valli Paladugu 2024-10-14 11:33:36 -0400  68)         <View style={styles.titleContainer}>
+9e4f1ba6 (Valli Paladugu 2024-10-14 11:33:36 -0400  69)           <Text style={[styles.title]}>SolSync</Text>
+9e4f1ba6 (Valli Paladugu 2024-10-14 11:33:36 -0400  70)         </View>
+9e4f1ba6 (Valli Paladugu 2024-10-14 11:33:36 -0400  71)         <View style={styles.inputContainer}>
+9e4f1ba6 (Valli Paladugu 2024-10-14 11:33:36 -0400  72)           <Controller
+9e4f1ba6 (Valli Paladugu 2024-10-14 11:33:36 -0400  73)             control={control}
+9e4f1ba6 (Valli Paladugu 2024-10-14 11:33:36 -0400  74)             name="displayName"
+9e4f1ba6 (Valli Paladugu 2024-10-14 11:33:36 -0400  75)             render={({ field: { onChange, onBlur, value } }) => (
+9e4f1ba6 (Valli Paladugu 2024-10-14 11:33:36 -0400  76)               <TextInput
+9e4f1ba6 (Valli Paladugu 2024-10-14 11:33:36 -0400  77)                 autoCorrect={false}
+9e4f1ba6 (Valli Paladugu 2024-10-14 11:33:36 -0400  78)                 autoCapitalize="words"
+9e4f1ba6 (Valli Paladugu 2024-10-14 11:33:36 -0400  79)                 style={styles.input}
+9e4f1ba6 (Valli Paladugu 2024-10-14 11:33:36 -0400  80)                 placeholder="Username"
+9e4f1ba6 (Valli Paladugu 2024-10-14 11:33:36 -0400  81)                 onChangeText={onChange}
+9e4f1ba6 (Valli Paladugu 2024-10-14 11:33:36 -0400  82)                 onBlur={onBlur}
+9e4f1ba6 (Valli Paladugu 2024-10-14 11:33:36 -0400  83)                 value={value}
+9e4f1ba6 (Valli Paladugu 2024-10-14 11:33:36 -0400  84)               />
+9e4f1ba6 (Valli Paladugu 2024-10-14 11:33:36 -0400  85)             )}
+9e4f1ba6 (Valli Paladugu 2024-10-14 11:33:36 -0400  86)           />
+9e4f1ba6 (Valli Paladugu 2024-10-14 11:33:36 -0400  88)           {errors.displayName && (
+9e4f1ba6 (Valli Paladugu 2024-10-14 11:33:36 -0400  89)             <Text style={{ color: "red" }}>{errors.displayName.message}</Text>
+9e4f1ba6 (Valli Paladugu 2024-10-14 11:33:36 -0400  92)           <Controller
+9e4f1ba6 (Valli Paladugu 2024-10-14 11:33:36 -0400  93)             control={control}
+9e4f1ba6 (Valli Paladugu 2024-10-14 11:33:36 -0400  94)             name="email"
+9e4f1ba6 (Valli Paladugu 2024-10-14 11:33:36 -0400  95)             render={({ field: { onChange, onBlur, value } }) => (
+9e4f1ba6 (Valli Paladugu 2024-10-14 11:33:36 -0400  96)               <TextInput
+9e4f1ba6 (Valli Paladugu 2024-10-14 11:33:36 -0400  97)                 autoCorrect={false}
+9e4f1ba6 (Valli Paladugu 2024-10-14 11:33:36 -0400  98)                 autoCapitalize="none"
+9e4f1ba6 (Valli Paladugu 2024-10-14 11:33:36 -0400  99)                 style={styles.input}
+9e4f1ba6 (Valli Paladugu 2024-10-14 11:33:36 -0400 100)                 placeholder="Email"
+9e4f1ba6 (Valli Paladugu 2024-10-14 11:33:36 -0400 101)                 keyboardType="email-address"
+9e4f1ba6 (Valli Paladugu 2024-10-14 11:33:36 -0400 102)                 onChangeText={onChange}
+9e4f1ba6 (Valli Paladugu 2024-10-14 11:33:36 -0400 103)                 onBlur={onBlur}
+9e4f1ba6 (Valli Paladugu 2024-10-14 11:33:36 -0400 104)                 value={value}
+9e4f1ba6 (Valli Paladugu 2024-10-14 11:33:36 -0400 105)               />
+9e4f1ba6 (Valli Paladugu 2024-10-14 11:33:36 -0400 106)             )}
+9e4f1ba6 (Valli Paladugu 2024-10-14 11:33:36 -0400 107)           />
+9e4f1ba6 (Valli Paladugu 2024-10-14 11:33:36 -0400 108)           {errors.email && (
+9e4f1ba6 (Valli Paladugu 2024-10-14 11:33:36 -0400 109)             <Text style={{ color: "red" }}>{errors.email.message}</Text>
+9e4f1ba6 (Valli Paladugu 2024-10-14 11:33:36 -0400 112)           <Controller
+9e4f1ba6 (Valli Paladugu 2024-10-14 11:33:36 -0400 113)             control={control}
+9e4f1ba6 (Valli Paladugu 2024-10-14 11:33:36 -0400 114)             name="password"
+9e4f1ba6 (Valli Paladugu 2024-10-14 11:33:36 -0400 115)             render={({ field: { onChange, onBlur, value } }) => (
+9e4f1ba6 (Valli Paladugu 2024-10-14 11:33:36 -0400 116)               <TextInput
+9e4f1ba6 (Valli Paladugu 2024-10-14 11:33:36 -0400 117)                 autoCorrect={false}
+9e4f1ba6 (Valli Paladugu 2024-10-14 11:33:36 -0400 118)                 autoCapitalize="none"
+9e4f1ba6 (Valli Paladugu 2024-10-14 11:33:36 -0400 119)                 style={styles.input}
+9e4f1ba6 (Valli Paladugu 2024-10-14 11:33:36 -0400 120)                 placeholder="Password"
+9e4f1ba6 (Valli Paladugu 2024-10-14 11:33:36 -0400 121)                 secureTextEntry
+9e4f1ba6 (Valli Paladugu 2024-10-14 11:33:36 -0400 122)                 onChangeText={onChange}
+9e4f1ba6 (Valli Paladugu 2024-10-14 11:33:36 -0400 123)                 onBlur={onBlur}
+9e4f1ba6 (Valli Paladugu 2024-10-14 11:33:36 -0400 124)                 value={value}
+9e4f1ba6 (Valli Paladugu 2024-10-14 11:33:36 -0400 125)               />
+9e4f1ba6 (Valli Paladugu 2024-10-14 11:33:36 -0400 126)             )}
+9e4f1ba6 (Valli Paladugu 2024-10-14 11:33:36 -0400 127)           />
+9e4f1ba6 (Valli Paladugu 2024-10-14 11:33:36 -0400 128)           {errors.password && (
+9e4f1ba6 (Valli Paladugu 2024-10-14 11:33:36 -0400 129)             <Text style={{ color: "red" }}>{errors.password.message}</Text>
+9e4f1ba6 (Valli Paladugu 2024-10-14 11:33:36 -0400 131)         </View>
+9e4f1ba6 (Valli Paladugu 2024-10-14 11:33:36 -0400 133)         <TouchableOpacity
+9e4f1ba6 (Valli Paladugu 2024-10-14 11:33:36 -0400 134)           style={styles.signUpButton}
+9e4f1ba6 (Valli Paladugu 2024-10-14 11:33:36 -0400 136)         >
+a5d84581 (Valli Paladugu 2024-10-14 13:45:33 -0400 137)           <Text style={styles.buttonText}>Create Account</Text>
+9e4f1ba6 (Valli Paladugu 2024-10-14 11:33:36 -0400 138)         </TouchableOpacity>
+9e4f1ba6 (Valli Paladugu 2024-10-14 11:33:36 -0400 154)     padding: 16,
+9e4f1ba6 (Valli Paladugu 2024-10-14 11:33:36 -0400 155)   },
+9e4f1ba6 (Valli Paladugu 2024-10-14 11:33:36 -0400 156)   content: {
+9e4f1ba6 (Valli Paladugu 2024-10-14 11:33:36 -0400 157)     flex: 1,
+9e4f1ba6 (Valli Paladugu 2024-10-14 11:33:36 -0400 158)     justifyContent: "center",
+9e4f1ba6 (Valli Paladugu 2024-10-14 11:33:36 -0400 159)     alignItems: "center",
+9e4f1ba6 (Valli Paladugu 2024-10-14 11:33:36 -0400 160)     marginTop: 20,
+9e4f1ba6 (Valli Paladugu 2024-10-14 11:33:36 -0400 161)     marginBottom: 30,
+9e4f1ba6 (Valli Paladugu 2024-10-14 11:33:36 -0400 162)   },
+9e4f1ba6 (Valli Paladugu 2024-10-14 11:33:36 -0400 163)   titleContainer: {
+9e4f1ba6 (Valli Paladugu 2024-10-14 11:33:36 -0400 164)     alignItems: "center",
+9e4f1ba6 (Valli Paladugu 2024-10-14 11:33:36 -0400 165)   },
+9e4f1ba6 (Valli Paladugu 2024-10-14 11:33:36 -0400 166)   title: {
+9e4f1ba6 (Valli Paladugu 2024-10-14 11:33:36 -0400 167)     fontSize: 42,
+9e4f1ba6 (Valli Paladugu 2024-10-14 11:33:36 -0400 168)     fontWeight: "bold",
+9e4f1ba6 (Valli Paladugu 2024-10-14 11:33:36 -0400 169)     color: "#4a3f4c",
+9e4f1ba6 (Valli Paladugu 2024-10-14 11:33:36 -0400 170)     marginBottom: 70,
+9e4f1ba6 (Valli Paladugu 2024-10-14 11:33:36 -0400 171)     marginTop: -60,
+9e4f1ba6 (Valli Paladugu 2024-10-14 11:33:36 -0400 172)   },
+9e4f1ba6 (Valli Paladugu 2024-10-14 11:33:36 -0400 173)   gradientText: {
+9e4f1ba6 (Valli Paladugu 2024-10-14 11:33:36 -0400 174)     padding: 10,
+9e4f1ba6 (Valli Paladugu 2024-10-14 11:33:36 -0400 175)     borderRadius: 10,
+9e4f1ba6 (Valli Paladugu 2024-10-14 11:33:36 -0400 178)     height: 50,
+9e4f1ba6 (Valli Paladugu 2024-10-14 11:33:36 -0400 179)     width: "100%",
+9e4f1ba6 (Valli Paladugu 2024-10-14 11:33:36 -0400 180)     borderColor: "#ccc",
+9e4f1ba6 (Valli Paladugu 2024-10-14 11:33:36 -0400 183)     borderRadius: 8,
+9e4f1ba6 (Valli Paladugu 2024-10-14 11:33:36 -0400 184)     paddingHorizontal: 10,
+9e4f1ba6 (Valli Paladugu 2024-10-14 11:33:36 -0400 185)     marginBottom: 12,
+9e4f1ba6 (Valli Paladugu 2024-10-14 11:33:36 -0400 186)   },
+9e4f1ba6 (Valli Paladugu 2024-10-14 11:33:36 -0400 187)   inputContainer: {
+9e4f1ba6 (Valli Paladugu 2024-10-14 11:33:36 -0400 188)     width: "95%",
+9e4f1ba6 (Valli Paladugu 2024-10-14 11:33:36 -0400 189)     padding: 25,
+9e4f1ba6 (Valli Paladugu 2024-10-14 11:33:36 -0400 190)     borderColor: "#ccc",
+9e4f1ba6 (Valli Paladugu 2024-10-14 11:33:36 -0400 191)     borderWidth: 1,
+9e4f1ba6 (Valli Paladugu 2024-10-14 11:33:36 -0400 192)     borderRadius: 8,
+a5d84581 (Valli Paladugu 2024-10-14 13:45:33 -0400 193)     marginBottom: 15,
+9e4f1ba6 (Valli Paladugu 2024-10-14 11:33:36 -0400 194)     alignItems: "center",
+9e4f1ba6 (Valli Paladugu 2024-10-14 11:33:36 -0400 195)   },
+9e4f1ba6 (Valli Paladugu 2024-10-14 11:33:36 -0400 196)   signUpButton: {
+9e4f1ba6 (Valli Paladugu 2024-10-14 11:33:36 -0400 197)     backgroundColor: "#b38acb",
+9e4f1ba6 (Valli Paladugu 2024-10-14 11:33:36 -0400 198)     width: "80%",
+9e4f1ba6 (Valli Paladugu 2024-10-14 11:33:36 -0400 199)     paddingVertical: 10,
+9e4f1ba6 (Valli Paladugu 2024-10-14 11:33:36 -0400 200)     borderRadius: 8,
+9e4f1ba6 (Valli Paladugu 2024-10-14 11:33:36 -0400 201)     alignItems: "center",
+a5d84581 (Valli Paladugu 2024-10-14 13:45:33 -0400 202)     marginTop: 12,
+9e4f1ba6 (Valli Paladugu 2024-10-14 11:33:36 -0400 203)   },
+9e4f1ba6 (Valli Paladugu 2024-10-14 11:33:36 -0400 204)   buttonText: {
+9e4f1ba6 (Valli Paladugu 2024-10-14 11:33:36 -0400 205)     color: "#fff",
+9e4f1ba6 (Valli Paladugu 2024-10-14 11:33:36 -0400 206)     fontSize: 16,
+9e4f1ba6 (Valli Paladugu 2024-10-14 11:33:36 -0400 207)     fontWeight: "600",
