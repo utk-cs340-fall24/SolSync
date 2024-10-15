@@ -1,0 +1,166 @@
+src/components/History/index.tsx
+index.tsx    (trishu patel on 10/14/2024 at 13:57): import { useHabit } from "@/hooks/useHabit";
+index.tsx    (trishu patel on 10/14/2024 at 13:57): import useUser from "@/hooks/useUser";
+index.tsx    (trishu patel on 10/14/2024 at 13:57): import { Habit, History } from "@/types";
+index.tsx    (trishu patel on 10/14/2024 at 13:57): import dayjs from "dayjs";
+index.tsx    (trishu patel on 10/14/2024 at 13:57): import { collection, getDocs, query, where } from "firebase/firestore";
+index.tsx    (trishu patel on 10/14/2024 at 13:57): import { useEffect, useState } from "react";
+index.tsx    (trishu patel on 10/14/2024 at 13:57): import { View, StyleSheet, Text } from "react-native";
+index.tsx    (trishu patel on 10/14/2024 at 13:57): import { Calendar } from "react-native-calendars";
+index.tsx    (trishu patel on 10/14/2024 at 13:57): import { Dropdown } from "react-native-element-dropdown";
+index.tsx    (trishu patel on 10/14/2024 at 13:57): import { db } from "../../../firebaseConfig";
+index.tsx    (trishu patel on 10/14/2024 at 13:57): type DropdownItem = {
+index.tsx    (trishu patel on 10/14/2024 at 13:57):   label: string;
+index.tsx    (trishu patel on 10/14/2024 at 13:57):   value: string;
+index.tsx    (trishu patel on 10/14/2024 at 13:57): };
+index.tsx    (trishu patel on 10/14/2024 at 13:57): export default function Habits() {
+index.tsx    (trishu patel on 10/14/2024 at 13:57):   const user = useUser();
+index.tsx    (trishu patel on 10/14/2024 at 13:57):   const { habits } = useHabit();
+index.tsx    (trishu patel on 10/14/2024 at 13:57):   const [currentHabit, setCurrentHabit] = useState<Habit>();
+index.tsx    (trishu patel on 10/14/2024 at 13:57):   const [history, setHistory] = useState<History[]>();
+index.tsx    (trishu patel on 10/14/2024 at 13:57):   const [calendarDates, setCalendarDates] = useState<unknown>();
+index.tsx    (trishu patel on 10/14/2024 at 13:57):   const habitToDropdownItem = (habit: Habit) => {
+index.tsx    (trishu patel on 10/14/2024 at 13:57):     return {
+index.tsx    (trishu patel on 10/14/2024 at 13:57):       label: habit.name,
+index.tsx    (trishu patel on 10/14/2024 at 13:57):       value: habit.id,
+index.tsx    (trishu patel on 10/14/2024 at 13:57):     } as DropdownItem;
+index.tsx    (trishu patel on 10/14/2024 at 13:57):   };
+index.tsx    (trishu patel on 10/14/2024 at 13:57):   const dropdownItemToHabit = (dropdownItem: DropdownItem) => {
+index.tsx    (trishu patel on 10/14/2024 at 13:57):     return habits.find((habit) => habit.id === dropdownItem.value);
+index.tsx    (trishu patel on 10/14/2024 at 13:57):   };
+index.tsx    (trishu patel on 10/14/2024 at 13:57):   const getHabits = () => {
+index.tsx    (trishu patel on 10/14/2024 at 13:57):     return habits.map((habit) => habitToDropdownItem(habit));
+index.tsx    (trishu patel on 10/14/2024 at 13:57):   };
+index.tsx    (trishu patel on 10/14/2024 at 13:57):   const onHabitChange = (item: DropdownItem) => {
+index.tsx    (trishu patel on 10/14/2024 at 13:57):     setCurrentHabit(dropdownItemToHabit(item));
+index.tsx    (trishu patel on 10/14/2024 at 13:57):   };
+index.tsx    (trishu patel on 10/14/2024 at 13:57):   useEffect(() => {
+index.tsx    (trishu patel on 10/14/2024 at 13:57):     if (!user) return;
+index.tsx    (trishu patel on 10/14/2024 at 13:57):     const fetchHabits = async () => {
+index.tsx    (trishu patel on 10/14/2024 at 13:57):       const historyQuery = await getDocs(
+index.tsx    (trishu patel on 10/14/2024 at 13:57):         query(collection(db, "history"), where("userId", "==", user?.uid)),
+index.tsx    (trishu patel on 10/14/2024 at 13:57):       );
+index.tsx    (trishu patel on 10/14/2024 at 13:57):       const history = historyQuery.docs.map(
+index.tsx    (trishu patel on 10/14/2024 at 13:57):         (doc) =>
+index.tsx    (trishu patel on 10/14/2024 at 13:57):           ({
+index.tsx    (trishu patel on 10/14/2024 at 13:57):             id: doc.id,
+index.tsx    (trishu patel on 10/14/2024 at 13:57):             date: doc.data().date.toDate(),
+index.tsx    (trishu patel on 10/14/2024 at 13:57):             habitId: doc.data().habitId,
+index.tsx    (trishu patel on 10/14/2024 at 13:57):             userId: doc.data().userId,
+index.tsx    (trishu patel on 10/14/2024 at 13:57):           }) as History,
+index.tsx    (trishu patel on 10/14/2024 at 13:57):       );
+index.tsx    (trishu patel on 10/14/2024 at 13:57):       setHistory(history);
+index.tsx    (trishu patel on 10/14/2024 at 13:57):     };
+index.tsx    (trishu patel on 10/14/2024 at 13:57):     fetchHabits();
+index.tsx    (trishu patel on 10/14/2024 at 13:57):   }, [user]);
+index.tsx    (trishu patel on 10/14/2024 at 13:57):   useEffect(() => {
+index.tsx    (trishu patel on 10/14/2024 at 13:57):     const dates = history
+index.tsx    (trishu patel on 10/14/2024 at 13:57):       ?.filter((history) => history.habitId === currentHabit?.id)
+index.tsx    (trishu patel on 10/14/2024 at 13:57):       .map((history) => dayjs(history.date));
+index.tsx    (trishu patel on 10/14/2024 at 13:57):     const calenderDates: Record<string, {}> = {};
+index.tsx    (trishu patel on 10/14/2024 at 13:57):     dates?.forEach((date) => {
+index.tsx    (trishu patel on 10/14/2024 at 13:57):       calenderDates[date.format("YYYY-MM-DD")] = {
+index.tsx    (trishu patel on 10/14/2024 at 13:57):         selected: true,
+index.tsx    (trishu patel on 10/14/2024 at 13:57):       };
+index.tsx    (trishu patel on 10/14/2024 at 13:57):     });
+index.tsx    (trishu patel on 10/14/2024 at 13:57):     setCalendarDates(calenderDates);
+index.tsx    (trishu patel on 10/14/2024 at 13:57):   }, [currentHabit?.id, history]);
+index.tsx    (trishu patel on 10/14/2024 at 13:57):   if (!user) {
+index.tsx    (trishu patel on 10/14/2024 at 13:57):     return (
+index.tsx    (trishu patel on 10/14/2024 at 13:57):       <View style={styles.container}>
+index.tsx    (trishu patel on 10/14/2024 at 13:57):         <Text>Please sign in to view your habits</Text>
+index.tsx    (trishu patel on 10/14/2024 at 13:57):       </View>
+index.tsx    (trishu patel on 10/14/2024 at 13:57):     );
+index.tsx    (trishu patel on 10/14/2024 at 13:57):   }
+index.tsx    (trishu patel on 10/14/2024 at 13:57):   return (
+index.tsx    (trishu patel on 10/14/2024 at 13:57):     <View style={styles.container}>
+index.tsx    (trishu patel on 10/14/2024 at 13:57):       <Text>History</Text>
+index.tsx    (trishu patel on 10/14/2024 at 13:57):       <Dropdown
+index.tsx    (trishu patel on 10/14/2024 at 13:57):         data={getHabits()}
+index.tsx    (trishu patel on 10/14/2024 at 13:57):         onChange={onHabitChange}
+index.tsx    (trishu patel on 10/14/2024 at 13:57):         style={styles.picker}
+index.tsx    (trishu patel on 10/14/2024 at 13:57):         value={currentHabit?.id}
+index.tsx    (trishu patel on 10/14/2024 at 13:57):         labelField={"label"}
+index.tsx    (trishu patel on 10/14/2024 at 13:57):         valueField={"value"}
+index.tsx    (trishu patel on 10/14/2024 at 13:57):       />
+index.tsx    (trishu patel on 10/14/2024 at 13:57):       <Calendar
+index.tsx    (trishu patel on 10/14/2024 at 13:57):         style={styles.calendar}
+index.tsx    (trishu patel on 10/14/2024 at 13:57):         markedDates={calendarDates}
+index.tsx    (trishu patel on 10/14/2024 at 13:57):         maxDate={dayjs().format("YYYY-MM-DD")}
+index.tsx    (trishu patel on 10/14/2024 at 13:57):       />
+index.tsx    (trishu patel on 10/14/2024 at 13:57):     </View>
+index.tsx    (trishu patel on 10/14/2024 at 13:57):   );
+index.tsx    (trishu patel on 10/14/2024 at 13:57): }
+index.tsx    (trishu patel on 10/14/2024 at 13:57): const styles = StyleSheet.create({
+index.tsx    (trishu patel on 10/14/2024 at 13:57):   container: {
+index.tsx    (trishu patel on 10/14/2024 at 13:57):     flex: 1,
+index.tsx    (trishu patel on 10/14/2024 at 13:57):     backgroundColor: "#fff",
+index.tsx    (trishu patel on 10/14/2024 at 13:57):     alignItems: "center",
+index.tsx    (trishu patel on 10/14/2024 at 13:57):     justifyContent: "center",
+index.tsx    (trishu patel on 10/14/2024 at 13:57):   },
+index.tsx    (trishu patel on 10/14/2024 at 13:57):   picker: {
+index.tsx    (trishu patel on 10/14/2024 at 13:57):     width: "70%",
+index.tsx    (trishu patel on 10/14/2024 at 13:57):     borderWidth: 1,
+index.tsx    (trishu patel on 10/14/2024 at 13:57):   },
+index.tsx    (trishu patel on 10/14/2024 at 13:57):   calendar: {
+index.tsx    (trishu patel on 10/14/2024 at 13:57):     height: 300,
+index.tsx    (trishu patel on 10/14/2024 at 13:57):     width: 400,
+index.tsx    (trishu patel on 10/14/2024 at 13:57):     marginTop: 30,
+index.tsx    (trishu patel on 10/14/2024 at 13:57):   },
+index.tsx    (trishu patel on 10/14/2024 at 13:57): });
+
+package.json
+package.json (trishu patel on 10/14/2024 at 13:57):     "dayjs": "^1.11.13",
+package.json (trishu patel on 10/14/2024 at 13:57):     "react-native-calendars": "^1.1307.0",
+
+src/screens/HistoryScreen.tsx
+HistoryScreen.tsx (trishu patel on 10/14/2024 at 13:57): import History from "@/components/History";
+HistoryScreen.tsx (trishu patel on 10/14/2024 at 13:57): export default function HistoryScreen() {
+HistoryScreen.tsx (trishu patel on 10/14/2024 at 13:57):   return <History />;
+HistoryScreen.tsx (trishu patel on 10/14/2024 at 13:57): }
+
+src/components/Habits/HabitForm.tsx
+HabitForm.tsx (trishu patel on 10/12/2024 at 16:23):     await addHabit({
+
+src/components/Habits/HabitProvider.tsx
+HabitProvider.tsx (trishu patel on 10/12/2024 at 16:23): import { createContext, useState, useEffect } from "react";
+HabitProvider.tsx (trishu patel on 10/12/2024 at 16:23): import {
+HabitProvider.tsx (trishu patel on 10/12/2024 at 16:23):   collection,
+HabitProvider.tsx (trishu patel on 10/12/2024 at 16:23):   deleteDoc,
+HabitProvider.tsx (trishu patel on 10/12/2024 at 16:23):   doc,
+HabitProvider.tsx (trishu patel on 10/12/2024 at 16:23):   getDocs,
+HabitProvider.tsx (trishu patel on 10/12/2024 at 16:23):   query,
+HabitProvider.tsx (trishu patel on 10/12/2024 at 16:23):   setDoc,
+HabitProvider.tsx (trishu patel on 10/12/2024 at 16:23):   where,
+HabitProvider.tsx (trishu patel on 10/12/2024 at 16:23): } from "firebase/firestore";
+HabitProvider.tsx (trishu patel on 10/12/2024 at 16:23): import { db } from "../../../firebaseConfig";
+HabitProvider.tsx (trishu patel on 10/12/2024 at 16:23): import useUser from "@/hooks/useUser";
+HabitProvider.tsx (trishu patel on 10/12/2024 at 16:23):   const user = useUser();
+HabitProvider.tsx (trishu patel on 10/12/2024 at 16:23):     if (!user) return;
+HabitProvider.tsx (trishu patel on 10/12/2024 at 16:23):     const fetchHabits = async () => {
+HabitProvider.tsx (trishu patel on 10/12/2024 at 16:23):       const habitsQuery = await getDocs(
+HabitProvider.tsx (trishu patel on 10/12/2024 at 16:23):         query(collection(db, "habits"), where("userId", "==", user?.uid)),
+HabitProvider.tsx (trishu patel on 10/12/2024 at 16:23):       );
+HabitProvider.tsx (trishu patel on 10/12/2024 at 16:23):       const habits = habitsQuery.docs.map(
+HabitProvider.tsx (trishu patel on 10/12/2024 at 16:23):         (doc) => ({ id: doc.id, ...doc.data() }) as Habit,
+HabitProvider.tsx (trishu patel on 10/12/2024 at 16:23):       );
+HabitProvider.tsx (trishu patel on 10/12/2024 at 16:23):       setHabits(habits);
+HabitProvider.tsx (trishu patel on 10/12/2024 at 16:23):     };
+HabitProvider.tsx (trishu patel on 10/12/2024 at 16:23):     fetchHabits();
+HabitProvider.tsx (trishu patel on 10/12/2024 at 16:23):   }, [user]);
+HabitProvider.tsx (trishu patel on 10/12/2024 at 16:23):   const addHabit = async (habit: Habit) => {
+HabitProvider.tsx (trishu patel on 10/12/2024 at 16:23):     await setDoc(doc(db, "habits", habit.id), habit);
+HabitProvider.tsx (trishu patel on 10/12/2024 at 16:23):   const removeHabit = async (habit: Habit) => {
+HabitProvider.tsx (trishu patel on 10/12/2024 at 16:23):     await deleteDoc(doc(db, "habits", habit.id));
+
+src/types/index.ts
+index.ts     (trishu patel on 10/14/2024 at 13:57): export type History = {
+index.ts     (trishu patel on 10/14/2024 at 13:57):   id: string;
+index.ts     (trishu patel on 10/14/2024 at 13:57):   date: Date;
+index.ts     (trishu patel on 10/14/2024 at 13:57):   habitId: string;
+index.ts     (trishu patel on 10/14/2024 at 13:57):   userId: string;
+index.ts     (trishu patel on 10/14/2024 at 13:57): };
+
+App.tsx
+App.tsx      (trishu patel on 10/14/2024 at 13:57): import HistoryScreen from "@/screens/HistoryScreen";
+App.tsx      (trishu patel on 10/14/2024 at 13:57):           <Tab.Screen name="History" component={HistoryScreen} />
