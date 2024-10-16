@@ -42,7 +42,7 @@ export const handler = async (event) => {
   try {
     // Fetch the API and store the JSON
     const response = await fetch(
-      `https://api.sunrisesunset.io/json?lat=${lat}&lng=${lng}&date_start=today&date_end=tomorrow&time_format=24`
+      `https://api.sunrisesunset.io/json?lat=${lat}&lng=${lng}&timezone=UTC&date_start=today&date_end=tomorrow&time_format=24`
     );
     const json = await response.json();
 
