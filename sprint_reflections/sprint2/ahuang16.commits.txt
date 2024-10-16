@@ -1,0 +1,289 @@
+src/components/LogIn/index.tsx
+index.tsx    (amy-huang16 on 10/13/2024 at 22:18):   TouchableOpacity,
+index.tsx    (amy-huang16 on 10/13/2024 at 22:18): import { NativeStackScreenProps } from "@react-navigation/native-stack";
+index.tsx    (amy-huang16 on 10/13/2024 at 22:18): import { ProfileStackParamList } from "../Profile";
+index.tsx    (amy-huang16 on 10/13/2024 at 22:18): type LogInPageProps = NativeStackScreenProps<ProfileStackParamList, "LogIn">;
+index.tsx    (amy-huang16 on 10/13/2024 at 22:18): export default function LogIn({ navigation }: LogInPageProps) {
+index.tsx    (amy-huang16 on 10/13/2024 at 22:18):         <View style={styles.titleContainer}>
+index.tsx    (amy-huang16 on 10/13/2024 at 22:18):           <Text style={styles.title}>SolSync</Text>
+index.tsx    (amy-huang16 on 10/13/2024 at 22:18):         </View>
+index.tsx    (amy-huang16 on 10/13/2024 at 22:18):         <View style={styles.inputContainer}>
+index.tsx    (amy-huang16 on 10/13/2024 at 22:18):           <Controller
+index.tsx    (amy-huang16 on 10/13/2024 at 22:18):             control={control}
+index.tsx    (amy-huang16 on 10/13/2024 at 22:18):             name="email"
+index.tsx    (amy-huang16 on 10/13/2024 at 22:18):             render={({ field: { onChange, onBlur, value } }) => (
+index.tsx    (amy-huang16 on 10/13/2024 at 22:18):               <TextInput
+index.tsx    (amy-huang16 on 10/13/2024 at 22:18):                 autoCorrect={false}
+index.tsx    (amy-huang16 on 10/13/2024 at 22:18):                 autoCapitalize="none"
+index.tsx    (amy-huang16 on 10/13/2024 at 22:18):                 style={styles.input}
+index.tsx    (amy-huang16 on 10/13/2024 at 22:18):                 placeholder="Email"
+index.tsx    (amy-huang16 on 10/13/2024 at 22:18):                 keyboardType="email-address"
+index.tsx    (amy-huang16 on 10/13/2024 at 22:18):                 onChangeText={onChange}
+index.tsx    (amy-huang16 on 10/13/2024 at 22:18):                 onBlur={onBlur}
+index.tsx    (amy-huang16 on 10/13/2024 at 22:18):                 value={value}
+index.tsx    (amy-huang16 on 10/13/2024 at 22:18):               />
+index.tsx    (amy-huang16 on 10/13/2024 at 22:18):             )}
+index.tsx    (amy-huang16 on 10/13/2024 at 22:18):           />
+index.tsx    (amy-huang16 on 10/13/2024 at 22:18):           {errors.email && (
+index.tsx    (amy-huang16 on 10/13/2024 at 22:18):             <Text style={{ color: "red" }}>{errors.email.message}</Text>
+index.tsx    (amy-huang16 on 10/13/2024 at 22:18):           <Controller
+index.tsx    (amy-huang16 on 10/13/2024 at 22:18):             control={control}
+index.tsx    (amy-huang16 on 10/13/2024 at 22:18):             name="password"
+index.tsx    (amy-huang16 on 10/13/2024 at 22:18):             render={({ field: { onChange, onBlur, value } }) => (
+index.tsx    (amy-huang16 on 10/13/2024 at 22:18):               <TextInput
+index.tsx    (amy-huang16 on 10/13/2024 at 22:18):                 autoCorrect={false}
+index.tsx    (amy-huang16 on 10/13/2024 at 22:18):                 autoCapitalize="none"
+index.tsx    (amy-huang16 on 10/13/2024 at 22:18):                 style={styles.input}
+index.tsx    (amy-huang16 on 10/13/2024 at 22:18):                 placeholder="Password"
+index.tsx    (amy-huang16 on 10/13/2024 at 22:18):                 secureTextEntry
+index.tsx    (amy-huang16 on 10/13/2024 at 22:18):                 onChangeText={onChange}
+index.tsx    (amy-huang16 on 10/13/2024 at 22:18):                 onBlur={onBlur}
+index.tsx    (amy-huang16 on 10/13/2024 at 22:18):                 value={value}
+index.tsx    (amy-huang16 on 10/13/2024 at 22:18):               />
+index.tsx    (amy-huang16 on 10/13/2024 at 22:18):             )}
+index.tsx    (amy-huang16 on 10/13/2024 at 22:18):           />
+index.tsx    (amy-huang16 on 10/13/2024 at 22:18):           {errors.password && (
+index.tsx    (amy-huang16 on 10/13/2024 at 22:18):             <Text style={{ color: "red" }}>{errors.password.message}</Text>
+index.tsx    (amy-huang16 on 10/13/2024 at 22:18):           <TouchableOpacity
+index.tsx    (amy-huang16 on 10/13/2024 at 22:18):             style={styles.loginButton}
+index.tsx    (amy-huang16 on 10/13/2024 at 22:18):             onPress={handleSubmit(onSubmit)}
+index.tsx    (amy-huang16 on 10/13/2024 at 22:18):           >
+index.tsx    (amy-huang16 on 10/13/2024 at 22:18):             <Text style={styles.buttonText}>Log In</Text>
+index.tsx    (amy-huang16 on 10/13/2024 at 22:18):           </TouchableOpacity>
+index.tsx    (amy-huang16 on 10/13/2024 at 22:18):           {errors.root && (
+index.tsx    (amy-huang16 on 10/13/2024 at 22:18):             <Text style={{ color: "red" }}>{errors.root.message}</Text>
+index.tsx    (amy-huang16 on 10/13/2024 at 22:18):           )}
+index.tsx    (amy-huang16 on 10/13/2024 at 22:18):         </View>
+index.tsx    (amy-huang16 on 10/13/2024 at 22:18):         <Text>or</Text>
+index.tsx    (amy-huang16 on 10/13/2024 at 22:18):         <TouchableOpacity
+index.tsx    (amy-huang16 on 10/13/2024 at 22:18):           style={styles.createAccountButton}
+index.tsx    (amy-huang16 on 10/13/2024 at 22:18):           onPress={() => navigation.navigate("SignUp")}
+index.tsx    (amy-huang16 on 10/13/2024 at 22:18):         >
+index.tsx    (amy-huang16 on 10/13/2024 at 22:18):           <Text style={styles.buttonText}>Create an Account</Text>
+index.tsx    (amy-huang16 on 10/13/2024 at 22:18):         </TouchableOpacity>
+index.tsx    (amy-huang16 on 10/13/2024 at 22:18):     padding: 16,
+index.tsx    (amy-huang16 on 10/13/2024 at 22:18):   },
+index.tsx    (amy-huang16 on 10/13/2024 at 22:18):   titleContainer: {
+index.tsx    (amy-huang16 on 10/13/2024 at 22:18):     alignItems: "center",
+index.tsx    (amy-huang16 on 10/13/2024 at 22:18):   },
+index.tsx    (amy-huang16 on 10/13/2024 at 22:18):   title: {
+index.tsx    (amy-huang16 on 10/13/2024 at 22:18):     fontSize: 42,
+index.tsx    (amy-huang16 on 10/13/2024 at 22:18):     fontWeight: "bold",
+index.tsx    (amy-huang16 on 10/13/2024 at 22:18):     color: "#4a3f4c",
+index.tsx    (amy-huang16 on 10/13/2024 at 22:18):     marginBottom: 90,
+index.tsx    (amy-huang16 on 10/13/2024 at 22:18):     marginTop: -40,
+index.tsx    (amy-huang16 on 10/13/2024 at 22:18):   },
+index.tsx    (amy-huang16 on 10/13/2024 at 22:18):   inputContainer: {
+index.tsx    (amy-huang16 on 10/13/2024 at 22:18):     width: "95%",
+index.tsx    (amy-huang16 on 10/13/2024 at 22:18):     padding: 25,
+index.tsx    (amy-huang16 on 10/13/2024 at 22:18):     borderColor: "#ccc",
+index.tsx    (amy-huang16 on 10/13/2024 at 22:18):     borderWidth: 1,
+index.tsx    (amy-huang16 on 10/13/2024 at 22:18):     borderRadius: 8,
+index.tsx    (amy-huang16 on 10/13/2024 at 22:18):     marginBottom: 15, // Spacing below the box
+index.tsx    (amy-huang16 on 10/13/2024 at 22:18):     alignItems: "center",
+index.tsx    (amy-huang16 on 10/13/2024 at 22:18):     width: "100%",
+index.tsx    (amy-huang16 on 10/13/2024 at 22:18):     height: 50,
+index.tsx    (amy-huang16 on 10/13/2024 at 22:18):     borderColor: "#ccc",
+index.tsx    (amy-huang16 on 10/13/2024 at 22:18):     borderRadius: 8,
+index.tsx    (amy-huang16 on 10/13/2024 at 22:18):     paddingHorizontal: 10,
+index.tsx    (amy-huang16 on 10/13/2024 at 22:18):     marginBottom: 12,
+index.tsx    (amy-huang16 on 10/13/2024 at 22:18):   },
+index.tsx    (amy-huang16 on 10/13/2024 at 22:18):   buttonText: {
+index.tsx    (amy-huang16 on 10/13/2024 at 22:18):     color: "#fff",
+index.tsx    (amy-huang16 on 10/13/2024 at 22:18):     fontSize: 16,
+index.tsx    (amy-huang16 on 10/13/2024 at 22:18):     fontWeight: "600",
+index.tsx    (amy-huang16 on 10/13/2024 at 22:18):   },
+index.tsx    (amy-huang16 on 10/13/2024 at 22:18):   loginButton: {
+index.tsx    (amy-huang16 on 10/13/2024 at 22:18):     backgroundColor: "#b38acb", // Light purple color
+index.tsx    (amy-huang16 on 10/13/2024 at 22:18):     width: "100%",
+index.tsx    (amy-huang16 on 10/13/2024 at 22:18):     paddingVertical: 10,
+index.tsx    (amy-huang16 on 10/13/2024 at 22:18):     borderRadius: 8,
+index.tsx    (amy-huang16 on 10/13/2024 at 22:18):     alignItems: "center",
+index.tsx    (amy-huang16 on 10/13/2024 at 22:18):   },
+index.tsx    (amy-huang16 on 10/13/2024 at 22:18):   createAccountButton: {
+index.tsx    (amy-huang16 on 10/13/2024 at 22:18):     backgroundColor: "#f4a58a", // Light orange color
+index.tsx    (amy-huang16 on 10/13/2024 at 22:18):     width: "80%",
+index.tsx    (amy-huang16 on 10/13/2024 at 22:18):     paddingVertical: 10,
+index.tsx    (amy-huang16 on 10/13/2024 at 22:18):     borderRadius: 8,
+index.tsx    (amy-huang16 on 10/13/2024 at 22:18):     alignItems: "center",
+index.tsx    (amy-huang16 on 10/13/2024 at 22:18):     marginTop: 12,
+
+src/components/Profile/index.tsx
+index.tsx    (amy-huang16 on 10/13/2024 at 22:18):             name="LogIn"
+index.tsx    (amy-huang16 on 10/13/2024 at 22:18):             component={LogIn}
+
+src/components/Profile/AuthorizedProfile.tsx
+AuthorizedProfile.tsx (amy-huang16 on 10/14/2024 at 22:07): import {
+AuthorizedProfile.tsx (amy-huang16 on 10/14/2024 at 22:07):   StyleSheet,
+AuthorizedProfile.tsx (amy-huang16 on 10/14/2024 at 22:07):   View,
+AuthorizedProfile.tsx (amy-huang16 on 10/14/2024 at 22:07):   Text,
+AuthorizedProfile.tsx (amy-huang16 on 10/14/2024 at 22:07):   TouchableOpacity,
+AuthorizedProfile.tsx (amy-huang16 on 10/14/2024 at 22:07):   Modal,
+AuthorizedProfile.tsx (amy-huang16 on 10/14/2024 at 22:07):   Alert,
+AuthorizedProfile.tsx (amy-huang16 on 10/14/2024 at 22:07):   Pressable,
+AuthorizedProfile.tsx (amy-huang16 on 10/14/2024 at 22:07): } from "react-native";
+AuthorizedProfile.tsx (amy-huang16 on 10/14/2024 at 22:07): import { default as FAIcon } from "react-native-vector-icons/FontAwesome";
+AuthorizedProfile.tsx (amy-huang16 on 10/14/2024 at 22:07): import getLocationFromDevice from "@/utils/getLocationFromDevice";
+AuthorizedProfile.tsx (amy-huang16 on 10/14/2024 at 22:07): import { LinearGradient } from "expo-linear-gradient";
+AuthorizedProfile.tsx (amy-huang16 on 10/14/2024 at 22:07): import { default as FeatherIcon } from "react-native-vector-icons/Feather";
+AuthorizedProfile.tsx (amy-huang16 on 10/14/2024 at 22:07): import useUser from "@/hooks/useUser";
+AuthorizedProfile.tsx (amy-huang16 on 10/14/2024 at 22:07): const gradientColors = ["#FFD18A", "#C6B9E4", "#81A8F4"];
+AuthorizedProfile.tsx (amy-huang16 on 10/14/2024 at 22:07): const colorsLocations = [0.15, 0.65, 1];
+AuthorizedProfile.tsx (amy-huang16 on 10/14/2024 at 22:07): export default function AuthorizedProfile() {
+AuthorizedProfile.tsx (amy-huang16 on 10/14/2024 at 22:07):   const [isModalVisible, setIsModalVisible] = useState(false);
+AuthorizedProfile.tsx (amy-huang16 on 10/14/2024 at 22:07):     <LinearGradient
+AuthorizedProfile.tsx (amy-huang16 on 10/14/2024 at 22:07):       colors={gradientColors}
+AuthorizedProfile.tsx (amy-huang16 on 10/14/2024 at 22:07):       locations={colorsLocations}
+AuthorizedProfile.tsx (amy-huang16 on 10/14/2024 at 22:07):       style={styles.container}
+AuthorizedProfile.tsx (amy-huang16 on 10/14/2024 at 22:07):     >
+AuthorizedProfile.tsx (amy-huang16 on 10/14/2024 at 22:07):       <View style={styles.content}>
+AuthorizedProfile.tsx (amy-huang16 on 10/14/2024 at 22:07):         <Modal
+AuthorizedProfile.tsx (amy-huang16 on 10/14/2024 at 22:07):           animationType="slide"
+AuthorizedProfile.tsx (amy-huang16 on 10/14/2024 at 22:07):           transparent={true}
+AuthorizedProfile.tsx (amy-huang16 on 10/14/2024 at 22:07):           visible={isModalVisible}
+AuthorizedProfile.tsx (amy-huang16 on 10/14/2024 at 22:07):           onRequestClose={() => {
+AuthorizedProfile.tsx (amy-huang16 on 10/14/2024 at 22:07):             Alert.alert("Modal has been closed.");
+AuthorizedProfile.tsx (amy-huang16 on 10/14/2024 at 22:07):             setIsModalVisible(!isModalVisible);
+AuthorizedProfile.tsx (amy-huang16 on 10/14/2024 at 22:07):         >
+AuthorizedProfile.tsx (amy-huang16 on 10/14/2024 at 22:07):           <View style={styles.content}>
+AuthorizedProfile.tsx (amy-huang16 on 10/14/2024 at 22:07):             <View style={styles.modalView}>
+AuthorizedProfile.tsx (amy-huang16 on 10/14/2024 at 22:07):               <Text style={styles.modalText}>Edit Name and Email here</Text>
+AuthorizedProfile.tsx (amy-huang16 on 10/14/2024 at 22:07):               <Pressable
+AuthorizedProfile.tsx (amy-huang16 on 10/14/2024 at 22:07):                 style={[styles.button, styles.buttonClose]}
+AuthorizedProfile.tsx (amy-huang16 on 10/14/2024 at 22:07):                 onPress={() => setIsModalVisible(!isModalVisible)}
+AuthorizedProfile.tsx (amy-huang16 on 10/14/2024 at 22:07):               >
+AuthorizedProfile.tsx (amy-huang16 on 10/14/2024 at 22:07):                 <Text style={styles.textStyle}>Save</Text>
+AuthorizedProfile.tsx (amy-huang16 on 10/14/2024 at 22:07):               </Pressable>
+AuthorizedProfile.tsx (amy-huang16 on 10/14/2024 at 22:07):             </View>
+AuthorizedProfile.tsx (amy-huang16 on 10/14/2024 at 22:07):           </View>
+AuthorizedProfile.tsx (amy-huang16 on 10/14/2024 at 22:07):         </Modal>
+AuthorizedProfile.tsx (amy-huang16 on 10/14/2024 at 22:07):         <TouchableOpacity style={styles.editButton}>
+AuthorizedProfile.tsx (amy-huang16 on 10/14/2024 at 22:07):           <FeatherIcon
+AuthorizedProfile.tsx (amy-huang16 on 10/14/2024 at 22:07):             name="edit"
+AuthorizedProfile.tsx (amy-huang16 on 10/14/2024 at 22:07):             size={38}
+AuthorizedProfile.tsx (amy-huang16 on 10/14/2024 at 22:07):             color="white"
+AuthorizedProfile.tsx (amy-huang16 on 10/14/2024 at 22:07):             onPress={() => setIsModalVisible(true)}
+AuthorizedProfile.tsx (amy-huang16 on 10/14/2024 at 22:07):           ></FeatherIcon>
+AuthorizedProfile.tsx (amy-huang16 on 10/14/2024 at 22:07):         </TouchableOpacity>
+AuthorizedProfile.tsx (amy-huang16 on 10/14/2024 at 22:07):         <Text style={styles.header}>Hello, Amy!</Text>
+AuthorizedProfile.tsx (amy-huang16 on 10/14/2024 at 22:07):         <FAIcon
+AuthorizedProfile.tsx (amy-huang16 on 10/14/2024 at 22:07):           name="user-circle"
+AuthorizedProfile.tsx (amy-huang16 on 10/14/2024 at 22:07):           size={100}
+AuthorizedProfile.tsx (amy-huang16 on 10/14/2024 at 22:07):           color="black"
+AuthorizedProfile.tsx (amy-huang16 on 10/14/2024 at 22:07):           style={{ marginBottom: 60 }}
+AuthorizedProfile.tsx (amy-huang16 on 10/14/2024 at 22:07):         ></FAIcon>
+AuthorizedProfile.tsx (amy-huang16 on 10/14/2024 at 22:07):         <View style={styles.option}>
+AuthorizedProfile.tsx (amy-huang16 on 10/14/2024 at 22:07):           <Text style={{ width: 70 }}>Name: </Text>
+AuthorizedProfile.tsx (amy-huang16 on 10/14/2024 at 22:07):           <Text>Amy</Text>
+AuthorizedProfile.tsx (amy-huang16 on 10/14/2024 at 22:07):         </View>
+AuthorizedProfile.tsx (amy-huang16 on 10/14/2024 at 22:07):         <View style={styles.line}></View>
+AuthorizedProfile.tsx (amy-huang16 on 10/14/2024 at 22:07):         <View style={styles.option}>
+AuthorizedProfile.tsx (amy-huang16 on 10/14/2024 at 22:07):           <Text style={{ width: 70 }}>Email: </Text>
+AuthorizedProfile.tsx (amy-huang16 on 10/14/2024 at 22:07):           <Text>{useUser()?.email}</Text>
+AuthorizedProfile.tsx (amy-huang16 on 10/14/2024 at 22:07):         </View>
+AuthorizedProfile.tsx (amy-huang16 on 10/14/2024 at 22:07):         <TouchableOpacity
+AuthorizedProfile.tsx (amy-huang16 on 10/14/2024 at 22:07):           style={styles.locationButton}
+AuthorizedProfile.tsx (amy-huang16 on 10/14/2024 at 22:07):           onPress={() => getLocationFromDevice()}
+AuthorizedProfile.tsx (amy-huang16 on 10/14/2024 at 22:07):         >
+AuthorizedProfile.tsx (amy-huang16 on 10/14/2024 at 22:07):           <FAIcon
+AuthorizedProfile.tsx (amy-huang16 on 10/14/2024 at 22:07):             name="location-arrow"
+AuthorizedProfile.tsx (amy-huang16 on 10/14/2024 at 22:07):             size={25}
+AuthorizedProfile.tsx (amy-huang16 on 10/14/2024 at 22:07):             color="white"
+AuthorizedProfile.tsx (amy-huang16 on 10/14/2024 at 22:07):             style={{ marginHorizontal: 6 }}
+AuthorizedProfile.tsx (amy-huang16 on 10/14/2024 at 22:07):           ></FAIcon>
+AuthorizedProfile.tsx (amy-huang16 on 10/14/2024 at 22:07):           <Text style={styles.buttonText}>Reset Your Location</Text>
+AuthorizedProfile.tsx (amy-huang16 on 10/14/2024 at 22:07):         </TouchableOpacity>
+AuthorizedProfile.tsx (amy-huang16 on 10/14/2024 at 22:07):         <TouchableOpacity
+AuthorizedProfile.tsx (amy-huang16 on 10/14/2024 at 22:07):           style={styles.logOutButton}
+AuthorizedProfile.tsx (amy-huang16 on 10/14/2024 at 22:07):           onPress={() => signOut(firebaseAuth)}
+AuthorizedProfile.tsx (amy-huang16 on 10/14/2024 at 22:07):         >
+AuthorizedProfile.tsx (amy-huang16 on 10/14/2024 at 22:07):           <FAIcon
+AuthorizedProfile.tsx (amy-huang16 on 10/14/2024 at 22:07):             name="sign-out"
+AuthorizedProfile.tsx (amy-huang16 on 10/14/2024 at 22:07):             size={25}
+AuthorizedProfile.tsx (amy-huang16 on 10/14/2024 at 22:07):             color="white"
+AuthorizedProfile.tsx (amy-huang16 on 10/14/2024 at 22:07):             style={{ marginHorizontal: 6 }}
+AuthorizedProfile.tsx (amy-huang16 on 10/14/2024 at 22:07):           ></FAIcon>
+AuthorizedProfile.tsx (amy-huang16 on 10/14/2024 at 22:07):           <Text style={styles.buttonText}>Log Out</Text>
+AuthorizedProfile.tsx (amy-huang16 on 10/14/2024 at 22:07):         </TouchableOpacity>
+AuthorizedProfile.tsx (amy-huang16 on 10/14/2024 at 22:07):     </LinearGradient>
+AuthorizedProfile.tsx (amy-huang16 on 10/14/2024 at 22:07):   container: {
+AuthorizedProfile.tsx (amy-huang16 on 10/14/2024 at 22:07):     flex: 1,
+AuthorizedProfile.tsx (amy-huang16 on 10/14/2024 at 22:07):   },
+AuthorizedProfile.tsx (amy-huang16 on 10/14/2024 at 22:07):   content: {
+AuthorizedProfile.tsx (amy-huang16 on 10/14/2024 at 22:07):     marginTop: 20,
+AuthorizedProfile.tsx (amy-huang16 on 10/14/2024 at 22:07):   },
+AuthorizedProfile.tsx (amy-huang16 on 10/14/2024 at 22:07):   editButton: {
+AuthorizedProfile.tsx (amy-huang16 on 10/14/2024 at 22:07):     position: "absolute",
+AuthorizedProfile.tsx (amy-huang16 on 10/14/2024 at 22:07):     top: "5%",
+AuthorizedProfile.tsx (amy-huang16 on 10/14/2024 at 22:07):     right: "8%",
+AuthorizedProfile.tsx (amy-huang16 on 10/14/2024 at 22:07):     paddingBottom: 60,
+AuthorizedProfile.tsx (amy-huang16 on 10/14/2024 at 22:07):     justifyContent: "flex-start",
+AuthorizedProfile.tsx (amy-huang16 on 10/14/2024 at 22:07):   line: {
+AuthorizedProfile.tsx (amy-huang16 on 10/14/2024 at 22:07):     height: 1,
+AuthorizedProfile.tsx (amy-huang16 on 10/14/2024 at 22:07):     width: "80%",
+AuthorizedProfile.tsx (amy-huang16 on 10/14/2024 at 22:07):     backgroundColor: "#918E8E",
+AuthorizedProfile.tsx (amy-huang16 on 10/14/2024 at 22:07):     marginVertical: 14,
+AuthorizedProfile.tsx (amy-huang16 on 10/14/2024 at 22:07):   },
+AuthorizedProfile.tsx (amy-huang16 on 10/14/2024 at 22:07):   buttonText: {
+AuthorizedProfile.tsx (amy-huang16 on 10/14/2024 at 22:07):     color: "#fff",
+AuthorizedProfile.tsx (amy-huang16 on 10/14/2024 at 22:07):     fontSize: 16,
+AuthorizedProfile.tsx (amy-huang16 on 10/14/2024 at 22:07):     fontWeight: "600",
+AuthorizedProfile.tsx (amy-huang16 on 10/14/2024 at 22:07):     marginHorizontal: 12,
+AuthorizedProfile.tsx (amy-huang16 on 10/14/2024 at 22:07):   },
+AuthorizedProfile.tsx (amy-huang16 on 10/14/2024 at 22:07):   locationButton: {
+AuthorizedProfile.tsx (amy-huang16 on 10/14/2024 at 22:07):     backgroundColor: "#908BE8",
+AuthorizedProfile.tsx (amy-huang16 on 10/14/2024 at 22:07):     width: "64%",
+AuthorizedProfile.tsx (amy-huang16 on 10/14/2024 at 22:07):     paddingVertical: 10,
+AuthorizedProfile.tsx (amy-huang16 on 10/14/2024 at 22:07):     borderRadius: 8,
+AuthorizedProfile.tsx (amy-huang16 on 10/14/2024 at 22:07):     alignItems: "center",
+AuthorizedProfile.tsx (amy-huang16 on 10/14/2024 at 22:07):     marginTop: 60,
+AuthorizedProfile.tsx (amy-huang16 on 10/14/2024 at 22:07):     flexDirection: "row",
+AuthorizedProfile.tsx (amy-huang16 on 10/14/2024 at 22:07):     justifyContent: "center",
+AuthorizedProfile.tsx (amy-huang16 on 10/14/2024 at 22:07):   },
+AuthorizedProfile.tsx (amy-huang16 on 10/14/2024 at 22:07):   logOutButton: {
+AuthorizedProfile.tsx (amy-huang16 on 10/14/2024 at 22:07):     backgroundColor: "#908BE8",
+AuthorizedProfile.tsx (amy-huang16 on 10/14/2024 at 22:07):     width: "64%",
+AuthorizedProfile.tsx (amy-huang16 on 10/14/2024 at 22:07):     paddingVertical: 10,
+AuthorizedProfile.tsx (amy-huang16 on 10/14/2024 at 22:07):     borderRadius: 8,
+AuthorizedProfile.tsx (amy-huang16 on 10/14/2024 at 22:07):     alignItems: "center",
+AuthorizedProfile.tsx (amy-huang16 on 10/14/2024 at 22:07):     marginTop: 24,
+AuthorizedProfile.tsx (amy-huang16 on 10/14/2024 at 22:07):     flexDirection: "row",
+AuthorizedProfile.tsx (amy-huang16 on 10/14/2024 at 22:07):     justifyContent: "center",
+AuthorizedProfile.tsx (amy-huang16 on 10/14/2024 at 22:07):   },
+AuthorizedProfile.tsx (amy-huang16 on 10/14/2024 at 22:07):   // modal stuff starting here
+AuthorizedProfile.tsx (amy-huang16 on 10/14/2024 at 22:07):   modalView: {
+AuthorizedProfile.tsx (amy-huang16 on 10/14/2024 at 22:07):     margin: 20,
+AuthorizedProfile.tsx (amy-huang16 on 10/14/2024 at 22:07):     backgroundColor: "white",
+AuthorizedProfile.tsx (amy-huang16 on 10/14/2024 at 22:07):     borderRadius: 20,
+AuthorizedProfile.tsx (amy-huang16 on 10/14/2024 at 22:07):     // padding: 100,
+AuthorizedProfile.tsx (amy-huang16 on 10/14/2024 at 22:07):     width: "92%",
+AuthorizedProfile.tsx (amy-huang16 on 10/14/2024 at 22:07):     height: "92%",
+AuthorizedProfile.tsx (amy-huang16 on 10/14/2024 at 22:07):     alignItems: "center",
+AuthorizedProfile.tsx (amy-huang16 on 10/14/2024 at 22:07):     justifyContent: "center",
+AuthorizedProfile.tsx (amy-huang16 on 10/14/2024 at 22:07):     shadowColor: "#000",
+AuthorizedProfile.tsx (amy-huang16 on 10/14/2024 at 22:07):     shadowOffset: {
+AuthorizedProfile.tsx (amy-huang16 on 10/14/2024 at 22:07):       width: 0,
+AuthorizedProfile.tsx (amy-huang16 on 10/14/2024 at 22:07):       height: 1,
+AuthorizedProfile.tsx (amy-huang16 on 10/14/2024 at 22:07):     },
+AuthorizedProfile.tsx (amy-huang16 on 10/14/2024 at 22:07):     shadowOpacity: 0.25,
+AuthorizedProfile.tsx (amy-huang16 on 10/14/2024 at 22:07):     shadowRadius: 4,
+AuthorizedProfile.tsx (amy-huang16 on 10/14/2024 at 22:07):     elevation: 4,
+AuthorizedProfile.tsx (amy-huang16 on 10/14/2024 at 22:07):   },
+AuthorizedProfile.tsx (amy-huang16 on 10/14/2024 at 22:07):     borderRadius: 20,
+AuthorizedProfile.tsx (amy-huang16 on 10/14/2024 at 22:07):     padding: 10,
+AuthorizedProfile.tsx (amy-huang16 on 10/14/2024 at 22:07):     elevation: 2,
+AuthorizedProfile.tsx (amy-huang16 on 10/14/2024 at 22:07):   },
+AuthorizedProfile.tsx (amy-huang16 on 10/14/2024 at 22:07):   buttonOpen: {
+AuthorizedProfile.tsx (amy-huang16 on 10/14/2024 at 22:07):     backgroundColor: "#F194FF",
+AuthorizedProfile.tsx (amy-huang16 on 10/14/2024 at 22:07):   },
+AuthorizedProfile.tsx (amy-huang16 on 10/14/2024 at 22:07):   buttonClose: {
+AuthorizedProfile.tsx (amy-huang16 on 10/14/2024 at 22:07):     backgroundColor: "#2196F3",
+AuthorizedProfile.tsx (amy-huang16 on 10/14/2024 at 22:07):   },
+AuthorizedProfile.tsx (amy-huang16 on 10/14/2024 at 22:07):   textStyle: {
+AuthorizedProfile.tsx (amy-huang16 on 10/14/2024 at 22:07):     color: "white",
+AuthorizedProfile.tsx (amy-huang16 on 10/14/2024 at 22:07):     fontWeight: "bold",
+AuthorizedProfile.tsx (amy-huang16 on 10/14/2024 at 22:07):     textAlign: "center",
+AuthorizedProfile.tsx (amy-huang16 on 10/14/2024 at 22:07):   },
+AuthorizedProfile.tsx (amy-huang16 on 10/14/2024 at 22:07):   modalText: {
+AuthorizedProfile.tsx (amy-huang16 on 10/14/2024 at 22:07):     marginBottom: 15,
+AuthorizedProfile.tsx (amy-huang16 on 10/14/2024 at 22:07):     textAlign: "center",
