@@ -1,0 +1,231 @@
+file: lambdas/exampleMailgunTest.js
+
+ed63ce0d (Kaylee Bae 2024-10-15 21:45:44 -0400  1) const formData = require('form-data');
+ed63ce0d (Kaylee Bae 2024-10-15 21:45:44 -0400  2)   const Mailgun = require('mailgun.js');
+ed63ce0d (Kaylee Bae 2024-10-15 21:45:44 -0400  3)   const mailgun = new Mailgun(formData);
+ed63ce0d (Kaylee Bae 2024-10-15 21:45:44 -0400  4)   const mg = mailgun.client({username: 'api', key: process.env.MAILGUN_API_KEY || 'API_KEY'});
+ed63ce0d (Kaylee Bae 2024-10-15 21:45:44 -0400  5)   
+ed63ce0d (Kaylee Bae 2024-10-15 21:45:44 -0400  6)   mg.messages.create('sandboxfeaeb40c76d74d6f9c05024143367250.mailgun.org', {
+ed63ce0d (Kaylee Bae 2024-10-15 21:45:44 -0400  7)   	from: "SolSync <solsync340@gmail.com>",
+ed63ce0d (Kaylee Bae 2024-10-15 21:45:44 -0400  8)   	to: ["kbae1@vols.utk.edu"],
+ed63ce0d (Kaylee Bae 2024-10-15 21:45:44 -0400  9)   	subject: "Hello",
+ed63ce0d (Kaylee Bae 2024-10-15 21:45:44 -0400 10)   	text: "Testing some Mailgun.",
+ed63ce0d (Kaylee Bae 2024-10-15 21:45:44 -0400 11)   	html: "<h1>Hello, world.</h1>"
+ed63ce0d (Kaylee Bae 2024-10-15 21:45:44 -0400 12)   })
+ed63ce0d (Kaylee Bae 2024-10-15 21:45:44 -0400 13)   .then(msg => console.log(msg)) // logs response data
+ed63ce0d (Kaylee Bae 2024-10-15 21:45:44 -0400 14)   .catch(err => console.log(err)); // logs any error
+
+file: lambdas/getSunriseSunset.mjs
+
+ed63ce0d (Kaylee Bae   2024-10-15 21:45:44 -0400 45)       `https://api.sunrisesunset.io/json?lat=${lat}&lng=${lng}&timezone=UTC&date_start=today&date_end=tomorrow&time_format=24`
+
+file: lambdas/sendDailyEmail.mjs
+
+4606a835 (Kaylee Bae 2024-10-15 21:48:46 -0400   1) // Schedules daily emails for tomorrow at noon
+4606a835 (Kaylee Bae 2024-10-15 21:48:46 -0400   2) 
+4606a835 (Kaylee Bae 2024-10-15 21:48:46 -0400   3) // Currently uses predetermined times for sunrise and sunset
+4606a835 (Kaylee Bae 2024-10-15 21:48:46 -0400   4) 
+4606a835 (Kaylee Bae 2024-10-15 21:48:46 -0400   5) // TODO: Pass in variables to the lambda event to change daily content email
+4606a835 (Kaylee Bae 2024-10-15 21:48:46 -0400   6) 
+4606a835 (Kaylee Bae 2024-10-15 21:48:46 -0400   7) export const handler = async (event) => {
+4606a835 (Kaylee Bae 2024-10-15 21:48:46 -0400   8)     // Create a new date object for the current date
+4606a835 (Kaylee Bae 2024-10-15 21:48:46 -0400   9)     let now = new Date();
+4606a835 (Kaylee Bae 2024-10-15 21:48:46 -0400  10)   
+4606a835 (Kaylee Bae 2024-10-15 21:48:46 -0400  11)     // Set to tomorrow by adding one day
+4606a835 (Kaylee Bae 2024-10-15 21:48:46 -0400  12)     const tomorrow = new Date(now);
+4606a835 (Kaylee Bae 2024-10-15 21:48:46 -0400  13)     tomorrow.setDate(now.getDate() + 1);
+4606a835 (Kaylee Bae 2024-10-15 21:48:46 -0400  14)   
+4606a835 (Kaylee Bae 2024-10-15 21:48:46 -0400  15)     // Set time to noon (12:00 PM)
+4606a835 (Kaylee Bae 2024-10-15 21:48:46 -0400  16)     tomorrow.setHours(20, 4, 0, 0);
+4606a835 (Kaylee Bae 2024-10-15 21:48:46 -0400  17)   
+4606a835 (Kaylee Bae 2024-10-15 21:48:46 -0400  18)     // Convert to RFC 2822 format to match mailgun's requirements
+4606a835 (Kaylee Bae 2024-10-15 21:48:46 -0400  19)     let rfc2822Time = tomorrow.toUTCString();
+4606a835 (Kaylee Bae 2024-10-15 21:48:46 -0400  20)   
+4606a835 (Kaylee Bae 2024-10-15 21:48:46 -0400  21)     // Make sure this variable is correct
+4606a835 (Kaylee Bae 2024-10-15 21:48:46 -0400  22)     console.log(rfc2822Time);
+4606a835 (Kaylee Bae 2024-10-15 21:48:46 -0400  23)   
+4606a835 (Kaylee Bae 2024-10-15 21:48:46 -0400  24)     // Define HTML (easiest way to maintain readability when going to JSON)
+4606a835 (Kaylee Bae 2024-10-15 21:48:46 -0400  25)     const emailHTML = `
+4606a835 (Kaylee Bae 2024-10-15 21:48:46 -0400  26)     <div style="font-family: Arial, sans-serif; padding: 20px; background-color: #FFCC80; color: #000; text-align: center;">
+4606a835 (Kaylee Bae 2024-10-15 21:48:46 -0400  27)         <h1 style="color: #D65F0D;">SolSync Daily Reflection</h1>
+4606a835 (Kaylee Bae 2024-10-15 21:48:46 -0400  28)         <div style="background-color: rgba(255, 255, 255, 0.8); padding: 15px; border-radius: 8px; display: inline-block; text-align: left;">
+4606a835 (Kaylee Bae 2024-10-15 21:48:46 -0400  29)             <p style="font-size: 20px;">
+4606a835 (Kaylee Bae 2024-10-15 21:48:46 -0400  30)                 Embrace the beauty of each day. Remember to practice your habits!
+4606a835 (Kaylee Bae 2024-10-15 21:48:46 -0400  31)             </p>
+4606a835 (Kaylee Bae 2024-10-15 21:48:46 -0400  32)             <p style="font-size: 18px;">
+4606a835 (Kaylee Bae 2024-10-15 21:48:46 -0400  33)                 <strong style="color: #D65F0D;">Habit:</strong> <span style="color: #000;">Meditation</span>
+4606a835 (Kaylee Bae 2024-10-15 21:48:46 -0400  34)             </p>
+4606a835 (Kaylee Bae 2024-10-15 21:48:46 -0400  35)             <p style="font-size: 18px;">
+4606a835 (Kaylee Bae 2024-10-15 21:48:46 -0400  36)                 <strong style="color: #D65F0D;">Sunrise:</strong> <span style="color: #000;">6:02AM</span>
+4606a835 (Kaylee Bae 2024-10-15 21:48:46 -0400  37)             </p>
+4606a835 (Kaylee Bae 2024-10-15 21:48:46 -0400  38)             <p style="font-size: 18px;">
+4606a835 (Kaylee Bae 2024-10-15 21:48:46 -0400  39)                 <strong style="color: #D65F0D;">Sunset:</strong> <span style="color: #000;">7:50PM</span>
+4606a835 (Kaylee Bae 2024-10-15 21:48:46 -0400  40)             </p>
+4606a835 (Kaylee Bae 2024-10-15 21:48:46 -0400  41)             <h2 style="color: #D65F0D;">Tips for Your Habit</h2>
+4606a835 (Kaylee Bae 2024-10-15 21:48:46 -0400  42)             <ul style="font-size: 18px; margin: 10px 0; padding-left: 20px;">
+4606a835 (Kaylee Bae 2024-10-15 21:48:46 -0400  43)                 <li>Set a specific time to practice your habit each day.</li>
+4606a835 (Kaylee Bae 2024-10-15 21:48:46 -0400  44)                 <li>Track your progress to stay motivated.</li>
+4606a835 (Kaylee Bae 2024-10-15 21:48:46 -0400  45)                 <li>Find a friend to share your goals with.</li>
+4606a835 (Kaylee Bae 2024-10-15 21:48:46 -0400  46)             </ul>
+4606a835 (Kaylee Bae 2024-10-15 21:48:46 -0400  47)         </div>
+4606a835 (Kaylee Bae 2024-10-15 21:48:46 -0400  48)     </div>
+4606a835 (Kaylee Bae 2024-10-15 21:48:46 -0400  49)     `;
+4606a835 (Kaylee Bae 2024-10-15 21:48:46 -0400  50)   
+4606a835 (Kaylee Bae 2024-10-15 21:48:46 -0400  51)     try {
+4606a835 (Kaylee Bae 2024-10-15 21:48:46 -0400  52)       // Fetch the sendEmail API with the required body
+4606a835 (Kaylee Bae 2024-10-15 21:48:46 -0400  53)       const response = await fetch(
+4606a835 (Kaylee Bae 2024-10-15 21:48:46 -0400  54)         "https://ybo13h7rwi.execute-api.us-east-2.amazonaws.com/default/sendEmail",
+4606a835 (Kaylee Bae 2024-10-15 21:48:46 -0400  55)         {
+4606a835 (Kaylee Bae 2024-10-15 21:48:46 -0400  56)           method: "POST",
+4606a835 (Kaylee Bae 2024-10-15 21:48:46 -0400  57)           headers: {
+4606a835 (Kaylee Bae 2024-10-15 21:48:46 -0400  58)             "x-api-key": "API_KEY_2",
+4606a835 (Kaylee Bae 2024-10-15 21:48:46 -0400  59)           },
+4606a835 (Kaylee Bae 2024-10-15 21:48:46 -0400  60)           body: JSON.stringify({
+4606a835 (Kaylee Bae 2024-10-15 21:48:46 -0400  61)             to: "kbae1@vols.utk.edu",
+4606a835 (Kaylee Bae 2024-10-15 21:48:46 -0400  62)             subject: "SolSync Daily Update",
+4606a835 (Kaylee Bae 2024-10-15 21:48:46 -0400  63)             text: "Habit: Meditation\nSunrise: 6:03 AM\nSunset: 7:22 PM",
+4606a835 (Kaylee Bae 2024-10-15 21:48:46 -0400  64)             textFormat: emailHTML,
+4606a835 (Kaylee Bae 2024-10-15 21:48:46 -0400  65)             deliveryTime: rfc2822Time,
+4606a835 (Kaylee Bae 2024-10-15 21:48:46 -0400  66)           }),
+4606a835 (Kaylee Bae 2024-10-15 21:48:46 -0400  67)         },
+4606a835 (Kaylee Bae 2024-10-15 21:48:46 -0400  68)       );
+4606a835 (Kaylee Bae 2024-10-15 21:48:46 -0400  69)   
+4606a835 (Kaylee Bae 2024-10-15 21:48:46 -0400  70)       // Convert to JSON
+4606a835 (Kaylee Bae 2024-10-15 21:48:46 -0400  71)       const jsonData = await response.json();
+4606a835 (Kaylee Bae 2024-10-15 21:48:46 -0400  72)       if (response.ok) {
+4606a835 (Kaylee Bae 2024-10-15 21:48:46 -0400  73)         // Return success message and event data
+4606a835 (Kaylee Bae 2024-10-15 21:48:46 -0400  74)         return {
+4606a835 (Kaylee Bae 2024-10-15 21:48:46 -0400  75)           statusCode: 200,
+4606a835 (Kaylee Bae 2024-10-15 21:48:46 -0400  76)           body: JSON.stringify({
+4606a835 (Kaylee Bae 2024-10-15 21:48:46 -0400  77)             message: "Email sent successfully!",
+4606a835 (Kaylee Bae 2024-10-15 21:48:46 -0400  78)             event: jsonData.eventTo,
+4606a835 (Kaylee Bae 2024-10-15 21:48:46 -0400  79)             data: jsonData.data,
+4606a835 (Kaylee Bae 2024-10-15 21:48:46 -0400  80)           }),
+4606a835 (Kaylee Bae 2024-10-15 21:48:46 -0400  81)         };
+4606a835 (Kaylee Bae 2024-10-15 21:48:46 -0400  82)       } else {
+4606a835 (Kaylee Bae 2024-10-15 21:48:46 -0400  83)         // Log the response data for debugging
+4606a835 (Kaylee Bae 2024-10-15 21:48:46 -0400  84)         console.log(jsonData);
+4606a835 (Kaylee Bae 2024-10-15 21:48:46 -0400  85)   
+4606a835 (Kaylee Bae 2024-10-15 21:48:46 -0400  86)         // Return failure status and error from sendEmail
+4606a835 (Kaylee Bae 2024-10-15 21:48:46 -0400  87)         return {
+4606a835 (Kaylee Bae 2024-10-15 21:48:46 -0400  88)           statusCode: 500,
+4606a835 (Kaylee Bae 2024-10-15 21:48:46 -0400  89)           body: JSON.stringify({
+4606a835 (Kaylee Bae 2024-10-15 21:48:46 -0400  90)             message: "Failed to send email.",
+4606a835 (Kaylee Bae 2024-10-15 21:48:46 -0400  91)             error: jsonData.message || "Unknown error",
+4606a835 (Kaylee Bae 2024-10-15 21:48:46 -0400  92)             error2: jsonData.error || "Unknown error",
+4606a835 (Kaylee Bae 2024-10-15 21:48:46 -0400  93)             emailTo: jsonData.emailTo,
+4606a835 (Kaylee Bae 2024-10-15 21:48:46 -0400  94)           }),
+4606a835 (Kaylee Bae 2024-10-15 21:48:46 -0400  95)         };
+4606a835 (Kaylee Bae 2024-10-15 21:48:46 -0400  96)       }
+4606a835 (Kaylee Bae 2024-10-15 21:48:46 -0400  97)     } catch (err) {
+4606a835 (Kaylee Bae 2024-10-15 21:48:46 -0400  98)   
+4606a835 (Kaylee Bae 2024-10-15 21:48:46 -0400  99)       // Log the error
+4606a835 (Kaylee Bae 2024-10-15 21:48:46 -0400 100)       console.log(err);
+4606a835 (Kaylee Bae 2024-10-15 21:48:46 -0400 101)   
+4606a835 (Kaylee Bae 2024-10-15 21:48:46 -0400 102)       // Return failure status and 
+4606a835 (Kaylee Bae 2024-10-15 21:48:46 -0400 103)       return {
+4606a835 (Kaylee Bae 2024-10-15 21:48:46 -0400 104)         statusCode: 500,
+4606a835 (Kaylee Bae 2024-10-15 21:48:46 -0400 105)         body: JSON.stringify({
+4606a835 (Kaylee Bae 2024-10-15 21:48:46 -0400 106)           message: "Failed to send email 1.",
+4606a835 (Kaylee Bae 2024-10-15 21:48:46 -0400 107)           error: err.message,
+4606a835 (Kaylee Bae 2024-10-15 21:48:46 -0400 108)         }),
+4606a835 (Kaylee Bae 2024-10-15 21:48:46 -0400 109)       };
+4606a835 (Kaylee Bae 2024-10-15 21:48:46 -0400 110)     }
+4606a835 (Kaylee Bae 2024-10-15 21:48:46 -0400 111)   };
+4606a835 (Kaylee Bae 2024-10-15 21:48:46 -0400 112)   
+
+file: lambdas/sendEmail.mjs
+
+ed63ce0d (Kaylee Bae 2024-10-15 21:45:44 -0400  1) import FormData from "form-data";
+ed63ce0d (Kaylee Bae 2024-10-15 21:45:44 -0400  2) import Mailgun from "mailgun.js";
+ed63ce0d (Kaylee Bae 2024-10-15 21:45:44 -0400  3) 
+ed63ce0d (Kaylee Bae 2024-10-15 21:45:44 -0400  4) // Reusable email send using Mailgun allowing for a delayed delivery time
+ed63ce0d (Kaylee Bae 2024-10-15 21:45:44 -0400  5) 
+ed63ce0d (Kaylee Bae 2024-10-15 21:45:44 -0400  6) // Parameters:
+ed63ce0d (Kaylee Bae 2024-10-15 21:45:44 -0400  7) // body : {
+ed63ce0d (Kaylee Bae 2024-10-15 21:45:44 -0400  8) //     "to": "kbae1@vols.utk.edu",
+ed63ce0d (Kaylee Bae 2024-10-15 21:45:44 -0400  9) //     "subject": "SolSync Daily Update",
+ed63ce0d (Kaylee Bae 2024-10-15 21:45:44 -0400 10) //     "text": "Habit: Meditation\nSunrise: 6:03 AM\nSunset: 7:22 PM",
+ed63ce0d (Kaylee Bae 2024-10-15 21:45:44 -0400 11) //     "textFormat": "<p>Hello</p>",
+ed63ce0d (Kaylee Bae 2024-10-15 21:45:44 -0400 12) //     "deliveryTime": "Tue, 15 Oct 2024 04:09:41 GMT"
+ed63ce0d (Kaylee Bae 2024-10-15 21:45:44 -0400 13) // }
+ed63ce0d (Kaylee Bae 2024-10-15 21:45:44 -0400 14) // x-api-key with api key as a header
+ed63ce0d (Kaylee Bae 2024-10-15 21:45:44 -0400 15) 
+ed63ce0d (Kaylee Bae 2024-10-15 21:45:44 -0400 16) // Returns:
+ed63ce0d (Kaylee Bae 2024-10-15 21:45:44 -0400 17) // Error/ Success message
+ed63ce0d (Kaylee Bae 2024-10-15 21:45:44 -0400 18) export const handler = async (event) => {
+ed63ce0d (Kaylee Bae 2024-10-15 21:45:44 -0400 19)   let emailTo, emailSubject, emailText, emailHTML, deliveryTime
+ed63ce0d (Kaylee Bae 2024-10-15 21:45:44 -0400 20) 
+ed63ce0d (Kaylee Bae 2024-10-15 21:45:44 -0400 21)   if (!event.body) {
+ed63ce0d (Kaylee Bae 2024-10-15 21:45:44 -0400 22)     // Works in the AWS test environment
+ed63ce0d (Kaylee Bae 2024-10-15 21:45:44 -0400 23)     emailTo = event.to;
+ed63ce0d (Kaylee Bae 2024-10-15 21:45:44 -0400 24)     emailSubject = event.subject;
+ed63ce0d (Kaylee Bae 2024-10-15 21:45:44 -0400 25)     emailText = event.text;
+ed63ce0d (Kaylee Bae 2024-10-15 21:45:44 -0400 26)     emailHTML = event.textFormat;
+ed63ce0d (Kaylee Bae 2024-10-15 21:45:44 -0400 27)     deliveryTime = event.deliveryTime;
+ed63ce0d (Kaylee Bae 2024-10-15 21:45:44 -0400 28)   } else {
+ed63ce0d (Kaylee Bae 2024-10-15 21:45:44 -0400 29)     // Works for frontend
+ed63ce0d (Kaylee Bae 2024-10-15 21:45:44 -0400 30)     const body = JSON.parse(event.body);
+ed63ce0d (Kaylee Bae 2024-10-15 21:45:44 -0400 31)   
+ed63ce0d (Kaylee Bae 2024-10-15 21:45:44 -0400 32)     // Email details
+ed63ce0d (Kaylee Bae 2024-10-15 21:45:44 -0400 33)     emailTo = body.to;
+ed63ce0d (Kaylee Bae 2024-10-15 21:45:44 -0400 34)     emailSubject = body.subject;
+ed63ce0d (Kaylee Bae 2024-10-15 21:45:44 -0400 35)     emailText = body.text;
+ed63ce0d (Kaylee Bae 2024-10-15 21:45:44 -0400 36)     emailHTML = body.textFormat;
+ed63ce0d (Kaylee Bae 2024-10-15 21:45:44 -0400 37)     deliveryTime = body.deliveryTime;
+ed63ce0d (Kaylee Bae 2024-10-15 21:45:44 -0400 38)   }
+ed63ce0d (Kaylee Bae 2024-10-15 21:45:44 -0400 39) 
+ed63ce0d (Kaylee Bae 2024-10-15 21:45:44 -0400 40)   // Log mail details
+ed63ce0d (Kaylee Bae 2024-10-15 21:45:44 -0400 41)   console.log(emailTo);
+ed63ce0d (Kaylee Bae 2024-10-15 21:45:44 -0400 42)   console.log(emailSubject);
+ed63ce0d (Kaylee Bae 2024-10-15 21:45:44 -0400 43)   console.log(emailText);
+ed63ce0d (Kaylee Bae 2024-10-15 21:45:44 -0400 44)   console.log(emailHTML);
+ed63ce0d (Kaylee Bae 2024-10-15 21:45:44 -0400 45)   console.log(deliveryTime);
+ed63ce0d (Kaylee Bae 2024-10-15 21:45:44 -0400 46) 
+ed63ce0d (Kaylee Bae 2024-10-15 21:45:44 -0400 47)   const mailgun = new Mailgun(FormData);
+ed63ce0d (Kaylee Bae 2024-10-15 21:45:44 -0400 48) 
+ed63ce0d (Kaylee Bae 2024-10-15 21:45:44 -0400 49)   // Use API key to begin creating email
+ed63ce0d (Kaylee Bae 2024-10-15 21:45:44 -0400 50)   const mg = mailgun.client({
+ed63ce0d (Kaylee Bae 2024-10-15 21:45:44 -0400 51)     username: "api",
+ed63ce0d (Kaylee Bae 2024-10-15 21:45:44 -0400 52)     key: process.env.MAILGUN_API_KEY || "API_KEY",
+ed63ce0d (Kaylee Bae 2024-10-15 21:45:44 -0400 53)   });
+ed63ce0d (Kaylee Bae 2024-10-15 21:45:44 -0400 54) 
+ed63ce0d (Kaylee Bae 2024-10-15 21:45:44 -0400 55)   try {
+ed63ce0d (Kaylee Bae 2024-10-15 21:45:44 -0400 56)     const msg = await mg.messages.create(
+ed63ce0d (Kaylee Bae 2024-10-15 21:45:44 -0400 57)       "CLIENT",
+ed63ce0d (Kaylee Bae 2024-10-15 21:45:44 -0400 58)       {
+ed63ce0d (Kaylee Bae 2024-10-15 21:45:44 -0400 59)         from: `SolSync <solsync340@gmail.com>`,
+ed63ce0d (Kaylee Bae 2024-10-15 21:45:44 -0400 60)         to: [emailTo],
+ed63ce0d (Kaylee Bae 2024-10-15 21:45:44 -0400 61)         subject: [emailSubject],
+ed63ce0d (Kaylee Bae 2024-10-15 21:45:44 -0400 62)         text: [emailText], // Plain text version
+ed63ce0d (Kaylee Bae 2024-10-15 21:45:44 -0400 63)         html: [emailHTML], // HTML version
+ed63ce0d (Kaylee Bae 2024-10-15 21:45:44 -0400 64)         "o:deliverytime": [deliveryTime], // Set delivery time
+ed63ce0d (Kaylee Bae 2024-10-15 21:45:44 -0400 65)       }
+ed63ce0d (Kaylee Bae 2024-10-15 21:45:44 -0400 66)     );
+ed63ce0d (Kaylee Bae 2024-10-15 21:45:44 -0400 67) 
+ed63ce0d (Kaylee Bae 2024-10-15 21:45:44 -0400 68)     console.log(msg);
+ed63ce0d (Kaylee Bae 2024-10-15 21:45:44 -0400 69) 
+ed63ce0d (Kaylee Bae 2024-10-15 21:45:44 -0400 70)     // Return a success response
+ed63ce0d (Kaylee Bae 2024-10-15 21:45:44 -0400 71)     return {
+ed63ce0d (Kaylee Bae 2024-10-15 21:45:44 -0400 72)       statusCode: 200,
+ed63ce0d (Kaylee Bae 2024-10-15 21:45:44 -0400 73)       body: JSON.stringify({
+ed63ce0d (Kaylee Bae 2024-10-15 21:45:44 -0400 74)         message: "Email sent successfully!",
+ed63ce0d (Kaylee Bae 2024-10-15 21:45:44 -0400 75)         eventTo:event,
+ed63ce0d (Kaylee Bae 2024-10-15 21:45:44 -0400 76)       }),
+ed63ce0d (Kaylee Bae 2024-10-15 21:45:44 -0400 77)     };
+ed63ce0d (Kaylee Bae 2024-10-15 21:45:44 -0400 78)   } catch (err) {
+ed63ce0d (Kaylee Bae 2024-10-15 21:45:44 -0400 79)     
+ed63ce0d (Kaylee Bae 2024-10-15 21:45:44 -0400 80)     console.error(err);
+ed63ce0d (Kaylee Bae 2024-10-15 21:45:44 -0400 81) 
+ed63ce0d (Kaylee Bae 2024-10-15 21:45:44 -0400 82)     // Return an error response
+ed63ce0d (Kaylee Bae 2024-10-15 21:45:44 -0400 83)     return {
+ed63ce0d (Kaylee Bae 2024-10-15 21:45:44 -0400 84)       statusCode: 500,
+ed63ce0d (Kaylee Bae 2024-10-15 21:45:44 -0400 85)       body: JSON.stringify({
+ed63ce0d (Kaylee Bae 2024-10-15 21:45:44 -0400 86)         message: "Failed to send email 2.",
+ed63ce0d (Kaylee Bae 2024-10-15 21:45:44 -0400 87)         emailTo: emailTo,
+ed63ce0d (Kaylee Bae 2024-10-15 21:45:44 -0400 88)         error: err.message
+ed63ce0d (Kaylee Bae 2024-10-15 21:45:44 -0400 89)     }),
+ed63ce0d (Kaylee Bae 2024-10-15 21:45:44 -0400 90)     };
+ed63ce0d (Kaylee Bae 2024-10-15 21:45:44 -0400 91)   }
+ed63ce0d (Kaylee Bae 2024-10-15 21:45:44 -0400 92) };
+
