@@ -23,6 +23,7 @@ const colorsLocations = [0.15, 0.65, 1];
 
 export default function AuthorizedProfile() {
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [user] = useUser();
   return (
     <LinearGradient
       colors={gradientColors}
@@ -77,7 +78,7 @@ export default function AuthorizedProfile() {
         <View style={styles.line}></View>
         <View style={styles.option}>
           <Text style={{ width: 70 }}>Email: </Text>
-          <Text>{useUser()?.email}</Text>
+          <Text>{user?.email}</Text>
         </View>
 
         <TouchableOpacity

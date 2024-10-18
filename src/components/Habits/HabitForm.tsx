@@ -62,14 +62,20 @@ export default function HabitForm({ navigation }: HabitFormProps) {
 
   const { addHabit } = useHabit();
 
-  const user = useUser();
+  const [user, userIsLoading] = useUser();
 
-  if (!user) {
+  console.log(userIsLoading);
+
+  if (userIsLoading) {
     return (
       <View style={styles.container}>
         <ActivityIndicator size="small" color="#000000" />
       </View>
     );
+  }
+
+  if (!user) {
+    return <Text>Please log in to add a habit</Text>;
   }
 
   const onSubmit: SubmitHandler<HabitFormValues> = async (data) => {

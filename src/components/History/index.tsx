@@ -1,6 +1,7 @@
 import dayjs from "dayjs";
 import { useEffect, useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
+import { ActivityIndicator } from "react-native";
 import { Calendar } from "react-native-calendars";
 import { Dropdown } from "react-native-element-dropdown";
 
@@ -14,8 +15,8 @@ type DropdownItem = {
   value: string;
 };
 
-export default function Habits() {
-  const user = useUser();
+export default function HistoryComponent() {
+  const [user, userIsLoading] = useUser();
   const { habits } = useHabit();
   const [currentHabit, setCurrentHabit] = useState<Habit>();
   const [history, setHistory] = useState<History[]>();
@@ -66,6 +67,14 @@ export default function Habits() {
 
     setCalendarDates(calenderDates);
   }, [currentHabit?.id, history]);
+
+  if (userIsLoading) {
+    return (
+      <View style={styles.container}>
+        <ActivityIndicator size="small" color="#000000" />
+      </View>
+    );
+  }
 
   if (!user) {
     return (
