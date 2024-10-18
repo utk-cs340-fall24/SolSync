@@ -1,9 +1,11 @@
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import React from "react";
-import AuthorizedProfile from "./AuthorizedProfile";
+
+import useUser from "@/hooks/useUser";
+
 import LogIn from "../LogIn";
 import SignUp from "../SignUp";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import useUser from "@/hooks/useUser";
+import AuthorizedProfile from "./AuthorizedProfile";
 
 export type ProfileStackParamList = {
   LogIn: undefined;

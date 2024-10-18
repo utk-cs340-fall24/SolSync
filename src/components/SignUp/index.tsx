@@ -1,21 +1,23 @@
-import { createUserWithEmailAndPassword } from "firebase/auth";
-import { firebaseAuth, db } from "../../../firebaseConfig";
-import {
-  StyleSheet,
-  View,
-  Text,
-  TextInput,
-  TouchableWithoutFeedback,
-  Keyboard,
-  TouchableOpacity,
-} from "react-native";
-import { doc, setDoc } from "firebase/firestore";
-import getLocationFromDevice from "@/utils/getLocationFromDevice";
-import { z } from "zod";
-import { SubmitHandler, Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FirebaseError } from "firebase/app";
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { Controller, SubmitHandler, useForm } from "react-hook-form";
+import {
+  Keyboard,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  TouchableWithoutFeedback,
+  View,
+} from "react-native";
+import { z } from "zod";
+
+import { setUser } from "@/server";
 import getFirebaseAuthErrorMessage from "@/utils/getFirebaseAuthErrorMessage";
+import getLocationFromDevice from "@/utils/getLocationFromDevice";
+
+import { firebaseAuth } from "../../../firebaseConfig";
 
 const signUpFormSchema = z.object({
   displayName: z.string().min(1, { message: "Display name is required" }),
@@ -48,11 +50,7 @@ export default function SignUp() {
 
       const location = await getLocationFromDevice();
 
-      setDoc(doc(db, "users", credentials.user.uid), {
-        displayName,
-        latitude: location.latitude,
-        longitude: location.longitude,
-      });
+      await setUser(credentials.user, location, displayName);
     } catch (error) {
       if (error instanceof FirebaseError) {
         setError("root", {

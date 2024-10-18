@@ -6,9 +6,15 @@ module.exports = {
     "expo",
     "prettier",
   ],
-  plugins: ["prettier"],
+  plugins: ["prettier", "simple-import-sort"],
   rules: {
     "prettier/prettier": "warn",
     "@typescript-eslint/consistent-type-definitions": ["error", "type"],
+    "simple-import-sort/imports": "error",
+    "simple-import-sort/exports": "error",
+  },
+  parserOptions: {
+    sourceType: "module",
+    ecmaVersion: "latest",
   },
 };

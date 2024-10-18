@@ -1,11 +1,12 @@
-import { NavigationContainer } from "@react-navigation/native";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import HomeScreen from "@/screens/HomeScreen";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import ProfileScreen from "@/screens/ProfileScreen";
-import HabitsScreen from "@/screens/HabitsScreen";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { NavigationContainer } from "@react-navigation/native";
+
 import HabitProvider from "@/components/Habits/HabitProvider";
+import HabitsScreen from "@/screens/HabitsScreen";
 import HistoryScreen from "@/screens/HistoryScreen";
+import HomeScreen from "@/screens/HomeScreen";
+import ProfileScreen from "@/screens/ProfileScreen";
 
 const getIconName = (
   routeName: string,

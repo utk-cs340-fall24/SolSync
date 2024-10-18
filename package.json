@@ -7,7 +7,8 @@
     "android": "expo start --android",
     "ios": "expo start --ios",
     "web": "expo start --web",
-    "lint": "eslint src App.tsx",
+    "lint": "eslint src App.tsx --fix",
+    "check-lint": "eslint src App.tsx",
     "check-format": "prettier --check src App.tsx",
     "format": "prettier --write src App.tsx"
   },
@@ -42,6 +43,7 @@
     "eslint-config-expo": "^7.1.2",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-prettier": "^5.2.1",
+    "eslint-plugin-simple-import-sort": "^12.1.1",
     "prettier": "^3.3.3",
     "typescript": "~5.3.3"
   },

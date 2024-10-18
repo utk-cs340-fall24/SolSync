@@ -1,20 +1,22 @@
+import { LinearGradient } from "expo-linear-gradient";
 import { signOut } from "firebase/auth";
 import { useState } from "react";
 import {
+  Alert,
+  Modal,
+  Pressable,
   StyleSheet,
-  View,
   Text,
   TouchableOpacity,
-  Modal,
-  Alert,
-  Pressable,
+  View,
 } from "react-native";
-import { default as FAIcon } from "react-native-vector-icons/FontAwesome";
-import { firebaseAuth } from "../../../firebaseConfig";
-import getLocationFromDevice from "@/utils/getLocationFromDevice";
-import { LinearGradient } from "expo-linear-gradient";
 import { default as FeatherIcon } from "react-native-vector-icons/Feather";
+import { default as FAIcon } from "react-native-vector-icons/FontAwesome";
+
 import useUser from "@/hooks/useUser";
+import getLocationFromDevice from "@/utils/getLocationFromDevice";
+
+import { firebaseAuth } from "../../../firebaseConfig";
 
 const gradientColors = ["#FFD18A", "#C6B9E4", "#81A8F4"];
 const colorsLocations = [0.15, 0.65, 1];

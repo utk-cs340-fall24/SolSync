@@ -1,13 +1,13 @@
-import { useHabit } from "@/hooks/useHabit";
-import useUser from "@/hooks/useUser";
-import { Habit, History } from "@/types";
 import dayjs from "dayjs";
-import { collection, getDocs, query, where } from "firebase/firestore";
 import { useEffect, useState } from "react";
-import { View, StyleSheet, Text } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 import { Calendar } from "react-native-calendars";
 import { Dropdown } from "react-native-element-dropdown";
-import { db } from "../../../firebaseConfig";
+
+import { useHabit } from "@/hooks/useHabit";
+import useUser from "@/hooks/useUser";
+import { getHistory } from "@/server/histories";
+import { Habit, History } from "@/types";
 
 type DropdownItem = {
   label: string;
@@ -43,25 +43,12 @@ export default function Habits() {
   useEffect(() => {
     if (!user) return;
 
-    const fetchHabits = async () => {
-      const historyQuery = await getDocs(
-        query(collection(db, "history"), where("userId", "==", user?.uid)),
-      );
-
-      const history = historyQuery.docs.map(
-        (doc) =>
-          ({
-            id: doc.id,
-            date: doc.data().date.toDate(),
-            habitId: doc.data().habitId,
-            userId: doc.data().userId,
-          }) as History,
-      );
-
+    const fetchHistory = async () => {
+      const history = await getHistory(user);
       setHistory(history);
     };
 
-    fetchHabits();
+    fetchHistory();
   }, [user]);
 
   useEffect(() => {

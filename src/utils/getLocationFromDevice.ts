@@ -1,6 +1,6 @@
 import {
-  requestForegroundPermissionsAsync,
   getLastKnownPositionAsync,
+  requestForegroundPermissionsAsync,
 } from "expo-location";
 
 import { Location } from "@/types";

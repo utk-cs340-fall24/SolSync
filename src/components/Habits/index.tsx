@@ -1,8 +1,10 @@
-import useUser from "@/hooks/useUser";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { View, StyleSheet, Text } from "react-native";
-import HabitList from "./HabitList";
+import { StyleSheet, Text, View } from "react-native";
+
+import useUser from "@/hooks/useUser";
+
 import HabitForm from "./HabitForm";
+import HabitList from "./HabitList";
 
 export type HabitStackParamList = {
   HabitList: undefined;

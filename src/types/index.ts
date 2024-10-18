@@ -13,7 +13,6 @@ type NullLocation = {
 
 export type Location = ValidLocation | NullLocation;
 
-// TODO: Trishu spec this out and also how do we get this from the database?
 export type SolSyncUser = User & {
   displayName: string;
   location: Location;
@@ -25,7 +24,6 @@ export type Habit = {
   name: string;
   notificationPeriod: "sunrise" | "sunset";
   emailNotificationEnabled: boolean;
-  pushNotificationEnabled: boolean;
   hourOffset: number;
   minuteOffset: number;
   offsetDirection: "before" | "after";

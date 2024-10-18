@@ -1,13 +1,19 @@
-import { User, onAuthStateChanged } from "firebase/auth";
+import { onAuthStateChanged } from "firebase/auth";
 import { useEffect, useState } from "react";
+
+import { getUser } from "@/server";
+import { SolSyncUser } from "@/types";
+
 import { firebaseAuth } from "../../firebaseConfig";
 
-const useUser = (): User | null => {
-  const [user, setUser] = useState<User | null>(null);
+const useUser = (): SolSyncUser | null => {
+  const [user, setUser] = useState<SolSyncUser | null>(null);
 
   useEffect(() => {
-    onAuthStateChanged(firebaseAuth, (user) => {
-      setUser(user ? user : null);
+    onAuthStateChanged(firebaseAuth, (firebaseAuthUser) => {
+      getUser(firebaseAuthUser).then((user) => {
+        setUser(user);
+      });
     });
   }, []);
 
