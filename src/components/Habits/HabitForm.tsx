@@ -3,12 +3,14 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { randomUUID } from "expo-crypto";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import {
+  ActivityIndicator,
   Button,
   Keyboard,
   Switch,
   Text,
   TextInput,
   TouchableWithoutFeedback,
+  View,
 } from "react-native";
 import { SafeAreaView, StyleSheet } from "react-native";
 import { Dropdown } from "react-native-element-dropdown";
@@ -63,7 +65,11 @@ export default function HabitForm({ navigation }: HabitFormProps) {
   const user = useUser();
 
   if (!user) {
-    return <Text>Please log in to add a habit</Text>;
+    return (
+      <View style={styles.container}>
+        <ActivityIndicator size="small" color="#000000" />
+      </View>
+    );
   }
 
   const onSubmit: SubmitHandler<HabitFormValues> = async (data) => {
