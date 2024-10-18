@@ -24,7 +24,7 @@ export const getHabits = async (user: SolSyncUser): Promise<Habit[]> => {
   return habits;
 };
 
-export const addHabit = async (habit: Habit) => {
+export const createHabit = async (habit: Habit) => {
   await setDoc(doc(db, "habits", habit.id), habit);
 };
 
