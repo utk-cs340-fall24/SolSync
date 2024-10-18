@@ -1,4 +1,20 @@
-# SolSync
+<h1 align="center">
+  <br>
+    <img src="assets/app-icon.png" alt="SolSync Logo" width="25%">  
+  <br>
+    SolSync
+  <br>
+</h1>
+
+<h2 align="center">An app to track your habits with the sun</h2>
+
+## Group Members
+
+- Rudra Patel (RudraPatel2003)
+- Kaylee Bae (baekay000)
+- Amy Huang (amy-huang16)
+- Trishu Patel (Trishu-Patel)
+- Valli Paladugu (vallipaladugu)
 
 ## Description
 
@@ -14,13 +30,28 @@ The initial inspiration for this product was the Hindu practice known as Agnihot
 - Expo Go App
 - PNPM
 
-### Installation
+### Installing and Running the App
 
 1. Clone the repo
 2. Obtain a copy of the .env file from one of the SolSync team members and place it in the root directory of the project
 3. Run `pnpm install` to install all dependencies
 4. Run `pnpm start` to start the app
 5. Scan the QR code with the Expo Go app to open the app on your phone, or, alternatively, use a locally installed emulator
+
+## Usage
+
+Upon first opening the app, you will be taken to the home page.
+The home page asks for your location and displays the sunrise and sunset times for the current location.
+
+If not logged in, this is the only functionality available.
+
+The profile page is accessed by clicking the profile icon at the bottom. This takes you to a page where you can log in or sign up.
+
+Upon logging in, the app has many more features.
+
+- The app remembers the location you typically use so that the time displayed on the home page is accurate even if you move around. This location can be reset by clicking the "Reset Your Location" button found on the profile page.
+- The habits page lets users add, edit, and delete habits, as well as set up notifications for each habit.
+- The history page shows how consistent the user has been with their habits. A habit can be tracked on it on the habits page on a given day.
 
 ## Contributing
 
