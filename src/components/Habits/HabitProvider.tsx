@@ -1,17 +1,8 @@
-import { createContext, useState, useEffect } from "react";
+import { createContext, useEffect, useState } from "react";
 
-import { Habit } from "@/types";
-import {
-  collection,
-  deleteDoc,
-  doc,
-  getDocs,
-  query,
-  setDoc,
-  where,
-} from "firebase/firestore";
-import { db } from "../../../firebaseConfig";
 import useUser from "@/hooks/useUser";
+import { createHabit, deleteHabit, getHabits } from "@/server";
+import { Habit } from "@/types";
 
 export type HabitContextType = {
   habits: Habit[];
@@ -27,20 +18,13 @@ type HabitProviderProps = {
 
 export default function HabitProvider({ children }: HabitProviderProps) {
   const [habits, setHabits] = useState<Habit[]>([]);
-  const user = useUser();
+  const [user] = useUser();
 
   useEffect(() => {
     if (!user) return;
 
     const fetchHabits = async () => {
-      const habitsQuery = await getDocs(
-        query(collection(db, "habits"), where("userId", "==", user?.uid)),
-      );
-
-      const habits = habitsQuery.docs.map(
-        (doc) => ({ id: doc.id, ...doc.data() }) as Habit,
-      );
-
+      const habits = await getHabits(user);
       setHabits(habits);
     };
 
@@ -50,7 +34,7 @@ export default function HabitProvider({ children }: HabitProviderProps) {
   const addHabit = async (habit: Habit) => {
     setHabits((prevHabits) => [...prevHabits, habit]);
 
-    await setDoc(doc(db, "habits", habit.id), habit);
+    await createHabit(habit);
   };
 
   const removeHabit = async (habit: Habit) => {
@@ -58,7 +42,7 @@ export default function HabitProvider({ children }: HabitProviderProps) {
       prevHabits.filter((prevHabit) => prevHabit.id !== habit.id),
     );
 
-    await deleteDoc(doc(db, "habits", habit.id));
+    await deleteHabit(habit);
   };
 
   return (

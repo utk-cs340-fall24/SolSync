@@ -1,20 +1,22 @@
+import { zodResolver } from "@hookform/resolvers/zod";
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import { FirebaseError } from "firebase/app";
 import { signInWithEmailAndPassword } from "firebase/auth";
-import { firebaseAuth } from "../../../firebaseConfig";
+import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import {
+  Keyboard,
   StyleSheet,
-  View,
   Text,
   TextInput,
-  TouchableWithoutFeedback,
-  Keyboard,
   TouchableOpacity,
+  TouchableWithoutFeedback,
+  View,
 } from "react-native";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { z } from "zod";
-import { FirebaseError } from "firebase/app";
+
 import getFirebaseAuthErrorMessage from "@/utils/getFirebaseAuthErrorMessage";
-import { NativeStackScreenProps } from "@react-navigation/native-stack";
+
+import { firebaseAuth } from "../../../firebaseConfig";
 import { ProfileStackParamList } from "../Profile";
 
 type LogInPageProps = NativeStackScreenProps<ProfileStackParamList, "LogIn">;

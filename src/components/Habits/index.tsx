@@ -1,8 +1,11 @@
-import useUser from "@/hooks/useUser";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { View, StyleSheet, Text } from "react-native";
-import HabitList from "./HabitList";
+import { StyleSheet, Text, View } from "react-native";
+import { ActivityIndicator } from "react-native";
+
+import useUser from "@/hooks/useUser";
+
 import HabitForm from "./HabitForm";
+import HabitList from "./HabitList";
 
 export type HabitStackParamList = {
   HabitList: undefined;
@@ -12,8 +15,15 @@ export type HabitStackParamList = {
 const Stack = createNativeStackNavigator<HabitStackParamList>();
 
 export default function Habits() {
-  const user = useUser();
+  const [user, userIsLoading] = useUser();
 
+  if (userIsLoading) {
+    return (
+      <View style={styles.container}>
+        <ActivityIndicator size="small" color="#000000" />
+      </View>
+    );
+  }
   if (!user) {
     return (
       <View style={styles.container}>

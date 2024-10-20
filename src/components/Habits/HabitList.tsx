@@ -1,15 +1,17 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { HabitStackParamList } from ".";
-import { useHabit } from "@/hooks/useHabit";
 import React from "react";
 import {
-  SafeAreaView,
   Button,
   FlatList,
   Pressable,
-  Text,
+  SafeAreaView,
   StyleSheet,
+  Text,
 } from "react-native";
+
+import { useHabit } from "@/hooks/useHabit";
+
+import { HabitStackParamList } from ".";
 
 type HabitListProps = NativeStackScreenProps<HabitStackParamList, "HabitList">;
 

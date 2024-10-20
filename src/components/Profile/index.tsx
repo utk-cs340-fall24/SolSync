@@ -1,9 +1,12 @@
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import React from "react";
-import AuthorizedProfile from "./AuthorizedProfile";
+import { ActivityIndicator, StyleSheet, View } from "react-native";
+
+import useUser from "@/hooks/useUser";
+
 import LogIn from "../LogIn";
 import SignUp from "../SignUp";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import useUser from "@/hooks/useUser";
+import AuthorizedProfile from "./AuthorizedProfile";
 
 export type ProfileStackParamList = {
   LogIn: undefined;
@@ -14,7 +17,15 @@ export type ProfileStackParamList = {
 const Stack = createNativeStackNavigator<ProfileStackParamList>();
 
 export default function Profile() {
-  const user = useUser();
+  const [user, userIsLoading] = useUser();
+
+  if (userIsLoading) {
+    return (
+      <View style={styles.container}>
+        <ActivityIndicator size="small" color="#000000" />
+      </View>
+    );
+  }
 
   return (
     <Stack.Navigator screenOptions={{ headerTitle: "" }}>
@@ -37,3 +48,12 @@ export default function Profile() {
     </Stack.Navigator>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "#fff",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+});

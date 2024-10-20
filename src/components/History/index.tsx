@@ -1,21 +1,22 @@
-import { useHabit } from "@/hooks/useHabit";
-import useUser from "@/hooks/useUser";
-import { Habit, History } from "@/types";
 import dayjs from "dayjs";
-import { collection, getDocs, query, where } from "firebase/firestore";
 import { useEffect, useState } from "react";
-import { View, StyleSheet, Text } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
+import { ActivityIndicator } from "react-native";
 import { Calendar } from "react-native-calendars";
 import { Dropdown } from "react-native-element-dropdown";
-import { db } from "../../../firebaseConfig";
+
+import { useHabit } from "@/hooks/useHabit";
+import useUser from "@/hooks/useUser";
+import { getHistory } from "@/server/histories";
+import { Habit, History } from "@/types";
 
 type DropdownItem = {
   label: string;
   value: string;
 };
 
-export default function Habits() {
-  const user = useUser();
+export default function HistoryComponent() {
+  const [user, userIsLoading] = useUser();
   const { habits } = useHabit();
   const [currentHabit, setCurrentHabit] = useState<Habit>();
   const [history, setHistory] = useState<History[]>();
@@ -43,25 +44,12 @@ export default function Habits() {
   useEffect(() => {
     if (!user) return;
 
-    const fetchHabits = async () => {
-      const historyQuery = await getDocs(
-        query(collection(db, "history"), where("userId", "==", user?.uid)),
-      );
-
-      const history = historyQuery.docs.map(
-        (doc) =>
-          ({
-            id: doc.id,
-            date: doc.data().date.toDate(),
-            habitId: doc.data().habitId,
-            userId: doc.data().userId,
-          }) as History,
-      );
-
+    const fetchHistory = async () => {
+      const history = await getHistory(user);
       setHistory(history);
     };
 
-    fetchHabits();
+    fetchHistory();
   }, [user]);
 
   useEffect(() => {
@@ -79,6 +67,14 @@ export default function Habits() {
 
     setCalendarDates(calenderDates);
   }, [currentHabit?.id, history]);
+
+  if (userIsLoading) {
+    return (
+      <View style={styles.container}>
+        <ActivityIndicator size="small" color="#000000" />
+      </View>
+    );
+  }
 
   if (!user) {
     return (

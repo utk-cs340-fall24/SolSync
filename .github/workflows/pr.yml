@@ -41,7 +41,7 @@ jobs:
         run: pnpm install
 
       - name: Enforce linting rules
-        run: pnpm run lint
+        run: pnpm run check-lint
 
       - name: Enforce formatting rules
         run: pnpm run check-format

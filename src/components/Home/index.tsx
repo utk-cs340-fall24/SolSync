@@ -1,9 +1,8 @@
-import React, { useEffect, useState } from "react";
-import { StyleSheet, View, Text, Image, ActivityIndicator } from "react-native";
-import { LinearGradient } from "expo-linear-gradient";
-
-import sun from "@assets/sun.png";
 import cloud from "@assets/simple_cloud.png";
+import sun from "@assets/sun.png";
+import { LinearGradient } from "expo-linear-gradient";
+import React, { useEffect, useState } from "react";
+import { ActivityIndicator, Image, StyleSheet, Text, View } from "react-native";
 
 const Hour = new Date().getHours();
 const isDay = Hour >= 0 && Hour < 12;

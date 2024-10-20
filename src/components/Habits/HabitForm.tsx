@@ -1,27 +1,30 @@
-import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { HabitStackParamList } from ".";
-import { z } from "zod";
-import { useHabit } from "@/hooks/useHabit";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm, SubmitHandler, Controller } from "react-hook-form";
-import useUser from "@/hooks/useUser";
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import { randomUUID } from "expo-crypto";
+import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import {
+  ActivityIndicator,
   Button,
   Keyboard,
   Switch,
   Text,
   TextInput,
   TouchableWithoutFeedback,
+  View,
 } from "react-native";
-import { randomUUID } from "expo-crypto";
 import { SafeAreaView, StyleSheet } from "react-native";
 import { Dropdown } from "react-native-element-dropdown";
+import { z } from "zod";
+
+import { useHabit } from "@/hooks/useHabit";
+import useUser from "@/hooks/useUser";
+
+import { HabitStackParamList } from ".";
 
 const habitFormSchema = z.object({
   name: z.string().min(1, { message: "Name is required" }),
   notificationPeriod: z.enum(["sunrise", "sunset"]),
   emailNotificationEnabled: z.boolean(),
-  pushNotificationEnabled: z.boolean(),
   hourOffset: z
     .number()
     .min(0, { message: "Hour offset must be a positive number" })
@@ -49,7 +52,6 @@ export default function HabitForm({ navigation }: HabitFormProps) {
       name: "",
       notificationPeriod: "sunrise",
       emailNotificationEnabled: true,
-      pushNotificationEnabled: true,
       minuteOffset: 0,
       hourOffset: 0,
       offsetDirection: "before",
@@ -60,7 +62,17 @@ export default function HabitForm({ navigation }: HabitFormProps) {
 
   const { addHabit } = useHabit();
 
-  const user = useUser();
+  const [user, userIsLoading] = useUser();
+
+  console.log(userIsLoading);
+
+  if (userIsLoading) {
+    return (
+      <View style={styles.container}>
+        <ActivityIndicator size="small" color="#000000" />
+      </View>
+    );
+  }
 
   if (!user) {
     return <Text>Please log in to add a habit</Text>;
@@ -71,7 +83,6 @@ export default function HabitForm({ navigation }: HabitFormProps) {
       name,
       notificationPeriod,
       emailNotificationEnabled,
-      pushNotificationEnabled,
       hourOffset,
       minuteOffset,
       offsetDirection,
@@ -83,7 +94,6 @@ export default function HabitForm({ navigation }: HabitFormProps) {
       name,
       notificationPeriod,
       emailNotificationEnabled,
-      pushNotificationEnabled,
       hourOffset,
       minuteOffset,
       offsetDirection,
@@ -153,26 +163,6 @@ export default function HabitForm({ navigation }: HabitFormProps) {
         {errors.emailNotificationEnabled && (
           <Text style={{ color: "red" }}>
             {errors.emailNotificationEnabled.message}
-          </Text>
-        )}
-        <Text>Push Notifications</Text>
-        <Controller
-          control={control}
-          name="pushNotificationEnabled"
-          render={({ field: { onChange, value } }) => (
-            <Switch
-              trackColor={{ false: "#767577", true: "#81b0ff" }}
-              thumbColor={value ? "#f5dd4b" : "#f4f3f4"}
-              ios_backgroundColor="#3e3e3e"
-              onValueChange={onChange}
-              value={value}
-            />
-          )}
-        />
-
-        {errors.pushNotificationEnabled && (
-          <Text style={{ color: "red" }}>
-            {errors.pushNotificationEnabled.message}
           </Text>
         )}
 
