@@ -9,6 +9,7 @@ const isDay = Hour >= 0 && Hour < 12;
 
 let gradientColors = ["#FFFFFF"];
 let colorsLocations = [0];
+let IntroMsg = "";
 
 if (isDay) {
   gradientColors = ["#81A8F4", "#A4B3D6", "#E1C7A3", "#FFD18A"];
@@ -16,6 +17,14 @@ if (isDay) {
 } else {
   gradientColors = ["#FFD18A", "#FDC28D", "#FAB38F", "#F6A494"];
   colorsLocations = [0.2, 0.4, 0.7, 0.9];
+}
+
+if (Hour >= 3 && Hour < 12) {
+  IntroMsg = "Good Morning";
+} else if (Hour >= 12 && Hour < 18) {
+  IntroMsg = "Good Afternoon";
+} else {
+  IntroMsg = "Good Evening";
 }
 
 export default function Home() {
@@ -66,7 +75,7 @@ export default function Home() {
       style={styles.container}
     >
       <View style={styles.content}>
-        <Text style={styles.Hello}>Hello Amy!</Text>
+        <Text style={styles.Hello}>{IntroMsg}</Text>
         <Image style={styles.sun} source={sun} />
         <Image style={styles.cloud} source={cloud} />
         {loading ? (
