@@ -1,27 +1,28 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { randomUUID } from "expo-crypto";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import {
   ActivityIndicator,
   Button,
   Keyboard,
+  SafeAreaView,
+  StyleSheet,
   Switch,
   Text,
   TextInput,
   TouchableWithoutFeedback,
   View,
 } from "react-native";
-import { SafeAreaView, StyleSheet } from "react-native";
 import { Dropdown } from "react-native-element-dropdown";
 import { z } from "zod";
 
 import { useHabit } from "@/hooks/useHabit";
 import useUser from "@/hooks/useUser";
+import { Habit } from "@/types";
 
 import { HabitStackParamList } from ".";
 
-const addHabitFormSchema = z.object({
+const editHabitFormSchema = z.object({
   name: z.string().min(1, { message: "Name is required" }),
   notificationPeriod: z.enum(["sunrise", "sunset"]),
   emailNotificationEnabled: z.boolean(),
@@ -36,34 +37,39 @@ const addHabitFormSchema = z.object({
   offsetDirection: z.enum(["before", "after"]),
 });
 
-type AddHabitFormValues = z.infer<typeof addHabitFormSchema>;
+type EditHabitFormValues = z.infer<typeof editHabitFormSchema>;
 
-type AddHabitFormProps = NativeStackScreenProps<
+type EditHabitFormProps = NativeStackScreenProps<
   HabitStackParamList,
-  "AddHabitForm"
+  "EditHabitForm"
 >;
 
-export default function AddHabitForm({ navigation }: AddHabitFormProps) {
+export default function EditHabitForm({
+  navigation,
+  route,
+}: EditHabitFormProps) {
+  const { habit } = route.params;
+
   const {
     control,
     handleSubmit,
     formState: { errors },
     watch,
-  } = useForm<AddHabitFormValues>({
-    resolver: zodResolver(addHabitFormSchema),
+  } = useForm<EditHabitFormValues>({
+    resolver: zodResolver(editHabitFormSchema),
     defaultValues: {
-      name: "",
-      notificationPeriod: "sunrise",
-      emailNotificationEnabled: true,
-      minuteOffset: 0,
-      hourOffset: 0,
-      offsetDirection: "before",
+      name: habit.name,
+      notificationPeriod: habit.notificationPeriod,
+      emailNotificationEnabled: habit.emailNotificationEnabled,
+      hourOffset: habit.hourOffset,
+      minuteOffset: habit.minuteOffset,
+      offsetDirection: habit.offsetDirection,
     },
   });
 
   const notificationPeriod = watch("notificationPeriod");
 
-  const { addHabit } = useHabit();
+  const { updateHabit, removeHabit } = useHabit();
 
   const [user, userIsLoading] = useUser();
 
@@ -79,7 +85,7 @@ export default function AddHabitForm({ navigation }: AddHabitFormProps) {
     return <Text>Please log in to add a habit</Text>;
   }
 
-  const onSubmit: SubmitHandler<AddHabitFormValues> = async (data) => {
+  const onSubmit: SubmitHandler<EditHabitFormValues> = async (data) => {
     const {
       name,
       notificationPeriod,
@@ -89,8 +95,8 @@ export default function AddHabitForm({ navigation }: AddHabitFormProps) {
       offsetDirection,
     } = data;
 
-    await addHabit({
-      id: randomUUID(),
+    await updateHabit({
+      id: habit.id,
       userId: user.uid,
       name,
       notificationPeriod,
@@ -100,6 +106,11 @@ export default function AddHabitForm({ navigation }: AddHabitFormProps) {
       offsetDirection,
     });
 
+    navigation.navigate("HabitList");
+  };
+
+  const handleDelete = async (habit: Habit) => {
+    await removeHabit(habit);
     navigation.navigate("HabitList");
   };
 
@@ -233,9 +244,21 @@ export default function AddHabitForm({ navigation }: AddHabitFormProps) {
         )}
 
         <Button
-          title="Add Habit"
+          title="Update Habit"
           color="purple"
           onPress={handleSubmit(onSubmit)}
+        />
+
+        <Button
+          title="Delete"
+          color="purple"
+          onPress={() => handleDelete(habit)}
+        />
+
+        <Button
+          title="Cancel"
+          color="purple"
+          onPress={() => navigation.navigate("HabitList")}
         />
       </SafeAreaView>
     </TouchableWithoutFeedback>

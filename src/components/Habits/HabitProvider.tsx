@@ -7,6 +7,7 @@ import { Habit } from "@/types";
 export type HabitContextType = {
   habits: Habit[];
   addHabit: (habit: Habit) => void;
+  updateHabit: (habit: Habit) => void;
   removeHabit: (habit: Habit) => void;
 };
 
@@ -37,6 +38,16 @@ export default function HabitProvider({ children }: HabitProviderProps) {
     await upsertHabit(habit);
   };
 
+  const updateHabit = async (habit: Habit) => {
+    setHabits((prevHabits) =>
+      prevHabits.map((prevHabit) =>
+        prevHabit.id === habit.id ? habit : prevHabit,
+      ),
+    );
+
+    await upsertHabit(habit);
+  };
+
   const removeHabit = async (habit: Habit) => {
     setHabits((prevHabits) =>
       prevHabits.filter((prevHabit) => prevHabit.id !== habit.id),
@@ -50,6 +61,7 @@ export default function HabitProvider({ children }: HabitProviderProps) {
       value={{
         habits,
         addHabit,
+        updateHabit,
         removeHabit,
       }}
     >

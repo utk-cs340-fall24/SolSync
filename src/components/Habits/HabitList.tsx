@@ -16,7 +16,7 @@ import { HabitStackParamList } from ".";
 type HabitListProps = NativeStackScreenProps<HabitStackParamList, "HabitList">;
 
 export default function HabitList({ navigation }: HabitListProps) {
-  const { habits, removeHabit } = useHabit();
+  const { habits } = useHabit();
 
   return (
     <SafeAreaView style={styles.container}>
@@ -26,7 +26,9 @@ export default function HabitList({ navigation }: HabitListProps) {
           <Button
             title={item.name}
             color="purple"
-            onPress={() => removeHabit(item)}
+            onPress={() =>
+              navigation.navigate("EditHabitForm", { habit: item })
+            }
           />
         )}
       />
@@ -40,7 +42,7 @@ export default function HabitList({ navigation }: HabitListProps) {
           alignSelf: "center",
           borderRadius: 10,
         }}
-        onPress={() => navigation.navigate("HabitForm")}
+        onPress={() => navigation.navigate("AddHabitForm")}
       >
         <Text style={{ color: "white", textAlign: "center" }}>Add Habit</Text>
       </Pressable>

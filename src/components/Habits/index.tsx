@@ -3,13 +3,16 @@ import { StyleSheet, Text, View } from "react-native";
 import { ActivityIndicator } from "react-native";
 
 import useUser from "@/hooks/useUser";
+import { Habit } from "@/types";
 
 import AddHabitForm from "./AddHabitForm";
+import EditHabitForm from "./EditHabitForm";
 import HabitList from "./HabitList";
 
 export type HabitStackParamList = {
   HabitList: undefined;
-  HabitForm: undefined;
+  AddHabitForm: undefined;
+  EditHabitForm: { habit: Habit };
 };
 
 const Stack = createNativeStackNavigator<HabitStackParamList>();
@@ -38,7 +41,10 @@ export default function Habits() {
         <Stack.Screen name="HabitList" component={HabitList} />
       </Stack.Group>
       <Stack.Group screenOptions={{ presentation: "modal" }}>
-        <Stack.Screen name="HabitForm" component={AddHabitForm} />
+        <Stack.Screen name="AddHabitForm" component={AddHabitForm} />
+      </Stack.Group>
+      <Stack.Group screenOptions={{ presentation: "modal" }}>
+        <Stack.Screen name="EditHabitForm" component={EditHabitForm} />
       </Stack.Group>
     </Stack.Navigator>
   );
