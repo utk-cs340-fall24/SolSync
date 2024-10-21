@@ -1,7 +1,7 @@
 import { createContext, useEffect, useState } from "react";
 
 import useUser from "@/hooks/useUser";
-import { createHabit, deleteHabit, getHabits } from "@/server";
+import { deleteHabit, getHabits, upsertHabit } from "@/server";
 import { Habit } from "@/types";
 
 export type HabitContextType = {
@@ -34,7 +34,7 @@ export default function HabitProvider({ children }: HabitProviderProps) {
   const addHabit = async (habit: Habit) => {
     setHabits((prevHabits) => [...prevHabits, habit]);
 
-    await createHabit(habit);
+    await upsertHabit(habit);
   };
 
   const removeHabit = async (habit: Habit) => {
