@@ -75,7 +75,7 @@ export default function SignUp() {
                 autoCorrect={false}
                 autoCapitalize="words"
                 style={styles.input}
-                placeholder="Username"
+                placeholder="Display Name"
                 onChangeText={onChange}
                 onBlur={onBlur}
                 value={value}

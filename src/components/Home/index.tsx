@@ -1,6 +1,8 @@
 import cloud from "@assets/simple_cloud.png";
 import sun from "@assets/sun.png";
 import { LinearGradient } from "expo-linear-gradient";
+import useUser from "../../hooks/useUser";
+import getLocationFromDevice from "@/utils/getLocationFromDevice";
 import React, { useEffect, useState } from "react";
 import { ActivityIndicator, Image, StyleSheet, Text, View } from "react-native";
 
@@ -32,12 +34,20 @@ export default function Home() {
   const [sunset, setSunset] = useState<Date | null>();
   const [nextsunrise, setNextSunrise] = useState<Date | null>();
   const [loading, setLoading] = useState(true);
+  const [user, userLoading] = useUser();
 
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [user]);
 
   const fetchData = async () => {
+    let location = user?.location;
+    if (user) {
+      location = user.location
+    } else {
+      location = await getLocationFromDevice();
+    }
+    
     try {
       const response = await fetch(
         "https://u7t0yd53l2.execute-api.us-east-2.amazonaws.com/default/getSunriseTime",
@@ -47,8 +57,8 @@ export default function Home() {
             "x-api-key": process.env.EXPO_PUBLIC_SUNRISE_TIME_API_KEY as string,
           },
           body: JSON.stringify({
-            lat: "38.907192",
-            lng: "-77.036873",
+            lat: location.latitude,
+            lng: location.longitude,
           }),
         },
       );
@@ -149,10 +159,10 @@ const styles = StyleSheet.create({
     marginBottom: 30,
   },
   sun: {
-    width: 110,
+    width: 100,
     height: 100,
     marginTop: 30,
-    marginBottom: -115,
+    marginBottom: -116,
   },
   cloud: {
     width: 190,
