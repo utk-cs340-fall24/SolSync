@@ -4,11 +4,16 @@ import { LinearGradient } from "expo-linear-gradient";
 import React, { useEffect, useState } from "react";
 import { ActivityIndicator, Image, StyleSheet, Text, View } from "react-native";
 
+import getLocationFromDevice from "@/utils/getLocationFromDevice";
+
+import useUser from "../../hooks/useUser";
+
 const Hour = new Date().getHours();
 const isDay = Hour >= 0 && Hour < 12;
 
 let gradientColors = ["#FFFFFF"];
 let colorsLocations = [0];
+let IntroMsg = "";
 
 if (isDay) {
   gradientColors = ["#81A8F4", "#A4B3D6", "#E1C7A3", "#FFD18A"];
@@ -18,17 +23,33 @@ if (isDay) {
   colorsLocations = [0.2, 0.4, 0.7, 0.9];
 }
 
+if (Hour >= 3 && Hour < 12) {
+  IntroMsg = "Good Morning";
+} else if (Hour >= 12 && Hour < 18) {
+  IntroMsg = "Good Afternoon";
+} else {
+  IntroMsg = "Good Evening";
+}
+
 export default function Home() {
   const [sunrise, setSunrise] = useState<Date | null>();
   const [sunset, setSunset] = useState<Date | null>();
   const [nextsunrise, setNextSunrise] = useState<Date | null>();
   const [loading, setLoading] = useState(true);
+  const [user, userLoading] = useUser();
 
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [user]);
 
   const fetchData = async () => {
+    let location = user?.location;
+    if (user) {
+      location = user.location;
+    } else {
+      location = await getLocationFromDevice();
+    }
+
     try {
       const response = await fetch(
         "https://u7t0yd53l2.execute-api.us-east-2.amazonaws.com/default/getSunriseTime",
@@ -38,8 +59,8 @@ export default function Home() {
             "x-api-key": process.env.EXPO_PUBLIC_SUNRISE_TIME_API_KEY as string,
           },
           body: JSON.stringify({
-            lat: "38.907192",
-            lng: "-77.036873",
+            lat: location.latitude,
+            lng: location.longitude,
           }),
         },
       );
@@ -66,7 +87,7 @@ export default function Home() {
       style={styles.container}
     >
       <View style={styles.content}>
-        <Text style={styles.Hello}>Hello Amy!</Text>
+        <Text style={styles.Hello}>{IntroMsg}</Text>
         <Image style={styles.sun} source={sun} />
         <Image style={styles.cloud} source={cloud} />
         {loading ? (
@@ -140,10 +161,10 @@ const styles = StyleSheet.create({
     marginBottom: 30,
   },
   sun: {
-    width: 110,
+    width: 100,
     height: 100,
     marginTop: 30,
-    marginBottom: -115,
+    marginBottom: -116,
   },
   cloud: {
     width: 190,
