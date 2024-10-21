@@ -4,7 +4,7 @@ import { ActivityIndicator } from "react-native";
 
 import useUser from "@/hooks/useUser";
 
-import HabitForm from "./HabitForm";
+import AddHabitForm from "./AddHabitForm";
 import HabitList from "./HabitList";
 
 export type HabitStackParamList = {
@@ -38,7 +38,7 @@ export default function Habits() {
         <Stack.Screen name="HabitList" component={HabitList} />
       </Stack.Group>
       <Stack.Group screenOptions={{ presentation: "modal" }}>
-        <Stack.Screen name="HabitForm" component={HabitForm} />
+        <Stack.Screen name="HabitForm" component={AddHabitForm} />
       </Stack.Group>
     </Stack.Navigator>
   );

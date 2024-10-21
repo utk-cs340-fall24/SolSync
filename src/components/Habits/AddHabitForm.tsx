@@ -40,7 +40,7 @@ type HabitFormValues = z.infer<typeof habitFormSchema>;
 
 type HabitFormProps = NativeStackScreenProps<HabitStackParamList, "HabitForm">;
 
-export default function HabitForm({ navigation }: HabitFormProps) {
+export default function AddHabitForm({ navigation }: HabitFormProps) {
   const {
     control,
     handleSubmit,
