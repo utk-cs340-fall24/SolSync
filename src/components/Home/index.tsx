@@ -1,10 +1,12 @@
 import cloud from "@assets/simple_cloud.png";
 import sun from "@assets/sun.png";
 import { LinearGradient } from "expo-linear-gradient";
-import useUser from "../../hooks/useUser";
-import getLocationFromDevice from "@/utils/getLocationFromDevice";
 import React, { useEffect, useState } from "react";
 import { ActivityIndicator, Image, StyleSheet, Text, View } from "react-native";
+
+import getLocationFromDevice from "@/utils/getLocationFromDevice";
+
+import useUser from "../../hooks/useUser";
 
 const Hour = new Date().getHours();
 const isDay = Hour >= 0 && Hour < 12;
@@ -43,11 +45,11 @@ export default function Home() {
   const fetchData = async () => {
     let location = user?.location;
     if (user) {
-      location = user.location
+      location = user.location;
     } else {
       location = await getLocationFromDevice();
     }
-    
+
     try {
       const response = await fetch(
         "https://u7t0yd53l2.execute-api.us-east-2.amazonaws.com/default/getSunriseTime",
