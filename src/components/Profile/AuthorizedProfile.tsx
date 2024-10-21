@@ -18,109 +18,110 @@ import getLocationFromDevice from "@/utils/getLocationFromDevice";
 
 import { firebaseAuth } from "../../../firebaseConfig";
 
-const gradientColors = ["#FFD18A", "#C6B9E4", "#81A8F4"];
-const colorsLocations = [0.15, 0.65, 1];
-
 export default function AuthorizedProfile() {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [user] = useUser();
   return (
-    <LinearGradient
-      colors={gradientColors}
-      locations={colorsLocations}
-      style={styles.container}
-    >
-      <View style={styles.content}>
-        <Modal
-          animationType="slide"
-          transparent={true}
-          visible={isModalVisible}
-          onRequestClose={() => {
-            Alert.alert("Modal has been closed.");
-            setIsModalVisible(!isModalVisible);
-          }}
-        >
-          <View style={styles.content}>
-            <View style={styles.modalView}>
-              <Text style={styles.modalText}>Edit Name and Email here</Text>
-              <Pressable
-                style={[styles.button, styles.buttonClose]}
-                onPress={() => setIsModalVisible(!isModalVisible)}
-              >
-                <Text style={styles.textStyle}>Save</Text>
-              </Pressable>
-            </View>
-          </View>
-        </Modal>
+    <View style={styles.container}>
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={isModalVisible}
+        onRequestClose={() => {
+          Alert.alert("Modal has been closed.");
+          setIsModalVisible(!isModalVisible);
+        }}
+      >
+        <View style={styles.modalView}>
+          <Text style={styles.modalText}>Edit Name and Email here</Text>
+          <Pressable
+            style={[styles.button, styles.buttonClose]}
+            onPress={() => setIsModalVisible(!isModalVisible)}
+          >
+            <Text style={styles.textStyle}>Save</Text>
+          </Pressable>
+        </View>
+      </Modal>
 
-        <TouchableOpacity style={styles.editButton}>
-          <FeatherIcon
-            name="edit"
-            size={38}
-            color="white"
-            onPress={() => setIsModalVisible(true)}
-          ></FeatherIcon>
-        </TouchableOpacity>
+      <TouchableOpacity style={styles.editButton}>
+        <FeatherIcon
+          name="edit"
+          size={38}
+          color="#5A5A5A"
+          onPress={() => setIsModalVisible(true)}
+        ></FeatherIcon>
+      </TouchableOpacity>
 
-        <Text style={styles.header}>Hello, Amy!</Text>
+      <Text style={styles.header}>Hello, {user?.displayName}!</Text>
 
-        <FAIcon
-          name="user-circle"
-          size={100}
-          color="black"
-          style={{ marginBottom: 60 }}
-        ></FAIcon>
-
-        <View style={styles.option}>
-          <Text style={{ width: 70 }}>Name: </Text>
-          <Text>Amy</Text>
+      <FAIcon
+        name="user-circle"
+        size={100}
+        color="gray"
+        style={{ marginBottom: 40 }}
+      ></FAIcon>
+      
+      <View style={styles.infoBox}>
+        <View style={styles.infoField}>
+          <Text style={styles.infoTitle}>Name: </Text>
+          <Text style={styles.infoValue}>{user?.displayName}</Text>
         </View>
         <View style={styles.line}></View>
-        <View style={styles.option}>
-          <Text style={{ width: 70 }}>Email: </Text>
-          <Text>{user?.email}</Text>
+        <View style={styles.infoField}>
+          <Text style={styles.infoTitle}>Email: </Text>
+          <Text style={styles.infoValue}>{user?.email}</Text>
         </View>
-
-        <TouchableOpacity
-          style={styles.locationButton}
-          onPress={() => getLocationFromDevice()}
-        >
-          <FAIcon
-            name="location-arrow"
-            size={25}
-            color="white"
-            style={{ marginHorizontal: 6 }}
-          ></FAIcon>
-          <Text style={styles.buttonText}>Reset Your Location</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          style={styles.logOutButton}
-          onPress={() => signOut(firebaseAuth)}
-        >
-          <FAIcon
-            name="sign-out"
-            size={25}
-            color="white"
-            style={{ marginHorizontal: 6 }}
-          ></FAIcon>
-          <Text style={styles.buttonText}>Log Out</Text>
-        </TouchableOpacity>
       </View>
-    </LinearGradient>
+
+      <View style={styles.infoBox}>
+        <View style={styles.infoField}>
+          <Text style={styles.infoTitle}>Latitude: </Text>
+          <Text style={styles.infoValue}>{user?.location?.latitude?.toPrecision(7)}</Text>
+        </View>
+        <View style={styles.line}></View>
+        <View style={styles.infoField}>
+          <Text style={styles.infoTitle}>Longitude: </Text>
+          <Text style={styles.infoValue}>{user?.location?.longitude?.toPrecision(7)}</Text>
+        </View>
+      </View>
+
+      <TouchableOpacity
+        style={styles.locationButton}
+        onPress={() => getLocationFromDevice()}
+      >
+        <FAIcon
+          name="location-arrow"
+          size={25}
+          color="white"
+          style={{ marginHorizontal: 6 }}
+        ></FAIcon>
+        <Text style={styles.buttonText}>Reset Your Location</Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity
+        style={styles.logOutButton}
+        onPress={() => signOut(firebaseAuth)}
+      >
+        <FAIcon
+          name="sign-out"
+          size={25}
+          color="white"
+          style={{ marginHorizontal: 6 }}
+        ></FAIcon>
+        <Text style={styles.buttonText}>Log Out</Text>
+      </TouchableOpacity>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-  },
-  content: {
-    flex: 1,
+    backgroundColor: "#F5F5F5",
     justifyContent: "center",
     alignItems: "center",
     marginTop: 20,
-  },
+  }, 
   editButton: {
     position: "absolute",
     top: "5%",
@@ -128,20 +129,35 @@ const styles = StyleSheet.create({
   },
   header: {
     fontSize: 30,
-    paddingBottom: 60,
+    paddingBottom: 40,
+    marginTop: 20,
   },
-  option: {
-    margin: 10,
-    flexDirection: "row",
-    justifyContent: "flex-start",
+  infoBox: {
+    backgroundColor: "#fff",
+    width: "95%",
+    padding: 20,
+    borderRadius: 8,
+    marginBottom: 20, // Spacing below the box
     alignItems: "center",
-    gap: 10,
-    width: "80%",
   },
+  infoField: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    gap: 10,
+    width: "100%",
+  },
+  infoTitle: {
+    width: 95, 
+    fontSize: 18,
+  }, 
+  infoValue: {
+    fontSize: 18,
+    color: "#5A5A5A",
+  }, 
   line: {
     height: 1,
-    width: "80%",
-    backgroundColor: "#918E8E",
+    width: "100%",
+    backgroundColor: "#F5F5F5",
     marginVertical: 14,
   },
   buttonText: {
@@ -151,27 +167,28 @@ const styles = StyleSheet.create({
     marginHorizontal: 12,
   },
   locationButton: {
-    backgroundColor: "#908BE8",
-    width: "64%",
+    backgroundColor: "#b38acb", // Light purple color
+    width: "95%",
     paddingVertical: 10,
     borderRadius: 8,
     alignItems: "center",
-    marginTop: 60,
+    marginTop: 20,
     flexDirection: "row",
     justifyContent: "center",
   },
   logOutButton: {
-    backgroundColor: "#908BE8",
-    width: "64%",
+    backgroundColor: "#f4a58a", // Light orange color
+    width: "95%",
     paddingVertical: 10,
     borderRadius: 8,
     alignItems: "center",
-    marginTop: 24,
+    marginTop: 20,
     flexDirection: "row",
     justifyContent: "center",
   },
   // modal stuff starting here
   modalView: {
+    flex: 1,
     margin: 20,
     backgroundColor: "white",
     borderRadius: 20,
