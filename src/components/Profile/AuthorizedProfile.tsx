@@ -19,21 +19,19 @@ import { firebaseAuth } from "../../../firebaseConfig";
 import { setUser } from "@/server";
 import { Location } from "@/types";
 
-
-
 export default function AuthorizedProfile() {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [user] = useUser();
 
   const handleUpdateLocation = () => {
-    if(!user){
-      return; 
+    if (!user) {
+      return;
     }
-    
+
     getLocationFromDevice().then((location) => {
       setUser(user as User, location, user.displayName);
     });
-  }
+  };
 
   return (
     <View style={styles.container}>
@@ -74,7 +72,7 @@ export default function AuthorizedProfile() {
         color="gray"
         style={{ marginBottom: 40 }}
       ></FAIcon>
-      
+
       <View style={styles.infoBox}>
         <View style={styles.infoField}>
           <Text style={styles.infoTitle}>Name: </Text>
@@ -90,12 +88,16 @@ export default function AuthorizedProfile() {
       <View style={styles.infoBox}>
         <View style={styles.infoField}>
           <Text style={styles.infoTitle}>Latitude: </Text>
-          <Text style={styles.infoValue}>{user?.location?.latitude?.toPrecision(7)}</Text>
+          <Text style={styles.infoValue}>
+            {user?.location?.latitude?.toPrecision(7)}
+          </Text>
         </View>
         <View style={styles.line}></View>
         <View style={styles.infoField}>
           <Text style={styles.infoTitle}>Longitude: </Text>
-          <Text style={styles.infoValue}>{user?.location?.longitude?.toPrecision(7)}</Text>
+          <Text style={styles.infoValue}>
+            {user?.location?.longitude?.toPrecision(7)}
+          </Text>
         </View>
       </View>
 
@@ -135,7 +137,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     marginTop: 20,
-  }, 
+  },
   editButton: {
     position: "absolute",
     top: "5%",
@@ -161,17 +163,17 @@ const styles = StyleSheet.create({
     width: "100%",
   },
   infoTitle: {
-    width: 95, 
+    width: 95,
     fontSize: 18,
     flexShrink: 1,
-  }, 
+  },
   infoValue: {
     fontSize: 18,
     color: "#5A5A5A",
-    textAlign: "right", 
+    textAlign: "right",
     flexShrink: 1,
     flexGrow: 1,
-  }, 
+  },
   line: {
     height: 1,
     width: "100%",
@@ -245,7 +247,3 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
 });
-function setUserLocation(location: Location) {
-  throw new Error("Function not implemented.");
-}
-
