@@ -11,13 +11,10 @@ import {
 } from "react-native";
 import { default as FeatherIcon } from "react-native-vector-icons/Feather";
 import { default as FAIcon } from "react-native-vector-icons/FontAwesome";
-
 import useUser from "@/hooks/useUser";
 import getLocationFromDevice from "@/utils/getLocationFromDevice";
-
 import { firebaseAuth } from "../../../firebaseConfig";
 import { setUser } from "@/server";
-import { Location } from "@/types";
 
 export default function AuthorizedProfile() {
   const [isModalVisible, setIsModalVisible] = useState(false);
