@@ -1,5 +1,4 @@
-import { LinearGradient } from "expo-linear-gradient";
-import { signOut } from "firebase/auth";
+import { signOut, User } from "firebase/auth";
 import { useState } from "react";
 import {
   Alert,
@@ -17,10 +16,25 @@ import useUser from "@/hooks/useUser";
 import getLocationFromDevice from "@/utils/getLocationFromDevice";
 
 import { firebaseAuth } from "../../../firebaseConfig";
+import { setUser } from "@/server";
+import { Location } from "@/types";
+
+
 
 export default function AuthorizedProfile() {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [user] = useUser();
+
+  const handleUpdateLocation = () => {
+    if(!user){
+      return; 
+    }
+    
+    getLocationFromDevice().then((location) => {
+      setUser(user as User, location, user.displayName);
+    });
+  }
+
   return (
     <View style={styles.container}>
       <Modal
@@ -87,7 +101,7 @@ export default function AuthorizedProfile() {
 
       <TouchableOpacity
         style={styles.locationButton}
-        onPress={() => getLocationFromDevice()}
+        onPress={handleUpdateLocation}
       >
         <FAIcon
           name="location-arrow"
@@ -149,10 +163,14 @@ const styles = StyleSheet.create({
   infoTitle: {
     width: 95, 
     fontSize: 18,
+    flexShrink: 1,
   }, 
   infoValue: {
     fontSize: 18,
     color: "#5A5A5A",
+    textAlign: "right", 
+    flexShrink: 1,
+    flexGrow: 1,
   }, 
   line: {
     height: 1,
@@ -227,3 +245,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
 });
+function setUserLocation(location: Location) {
+  throw new Error("Function not implemented.");
+}
+
