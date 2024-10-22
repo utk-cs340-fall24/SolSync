@@ -151,7 +151,7 @@ export default function Home() {
             <Text style={styles.Sunrise2Data}>Time Not Available</Text>
           </>
         )}
-        if ({noPermission}) <Text style={styles.Sunrise2}>{permissionMsg}</Text>
+        {noPermission && <Text style={styles.Sunrise2}>{permissionMsg}</Text>}
       </View>
     </LinearGradient>
   );
