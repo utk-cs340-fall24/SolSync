@@ -38,7 +38,7 @@ export default function Home() {
   const [sunset, setSunset] = useState<Date | null>();
   const [nextsunrise, setNextSunrise] = useState<Date | null>();
   const [loading, setLoading] = useState(true);
-  const [user] = useUser();
+  const [user, userLoading] = useUser();
 
   useEffect(() => {
     fetchData();
@@ -183,7 +183,7 @@ const styles = StyleSheet.create({
   Hello: {
     color: "white",
     fontWeight: "bold",
-    fontSize: 50,
+    fontSize: 45,
     marginTop: 40,
     marginBottom: 5,
   },
