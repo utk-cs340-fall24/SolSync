@@ -48,6 +48,11 @@ export default function Home() {
       location = user.location;
     } else {
       location = await getLocationFromDevice();
+      if (!(await getLocationFromDevice())) {
+        const persmissions = false;
+        const permissionMsg =
+          "Please allow location permissions to view current location's sunrise and sunset times";
+      }
     }
 
     try {
