@@ -14,6 +14,8 @@ const isDay = Hour >= 0 && Hour < 12;
 let gradientColors = ["#FFFFFF"];
 let colorsLocations = [0];
 let IntroMsg = "";
+let noPermission = false;
+let permissionMsg = "";
 
 if (isDay) {
   gradientColors = ["#81A8F4", "#A4B3D6", "#E1C7A3", "#FFD18A"];
@@ -49,8 +51,8 @@ export default function Home() {
     } else {
       location = await getLocationFromDevice();
       if (!(await getLocationFromDevice())) {
-        const persmissions = false;
-        const permissionMsg =
+        noPermission = true;
+        permissionMsg =
           "Please allow location permissions to view current location's sunrise and sunset times";
       }
     }
@@ -149,6 +151,7 @@ export default function Home() {
             <Text style={styles.Sunrise2Data}>Time Not Available</Text>
           </>
         )}
+        if ({noPermission}) <Text style={styles.Sunrise2}>{permissionMsg}</Text>
       </View>
     </LinearGradient>
   );
@@ -221,6 +224,13 @@ const styles = StyleSheet.create({
     color: "white",
     fontWeight: "bold",
     fontSize: 35,
+    alignItems: "center",
+    marginBottom: 5,
+  },
+  PermissionMessage: {
+    color: "white",
+    fontWeight: "normal",
+    fontSize: 15,
     alignItems: "center",
   },
 });
