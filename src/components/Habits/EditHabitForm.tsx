@@ -1,27 +1,28 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { randomUUID } from "expo-crypto";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import {
   ActivityIndicator,
   Button,
   Keyboard,
+  SafeAreaView,
+  StyleSheet,
   Switch,
   Text,
   TextInput,
   TouchableWithoutFeedback,
   View,
 } from "react-native";
-import { SafeAreaView, StyleSheet } from "react-native";
 import { Dropdown } from "react-native-element-dropdown";
 import { z } from "zod";
 
 import { useHabit } from "@/hooks/useHabit";
 import useUser from "@/hooks/useUser";
+import { Habit } from "@/types";
 
 import { HabitStackParamList } from ".";
 
-const habitFormSchema = z.object({
+const editHabitFormSchema = z.object({
   name: z.string().min(1, { message: "Name is required" }),
   notificationPeriod: z.enum(["sunrise", "sunset"]),
   emailNotificationEnabled: z.boolean(),
@@ -36,35 +37,41 @@ const habitFormSchema = z.object({
   offsetDirection: z.enum(["before", "after"]),
 });
 
-type HabitFormValues = z.infer<typeof habitFormSchema>;
+type EditHabitFormValues = z.infer<typeof editHabitFormSchema>;
 
-type HabitFormProps = NativeStackScreenProps<HabitStackParamList, "HabitForm">;
+type EditHabitFormProps = NativeStackScreenProps<
+  HabitStackParamList,
+  "EditHabitForm"
+>;
 
-export default function HabitForm({ navigation }: HabitFormProps) {
+export default function EditHabitForm({
+  navigation,
+  route,
+}: EditHabitFormProps) {
+  const { habit } = route.params;
+
   const {
     control,
     handleSubmit,
     formState: { errors },
     watch,
-  } = useForm<HabitFormValues>({
-    resolver: zodResolver(habitFormSchema),
+  } = useForm<EditHabitFormValues>({
+    resolver: zodResolver(editHabitFormSchema),
     defaultValues: {
-      name: "",
-      notificationPeriod: "sunrise",
-      emailNotificationEnabled: true,
-      minuteOffset: 0,
-      hourOffset: 0,
-      offsetDirection: "before",
+      name: habit.name,
+      notificationPeriod: habit.notificationPeriod,
+      emailNotificationEnabled: habit.emailNotificationEnabled,
+      hourOffset: habit.hourOffset,
+      minuteOffset: habit.minuteOffset,
+      offsetDirection: habit.offsetDirection,
     },
   });
 
   const notificationPeriod = watch("notificationPeriod");
 
-  const { addHabit } = useHabit();
+  const { updateHabit, removeHabit } = useHabit();
 
   const [user, userIsLoading] = useUser();
-
-  console.log(userIsLoading);
 
   if (userIsLoading) {
     return (
@@ -78,7 +85,7 @@ export default function HabitForm({ navigation }: HabitFormProps) {
     return <Text>Please log in to add a habit</Text>;
   }
 
-  const onSubmit: SubmitHandler<HabitFormValues> = async (data) => {
+  const onSubmit: SubmitHandler<EditHabitFormValues> = async (data) => {
     const {
       name,
       notificationPeriod,
@@ -88,8 +95,8 @@ export default function HabitForm({ navigation }: HabitFormProps) {
       offsetDirection,
     } = data;
 
-    await addHabit({
-      id: randomUUID(),
+    await updateHabit({
+      id: habit.id,
       userId: user.uid,
       name,
       notificationPeriod,
@@ -99,6 +106,11 @@ export default function HabitForm({ navigation }: HabitFormProps) {
       offsetDirection,
     });
 
+    navigation.navigate("HabitList");
+  };
+
+  const handleDelete = async (habit: Habit) => {
+    await removeHabit(habit);
     navigation.navigate("HabitList");
   };
 
@@ -232,9 +244,21 @@ export default function HabitForm({ navigation }: HabitFormProps) {
         )}
 
         <Button
-          title="Add Habit"
+          title="Update Habit"
           color="purple"
           onPress={handleSubmit(onSubmit)}
+        />
+
+        <Button
+          title="Delete"
+          color="purple"
+          onPress={() => handleDelete(habit)}
+        />
+
+        <Button
+          title="Cancel"
+          color="purple"
+          onPress={() => navigation.navigate("HabitList")}
         />
       </SafeAreaView>
     </TouchableWithoutFeedback>
