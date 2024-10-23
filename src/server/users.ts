@@ -5,7 +5,7 @@ import { Location, SolSyncUser } from "@/types";
 
 import { db } from "../../firebaseConfig";
 
-export const getUser = async (
+export const getUserFromFirestore = async (
   user: User | null,
 ): Promise<SolSyncUser | null> => {
   if (!user) {
@@ -20,8 +20,13 @@ export const getUser = async (
     return null;
   }
 
+  if (!user.email) {
+    return null;
+  }
+
   return {
-    ...user,
+    uid: user.uid,
+    email: user.email,
     displayName: userData.displayName,
     location: {
       latitude: userData.latitude,
@@ -31,11 +36,14 @@ export const getUser = async (
 };
 
 export const upsertUser = async (
-  user: User,
+  user: SolSyncUser,
+  email: string,
   location: Location,
   displayName: string,
 ) => {
   await setDoc(doc(db, "users", user.uid), {
+    uid: user.uid,
+    email: email,
     displayName: displayName,
     latitude: location.latitude,
     longitude: location.longitude,

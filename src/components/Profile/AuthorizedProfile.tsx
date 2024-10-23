@@ -1,4 +1,4 @@
-import { signOut, User } from "firebase/auth";
+import { signOut } from "firebase/auth";
 import { useState } from "react";
 import {
   Alert,
@@ -9,6 +9,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import { ActivityIndicator } from "react-native";
 import { default as FeatherIcon } from "react-native-vector-icons/Feather";
 import { default as FAIcon } from "react-native-vector-icons/FontAwesome";
 
@@ -20,19 +21,30 @@ import { firebaseAuth } from "../../../firebaseConfig";
 
 export default function AuthorizedProfile() {
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const userObject = useUser();
+  const { user, userIsLoading, reloadUser } = useUser();
+
+  if (userIsLoading) {
+    return (
+      <View style={styles.container}>
+        <ActivityIndicator size="small" color="#000000" />
+      </View>
+    );
+  }
+
+  if (!user) {
+    return <Text>Please log in to view your profile</Text>;
+  }
 
   const handleUpdateLocation = async () => {
-    if (!userObject.user) {
-      return;
-    }
-
     const location = await getLocationFromDevice();
 
-    userObject.user.location.latitude = location.latitude;
-    userObject.user.location.longitude = location.longitude;
-    upsertUser(userObject.user as User, location, userObject.user.displayName);
-    userObject.reloadUser();
+    const userCopy = user;
+
+    userCopy.location.latitude = location.latitude;
+    userCopy.location.longitude = location.longitude;
+
+    await upsertUser(userCopy, userCopy.email, location, userCopy.displayName);
+    await reloadUser();
   };
 
   return (
@@ -66,7 +78,7 @@ export default function AuthorizedProfile() {
         ></FeatherIcon>
       </TouchableOpacity>
 
-      <Text style={styles.header}>Hello, {userObject.user?.displayName}!</Text>
+      <Text style={styles.header}>Hello, {user?.displayName}!</Text>
 
       <FAIcon
         name="user-circle"
@@ -78,12 +90,12 @@ export default function AuthorizedProfile() {
       <View style={styles.infoBox}>
         <View style={styles.infoField}>
           <Text style={styles.infoTitle}>Name: </Text>
-          <Text style={styles.infoValue}>{userObject.user?.displayName}</Text>
+          <Text style={styles.infoValue}>{user?.displayName}</Text>
         </View>
         <View style={styles.line}></View>
         <View style={styles.infoField}>
           <Text style={styles.infoTitle}>Email: </Text>
-          <Text style={styles.infoValue}>{userObject.user?.email}</Text>
+          <Text style={styles.infoValue}>{user?.email}</Text>
         </View>
       </View>
 
@@ -91,14 +103,14 @@ export default function AuthorizedProfile() {
         <View style={styles.infoField}>
           <Text style={styles.infoTitle}>Latitude: </Text>
           <Text style={styles.infoValue}>
-            {userObject.user?.location?.latitude?.toPrecision(7)}
+            {user?.location?.latitude?.toPrecision(7)}
           </Text>
         </View>
         <View style={styles.line}></View>
         <View style={styles.infoField}>
           <Text style={styles.infoTitle}>Longitude: </Text>
           <Text style={styles.infoValue}>
-            {userObject.user?.location?.longitude?.toPrecision(7)}
+            {user?.location?.longitude?.toPrecision(7)}
           </Text>
         </View>
       </View>

@@ -36,50 +36,51 @@ export default function Home() {
   const [sunset, setSunset] = useState<Date | null>();
   const [nextsunrise, setNextSunrise] = useState<Date | null>();
   const [loading, setLoading] = useState(true);
-  const userObject = useUser();
+  const { user } = useUser();
 
   useEffect(() => {
-    fetchData();
-  }, [userObject.user]);
-
-  const fetchData = async () => {
-    let location = userObject.user?.location;
-    if (userObject.user) {
-      location = userObject.user.location;
-    } else {
-      location = await getLocationFromDevice();
-    }
-
-    try {
-      const response = await fetch(
-        "https://u7t0yd53l2.execute-api.us-east-2.amazonaws.com/default/getSunriseTime",
-        {
-          method: "POST",
-          headers: {
-            "x-api-key": process.env.EXPO_PUBLIC_SUNRISE_TIME_API_KEY as string,
-          },
-          body: JSON.stringify({
-            lat: location.latitude,
-            lng: location.longitude,
-          }),
-        },
-      );
-      const jsonData = await response.json();
-      if (jsonData.message) {
-        setSunrise(null);
-        setSunset(null);
-        setNextSunrise(null);
+    const fetchData = async () => {
+      let location = user?.location;
+      if (user) {
+        location = user.location;
       } else {
-        setSunrise(new Date(jsonData.todaySunrise));
-        setSunset(new Date(jsonData.todaySunset));
-        setNextSunrise(new Date(jsonData.tomorrowSunrise));
+        location = await getLocationFromDevice();
       }
-    } catch (err) {
-      console.log(err);
-    } finally {
-      setLoading(false);
-    }
-  };
+
+      try {
+        const response = await fetch(
+          "https://u7t0yd53l2.execute-api.us-east-2.amazonaws.com/default/getSunriseTime",
+          {
+            method: "POST",
+            headers: {
+              "x-api-key": process.env
+                .EXPO_PUBLIC_SUNRISE_TIME_API_KEY as string,
+            },
+            body: JSON.stringify({
+              lat: location.latitude,
+              lng: location.longitude,
+            }),
+          },
+        );
+        const jsonData = await response.json();
+        if (jsonData.message) {
+          setSunrise(null);
+          setSunset(null);
+          setNextSunrise(null);
+        } else {
+          setSunrise(new Date(jsonData.todaySunrise));
+          setSunset(new Date(jsonData.todaySunset));
+          setNextSunrise(new Date(jsonData.tomorrowSunrise));
+        }
+      } catch (err) {
+        console.log(err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchData();
+  }, [user]);
+
   return (
     <LinearGradient
       colors={gradientColors}

@@ -17,9 +17,9 @@ export type ProfileStackParamList = {
 const Stack = createNativeStackNavigator<ProfileStackParamList>();
 
 export default function Profile() {
-  const userObject = useUser();
+  const { user, userIsLoading } = useUser();
 
-  if (userObject.userIsLoading) {
+  if (userIsLoading) {
     return (
       <View style={styles.container}>
         <ActivityIndicator size="small" color="#000000" />
@@ -29,7 +29,7 @@ export default function Profile() {
 
   return (
     <Stack.Navigator screenOptions={{ headerTitle: "" }}>
-      {userObject.user ? (
+      {user ? (
         <Stack.Screen
           name="AuthorizedProfile"
           component={AuthorizedProfile}

@@ -1,7 +1,7 @@
 import { onAuthStateChanged } from "firebase/auth";
 import { useEffect, useState } from "react";
 
-import { getUser } from "@/server";
+import { getUserFromFirestore } from "@/server";
 import { SolSyncUser } from "@/types";
 
 import { firebaseAuth } from "../../firebaseConfig";
@@ -23,7 +23,7 @@ import { firebaseAuth } from "../../firebaseConfig";
 type UseUser = {
   user: SolSyncUser | null;
   userIsLoading: boolean;
-  reloadUser: () => void;
+  reloadUser: () => Promise<void>;
 };
 
 const useUser = (): UseUser => {
@@ -34,24 +34,27 @@ const useUser = (): UseUser => {
     setUserIsLoading(true);
 
     onAuthStateChanged(firebaseAuth, async (firebaseAuthUser) => {
-      //   getUser(firebaseAuthUser).then((user) => {
-      //     setUser(user);
-      //     setUserIsLoading(false);
-      //   });
-      const user = await getUser(firebaseAuthUser);
-      setUser(user);
-      setUserIsLoading(true);
+      const solSyncUser = await getUserFromFirestore(firebaseAuthUser);
+      setUser(solSyncUser);
+      setUserIsLoading(false);
     });
-  }
+  };
 
   useEffect(() => {
     loadUser();
   }, []);
 
-  // update location in here
-  // in useEffect, rather than empty array, if location changes, then useEffect will fetch user again
+  const reloadUser = async () => {
+    setUserIsLoading(true);
+    const currentUser = firebaseAuth.currentUser;
 
-  return { user, userIsLoading, reloadUser: loadUser };
+    const solSyncUser = await getUserFromFirestore(currentUser);
+    setUser(solSyncUser);
+
+    setUserIsLoading(false);
+  };
+
+  return { user, userIsLoading, reloadUser };
 };
 
 export default useUser;

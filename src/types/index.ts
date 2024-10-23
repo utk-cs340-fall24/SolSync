@@ -1,5 +1,3 @@
-import { User } from "firebase/auth";
-
 // Discriminated union: both are numbers or both are null
 type ValidLocation = {
   latitude: number;
@@ -13,7 +11,9 @@ type NullLocation = {
 
 export type Location = ValidLocation | NullLocation;
 
-export type SolSyncUser = User & {
+export type SolSyncUser = {
+  uid: string;
+  email: string;
   displayName: string;
   location: Location;
 };
