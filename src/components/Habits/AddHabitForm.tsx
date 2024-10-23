@@ -65,7 +65,7 @@ export default function AddHabitForm({ navigation }: AddHabitFormProps) {
 
   const { addHabit } = useHabit();
 
-  const [user, userIsLoading] = useUser();
+  const { user, userIsLoading } = useUser();
 
   if (userIsLoading) {
     return (
