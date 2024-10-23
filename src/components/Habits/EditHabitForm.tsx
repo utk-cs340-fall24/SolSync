@@ -71,7 +71,7 @@ export default function EditHabitForm({
 
   const { updateHabit, removeHabit } = useHabit();
 
-  const [user, userIsLoading] = useUser();
+  const { user, userIsLoading } = useUser();
 
   if (userIsLoading) {
     return (
