@@ -58,7 +58,7 @@ export default function Home() {
         "GETSUNRISESUNSET_API_URL is not defined in the environment variables.",
       );
     }
-    let url = new URL(apiUrl);
+    const url = new URL(apiUrl);
 
     // Adding query parameters
     if (location && location.latitude && location.longitude) {
