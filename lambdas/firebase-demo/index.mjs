@@ -11,7 +11,7 @@ initializeApp({
 
 const db = getFirestore();
 
-const handler = async (event) => {
+export const handler = async () => {
   const habitsSnapshot = await db.collection("habits").get();
 
   const habits = [];
@@ -28,7 +28,5 @@ const handler = async (event) => {
     users.push({ id: doc.id, ...doc.data(), habits: users_habits });
   });
 
-  console.log(users)
+  return users;
 };
-
-handler()
