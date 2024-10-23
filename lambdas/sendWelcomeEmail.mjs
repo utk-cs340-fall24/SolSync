@@ -7,10 +7,10 @@ export const handler = async (event) => {
   let emailTo, emailHabit;
 
   // Extract email details from the event
-  if (event.to && event.to !== "" && event.habit && event.habit !== "") {
+  if (event.to && event.habit) {
     emailTo = event.to;
     emailHabit = event.habit;
-  } else if (event.body && event.body !== "") {
+  } else if (event.body) {
     try {
       const body = JSON.parse(event.body);
       emailTo = body.to;
