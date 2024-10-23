@@ -2,6 +2,7 @@
   "extends": "expo/tsconfig.base",
   "compilerOptions": {
     "strict": true,
+    "baseUrl": ".",
     "paths": {
       // used to import getReactNativePersistence
       // https://stackoverflow.com/a/77021337
