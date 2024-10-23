@@ -6,20 +6,6 @@ import { SolSyncUser } from "@/types";
 
 import { firebaseAuth } from "../../firebaseConfig";
 
-// define object type that useUser will return
-// user: SolSyncUser | null
-// userIsLoading: boolean
-// reloadUser: () => void or something idk  the syntax
-
-// update the return type of useUser
-// add a function inside of useUser called reloadUser that reloads the user and updates the state variable
-// update the return type to be an object instead of an array
-// go around the repo and everywhere useUser is called, make sure they are getting the variables
-// from the object and not an array
-
-// step 1: add type
-// step 2:
-
 type UseUser = {
   user: SolSyncUser | null;
   userIsLoading: boolean;
