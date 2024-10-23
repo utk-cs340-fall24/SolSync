@@ -1,12 +1,13 @@
 import { createContext, useEffect, useState } from "react";
 
 import useUser from "@/hooks/useUser";
-import { createHabit, deleteHabit, getHabits } from "@/server";
+import { deleteHabit, getHabits, upsertHabit } from "@/server";
 import { Habit } from "@/types";
 
 export type HabitContextType = {
   habits: Habit[];
   addHabit: (habit: Habit) => void;
+  updateHabit: (habit: Habit) => void;
   removeHabit: (habit: Habit) => void;
 };
 
@@ -34,7 +35,17 @@ export default function HabitProvider({ children }: HabitProviderProps) {
   const addHabit = async (habit: Habit) => {
     setHabits((prevHabits) => [...prevHabits, habit]);
 
-    await createHabit(habit);
+    await upsertHabit(habit);
+  };
+
+  const updateHabit = async (habit: Habit) => {
+    setHabits((prevHabits) =>
+      prevHabits.map((prevHabit) =>
+        prevHabit.id === habit.id ? habit : prevHabit,
+      ),
+    );
+
+    await upsertHabit(habit);
   };
 
   const removeHabit = async (habit: Habit) => {
@@ -50,6 +61,7 @@ export default function HabitProvider({ children }: HabitProviderProps) {
       value={{
         habits,
         addHabit,
+        updateHabit,
         removeHabit,
       }}
     >
