@@ -3,7 +3,6 @@ import sun from "@assets/sun.png";
 import { LinearGradient } from "expo-linear-gradient";
 import React, { useEffect, useState } from "react";
 import { ActivityIndicator, Image, StyleSheet, Text, View } from "react-native";
-
 import getLocationFromDevice from "@/utils/getLocationFromDevice";
 
 import useUser from "../../hooks/useUser";
@@ -50,20 +49,32 @@ export default function Home() {
       location = await getLocationFromDevice();
     }
 
-    try {
-      const response = await fetch(
-        "https://u7t0yd53l2.execute-api.us-east-2.amazonaws.com/default/getSunriseTime",
-        {
-          method: "POST",
-          headers: {
-            "x-api-key": process.env.EXPO_PUBLIC_SUNRISE_TIME_API_KEY as string,
-          },
-          body: JSON.stringify({
-            lat: location.latitude,
-            lng: location.longitude,
-          }),
-        },
+    // Assuming process.env.GETSUNRISESUNSET_API_URL is a valid URL
+    const apiUrl = process.env.EXPO_PUBLIC_GETSUNRISESUNSET_API_URL;
+
+    // Check if the API URL is defined
+    if (!apiUrl) {
+      throw new Error(
+        "GETSUNRISESUNSET_API_URL is not defined in the environment variables.",
       );
+    }
+    let url = new URL(apiUrl);
+
+    // Adding query parameters
+    if (location && location.latitude && location.longitude) {
+      url.searchParams.append("latitude", location.latitude.toString());
+      url.searchParams.append("longitude", location.longitude.toString());
+    } else {
+      console.log("Unable to fetch longitude and latitude");
+    }
+
+    try {
+      const response = await fetch(url, {
+        method: "GET",
+        headers: {
+          "x-api-key": process.env.EXPO_PUBLIC_GETSUNRISESUNSET_API_KEY as string,
+        },
+      });
       const jsonData = await response.json();
       if (jsonData.message) {
         setSunrise(null);
