@@ -18,7 +18,7 @@ type HabitProviderProps = {
 
 export default function HabitProvider({ children }: HabitProviderProps) {
   const [habits, setHabits] = useState<Habit[]>([]);
-  const [user] = useUser();
+  const user = useUser().user;
 
   useEffect(() => {
     if (!user) return;

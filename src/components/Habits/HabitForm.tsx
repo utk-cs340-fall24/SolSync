@@ -62,11 +62,11 @@ export default function HabitForm({ navigation }: HabitFormProps) {
 
   const { addHabit } = useHabit();
 
-  const [user, userIsLoading] = useUser();
+  const userObject = useUser();
 
-  console.log(userIsLoading);
+  console.log(userObject.userIsLoading);
 
-  if (userIsLoading) {
+  if (userObject.userIsLoading) {
     return (
       <View style={styles.container}>
         <ActivityIndicator size="small" color="#000000" />
@@ -74,7 +74,7 @@ export default function HabitForm({ navigation }: HabitFormProps) {
     );
   }
 
-  if (!user) {
+  if (!userObject.user) {
     return <Text>Please log in to add a habit</Text>;
   }
 
@@ -88,9 +88,13 @@ export default function HabitForm({ navigation }: HabitFormProps) {
       offsetDirection,
     } = data;
 
+    if (!userObject.user) {
+      return <Text>Please log in to add a habit</Text>;
+    }
+
     await addHabit({
       id: randomUUID(),
-      userId: user.uid,
+      userId: userObject.user.uid,
       name,
       notificationPeriod,
       emailNotificationEnabled,

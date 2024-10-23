@@ -30,7 +30,7 @@ export const getUser = async (
   };
 };
 
-export const setUser = async (
+export const upsertUser = async (
   user: User,
   location: Location,
   displayName: string,

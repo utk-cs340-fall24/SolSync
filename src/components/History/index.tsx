@@ -16,7 +16,8 @@ type DropdownItem = {
 };
 
 export default function HistoryComponent() {
-  const [user, userIsLoading] = useUser();
+  const userObject = useUser();
+  const user = userObject.user; // this could be an issue
   const { habits } = useHabit();
   const [currentHabit, setCurrentHabit] = useState<Habit>();
   const [history, setHistory] = useState<History[]>();
@@ -68,7 +69,7 @@ export default function HistoryComponent() {
     setCalendarDates(calenderDates);
   }, [currentHabit?.id, history]);
 
-  if (userIsLoading) {
+  if (userObject.userIsLoading) {
     return (
       <View style={styles.container}>
         <ActivityIndicator size="small" color="#000000" />
@@ -76,7 +77,7 @@ export default function HistoryComponent() {
     );
   }
 
-  if (!user) {
+  if (!userObject.user) {
     return (
       <View style={styles.container}>
         <Text>Please sign in to view your habits</Text>

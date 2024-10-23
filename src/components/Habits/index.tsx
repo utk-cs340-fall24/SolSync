@@ -15,16 +15,16 @@ export type HabitStackParamList = {
 const Stack = createNativeStackNavigator<HabitStackParamList>();
 
 export default function Habits() {
-  const [user, userIsLoading] = useUser();
+  const userObject = useUser();
 
-  if (userIsLoading) {
+  if (userObject.userIsLoading) {
     return (
       <View style={styles.container}>
         <ActivityIndicator size="small" color="#000000" />
       </View>
     );
   }
-  if (!user) {
+  if (!userObject.user) {
     return (
       <View style={styles.container}>
         <Text>Please sign in to view your habits</Text>
