@@ -18,7 +18,7 @@ export type HabitStackParamList = {
 const Stack = createNativeStackNavigator<HabitStackParamList>();
 
 export default function Habits() {
-  const [user, userIsLoading] = useUser();
+  const { user, userIsLoading } = useUser();
 
   if (userIsLoading) {
     return (
