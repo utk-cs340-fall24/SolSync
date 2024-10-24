@@ -1,20 +1,21 @@
-// Takes in an email and the name used
+// Takes in an email and a name
+// Send welcome email, should be triggered when user signs up
 
 export const handler = async (event) => {
   // Verify the parameters
   console.log("Received event:", JSON.stringify(event, null, 2));
 
-  let emailTo, emailHabit;
+  let emailTo, emailName;
 
   // Extract email details from the event
-  if (event.to && event.habit) {
+  if (event.to && event.name ) {
     emailTo = event.to;
-    emailHabit = event.habit;
+    emailName = event.name;
   } else if (event.body) {
     try {
       const body = JSON.parse(event.body);
       emailTo = body.to;
-      emailHabit = body.habit; // Ensure habit is extracted
+      emailName = body.name; // Ensure name is extracted
     } catch (error) {
       console.error("Failed to parse JSON body:", error);
       return {
@@ -25,18 +26,18 @@ export const handler = async (event) => {
   } else if (
     event.queryStringParameters &&
     event.queryStringParameters.to &&
-    event.queryStringParameters.habit
+    event.queryStringParameters.name
   ) {
     // Try various methods to parse the emailTo and emailHabit
     emailTo = event.queryStringParameters.to;
-    emailHabit = event.queryStringParameters.habit;
-  } else if (event.headers && event.headers.to && event.headers.habit) {
+    emailName = event.queryStringParameters.name;
+  } else if (event.headers && event.headers.to && event.headers.name) {
     emailTo = event.headers.to;
-    emailHabit = event.headers.habit;
+    emailName = event.headers.name;
   } else {
     return {
       statusCode: 400,
-      body: JSON.stringify({ error: "Email recipient and habit are required" }),
+      body: JSON.stringify({ error: "Email recipient and name are required" }),
     };
   }
 
@@ -54,40 +55,40 @@ export const handler = async (event) => {
 
   // Define HTML
   const emailHTML = `
-    <div style="font-family: Arial, sans-serif; padding: 20px; background-color: #FFCC80; color: #000; text-align: center;">
-        <h1 style="color: #D65F0D;">Welcome to SolSync!</h1>
-        <div style="background-color: rgba(255, 255, 255, 0.8); padding: 15px; border-radius: 8px; display: inline-block; text-align: left;">
-            <p style="font-size: 20px;">
-                We are thrilled to have you join our community! At SolSync, we believe in the power of daily reflection and personal growth.
-            </p>
-            <p style="font-size: 18px;">
-                SolSync helps you quickly and easily keep track of your habits, making aligning habits with sunrise and sunset times easy.
-            </p>
-  
-            <h2 style="color: #D65F0D;">Account Details</h2>
-            <p style="font-size: 18px;">
-                Email: ${emailTo}
-            </p>
-            <p style="font-size: 18px;">
-                Habit: ${emailHabit}
-            </p>
-  
-  
-            <h2 style="color: #D65F0D;">Getting Started</h2>
-            <p style="font-size: 18px;">
-                Here are a few tips for using SolSync:
-            </p>
-            <ul style="font-size: 18px; margin: 10px 0; padding-left: 20px;">
-                <li>Customize your icons and profile picture to make this app uniquely yours.</li>
-                <li>Log into the app daily to track your progress.</li>
-                <li>Keep your email updated to receive daily reminders.</li>
-            </ul>
-            <p style="font-size: 18px;">
-                Remember, every small step counts on your habit-building journey!
-            </p>
-        </div>
-    </div>
-    `;
+  <div style="font-family: Arial, sans-serif; padding: 20px; background-color: #FFCC80; color: #000; text-align: center;">
+      <h1 style="color: #D65F0D;">Welcome to SolSync!</h1>
+      <div style="background-color: rgba(255, 255, 255, 0.8); padding: 15px; border-radius: 8px; display: inline-block; text-align: left;">
+          <p style="font-size: 20px;">
+              We are thrilled to have you join our community! At SolSync, we believe in the power of daily reflection and personal growth.
+          </p>
+          <p style="font-size: 18px;">
+              SolSync helps you quickly and easily keep track of your habits, making aligning habits with sunrise and sunset times easy.
+          </p>
+
+          <h2 style="color: #D65F0D;">Account Details</h2>
+          <p style="font-size: 18px;">
+              Name: ${emailName}
+          </p>
+          <p style="font-size: 18px;">
+              Email: ${emailTo}
+          </p>
+
+
+          <h2 style="color: #D65F0D;">Getting Started</h2>
+          <p style="font-size: 18px;">
+              Here are a few tips for using SolSync:
+          </p>
+          <ul style="font-size: 18px; margin: 10px 0; padding-left: 20px;">
+              <li>Customize your icons, habits, and profile picture to make this app uniquely yours.</li>
+              <li>Log into the app daily to track your progress.</li>
+              <li>Keep your email updated to receive daily reminders.</li>
+          </ul>
+          <p style="font-size: 18px;">
+              Remember, every small step counts on your habit-building journey!
+          </p>
+      </div>
+  </div>
+  `;
 
   try {
     // Fetch the sendEmail API with the required body
@@ -136,7 +137,7 @@ export const handler = async (event) => {
     // Log the error
     console.log(err);
 
-    // Return failure status and
+    // Return failure status
     return {
       statusCode: 500,
       body: JSON.stringify({
