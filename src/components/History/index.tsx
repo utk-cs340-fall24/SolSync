@@ -27,7 +27,9 @@ type DropdownItem = {
 export default function HistoryComponent() {
   const [user, userIsLoading] = useUser();
   const { habits } = useHabit();
-  const [currentHabit, setCurrentHabit] = useState<Habit>();
+  const [currentHabit, setCurrentHabit] = useState<Habit | undefined>(
+    habits[0],
+  );
   const [history, setHistory] = useState<History[]>();
   const [calendarDates, setCalendarDates] = useState<unknown>();
   const [habitsCompleted, setHabitsCompleted] =
@@ -97,13 +99,7 @@ export default function HistoryComponent() {
     } else {
       addHistory();
     }
-
-    setHabitsCompleted({ ...habitsCompleted });
   };
-
-  useEffect(() => {
-    console.log(habitsCompleted);
-  }, [habitsCompleted]);
 
   useEffect(() => {
     const newHabitsCompleted: Record<string, boolean> = {};
@@ -113,8 +109,7 @@ export default function HistoryComponent() {
     });
 
     setHabitsCompleted(newHabitsCompleted);
-
-    setCurrentHabit(habits[0]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [habits]);
 
   useEffect(() => {
@@ -157,6 +152,14 @@ export default function HistoryComponent() {
     return (
       <View style={styles.container}>
         <Text>Please sign in to view your habits</Text>
+      </View>
+    );
+  }
+
+  if (habits.length === 0) {
+    return (
+      <View style={styles.container}>
+        <Text>Please add a habit</Text>
       </View>
     );
   }
