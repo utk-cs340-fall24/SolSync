@@ -3,7 +3,7 @@ const formData = require('form-data');
   const mailgun = new Mailgun(formData);
   const mg = mailgun.client({username: 'api', key: process.env.MAILGUN_API_KEY || 'API_KEY'});
   
-  mg.messages.create('sandboxfeaeb40c76d74d6f9c05024143367250.mailgun.org', {
+  mg.messages.create('process.env.EXPO_PUBLIC_MAILGUN_URL', {
   	from: "SolSync <solsync340@gmail.com>",
   	to: ["kbae1@vols.utk.edu"],
   	subject: "Hello",
