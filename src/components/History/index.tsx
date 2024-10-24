@@ -1,4 +1,6 @@
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import dayjs from "dayjs";
+import { randomUUID } from "expo-crypto";
 import React, { useEffect, useState } from "react";
 import {
   ActivityIndicator,
@@ -28,6 +30,8 @@ export default function HistoryComponent() {
   const [currentHabit, setCurrentHabit] = useState<Habit>();
   const [history, setHistory] = useState<History[]>();
   const [calendarDates, setCalendarDates] = useState<unknown>();
+  const [habitsCompleted, setHabitsCompleted] =
+    useState<Record<string, boolean>>();
 
   const habitToDropdownItem = (habit: Habit) => {
     return {
@@ -48,7 +52,68 @@ export default function HistoryComponent() {
     setCurrentHabit(dropdownItemToHabit(item));
   };
 
+  const addHistory = () => {
+    if (!history || !user || !currentHabit) return;
+
+    setHistory([
+      ...history,
+      {
+        id: randomUUID(),
+        date: dayjs().startOf("day").toDate(),
+        habitId: currentHabit.id,
+        userId: user.uid,
+      },
+    ]);
+
+    setHabitsCompleted({ ...habitsCompleted, [currentHabit.id]: true });
+  };
+
+  const removeHistory = () => {
+    if (!history || !user || !currentHabit) return;
+
+    setHistory(
+      history?.filter((history) => {
+        if (
+          !(
+            history.userId === user.uid &&
+            history.habitId === currentHabit.id &&
+            dayjs().isSame(history.date, "day")
+          )
+        ) {
+          return true;
+        }
+
+        setHabitsCompleted({ ...habitsCompleted, [history.habitId]: false });
+        return false;
+      }),
+    );
+  };
+
+  const handleSubmit = () => {
+    if (!history || !user || !currentHabit) return;
+
+    if (habitsCompleted?.[currentHabit?.id]) {
+      removeHistory();
+    } else {
+      addHistory();
+    }
+
+    setHabitsCompleted({ ...habitsCompleted });
+  };
+
   useEffect(() => {
+    console.log(habitsCompleted);
+  }, [habitsCompleted]);
+
+  useEffect(() => {
+    const newHabitsCompleted: Record<string, boolean> = {};
+
+    habits.forEach((habit) => {
+      newHabitsCompleted[habit.id] = habitsCompleted?.[habit.id] ?? false;
+    });
+
+    setHabitsCompleted(newHabitsCompleted);
+
     setCurrentHabit(habits[0]);
   }, [habits]);
 
@@ -57,7 +122,6 @@ export default function HistoryComponent() {
 
     const fetchHistory = async () => {
       const history = await getHistory(user);
-      setHistory(history);
       setHistory(history);
     };
 
@@ -117,15 +181,28 @@ export default function HistoryComponent() {
           arrowColor: "#f4a58a",
         }}
       />
-      <TouchableOpacity style={styles.completeHabitButton}>
-        <FAIcon
-          name="check-circle-o"
-          size={25}
-          color="white"
-          style={{ marginHorizontal: 6 }}
-        />
-        <Text style={styles.buttonText}>Complete Habit</Text>
-      </TouchableOpacity>
+      {currentHabit && habitsCompleted && (
+        <TouchableOpacity
+          style={
+            habitsCompleted[currentHabit?.id]
+              ? styles.undoHabitButton
+              : styles.completeHabitButton
+          }
+          onPress={handleSubmit}
+        >
+          <FAIcon
+            name="check-circle-o"
+            size={25}
+            color="white"
+            style={{ marginHorizontal: 6 }}
+          />
+          <Text style={styles.buttonText}>
+            {habitsCompleted[currentHabit?.id]
+              ? "Undo Habit"
+              : "Complete Habit"}
+          </Text>
+        </TouchableOpacity>
+      )}
     </View>
   );
 }
@@ -150,6 +227,16 @@ const styles = StyleSheet.create({
   },
   completeHabitButton: {
     backgroundColor: "#b38acb",
+    width: "95%",
+    paddingVertical: 10,
+    borderRadius: 8,
+    alignItems: "center",
+    marginTop: 20,
+    flexDirection: "row",
+    justifyContent: "center",
+  },
+  undoHabitButton: {
+    backgroundColor: "#f4a58a",
     width: "95%",
     paddingVertical: 10,
     borderRadius: 8,
