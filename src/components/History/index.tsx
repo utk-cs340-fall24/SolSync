@@ -1,6 +1,6 @@
-import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import dayjs from "dayjs";
 import { randomUUID } from "expo-crypto";
+import { deleteDoc, doc, setDoc } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
 import {
   ActivityIndicator,
@@ -18,6 +18,8 @@ import { useHabit } from "@/hooks/useHabit";
 import useUser from "@/hooks/useUser";
 import { getHistory } from "@/server/histories";
 import { Habit, History } from "@/types";
+
+import { db } from "../../../firebaseConfig";
 
 type DropdownItem = {
   label: string;
@@ -54,20 +56,27 @@ export default function HistoryComponent() {
     setCurrentHabit(dropdownItemToHabit(item));
   };
 
+  const upsertHistory = async (history: History) => {
+    await setDoc(doc(db, "history", history.id), history);
+  };
+
+  const deleteHistory = async (history: History) => {
+    await deleteDoc(doc(db, "history", history.id));
+  };
+
   const addHistory = () => {
     if (!history || !user || !currentHabit) return;
 
-    setHistory([
-      ...history,
-      {
-        id: randomUUID(),
-        date: dayjs().startOf("day").toDate(),
-        habitId: currentHabit.id,
-        userId: user.uid,
-      },
-    ]);
+    const newHistory: History = {
+      id: randomUUID(),
+      date: dayjs().startOf("day").toDate(),
+      habitId: currentHabit.id,
+      userId: user.uid,
+    };
 
-    setHabitsCompleted({ ...habitsCompleted, [currentHabit.id]: true });
+    setHistory([...history, newHistory]);
+
+    upsertHistory(newHistory);
   };
 
   const removeHistory = () => {
@@ -85,7 +94,8 @@ export default function HistoryComponent() {
           return true;
         }
 
-        setHabitsCompleted({ ...habitsCompleted, [history.habitId]: false });
+        deleteHistory(history);
+
         return false;
       }),
     );
@@ -105,12 +115,18 @@ export default function HistoryComponent() {
     const newHabitsCompleted: Record<string, boolean> = {};
 
     habits.forEach((habit) => {
-      newHabitsCompleted[habit.id] = habitsCompleted?.[habit.id] ?? false;
+      const isHabitCompleted =
+        history?.some(
+          (history) =>
+            habit.id === history.habitId && dayjs().isSame(history.date, "day"),
+        ) ?? false;
+
+      newHabitsCompleted[habit.id] = isHabitCompleted;
     });
 
     setHabitsCompleted(newHabitsCompleted);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [habits]);
+  }, [habits, history]);
 
   useEffect(() => {
     if (!user) return;
