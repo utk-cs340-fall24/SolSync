@@ -13,7 +13,7 @@ import {
 } from "react-native";
 import { z } from "zod";
 
-import { upsertUser } from "@/server";
+import { getUserFromFirestore, upsertUser } from "@/server";
 import getFirebaseAuthErrorMessage from "@/utils/getFirebaseAuthErrorMessage";
 import getLocationFromDevice from "@/utils/getLocationFromDevice";
 
@@ -48,9 +48,14 @@ export default function SignUp() {
         password,
       );
 
+      const SSuser = await getUserFromFirestore(credentials.user);
+      if (!SSuser) {
+        throw new Error("Failed to create Firestore user");
+      }
+
       const location = await getLocationFromDevice();
 
-      await upsertUser(credentials.user, location, displayName);
+      await upsertUser(SSuser, email, location, displayName);
     } catch (error) {
       if (error instanceof FirebaseError) {
         setError("root", {
