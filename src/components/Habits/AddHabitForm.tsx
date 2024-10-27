@@ -157,11 +157,6 @@ export default function AddHabitForm({ navigation }: AddHabitFormProps) {
           </Text>
         )}
 
-        {errors.emailNotificationEnabled && (
-          <Text style={{ color: "red" }}>
-            {errors.emailNotificationEnabled.message}
-          </Text>
-        )}
         <Text style={styles.offsetHeader}>Offset</Text>
         <View style={styles.sectionContainer}>
           <Controller
@@ -208,11 +203,6 @@ export default function AddHabitForm({ navigation }: AddHabitFormProps) {
                   />
                 )}
               />
-              {errors.hourOffset && (
-                <Text style={{ color: "red" }}>
-                  {errors.hourOffset.message}
-                </Text>
-              )}
             </View>
             <Text style={styles.colon}>:</Text>
             <View style={styles.offsetColumns}>
@@ -232,14 +222,15 @@ export default function AddHabitForm({ navigation }: AddHabitFormProps) {
                   />
                 )}
               />
-              {errors.minuteOffset && (
-                <Text style={{ color: "red" }}>
-                  {errors.minuteOffset.message}
-                </Text>
-              )}
             </View>
           </View>
         </View>
+        {errors.hourOffset && (
+          <Text style={{ color: "red" }}>{errors.hourOffset.message}</Text>
+        )}
+        {errors.minuteOffset && (
+          <Text style={{ color: "red" }}>{errors.minuteOffset.message}</Text>
+        )}
 
         <View style={styles.emailRow}>
           <Text style={styles.emailText}>Email Notifications</Text>
@@ -257,6 +248,11 @@ export default function AddHabitForm({ navigation }: AddHabitFormProps) {
             )}
           />
         </View>
+        {errors.emailNotificationEnabled && (
+          <Text style={{ color: "red" }}>
+            {errors.emailNotificationEnabled.message}
+          </Text>
+        )}
         <TouchableOpacity
           style={styles.addHabitButton}
           onPress={handleSubmit(onSubmit)}
@@ -299,7 +295,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: "bold",
     color: "#4a3f4c",
-    marginTop: -45,
+    marginTop: -35,
   },
   habitNameHeader: {
     fontSize: 18,
@@ -416,5 +412,6 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     alignItems: "center",
     marginTop: 10,
+    marginBottom: -30,
   },
 });
