@@ -153,7 +153,7 @@ const styles = StyleSheet.create({
     borderColor: "#ccc",
     borderWidth: 1,
     borderRadius: 8,
-    marginBottom: 15, // Spacing below the box
+    marginBottom: 15,
     alignItems: "center",
   },
   input: {

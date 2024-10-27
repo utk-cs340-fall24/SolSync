@@ -53,26 +53,26 @@ export default function AuthorizedProfile({
 
       <View style={styles.infoBox}>
         <View style={styles.infoField}>
-          <Text style={styles.infoTitle}>Name: </Text>
+          <Text style={styles.infoTitle}>Name </Text>
           <Text style={styles.infoValue}>{user?.displayName}</Text>
         </View>
         <View style={styles.line}></View>
         <View style={styles.infoField}>
-          <Text style={styles.infoTitle}>Email: </Text>
+          <Text style={styles.infoTitle}>Email </Text>
           <Text style={styles.infoValue}>{user?.email}</Text>
         </View>
       </View>
 
       <View style={styles.infoBox}>
         <View style={styles.infoField}>
-          <Text style={styles.infoTitle}>Latitude: </Text>
+          <Text style={styles.infoTitle}>Latitude </Text>
           <Text style={styles.infoValue}>
             {user?.location?.latitude?.toPrecision(7)}
           </Text>
         </View>
         <View style={styles.line}></View>
         <View style={styles.infoField}>
-          <Text style={styles.infoTitle}>Longitude: </Text>
+          <Text style={styles.infoTitle}>Longitude </Text>
           <Text style={styles.infoValue}>
             {user?.location?.longitude?.toPrecision(7)}
           </Text>
@@ -118,8 +118,8 @@ const styles = StyleSheet.create({
   },
   editButton: {
     position: "absolute",
-    top: "5%",
-    right: "8%",
+    top: 36,
+    right: 20,
   },
   header: {
     fontSize: 30,
