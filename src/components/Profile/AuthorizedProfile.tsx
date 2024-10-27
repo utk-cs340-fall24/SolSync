@@ -131,7 +131,7 @@ const styles = StyleSheet.create({
     width: "95%",
     padding: 20,
     borderRadius: 8,
-    marginBottom: 20, // Spacing below the box
+    marginBottom: 20,
     alignItems: "center",
   },
   infoField: {
@@ -183,45 +183,5 @@ const styles = StyleSheet.create({
     marginTop: 20,
     flexDirection: "row",
     justifyContent: "center",
-  },
-  // modal stuff starting here
-  modalView: {
-    flex: 1,
-    margin: 20,
-    backgroundColor: "white",
-    borderRadius: 20,
-    // padding: 100,
-    width: "92%",
-    height: "92%",
-    alignItems: "center",
-    justifyContent: "center",
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 1,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-    elevation: 4,
-  },
-  button: {
-    borderRadius: 20,
-    padding: 10,
-    elevation: 2,
-  },
-  buttonOpen: {
-    backgroundColor: "#F194FF",
-  },
-  buttonClose: {
-    backgroundColor: "#2196F3",
-  },
-  textStyle: {
-    color: "white",
-    fontWeight: "bold",
-    textAlign: "center",
-  },
-  modalText: {
-    marginBottom: 15,
-    textAlign: "center",
   },
 });
