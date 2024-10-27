@@ -1,14 +1,6 @@
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { signOut, User } from "firebase/auth";
-import { useState } from "react";
-import {
-  Alert,
-  Modal,
-  Pressable,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { default as FeatherIcon } from "react-native-vector-icons/Feather";
 import { default as FAIcon } from "react-native-vector-icons/FontAwesome";
 
@@ -17,9 +9,16 @@ import { setUser } from "@/server";
 import getLocationFromDevice from "@/utils/getLocationFromDevice";
 
 import { firebaseAuth } from "../../../firebaseConfig";
+import { ProfileStackParamList } from ".";
 
-export default function AuthorizedProfile() {
-  const [isModalVisible, setIsModalVisible] = useState(false);
+type AuthorizedProfilePageProps = NativeStackScreenProps<
+  ProfileStackParamList,
+  "AuthorizedProfile"
+>;
+
+export default function AuthorizedProfile({
+  navigation,
+}: AuthorizedProfilePageProps) {
   const [user] = useUser();
 
   const handleUpdateLocation = () => {
@@ -34,32 +33,12 @@ export default function AuthorizedProfile() {
 
   return (
     <View style={styles.container}>
-      <Modal
-        animationType="slide"
-        transparent={true}
-        visible={isModalVisible}
-        onRequestClose={() => {
-          Alert.alert("Modal has been closed.");
-          setIsModalVisible(!isModalVisible);
-        }}
-      >
-        <View style={styles.modalView}>
-          <Text style={styles.modalText}>Edit Name and Email here</Text>
-          <Pressable
-            style={[styles.button, styles.buttonClose]}
-            onPress={() => setIsModalVisible(!isModalVisible)}
-          >
-            <Text style={styles.textStyle}>Save</Text>
-          </Pressable>
-        </View>
-      </Modal>
-
       <TouchableOpacity style={styles.editButton}>
         <FeatherIcon
           name="edit"
           size={38}
           color="#5A5A5A"
-          onPress={() => setIsModalVisible(true)}
+          onPress={() => navigation.navigate("EditProfile")}
         ></FeatherIcon>
       </TouchableOpacity>
 
