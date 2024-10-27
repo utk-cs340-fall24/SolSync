@@ -1,5 +1,5 @@
 {
-  "name": "firebase-demo",
+  "name": "send-daily-emails",
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
