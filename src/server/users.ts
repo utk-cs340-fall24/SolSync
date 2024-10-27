@@ -25,7 +25,7 @@ export const getUserFromFirestore = async (
   }
 
   return {
-    uid: user.uid,
+    id: user.uid,
     email: user.email,
     displayName: userData.displayName,
     location: {
@@ -41,8 +41,8 @@ export const upsertUser = async (
   location: Location,
   displayName: string,
 ) => {
-  await setDoc(doc(db, "users", user.uid), {
-    uid: user.uid,
+  await setDoc(doc(db, "users", user.id), {
+    id: user.id,
     email: email,
     displayName: displayName,
     latitude: location.latitude,

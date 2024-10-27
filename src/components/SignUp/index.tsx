@@ -42,20 +42,16 @@ export default function SignUp() {
   const onSubmit: SubmitHandler<SignUpFormValues> = async (data) => {
     const { email, password, displayName } = data;
     try {
+      console.log("test 0");
       const credentials = await createUserWithEmailAndPassword(
         firebaseAuth,
         email,
         password,
       );
 
-      const SSuser = await getUserFromFirestore(credentials.user);
-      if (!SSuser) {
-        throw new Error("Failed to create Firestore user");
-      }
-
       const location = await getLocationFromDevice();
 
-      await upsertUser(SSuser, email, location, displayName);
+      await upsertUser(credentials.user, email, location, displayName);
     } catch (error) {
       if (error instanceof FirebaseError) {
         setError("root", {

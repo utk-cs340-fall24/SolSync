@@ -12,7 +12,7 @@ type NullLocation = {
 export type Location = ValidLocation | NullLocation;
 
 export type SolSyncUser = {
-  uid: string;
+  id: string;
   email: string;
   displayName: string;
   location: Location;
