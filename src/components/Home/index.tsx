@@ -50,7 +50,6 @@ export default function Home() {
       location = await getLocationFromDevice();
     }
 
-
     // Assuming process.env.GETSUNRISESUNSET_API_URL is a valid URL
     const apiUrl = process.env.EXPO_PUBLIC_GETSUNRISESUNSET_API_URL;
 
