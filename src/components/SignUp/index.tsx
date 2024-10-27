@@ -42,7 +42,6 @@ export default function SignUp() {
   const onSubmit: SubmitHandler<SignUpFormValues> = async (data) => {
     const { email, password, displayName } = data;
     try {
-      console.log("test 0");
       const credentials = await createUserWithEmailAndPassword(
         firebaseAuth,
         email,
@@ -51,7 +50,14 @@ export default function SignUp() {
 
       const location = await getLocationFromDevice();
 
-      await upsertUser(credentials.user, email, location, displayName);
+      const newSolSyncUser = {
+        id: credentials.user.uid,
+        email: email,
+        displayName: displayName,
+        location: location,
+      };
+
+      await upsertUser(newSolSyncUser, email, location, displayName);
     } catch (error) {
       if (error instanceof FirebaseError) {
         setError("root", {
