@@ -4,9 +4,9 @@ import { ActivityIndicator, StyleSheet, View } from "react-native";
 
 import useUser from "@/hooks/useUser";
 
-import LogIn from "../LogIn";
-import SignUp from "../SignUp";
 import AuthorizedProfile from "./AuthorizedProfile";
+import LogIn from "./Login";
+import SignUp from "./SignUp";
 
 export type ProfileStackParamList = {
   LogIn: undefined;

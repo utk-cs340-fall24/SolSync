@@ -17,7 +17,7 @@ import { z } from "zod";
 import getFirebaseAuthErrorMessage from "@/utils/getFirebaseAuthErrorMessage";
 
 import { firebaseAuth } from "../../../firebaseConfig";
-import { ProfileStackParamList } from "../Profile";
+import { ProfileStackParamList } from ".";
 
 type LogInPageProps = NativeStackScreenProps<ProfileStackParamList, "LogIn">;
 
