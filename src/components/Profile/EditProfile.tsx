@@ -59,7 +59,6 @@ export default function EditProfile({ navigation }: EditProfileScreenProps) {
   const onSubmit: SubmitHandler<EditProfileFormValues> = async (data) => {
     const { displayName } = data;
 
-    console.log(displayName);
     await upsertUser(user, user.email, user.location, displayName);
     await reloadUser();
 
@@ -91,7 +90,7 @@ export default function EditProfile({ navigation }: EditProfileScreenProps) {
           <Text style={{ color: "red" }}>{errors.displayName.message}</Text>
         )}
 
-        <Text>Icon picker here</Text>
+        {/* <Text>Icon picker here</Text> */}
 
         <TouchableOpacity
           style={styles.saveButton}
