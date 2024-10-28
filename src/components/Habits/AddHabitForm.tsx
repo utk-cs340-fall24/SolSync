@@ -91,7 +91,7 @@ export default function AddHabitForm({ navigation }: AddHabitFormProps) {
 
     await addHabit({
       id: randomUUID(),
-      userId: user.uid,
+      userId: user.id,
       name,
       notificationPeriod,
       emailNotificationEnabled,

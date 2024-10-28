@@ -13,7 +13,7 @@ import {
 } from "react-native";
 import { z } from "zod";
 
-import { getUserFromFirestore, upsertUser } from "@/server";
+import { upsertUser } from "@/server";
 import getFirebaseAuthErrorMessage from "@/utils/getFirebaseAuthErrorMessage";
 import getLocationFromDevice from "@/utils/getLocationFromDevice";
 
