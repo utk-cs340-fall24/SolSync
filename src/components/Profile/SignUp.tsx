@@ -82,7 +82,6 @@ export default function SignUp() {
       url.searchParams.append("name", displayName.toString());
 
       console.log("Parameters successfully added.");
-
     } else {
       console.log("Unable to fetch email and name.");
     }
@@ -92,7 +91,8 @@ export default function SignUp() {
       const response = await fetch(url, {
         method: "GET",
         headers: {
-          "x-api-key": process.env.EXPO_PUBLIC_SENDWELCOMEEMAIL_API_KEY as string,
+          "x-api-key": process.env
+            .EXPO_PUBLIC_SENDWELCOMEEMAIL_API_KEY as string,
         },
       });
 
@@ -108,7 +108,6 @@ export default function SignUp() {
 
       // Print out success or error
       console.log(jsonData.message);
-
     } catch (err) {
       console.log(err);
     }
