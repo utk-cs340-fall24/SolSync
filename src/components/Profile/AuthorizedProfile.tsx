@@ -1,14 +1,6 @@
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { signOut } from "firebase/auth";
-import { useState } from "react";
-import {
-  Alert,
-  Modal,
-  Pressable,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { ActivityIndicator } from "react-native";
 import { default as FeatherIcon } from "react-native-vector-icons/Feather";
 import { default as FAIcon } from "react-native-vector-icons/FontAwesome";
@@ -18,9 +10,16 @@ import { upsertUser } from "@/server";
 import getLocationFromDevice from "@/utils/getLocationFromDevice";
 
 import { firebaseAuth } from "../../../firebaseConfig";
+import { ProfileStackParamList } from ".";
 
-export default function AuthorizedProfile() {
-  const [isModalVisible, setIsModalVisible] = useState(false);
+type AuthorizedProfilePageProps = NativeStackScreenProps<
+  ProfileStackParamList,
+  "AuthorizedProfile"
+>;
+
+export default function AuthorizedProfile({
+  navigation,
+}: AuthorizedProfilePageProps) {
   const { user, userIsLoading, reloadUser } = useUser();
 
   if (userIsLoading) {
@@ -49,32 +48,12 @@ export default function AuthorizedProfile() {
 
   return (
     <View style={styles.container}>
-      <Modal
-        animationType="slide"
-        transparent={true}
-        visible={isModalVisible}
-        onRequestClose={() => {
-          Alert.alert("Modal has been closed.");
-          setIsModalVisible(!isModalVisible);
-        }}
-      >
-        <View style={styles.modalView}>
-          <Text style={styles.modalText}>Edit Name and Email here</Text>
-          <Pressable
-            style={[styles.button, styles.buttonClose]}
-            onPress={() => setIsModalVisible(!isModalVisible)}
-          >
-            <Text style={styles.textStyle}>Save</Text>
-          </Pressable>
-        </View>
-      </Modal>
-
       <TouchableOpacity style={styles.editButton}>
         <FeatherIcon
           name="edit"
           size={38}
           color="#5A5A5A"
-          onPress={() => setIsModalVisible(true)}
+          onPress={() => navigation.navigate("EditProfile")}
         ></FeatherIcon>
       </TouchableOpacity>
 
@@ -89,26 +68,26 @@ export default function AuthorizedProfile() {
 
       <View style={styles.infoBox}>
         <View style={styles.infoField}>
-          <Text style={styles.infoTitle}>Name: </Text>
+          <Text style={styles.infoTitle}>Name </Text>
           <Text style={styles.infoValue}>{user?.displayName}</Text>
         </View>
         <View style={styles.line}></View>
         <View style={styles.infoField}>
-          <Text style={styles.infoTitle}>Email: </Text>
+          <Text style={styles.infoTitle}>Email </Text>
           <Text style={styles.infoValue}>{user?.email}</Text>
         </View>
       </View>
 
       <View style={styles.infoBox}>
         <View style={styles.infoField}>
-          <Text style={styles.infoTitle}>Latitude: </Text>
+          <Text style={styles.infoTitle}>Latitude </Text>
           <Text style={styles.infoValue}>
             {user?.location?.latitude?.toPrecision(7)}
           </Text>
         </View>
         <View style={styles.line}></View>
         <View style={styles.infoField}>
-          <Text style={styles.infoTitle}>Longitude: </Text>
+          <Text style={styles.infoTitle}>Longitude </Text>
           <Text style={styles.infoValue}>
             {user?.location?.longitude?.toPrecision(7)}
           </Text>
@@ -154,8 +133,8 @@ const styles = StyleSheet.create({
   },
   editButton: {
     position: "absolute",
-    top: "5%",
-    right: "8%",
+    top: 36,
+    right: 20,
   },
   header: {
     fontSize: 30,
@@ -221,45 +200,5 @@ const styles = StyleSheet.create({
     marginTop: 20,
     flexDirection: "row",
     justifyContent: "center",
-  },
-  // modal stuff starting here
-  modalView: {
-    flex: 1,
-    margin: 20,
-    backgroundColor: "white",
-    borderRadius: 20,
-    // padding: 100,
-    width: "92%",
-    height: "92%",
-    alignItems: "center",
-    justifyContent: "center",
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 1,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-    elevation: 4,
-  },
-  button: {
-    borderRadius: 20,
-    padding: 10,
-    elevation: 2,
-  },
-  buttonOpen: {
-    backgroundColor: "#F194FF",
-  },
-  buttonClose: {
-    backgroundColor: "#2196F3",
-  },
-  textStyle: {
-    color: "white",
-    fontWeight: "bold",
-    textAlign: "center",
-  },
-  modalText: {
-    marginBottom: 15,
-    textAlign: "center",
   },
 });

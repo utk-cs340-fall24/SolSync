@@ -4,14 +4,16 @@ import { ActivityIndicator, StyleSheet, View } from "react-native";
 
 import useUser from "@/hooks/useUser";
 
-import LogIn from "../LogIn";
-import SignUp from "../SignUp";
 import AuthorizedProfile from "./AuthorizedProfile";
+import EditProfile from "./EditProfile";
+import LogIn from "./Login";
+import SignUp from "./SignUp";
 
 export type ProfileStackParamList = {
   LogIn: undefined;
   SignUp: undefined;
   AuthorizedProfile: undefined;
+  EditProfile: undefined;
 };
 
 const Stack = createNativeStackNavigator<ProfileStackParamList>();
@@ -30,11 +32,18 @@ export default function Profile() {
   return (
     <Stack.Navigator screenOptions={{ headerTitle: "" }}>
       {user ? (
-        <Stack.Screen
-          name="AuthorizedProfile"
-          component={AuthorizedProfile}
-          options={{ headerShown: false }}
-        />
+        <>
+          <Stack.Screen
+            name="AuthorizedProfile"
+            component={AuthorizedProfile}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="EditProfile"
+            component={EditProfile}
+            options={{ headerShown: false, presentation: "modal" }}
+          />
+        </>
       ) : (
         <>
           <Stack.Screen

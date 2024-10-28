@@ -1,46 +1,15 @@
-import { onAuthStateChanged } from "firebase/auth";
-import { useEffect, useState } from "react";
+import { useContext } from "react";
 
-import { getUserFromFirestore } from "@/server";
-import { SolSyncUser } from "@/types";
+import { UserContext } from "@/providers/UserProvider";
 
-import { firebaseAuth } from "../../firebaseConfig";
+const useUser = () => {
+  const context = useContext(UserContext);
 
-type UseUser = {
-  user: SolSyncUser | null;
-  userIsLoading: boolean;
-  reloadUser: () => Promise<void>;
-};
+  if (!context) {
+    throw new Error("useUser must be used within a UserProvider");
+  }
 
-const useUser = (): UseUser => {
-  const [user, setUser] = useState<SolSyncUser | null>(null);
-  const [userIsLoading, setUserIsLoading] = useState(true);
-
-  const loadUser = () => {
-    setUserIsLoading(true);
-
-    onAuthStateChanged(firebaseAuth, async (firebaseAuthUser) => {
-      const solSyncUser = await getUserFromFirestore(firebaseAuthUser);
-      setUser(solSyncUser);
-      setUserIsLoading(false);
-    });
-  };
-
-  useEffect(() => {
-    loadUser();
-  }, []);
-
-  const reloadUser = async () => {
-    setUserIsLoading(true);
-    const currentUser = firebaseAuth.currentUser;
-
-    const solSyncUser = await getUserFromFirestore(currentUser);
-    setUser(solSyncUser);
-
-    setUserIsLoading(false);
-  };
-
-  return { user, userIsLoading, reloadUser };
+  return context;
 };
 
 export default useUser;
