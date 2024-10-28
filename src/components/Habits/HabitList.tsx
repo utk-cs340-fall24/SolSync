@@ -34,7 +34,7 @@ export default function HabitList({ navigation }: HabitListProps) {
       />
       <Pressable
         style={{
-          backgroundColor: "purple",
+          backgroundColor: "#b38acb",
           padding: 10,
           marginTop: "auto",
           marginBottom: 20,

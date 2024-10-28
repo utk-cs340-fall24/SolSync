@@ -4,11 +4,11 @@ import { randomUUID } from "expo-crypto";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import {
   ActivityIndicator,
-  Button,
   Keyboard,
   Switch,
   Text,
   TextInput,
+  TouchableOpacity,
   TouchableWithoutFeedback,
   View,
 } from "react-native";
@@ -106,14 +106,21 @@ export default function AddHabitForm({ navigation }: AddHabitFormProps) {
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
       <SafeAreaView style={styles.container}>
-        <Text>Add a habit</Text>
+        <View style={styles.titleContainer}>
+          <Text style={styles.title}>New Habit</Text>
+        </View>
+
+        <View style={styles.titleContainer}>
+          <Text style={styles.habitNameHeader}>Habit Name</Text>
+        </View>
         <Controller
           control={control}
           name="name"
           render={({ field: { onChange, onBlur, value } }) => (
             <TextInput
               autoCorrect={false}
-              style={styles.input}
+              autoCapitalize="words"
+              style={styles.nameInput}
               placeholder="Name"
               onChangeText={onChange}
               onBlur={onBlur}
@@ -124,17 +131,20 @@ export default function AddHabitForm({ navigation }: AddHabitFormProps) {
         {errors.name && (
           <Text style={{ color: "red" }}>{errors.name.message}</Text>
         )}
+        <View style={styles.titleContainer}>
+          <Text style={styles.habitTimeHeader}>Habit Time</Text>
+        </View>
         <Controller
           control={control}
           name="notificationPeriod"
           render={({ field: { onChange, value } }) => (
             <Dropdown
               data={[
-                { label: "Sunrise", value: "sunrise" },
-                { label: "Sunset", value: "sunset" },
+                { label: "  Sunrise", value: "sunrise" },
+                { label: "  Sunset", value: "sunset" },
               ]}
               onChange={(item) => onChange(item.value)}
-              style={styles.picker}
+              style={styles.timePicker}
               value={value}
               labelField={"label"}
               valueField={"value"}
@@ -147,96 +157,115 @@ export default function AddHabitForm({ navigation }: AddHabitFormProps) {
           </Text>
         )}
 
-        <Text>Email Notifications</Text>
-        <Controller
-          control={control}
-          name="emailNotificationEnabled"
-          render={({ field: { onChange, value } }) => (
-            <Switch
-              trackColor={{ false: "#767577", true: "#81b0ff" }}
-              thumbColor={value ? "#f5dd4b" : "#f4f3f4"}
-              ios_backgroundColor="#3e3e3e"
-              onValueChange={onChange}
-              value={value}
-            />
+        <Text style={styles.offsetHeader}>Offset</Text>
+        <View style={styles.sectionContainer}>
+          <Controller
+            control={control}
+            name="offsetDirection"
+            render={({ field: { onChange, value } }) => (
+              <Dropdown
+                data={[
+                  {
+                    label: `  Before ${notificationPeriod}`,
+                    value: "before",
+                  },
+                  { label: `  After ${notificationPeriod}`, value: "after" },
+                ]}
+                onChange={(item) => onChange(item.value)}
+                style={styles.offsetPicker}
+                value={value}
+                labelField={"label"}
+                valueField={"value"}
+              />
+            )}
+          />
+          {errors.offsetDirection && (
+            <Text style={{ color: "red" }}>
+              {errors.offsetDirection.message}
+            </Text>
           )}
-        />
+          <View style={styles.offsetDivider} />
+          <View style={styles.offsetRow}>
+            <View style={styles.offsetColumns}>
+              <Text style={styles.timeHeader}>Hour</Text>
+              <Controller
+                control={control}
+                name="hourOffset"
+                render={({ field: { onChange, onBlur, value } }) => (
+                  <TextInput
+                    autoCorrect={false}
+                    style={styles.timeInput}
+                    placeholder="Hour offset"
+                    onChangeText={(text) => onChange(Number(text))}
+                    onBlur={onBlur}
+                    keyboardType="numeric"
+                    value={String(value)}
+                  />
+                )}
+              />
+            </View>
+            <Text style={styles.colon}>:</Text>
+            <View style={styles.offsetColumns}>
+              <Text style={styles.timeHeader}>Minute</Text>
+              <Controller
+                control={control}
+                name="minuteOffset"
+                render={({ field: { onChange, onBlur, value } }) => (
+                  <TextInput
+                    autoCorrect={false}
+                    style={styles.timeInput}
+                    placeholder="Minute offset"
+                    onChangeText={(text) => onChange(Number(text))}
+                    onBlur={onBlur}
+                    keyboardType="numeric"
+                    value={String(value)}
+                  />
+                )}
+              />
+            </View>
+          </View>
+        </View>
+        {errors.hourOffset && (
+          <Text style={{ color: "red" }}>{errors.hourOffset.message}</Text>
+        )}
+        {errors.minuteOffset && (
+          <Text style={{ color: "red" }}>{errors.minuteOffset.message}</Text>
+        )}
+
+        <View style={styles.emailRow}>
+          <Text style={styles.emailText}>Email Notifications</Text>
+          <Controller
+            control={control}
+            name="emailNotificationEnabled"
+            render={({ field: { onChange, value } }) => (
+              <Switch
+                trackColor={{ false: "#767577", true: "#F4A58A" }}
+                thumbColor={value ? "#FFFFFF" : "#FFFFFF"}
+                ios_backgroundColor="#3e3e3e"
+                onValueChange={onChange}
+                value={value}
+              />
+            )}
+          />
+        </View>
         {errors.emailNotificationEnabled && (
           <Text style={{ color: "red" }}>
             {errors.emailNotificationEnabled.message}
           </Text>
         )}
-
-        <Text>Hour offset</Text>
-        <Controller
-          control={control}
-          name="hourOffset"
-          render={({ field: { onChange, onBlur, value } }) => (
-            <TextInput
-              autoCorrect={false}
-              style={styles.input}
-              placeholder="Hour offset"
-              onChangeText={(text) => onChange(Number(text))}
-              onBlur={onBlur}
-              keyboardType="numeric"
-              value={String(value)}
-            />
-          )}
-        />
-        {errors.hourOffset && (
-          <Text style={{ color: "red" }}>{errors.hourOffset.message}</Text>
-        )}
-
-        <Text>Minute offset</Text>
-        <Controller
-          control={control}
-          name="minuteOffset"
-          render={({ field: { onChange, onBlur, value } }) => (
-            <TextInput
-              autoCorrect={false}
-              style={styles.input}
-              placeholder="Minute offset"
-              onChangeText={(text) => onChange(Number(text))}
-              onBlur={onBlur}
-              keyboardType="numeric"
-              value={String(value)}
-            />
-          )}
-        />
-        {errors.minuteOffset && (
-          <Text style={{ color: "red" }}>{errors.minuteOffset.message}</Text>
-        )}
-
-        <Text>Offset direction</Text>
-        <Controller
-          control={control}
-          name="offsetDirection"
-          render={({ field: { onChange, value } }) => (
-            <Dropdown
-              data={[
-                {
-                  label: `Before ${notificationPeriod}`,
-                  value: "before",
-                },
-                { label: `After ${notificationPeriod}`, value: "after" },
-              ]}
-              onChange={(item) => onChange(item.value)}
-              style={styles.picker}
-              value={value}
-              labelField={"label"}
-              valueField={"value"}
-            />
-          )}
-        />
-        {errors.offsetDirection && (
-          <Text style={{ color: "red" }}>{errors.offsetDirection.message}</Text>
-        )}
-
-        <Button
-          title="Add Habit"
-          color="purple"
+        <TouchableOpacity
+          style={styles.addHabitButton}
           onPress={handleSubmit(onSubmit)}
-        />
+        >
+          <Text style={styles.buttonText}>Add Habit</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={styles.cancelButton}
+          onPress={() => navigation.navigate("HabitList")}
+        >
+          <Text style={styles.buttonText}>Cancel</Text>
+        </TouchableOpacity>
       </SafeAreaView>
     </TouchableWithoutFeedback>
   );
@@ -245,20 +274,144 @@ export default function AddHabitForm({ navigation }: AddHabitFormProps) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: "#f9f9f9",
     alignItems: "center",
     justifyContent: "center",
   },
-  input: {
-    height: 40,
-    width: "70%",
+  sectionContainer: {
+    paddingHorizontal: 0,
+    width: "80%",
+    borderWidth: 1,
+    borderColor: "#ccc",
+    borderRadius: 10,
+    padding: 15,
+    backgroundColor: "#f9f9f9",
+    marginBottom: 20,
+  },
+  titleContainer: {
+    alignItems: "center",
+  },
+  title: {
+    fontSize: 20,
+    fontWeight: "bold",
+    color: "#4a3f4c",
+    marginTop: -35,
+  },
+  habitNameHeader: {
+    fontSize: 18,
+    marginTop: 10,
+    alignSelf: "flex-start",
+    marginLeft: -155,
+    color: "#5A5A5A",
+  },
+  habitTimeHeader: {
+    fontSize: 18,
+    marginTop: 10,
+    marginBottom: 10,
+    alignSelf: "flex-start",
+    marginLeft: -155,
+    color: "#5A5A5A",
+  },
+  nameInput: {
+    height: 45,
+    width: "80%",
     marginHorizontal: 12,
     margin: 12,
     borderWidth: 1,
     padding: 10,
+    borderRadius: 8,
+    borderColor: "#ccc",
+    fontSize: 16,
   },
-  picker: {
-    width: "70%",
+  timeInput: {
+    height: 40,
+    width: "40%",
+    maxWidth: 40,
+    textAlign: "center",
+    marginHorizontal: 60,
+    margin: 12,
     borderWidth: 1,
+    padding: 10,
+    borderRadius: 8,
+    borderColor: "#ccc",
+  },
+  emailRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginVertical: 10,
+    borderWidth: 1,
+    padding: 10,
+    borderRadius: 8,
+    borderColor: "#ccc",
+    height: 50,
+    width: "80%",
+  },
+  offsetRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginTop: 10,
+  },
+  offsetColumns: {
+    alignItems: "center",
+  },
+  timeHeader: {
+    fontSize: 20,
+  },
+  colon: {
+    fontSize: 40,
+    alignSelf: "center",
+    marginTop: 15,
+  },
+  emailText: {
+    fontSize: 18,
+    marginRight: 80,
+  },
+  offsetHeader: {
+    fontSize: 18,
+    marginTop: 20,
+    marginBottom: 10,
+    alignSelf: "flex-start",
+    marginLeft: 40,
+    color: "#5A5A5A",
+  },
+  timePicker: {
+    width: "80%",
+    height: 50,
+    borderWidth: 1,
+    borderRadius: 8,
+    borderColor: "#ccc",
+  },
+  offsetPicker: {
+    width: "100%",
+    height: 30,
+  },
+  offsetDivider: {
+    height: 1,
+    backgroundColor: "#ccc",
+    marginVertical: 10,
+  },
+  buttonText: {
+    color: "#fff",
+    fontSize: 16,
+    fontWeight: "600",
+  },
+  addHabitButton: {
+    backgroundColor: "#b38acb",
+    width: "80%",
+    paddingVertical: 10,
+    borderRadius: 8,
+    alignItems: "center",
+    marginTop: 20,
+  },
+  cancelButton: {
+    backgroundColor: "#f4a58a",
+    width: "80%",
+    paddingVertical: 10,
+    borderRadius: 8,
+    alignItems: "center",
+    marginTop: 10,
+    marginBottom: -30,
   },
 });
