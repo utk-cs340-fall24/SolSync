@@ -1,27 +1,46 @@
 import { onAuthStateChanged } from "firebase/auth";
 import { useEffect, useState } from "react";
 
-import { getUser } from "@/server";
+import { getUserFromFirestore } from "@/server";
 import { SolSyncUser } from "@/types";
 
 import { firebaseAuth } from "../../firebaseConfig";
 
-const useUser = (): [SolSyncUser | null, boolean] => {
+type UseUser = {
+  user: SolSyncUser | null;
+  userIsLoading: boolean;
+  reloadUser: () => Promise<void>;
+};
+
+const useUser = (): UseUser => {
   const [user, setUser] = useState<SolSyncUser | null>(null);
   const [userIsLoading, setUserIsLoading] = useState(true);
 
-  useEffect(() => {
+  const loadUser = () => {
     setUserIsLoading(true);
 
-    onAuthStateChanged(firebaseAuth, (firebaseAuthUser) => {
-      getUser(firebaseAuthUser).then((user) => {
-        setUser(user);
-        setUserIsLoading(false);
-      });
+    onAuthStateChanged(firebaseAuth, async (firebaseAuthUser) => {
+      const solSyncUser = await getUserFromFirestore(firebaseAuthUser);
+      setUser(solSyncUser);
+      setUserIsLoading(false);
     });
+  };
+
+  useEffect(() => {
+    loadUser();
   }, []);
 
-  return [user, userIsLoading];
+  const reloadUser = async () => {
+    setUserIsLoading(true);
+    const currentUser = firebaseAuth.currentUser;
+
+    const solSyncUser = await getUserFromFirestore(currentUser);
+    setUser(solSyncUser);
+
+    setUserIsLoading(false);
+  };
+
+  return { user, userIsLoading, reloadUser };
 };
 
 export default useUser;

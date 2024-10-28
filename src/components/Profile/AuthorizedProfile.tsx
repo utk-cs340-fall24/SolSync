@@ -1,11 +1,12 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { signOut, User } from "firebase/auth";
+import { signOut } from "firebase/auth";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { ActivityIndicator } from "react-native";
 import { default as FeatherIcon } from "react-native-vector-icons/Feather";
 import { default as FAIcon } from "react-native-vector-icons/FontAwesome";
 
 import useUser from "@/hooks/useUser";
-import { setUser } from "@/server";
+import { upsertUser } from "@/server";
 import getLocationFromDevice from "@/utils/getLocationFromDevice";
 
 import { firebaseAuth } from "../../../firebaseConfig";
@@ -19,16 +20,30 @@ type AuthorizedProfilePageProps = NativeStackScreenProps<
 export default function AuthorizedProfile({
   navigation,
 }: AuthorizedProfilePageProps) {
-  const [user] = useUser();
+  const { user, userIsLoading, reloadUser } = useUser();
 
-  const handleUpdateLocation = () => {
-    if (!user) {
-      return;
-    }
+  if (userIsLoading) {
+    return (
+      <View style={styles.container}>
+        <ActivityIndicator size="small" color="#000000" />
+      </View>
+    );
+  }
 
-    getLocationFromDevice().then((location) => {
-      setUser(user as User, location, user.displayName);
-    });
+  if (!user) {
+    return <Text>Please log in to view your profile</Text>;
+  }
+
+  const handleUpdateLocation = async () => {
+    const location = await getLocationFromDevice();
+
+    const userCopy = user;
+
+    userCopy.location.latitude = location.latitude;
+    userCopy.location.longitude = location.longitude;
+
+    await upsertUser(userCopy, userCopy.email, location, userCopy.displayName);
+    await reloadUser();
   };
 
   return (
@@ -124,7 +139,9 @@ const styles = StyleSheet.create({
   header: {
     fontSize: 30,
     paddingBottom: 40,
-    marginTop: 20,
+    marginTop: 50,
+    width: "80%",
+    textAlign: "center",
   },
   infoBox: {
     backgroundColor: "#fff",

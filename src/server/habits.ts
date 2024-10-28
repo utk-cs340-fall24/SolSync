@@ -14,7 +14,7 @@ import { db } from "../../firebaseConfig";
 
 export const getHabits = async (user: SolSyncUser): Promise<Habit[]> => {
   const habitsQuery = await getDocs(
-    query(collection(db, "habits"), where("userId", "==", user.uid)),
+    query(collection(db, "habits"), where("userId", "==", user.id)),
   );
 
   const habits = habitsQuery.docs.map(

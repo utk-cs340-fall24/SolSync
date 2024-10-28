@@ -6,7 +6,7 @@ import { db } from "../../firebaseConfig";
 
 export const getHistory = async (user: SolSyncUser): Promise<History[]> => {
   const historyQuery = await getDocs(
-    query(collection(db, "history"), where("userId", "==", user?.uid)),
+    query(collection(db, "history"), where("userId", "==", user?.id)),
   );
 
   const history = historyQuery.docs.map(

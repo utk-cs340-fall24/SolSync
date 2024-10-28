@@ -65,7 +65,7 @@ export default function AddHabitForm({ navigation }: AddHabitFormProps) {
 
   const { addHabit } = useHabit();
 
-  const [user, userIsLoading] = useUser();
+  const { user, userIsLoading } = useUser();
 
   if (userIsLoading) {
     return (
@@ -91,7 +91,7 @@ export default function AddHabitForm({ navigation }: AddHabitFormProps) {
 
     await addHabit({
       id: randomUUID(),
-      userId: user.uid,
+      userId: user.id,
       name,
       notificationPeriod,
       emailNotificationEnabled,

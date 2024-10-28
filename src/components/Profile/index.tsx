@@ -19,7 +19,7 @@ export type ProfileStackParamList = {
 const Stack = createNativeStackNavigator<ProfileStackParamList>();
 
 export default function Profile() {
-  const [user, userIsLoading] = useUser();
+  const { user, userIsLoading } = useUser();
 
   if (userIsLoading) {
     return (
