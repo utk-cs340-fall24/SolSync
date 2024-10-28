@@ -1,6 +1,6 @@
 import { useContext } from "react";
 
-import { HabitContext } from "@/components/Habits/HabitProvider";
+import { HabitContext } from "@/providers/HabitProvider";
 
 export const useHabit = () => {
   const context = useContext(HabitContext);
