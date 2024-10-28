@@ -79,7 +79,8 @@ export default function HistoryComponent() {
   if (!user) {
     return (
       <View style={styles.container}>
-        <Text>Please sign in to view your habits</Text>
+        <Text style={styles.title}>SolSync</Text>
+        <Text style={styles.LogIn}>Log in to view your history</Text>
       </View>
     );
   }
@@ -119,5 +120,16 @@ const styles = StyleSheet.create({
     height: 300,
     width: 400,
     marginTop: 30,
+  },
+  title: {
+    fontSize: 42,
+    fontWeight: "bold",
+    color: "#4a3f4c",
+    marginTop: -198,
+    alignItems: "center",
+  },
+  LogIn: {
+    fontSize: 25,
+    marginTop: 200,
   },
 });
