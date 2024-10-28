@@ -15,7 +15,7 @@ import {
 import { z } from "zod";
 
 import useUser from "@/hooks/useUser";
-import { setUser } from "@/server";
+import { upsertUser } from "@/server";
 
 import { ProfileStackParamList } from ".";
 
@@ -31,7 +31,7 @@ type EditProfileScreenProps = NativeStackScreenProps<
 >;
 
 export default function EditProfile({ navigation }: EditProfileScreenProps) {
-  const [user, userIsLoading] = useUser();
+  const { user, userIsLoading, reloadUser } = useUser();
 
   const {
     control,
@@ -59,7 +59,10 @@ export default function EditProfile({ navigation }: EditProfileScreenProps) {
   const onSubmit: SubmitHandler<EditProfileFormValues> = async (data) => {
     const { displayName } = data;
 
-    await setUser(user, user.location, displayName);
+    console.log(displayName);
+    await upsertUser(user, user.email, user.location, displayName);
+    await reloadUser();
+
     navigation.navigate("AuthorizedProfile");
   };
 
