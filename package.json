@@ -10,7 +10,8 @@
     "lint": "eslint src App.tsx --fix",
     "check-lint": "eslint src App.tsx",
     "check-format": "prettier --check src App.tsx",
-    "format": "prettier --write src App.tsx"
+    "format": "prettier --write src App.tsx",
+    "daily-email": "node --env-file=.env lambdas/sendDailyEmails/index.mjs"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.0",
