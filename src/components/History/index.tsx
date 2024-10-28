@@ -27,7 +27,7 @@ type DropdownItem = {
 };
 
 export default function HistoryComponent() {
-  const [user, userIsLoading] = useUser();
+  const { user, userIsLoading } = useUser();
   const { habits } = useHabit();
   const [currentHabit, setCurrentHabit] = useState<Habit | undefined>(
     habits[0],

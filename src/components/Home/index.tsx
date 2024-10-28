@@ -38,7 +38,7 @@ export default function Home() {
   const [sunset, setSunset] = useState<Date | null>();
   const [nextsunrise, setNextSunrise] = useState<Date | null>();
   const [loading, setLoading] = useState(true);
-  const [user, userLoading] = useUser();
+  const { user } = useUser();
 
   useEffect(() => {
     fetchData();

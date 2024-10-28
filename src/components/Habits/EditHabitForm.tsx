@@ -71,7 +71,7 @@ export default function EditHabitForm({
 
   const { updateHabit, removeHabit } = useHabit();
 
-  const [user, userIsLoading] = useUser();
+  const { user, userIsLoading } = useUser();
 
   if (userIsLoading) {
     return (
@@ -97,7 +97,7 @@ export default function EditHabitForm({
 
     await updateHabit({
       id: habit.id,
-      userId: user.uid,
+      userId: user.id,
       name,
       notificationPeriod,
       emailNotificationEnabled,

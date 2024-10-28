@@ -13,7 +13,7 @@ import {
 } from "react-native";
 import { z } from "zod";
 
-import { setUser } from "@/server";
+import { upsertUser } from "@/server";
 import getFirebaseAuthErrorMessage from "@/utils/getFirebaseAuthErrorMessage";
 import getLocationFromDevice from "@/utils/getLocationFromDevice";
 
@@ -50,7 +50,14 @@ export default function SignUp() {
 
       const location = await getLocationFromDevice();
 
-      await setUser(credentials.user, location, displayName);
+      const newSolSyncUser = {
+        id: credentials.user.uid,
+        email: email,
+        displayName: displayName,
+        location: location,
+      };
+
+      await upsertUser(newSolSyncUser, email, location, displayName);
     } catch (error) {
       if (error instanceof FirebaseError) {
         setError("root", {
