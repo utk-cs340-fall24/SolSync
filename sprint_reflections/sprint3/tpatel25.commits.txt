@@ -1,0 +1,359 @@
+package.json (trishu patel on 10/28/2024 at 13:36):     "format": "prettier --write src App.tsx",
+package.json (trishu patel on 10/28/2024 at 13:36):     "daily-email": "node --env-file=.env lambdas/sendDailyEmails/index.mjs"
+package.json (trishu patel on 10/28/2024 at 13:36): {
+package.json (trishu patel on 10/28/2024 at 13:36):   "name": "send-daily-emails",
+package.json (trishu patel on 10/28/2024 at 13:36):   "version": "1.0.0",
+package.json (trishu patel on 10/28/2024 at 13:36):   "main": "index.js",
+package.json (trishu patel on 10/28/2024 at 13:36):   "scripts": {
+package.json (trishu patel on 10/28/2024 at 13:36):     "test": "echo \"Error: no test specified\" && exit 1"
+package.json (trishu patel on 10/28/2024 at 13:36):   },
+package.json (trishu patel on 10/28/2024 at 13:36):   "keywords": [],
+package.json (trishu patel on 10/28/2024 at 13:36):   "author": "",
+package.json (trishu patel on 10/28/2024 at 13:36):   "license": "ISC",
+package.json (trishu patel on 10/28/2024 at 13:36):   "description": "",
+package.json (trishu patel on 10/28/2024 at 13:36):   "dependencies": {
+package.json (trishu patel on 10/28/2024 at 13:36):     "dayjs": "^1.11.13",
+package.json (trishu patel on 10/28/2024 at 13:36):     "firebase-admin": "^12.6.0"
+package.json (trishu patel on 10/28/2024 at 13:36):   }
+package.json (trishu patel on 10/28/2024 at 13:36): }
+index.mjs    (trishu patel on 10/28/2024 at 13:36): import dayjs from "dayjs";
+index.mjs    (trishu patel on 10/28/2024 at 13:36): import { cert, initializeApp } from "firebase-admin/app";
+index.mjs    (trishu patel on 10/28/2024 at 13:36): import { getFirestore } from "firebase-admin/firestore";
+index.mjs    (trishu patel on 10/28/2024 at 13:36): import { URL } from "url";
+index.mjs    (trishu patel on 10/28/2024 at 13:36): initializeApp({
+index.mjs    (trishu patel on 10/28/2024 at 13:36):   credential: cert({
+index.mjs    (trishu patel on 10/28/2024 at 13:36):     type: process.env.FIREBASE_ADMIN_TYPE,
+index.mjs    (trishu patel on 10/28/2024 at 13:36):     project_id: process.env.FIREBASE_ADMIN_PROJECT_ID,
+index.mjs    (trishu patel on 10/28/2024 at 13:36):     private_key_id: process.env.FIREBASE_ADMIN_PRIVATE_KEY_id,
+index.mjs    (trishu patel on 10/28/2024 at 13:36):     private_key: process.env.FIREBASE_ADMIN_PRIVATE_KEY,
+index.mjs    (trishu patel on 10/28/2024 at 13:36):     client_email: process.env.FIREBASE_ADMIN_CLIENT_EMAIL,
+index.mjs    (trishu patel on 10/28/2024 at 13:36):     client_id: process.env.FIREBASE_ADMIN_CLIENT_ID,
+index.mjs    (trishu patel on 10/28/2024 at 13:36):     auth_uri: process.env.FIREBASE_ADMIN_AUTH_URI,
+index.mjs    (trishu patel on 10/28/2024 at 13:36):     token_uri: process.env.FIREBASE_ADMIN_TOKEN_URI,
+index.mjs    (trishu patel on 10/28/2024 at 13:36):     auth_provider_x509_cert_url:
+index.mjs    (trishu patel on 10/28/2024 at 13:36):       process.env.FIREBASE_ADMIN_AUTH_PROVIDER_X509_CERT_URL,
+index.mjs    (trishu patel on 10/28/2024 at 13:36):     client_x509_cert_url: process.env.FIREBASE_ADMIN_CLIENT_X509_CERT_URL,
+index.mjs    (trishu patel on 10/28/2024 at 13:36):     universe_domain: process.env.FIREBASE_ADMIN_UNIVERSE_DOMAIN,
+index.mjs    (trishu patel on 10/28/2024 at 13:36):   }),
+index.mjs    (trishu patel on 10/28/2024 at 13:36): });
+index.mjs    (trishu patel on 10/28/2024 at 13:36): const db = getFirestore();
+index.mjs    (trishu patel on 10/28/2024 at 13:36): const getSunriseSunsetTime = async (user) => {
+index.mjs    (trishu patel on 10/28/2024 at 13:36):   const url = new URL(process.env.EXPO_PUBLIC_GETSUNRISESUNSET_API_URL);
+index.mjs    (trishu patel on 10/28/2024 at 13:36):   url.searchParams.append("latitude", user.latitude);
+index.mjs    (trishu patel on 10/28/2024 at 13:36):   url.searchParams.append("longitude", user.longitude);
+index.mjs    (trishu patel on 10/28/2024 at 13:36):   let sunrise = null;
+index.mjs    (trishu patel on 10/28/2024 at 13:36):   let sunset = null;
+index.mjs    (trishu patel on 10/28/2024 at 13:36):   try {
+index.mjs    (trishu patel on 10/28/2024 at 13:36):     const response = await fetch(url, {
+index.mjs    (trishu patel on 10/28/2024 at 13:36):       method: "GET",
+index.mjs    (trishu patel on 10/28/2024 at 13:36):       headers: {
+index.mjs    (trishu patel on 10/29/2024 at 08:46):         "x-api-key": process.env.EXPO_PUBLIC_SENDDAILYEMAIL_API_KEY,
+index.mjs    (trishu patel on 10/28/2024 at 13:36):       },
+index.mjs    (trishu patel on 10/28/2024 at 13:36):     });
+index.mjs    (trishu patel on 10/28/2024 at 13:36):     const jsonData = await response.json();
+index.mjs    (trishu patel on 10/28/2024 at 13:36):     sunrise = dayjs(jsonData.todaySunrise);
+index.mjs    (trishu patel on 10/28/2024 at 13:36):     sunset = dayjs(jsonData.todaySunset);
+index.mjs    (trishu patel on 10/28/2024 at 13:36):   } catch (err) {
+index.mjs    (trishu patel on 10/28/2024 at 13:36):     console.log(err);
+index.mjs    (trishu patel on 10/28/2024 at 13:36):   }
+index.mjs    (trishu patel on 10/28/2024 at 13:36):   return [sunrise, sunset];
+index.mjs    (trishu patel on 10/28/2024 at 13:36): };
+index.mjs    (trishu patel on 10/28/2024 at 13:36): const constructEmailBody = async (user) => {
+index.mjs    (trishu patel on 10/28/2024 at 13:36):   const [sunrise, sunset] = await getSunriseSunsetTime(user);
+index.mjs    (trishu patel on 10/28/2024 at 13:36):   let habitHTML = "";
+index.mjs    (trishu patel on 10/28/2024 at 13:36):   let habitTime = null;
+index.mjs    (trishu patel on 10/28/2024 at 13:36):   user.habits.forEach((habit) => {
+index.mjs    (trishu patel on 10/28/2024 at 13:36):     switch (habit.notificationPeriod) {
+index.mjs    (trishu patel on 10/28/2024 at 13:36):       case "sunrise":
+index.mjs    (trishu patel on 10/28/2024 at 13:36):         habitTime = sunrise;
+index.mjs    (trishu patel on 10/28/2024 at 13:36):         break;
+index.mjs    (trishu patel on 10/28/2024 at 13:36):       case "sunset":
+index.mjs    (trishu patel on 10/28/2024 at 13:36):         habitTime = sunset;
+index.mjs    (trishu patel on 10/28/2024 at 13:36):         break;
+index.mjs    (trishu patel on 10/28/2024 at 13:36):       default:
+index.mjs    (trishu patel on 10/28/2024 at 13:36):         console.log("Incorrect notification period");
+index.mjs    (trishu patel on 10/28/2024 at 13:36):         return;
+index.mjs    (trishu patel on 10/28/2024 at 13:36):     }
+index.mjs    (trishu patel on 10/28/2024 at 13:36):     switch (habit.offsetDirection) {
+index.mjs    (trishu patel on 10/28/2024 at 13:36):       case "before":
+index.mjs    (trishu patel on 10/28/2024 at 13:36):         habitTime = habitTime.subtract(habit.hourOffset, "hour");
+index.mjs    (trishu patel on 10/28/2024 at 13:36):         habitTime = habitTime.subtract(habit.minuteOffset, "minute");
+index.mjs    (trishu patel on 10/28/2024 at 13:36):         break;
+index.mjs    (trishu patel on 10/28/2024 at 13:36):       case "after":
+index.mjs    (trishu patel on 10/28/2024 at 13:36):         habitTime = habitTime.add(habit.hourOffset, "hour");
+index.mjs    (trishu patel on 10/28/2024 at 13:36):         habitTime = habitTime.add(habit.minuteOffset, "minute");
+index.mjs    (trishu patel on 10/28/2024 at 13:36):         break;
+index.mjs    (trishu patel on 10/28/2024 at 13:36):       default:
+index.mjs    (trishu patel on 10/28/2024 at 13:36):         console.log("Incorrect offset direction");
+index.mjs    (trishu patel on 10/28/2024 at 13:36):         return;
+index.mjs    (trishu patel on 10/28/2024 at 13:36):     }
+index.mjs    (trishu patel on 10/28/2024 at 13:36):     const getHabitTimeMessage = (habit) => {
+index.mjs    (trishu patel on 10/28/2024 at 13:36):       if (habit.hourOffset === 0 && habit.minuteOffset === 0) {
+index.mjs    (trishu patel on 10/28/2024 at 13:36):         return `at ${habit.notificationPeriod}`;
+index.mjs    (trishu patel on 10/28/2024 at 13:36):       }
+index.mjs    (trishu patel on 10/28/2024 at 13:36):       let habitTimeMessage = "";
+index.mjs    (trishu patel on 10/28/2024 at 13:36):       if (habit.hourOffset !== 0) {
+index.mjs    (trishu patel on 10/28/2024 at 13:36):         habitTimeMessage += `${habit.hourOffset} ${habit.hourOffset === 1 ? "hour" : "hours"}`;
+index.mjs    (trishu patel on 10/28/2024 at 13:36):       }
+index.mjs    (trishu patel on 10/28/2024 at 13:36):       if (habit.minuteOffset !== 0) {
+index.mjs    (trishu patel on 10/28/2024 at 13:36):         if (habitTimeMessage != "") habitTimeMessage += " ";
+index.mjs    (trishu patel on 10/28/2024 at 13:36):         habitTimeMessage += `${habit.minuteOffset} ${habit.minuteOffset === 1 ? "minute" : "minutes"}`;
+index.mjs    (trishu patel on 10/28/2024 at 13:36):       }
+index.mjs    (trishu patel on 10/28/2024 at 13:36):       habitTimeMessage += ` ${habit.offsetDirection} ${habit.notificationPeriod}`;
+index.mjs    (trishu patel on 10/28/2024 at 13:36):       return habitTimeMessage;
+index.mjs    (trishu patel on 10/28/2024 at 13:36):     };
+index.mjs    (trishu patel on 10/28/2024 at 13:36):     const habitTimeMessage = getHabitTimeMessage(habit);
+index.mjs    (trishu patel on 10/28/2024 at 13:36):     habitHTML += `
+index.mjs    (trishu patel on 10/28/2024 at 13:36):       <p style="font-size: 18px;">
+index.mjs    (trishu patel on 10/28/2024 at 13:36):         <strong style="color: #D65F0D;">${habit.name}:</strong> <span style="color: #000;">${habitTime.format("h:mm A")} (${habitTimeMessage})</span>
+index.mjs    (trishu patel on 10/28/2024 at 13:36):       </p>`;
+index.mjs    (trishu patel on 10/28/2024 at 13:36):   });
+index.mjs    (trishu patel on 10/28/2024 at 13:36):   const emailHTML = `
+index.mjs    (trishu patel on 10/28/2024 at 13:36):     <div style="font-family: Arial, sans-serif; padding: 20px; background-color: #FFCC80; color: #000; text-align: center;">
+index.mjs    (trishu patel on 10/28/2024 at 13:36):       <h1 style="color: #D65F0D;">SolSync Daily Reflection</h1>
+index.mjs    (trishu patel on 10/28/2024 at 13:36):       <div style="background-color: rgba(255, 255, 255, 0.8); padding: 15px; border-radius: 8px; display: inline-block; text-align: left;">
+index.mjs    (trishu patel on 10/28/2024 at 13:36):         <p style="font-size: 20px;">
+index.mjs    (trishu patel on 10/28/2024 at 13:36):           Embrace the beauty of each day. Remember to practice your habits!
+index.mjs    (trishu patel on 10/28/2024 at 13:36):         </p>
+index.mjs    (trishu patel on 10/28/2024 at 13:36):               <p style="font-size: 18px;">
+index.mjs    (trishu patel on 10/28/2024 at 13:36):           <strong style="color: #D65F0D;">Sunrise:</strong> <span style="color: #000;">${sunrise.format("h:mm A")}</span>
+index.mjs    (trishu patel on 10/28/2024 at 13:36):         </p>
+index.mjs    (trishu patel on 10/28/2024 at 13:36):         <p style="font-size: 18px;">
+index.mjs    (trishu patel on 10/28/2024 at 13:36):           <strong style="color: #D65F0D;">Sunset:</strong> <span style="color: #000;">${sunset.format("h:mm A")}</span>
+index.mjs    (trishu patel on 10/28/2024 at 13:36):         </p>
+index.mjs    (trishu patel on 10/28/2024 at 13:36):         <h2 style="color: #D65F0D;">Upcoming Habit (${dayjs().format("dddd, MMMM D YYYY")}):</h2>
+index.mjs    (trishu patel on 10/28/2024 at 13:36):         ${habitHTML}
+index.mjs    (trishu patel on 10/28/2024 at 13:36):         <h2 style="color: #D65F0D;">Tips for Your Habit</h2>
+index.mjs    (trishu patel on 10/28/2024 at 13:36):         <ul style="font-size: 18px; margin: 10px 0; padding-left: 20px;">
+index.mjs    (trishu patel on 10/28/2024 at 13:36):           <li>Set a specific time to practice your habit each day.</li>
+index.mjs    (trishu patel on 10/28/2024 at 13:36):           <li>Track your progress to stay motivated.</li>
+index.mjs    (trishu patel on 10/28/2024 at 13:36):           <li>Find a friend to share your goals with.</li>
+index.mjs    (trishu patel on 10/28/2024 at 13:36):         </ul>
+index.mjs    (trishu patel on 10/28/2024 at 13:36):       </div>
+index.mjs    (trishu patel on 10/28/2024 at 13:36):     </div>
+index.mjs    (trishu patel on 10/28/2024 at 13:36):   `;
+index.mjs    (trishu patel on 10/28/2024 at 13:36):   return emailHTML;
+index.mjs    (trishu patel on 10/28/2024 at 13:36): };
+index.mjs    (trishu patel on 10/28/2024 at 13:36): const sendDailyEmail = async (user, emailBody) => {
+index.mjs    (trishu patel on 10/28/2024 at 13:36):   const sendTime = dayjs().add(20, "second");
+index.mjs    (trishu patel on 10/28/2024 at 13:36):   try {
+index.mjs    (trishu patel on 10/28/2024 at 13:36):     const response = await fetch(process.env.EXPO_PUBLIC_SENDEMAIL_API_URL, {
+index.mjs    (trishu patel on 10/28/2024 at 13:36):       method: "POST",
+index.mjs    (trishu patel on 10/28/2024 at 13:36):       headers: {
+index.mjs    (trishu patel on 10/28/2024 at 13:36):         "x-api-key": process.env.EXPO_PUBLIC_SENDEMAIL_API_KEY,
+index.mjs    (trishu patel on 10/28/2024 at 13:36):       },
+index.mjs    (trishu patel on 10/28/2024 at 13:36):       body: JSON.stringify({
+index.mjs    (trishu patel on 10/28/2024 at 13:36):         to: user.email,
+index.mjs    (trishu patel on 10/28/2024 at 13:36):         subject: "Welcome to SolSync",
+index.mjs    (trishu patel on 10/28/2024 at 13:36):         text: "We are glad you have chosen to become a part of the SolSync community.",
+index.mjs    (trishu patel on 10/28/2024 at 13:36):         textFormat: emailBody,
+index.mjs    (trishu patel on 10/28/2024 at 13:36):         deliveryTime: sendTime.format("ddd, DD MMM YYYY HH:mm:ss ZZ"),
+index.mjs    (trishu patel on 10/28/2024 at 13:36):       }),
+index.mjs    (trishu patel on 10/28/2024 at 13:36):     });
+index.mjs    (trishu patel on 10/28/2024 at 13:36):     const jsonData = await response.json();
+index.mjs    (trishu patel on 10/28/2024 at 13:36):     if (response.ok) {
+index.mjs    (trishu patel on 10/28/2024 at 13:36):       return {
+index.mjs    (trishu patel on 10/28/2024 at 13:36):         statusCode: 200,
+index.mjs    (trishu patel on 10/28/2024 at 13:36):         body: JSON.stringify({
+index.mjs    (trishu patel on 10/28/2024 at 13:36):           message: "Email sent successfully!",
+index.mjs    (trishu patel on 10/28/2024 at 13:36):           event: jsonData.eventTo,
+index.mjs    (trishu patel on 10/28/2024 at 13:36):           data: jsonData.data,
+index.mjs    (trishu patel on 10/28/2024 at 13:36):         }),
+index.mjs    (trishu patel on 10/28/2024 at 13:36):       };
+index.mjs    (trishu patel on 10/28/2024 at 13:36):     }
+index.mjs    (trishu patel on 10/28/2024 at 13:36):     return {
+index.mjs    (trishu patel on 10/28/2024 at 13:36):       statusCode: 500,
+index.mjs    (trishu patel on 10/28/2024 at 13:36):       body: JSON.stringify({
+index.mjs    (trishu patel on 10/28/2024 at 13:36):         message: "Failed to send email.",
+index.mjs    (trishu patel on 10/28/2024 at 13:36):         error: jsonData.message || "Unknown error",
+index.mjs    (trishu patel on 10/28/2024 at 13:36):         error2: jsonData.error || "Unknown error",
+index.mjs    (trishu patel on 10/28/2024 at 13:36):         emailTo: jsonData.emailTo,
+index.mjs    (trishu patel on 10/28/2024 at 13:36):       }),
+index.mjs    (trishu patel on 10/28/2024 at 13:36):     };
+index.mjs    (trishu patel on 10/28/2024 at 13:36):   } catch (err) {
+index.mjs    (trishu patel on 10/28/2024 at 13:36):     return {
+index.mjs    (trishu patel on 10/28/2024 at 13:36):       statusCode: 500,
+index.mjs    (trishu patel on 10/28/2024 at 13:36):       body: JSON.stringify({
+index.mjs    (trishu patel on 10/28/2024 at 13:36):         message: "Failed to send email 1.",
+index.mjs    (trishu patel on 10/28/2024 at 13:36):         error: err.message,
+index.mjs    (trishu patel on 10/28/2024 at 13:36):       }),
+index.mjs    (trishu patel on 10/28/2024 at 13:36):     };
+index.mjs    (trishu patel on 10/28/2024 at 13:36):   }
+index.mjs    (trishu patel on 10/28/2024 at 13:36): };
+index.mjs    (trishu patel on 10/28/2024 at 13:36): export const handler = async () => {
+index.mjs    (trishu patel on 10/28/2024 at 13:36):   const habitsSnapshot = await db.collection("habits").get();
+index.mjs    (trishu patel on 10/28/2024 at 13:36):   const habits = [];
+index.mjs    (trishu patel on 10/28/2024 at 13:36):   habitsSnapshot.forEach((doc) => {
+index.mjs    (trishu patel on 10/28/2024 at 13:36):     habits.push({ id: doc.id, ...doc.data() });
+index.mjs    (trishu patel on 10/28/2024 at 13:36):   });
+index.mjs    (trishu patel on 10/28/2024 at 13:36):   const userSnapshot = await db.collection("users").get();
+index.mjs    (trishu patel on 10/28/2024 at 13:36):   const users = [];
+index.mjs    (trishu patel on 10/28/2024 at 13:36):   userSnapshot.forEach((doc) => {
+index.mjs    (trishu patel on 10/28/2024 at 13:36):     const users_habits = habits.filter(
+index.mjs    (trishu patel on 10/28/2024 at 13:36):       (habit) => habit.userId === doc.id && habit.emailNotificationEnabled,
+index.mjs    (trishu patel on 10/28/2024 at 13:36):     );
+index.mjs    (trishu patel on 10/28/2024 at 13:36):     users.push({ id: doc.id, ...doc.data(), habits: users_habits });
+index.mjs    (trishu patel on 10/28/2024 at 13:36):   });
+index.mjs    (trishu patel on 10/28/2024 at 13:36):   users.forEach(async (user) => {
+index.mjs    (trishu patel on 10/28/2024 at 13:36):     if (user.habits.length === 0) {
+index.mjs    (trishu patel on 10/28/2024 at 13:36):       return;
+index.mjs    (trishu patel on 10/28/2024 at 13:36):     }
+index.mjs    (trishu patel on 10/28/2024 at 13:36):     const emailBody = await constructEmailBody(user);
+index.mjs    (trishu patel on 10/28/2024 at 13:36):     await sendDailyEmail(user, emailBody);
+index.mjs    (trishu patel on 10/28/2024 at 13:36):     console.log(`Email sent to ${user.displayName} at ${user.email}`);
+index.mjs    (trishu patel on 10/28/2024 at 13:36):   });
+index.mjs    (trishu patel on 10/28/2024 at 13:36): };
+index.mjs    (trishu patel on 10/28/2024 at 13:36): handler();
+index.tsx    (trishu patel on 10/28/2024 at 13:53): import { randomUUID } from "expo-crypto";
+index.tsx    (trishu patel on 10/28/2024 at 13:53): import { deleteDoc, doc, setDoc } from "firebase/firestore";
+index.tsx    (trishu patel on 10/28/2024 at 13:53): import React, { useEffect, useState } from "react";
+index.tsx    (trishu patel on 10/28/2024 at 13:53): import {
+index.tsx    (trishu patel on 10/28/2024 at 13:53):   ActivityIndicator,
+index.tsx    (trishu patel on 10/28/2024 at 13:53):   Dimensions,
+index.tsx    (trishu patel on 10/28/2024 at 13:53):   StyleSheet,
+index.tsx    (trishu patel on 10/28/2024 at 13:53):   Text,
+index.tsx    (trishu patel on 10/28/2024 at 13:53):   TouchableOpacity,
+index.tsx    (trishu patel on 10/28/2024 at 13:53):   View,
+index.tsx    (trishu patel on 10/28/2024 at 13:53): } from "react-native";
+index.tsx    (trishu patel on 10/28/2024 at 13:53): import { default as FAIcon } from "react-native-vector-icons/FontAwesome";
+index.tsx    (trishu patel on 10/28/2024 at 13:53): import { db } from "../../../firebaseConfig";
+index.tsx    (trishu patel on 10/28/2024 at 13:53):   const [currentHabit, setCurrentHabit] = useState<Habit | undefined>(
+index.tsx    (trishu patel on 10/28/2024 at 13:53):     habits[0],
+index.tsx    (trishu patel on 10/28/2024 at 13:53):   );
+index.tsx    (trishu patel on 10/28/2024 at 13:53):   const [habitsCompleted, setHabitsCompleted] =
+index.tsx    (trishu patel on 10/28/2024 at 13:53):     useState<Record<string, boolean>>();
+index.tsx    (trishu patel on 10/28/2024 at 13:53):   const upsertHistory = async (history: History) => {
+index.tsx    (trishu patel on 10/28/2024 at 13:53):     await setDoc(doc(db, "history", history.id), history);
+index.tsx    (trishu patel on 10/28/2024 at 13:53):   };
+index.tsx    (trishu patel on 10/28/2024 at 13:53):   const deleteHistory = async (history: History) => {
+index.tsx    (trishu patel on 10/28/2024 at 13:53):     await deleteDoc(doc(db, "history", history.id));
+index.tsx    (trishu patel on 10/28/2024 at 13:53):   };
+index.tsx    (trishu patel on 10/28/2024 at 13:53):   const addHistory = () => {
+index.tsx    (trishu patel on 10/28/2024 at 13:53):     if (!history || !user || !currentHabit) return;
+index.tsx    (trishu patel on 10/28/2024 at 13:53):     const newHistory: History = {
+index.tsx    (trishu patel on 10/28/2024 at 13:53):       id: randomUUID(),
+index.tsx    (trishu patel on 10/28/2024 at 13:53):       date: dayjs().startOf("day").toDate(),
+index.tsx    (trishu patel on 10/28/2024 at 13:53):       habitId: currentHabit.id,
+index.tsx    (trishu patel on 10/28/2024 at 23:19):       userId: user.id,
+index.tsx    (trishu patel on 10/28/2024 at 13:53):     };
+index.tsx    (trishu patel on 10/28/2024 at 13:53):     setHistory([...history, newHistory]);
+index.tsx    (trishu patel on 10/28/2024 at 13:53):     upsertHistory(newHistory);
+index.tsx    (trishu patel on 10/28/2024 at 13:53):   };
+index.tsx    (trishu patel on 10/28/2024 at 13:53):   const removeHistory = () => {
+index.tsx    (trishu patel on 10/28/2024 at 13:53):     if (!history || !user || !currentHabit) return;
+index.tsx    (trishu patel on 10/28/2024 at 13:53):     setHistory(
+index.tsx    (trishu patel on 10/28/2024 at 13:53):       history?.filter((history) => {
+index.tsx    (trishu patel on 10/28/2024 at 13:53):         if (
+index.tsx    (trishu patel on 10/28/2024 at 13:53):           !(
+index.tsx    (trishu patel on 10/28/2024 at 23:19):             history.userId === user.id &&
+index.tsx    (trishu patel on 10/28/2024 at 13:53):             history.habitId === currentHabit.id &&
+index.tsx    (trishu patel on 10/28/2024 at 13:53):             dayjs().isSame(history.date, "day")
+index.tsx    (trishu patel on 10/28/2024 at 13:53):           )
+index.tsx    (trishu patel on 10/28/2024 at 13:53):         ) {
+index.tsx    (trishu patel on 10/28/2024 at 13:53):           return true;
+index.tsx    (trishu patel on 10/28/2024 at 13:53):         }
+index.tsx    (trishu patel on 10/28/2024 at 13:53):         deleteHistory(history);
+index.tsx    (trishu patel on 10/28/2024 at 13:53):         return false;
+index.tsx    (trishu patel on 10/28/2024 at 13:53):       }),
+index.tsx    (trishu patel on 10/28/2024 at 13:53):     );
+index.tsx    (trishu patel on 10/28/2024 at 13:53):   };
+index.tsx    (trishu patel on 10/28/2024 at 13:53):   const handleSubmit = () => {
+index.tsx    (trishu patel on 10/28/2024 at 13:53):     if (!history || !user || !currentHabit) return;
+index.tsx    (trishu patel on 10/28/2024 at 13:53):     if (habitsCompleted?.[currentHabit?.id]) {
+index.tsx    (trishu patel on 10/28/2024 at 13:53):       removeHistory();
+index.tsx    (trishu patel on 10/28/2024 at 13:53):     } else {
+index.tsx    (trishu patel on 10/28/2024 at 13:53):       addHistory();
+index.tsx    (trishu patel on 10/28/2024 at 13:53):     }
+index.tsx    (trishu patel on 10/28/2024 at 13:53):   };
+index.tsx    (trishu patel on 10/28/2024 at 13:53):   useEffect(() => {
+index.tsx    (trishu patel on 10/28/2024 at 13:53):     const newHabitsCompleted: Record<string, boolean> = {};
+index.tsx    (trishu patel on 10/28/2024 at 13:53):     habits.forEach((habit) => {
+index.tsx    (trishu patel on 10/28/2024 at 13:53):       const isHabitCompleted =
+index.tsx    (trishu patel on 10/28/2024 at 13:53):         history?.some(
+index.tsx    (trishu patel on 10/28/2024 at 13:53):           (history) =>
+index.tsx    (trishu patel on 10/28/2024 at 13:53):             habit.id === history.habitId && dayjs().isSame(history.date, "day"),
+index.tsx    (trishu patel on 10/28/2024 at 13:53):         ) ?? false;
+index.tsx    (trishu patel on 10/28/2024 at 13:53):       newHabitsCompleted[habit.id] = isHabitCompleted;
+index.tsx    (trishu patel on 10/28/2024 at 13:53):     });
+index.tsx    (trishu patel on 10/28/2024 at 13:53):     setHabitsCompleted(newHabitsCompleted);
+index.tsx    (trishu patel on 10/28/2024 at 13:53):     // eslint-disable-next-line react-hooks/exhaustive-deps
+index.tsx    (trishu patel on 10/28/2024 at 13:53):   }, [habits, history]);
+index.tsx    (trishu patel on 10/28/2024 at 13:53):         selectedColor: "#f4a58a",
+index.tsx    (trishu patel on 10/28/2024 at 13:53):   if (habits.length === 0) {
+index.tsx    (trishu patel on 10/28/2024 at 13:53):     return (
+index.tsx    (trishu patel on 10/28/2024 at 13:53):       <View style={styles.container}>
+index.tsx    (trishu patel on 10/28/2024 at 13:53):         <Text>Please add a habit</Text>
+index.tsx    (trishu patel on 10/28/2024 at 13:53):       </View>
+index.tsx    (trishu patel on 10/28/2024 at 13:53):     );
+index.tsx    (trishu patel on 10/28/2024 at 13:53):   }
+index.tsx    (trishu patel on 10/28/2024 at 13:53):       <Text style={styles.header}>History</Text>
+index.tsx    (trishu patel on 10/28/2024 at 13:53):         style={styles.dropdown}
+index.tsx    (trishu patel on 10/28/2024 at 13:53):         theme={{
+index.tsx    (trishu patel on 10/28/2024 at 13:53):           todayTextColor: "#f4a58a",
+index.tsx    (trishu patel on 10/28/2024 at 13:53):           arrowColor: "#f4a58a",
+index.tsx    (trishu patel on 10/28/2024 at 13:53):         }}
+index.tsx    (trishu patel on 10/28/2024 at 13:53):       {currentHabit && habitsCompleted && (
+index.tsx    (trishu patel on 10/28/2024 at 13:53):         <TouchableOpacity
+index.tsx    (trishu patel on 10/28/2024 at 13:53):           style={
+index.tsx    (trishu patel on 10/28/2024 at 13:53):             habitsCompleted[currentHabit?.id]
+index.tsx    (trishu patel on 10/28/2024 at 13:53):               ? styles.undoHabitButton
+index.tsx    (trishu patel on 10/28/2024 at 13:53):               : styles.completeHabitButton
+index.tsx    (trishu patel on 10/28/2024 at 13:53):           }
+index.tsx    (trishu patel on 10/28/2024 at 13:53):           onPress={handleSubmit}
+index.tsx    (trishu patel on 10/28/2024 at 13:53):         >
+index.tsx    (trishu patel on 10/28/2024 at 13:53):           <FAIcon
+index.tsx    (trishu patel on 10/28/2024 at 13:53):             name="check-circle-o"
+index.tsx    (trishu patel on 10/28/2024 at 13:53):             size={25}
+index.tsx    (trishu patel on 10/28/2024 at 13:53):             color="white"
+index.tsx    (trishu patel on 10/28/2024 at 13:53):             style={{ marginHorizontal: 6 }}
+index.tsx    (trishu patel on 10/28/2024 at 13:53):           />
+index.tsx    (trishu patel on 10/28/2024 at 13:53):           <Text style={styles.buttonText}>
+index.tsx    (trishu patel on 10/28/2024 at 13:53):             {habitsCompleted[currentHabit?.id]
+index.tsx    (trishu patel on 10/28/2024 at 13:53):               ? "Undo Habit"
+index.tsx    (trishu patel on 10/28/2024 at 13:53):               : "Complete Habit"}
+index.tsx    (trishu patel on 10/28/2024 at 13:53):           </Text>
+index.tsx    (trishu patel on 10/28/2024 at 13:53):         </TouchableOpacity>
+index.tsx    (trishu patel on 10/28/2024 at 13:53):       )}
+index.tsx    (trishu patel on 10/28/2024 at 13:53):     backgroundColor: "#F5F5F5",
+index.tsx    (trishu patel on 10/28/2024 at 13:53):     width: Dimensions.get("window").width * 0.95,
+index.tsx    (trishu patel on 10/28/2024 at 13:53):     marginBottom: 30,
+index.tsx    (trishu patel on 10/28/2024 at 13:53):     borderRadius: 8,
+index.tsx    (trishu patel on 10/28/2024 at 13:53):   },
+index.tsx    (trishu patel on 10/28/2024 at 13:53):   header: {
+index.tsx    (trishu patel on 10/28/2024 at 13:53):     fontSize: 30,
+index.tsx    (trishu patel on 10/28/2024 at 13:53):     paddingBottom: 40,
+index.tsx    (trishu patel on 10/28/2024 at 13:53):     marginTop: 20,
+index.tsx    (trishu patel on 10/28/2024 at 13:53):   },
+index.tsx    (trishu patel on 10/28/2024 at 13:53):   completeHabitButton: {
+index.tsx    (trishu patel on 10/28/2024 at 13:53):     backgroundColor: "#b38acb",
+index.tsx    (trishu patel on 10/28/2024 at 13:53):     width: "95%",
+index.tsx    (trishu patel on 10/28/2024 at 13:53):     paddingVertical: 10,
+index.tsx    (trishu patel on 10/28/2024 at 13:53):     borderRadius: 8,
+index.tsx    (trishu patel on 10/28/2024 at 13:53):     alignItems: "center",
+index.tsx    (trishu patel on 10/28/2024 at 13:53):     marginTop: 20,
+index.tsx    (trishu patel on 10/28/2024 at 13:53):     flexDirection: "row",
+index.tsx    (trishu patel on 10/28/2024 at 13:53):     justifyContent: "center",
+index.tsx    (trishu patel on 10/28/2024 at 13:53):   },
+index.tsx    (trishu patel on 10/28/2024 at 13:53):   undoHabitButton: {
+index.tsx    (trishu patel on 10/28/2024 at 13:53):     backgroundColor: "#f4a58a",
+index.tsx    (trishu patel on 10/28/2024 at 13:53):     width: "95%",
+index.tsx    (trishu patel on 10/28/2024 at 13:53):     paddingVertical: 10,
+index.tsx    (trishu patel on 10/28/2024 at 13:53):     borderRadius: 8,
+index.tsx    (trishu patel on 10/28/2024 at 13:53):     alignItems: "center",
+index.tsx    (trishu patel on 10/28/2024 at 13:53):     marginTop: 20,
+index.tsx    (trishu patel on 10/28/2024 at 13:53):     flexDirection: "row",
+index.tsx    (trishu patel on 10/28/2024 at 13:53):     justifyContent: "center",
+index.tsx    (trishu patel on 10/28/2024 at 13:53):   },
+index.tsx    (trishu patel on 10/28/2024 at 13:53):   buttonText: {
+index.tsx    (trishu patel on 10/28/2024 at 13:53):     color: "#fff",
+index.tsx    (trishu patel on 10/28/2024 at 13:53):     fontSize: 16,
+index.tsx    (trishu patel on 10/28/2024 at 13:53):     fontWeight: "600",
+index.tsx    (trishu patel on 10/28/2024 at 13:53):     marginHorizontal: 12,
+index.tsx    (trishu patel on 10/28/2024 at 13:53):   },
+index.tsx    (trishu patel on 10/28/2024 at 13:53):   dropdown: {
+index.tsx    (trishu patel on 10/28/2024 at 13:53):     height: 50,
+index.tsx    (trishu patel on 10/28/2024 at 13:53):     borderColor: "gray",
+index.tsx    (trishu patel on 10/28/2024 at 13:53):     borderRadius: 8,
+index.tsx    (trishu patel on 10/28/2024 at 13:53):     paddingHorizontal: 16,
+index.tsx    (trishu patel on 10/28/2024 at 13:53):     width: "95%",
+index.tsx    (trishu patel on 10/28/2024 at 13:53):     backgroundColor: "#fff",
