@@ -1,0 +1,404 @@
+users.ts     (amy-huang16 on 10/28/2024 at 14:19): export const getUserFromFirestore = async (
+users.ts     (amy-huang16 on 10/28/2024 at 14:19):   if (!user.email) {
+users.ts     (amy-huang16 on 10/28/2024 at 14:19):     return null;
+users.ts     (amy-huang16 on 10/28/2024 at 14:19):   }
+users.ts     (amy-huang16 on 10/28/2024 at 14:19):     id: user.uid,
+users.ts     (amy-huang16 on 10/28/2024 at 14:19):     email: user.email,
+users.ts     (amy-huang16 on 10/28/2024 at 14:19): export const upsertUser = async (
+users.ts     (amy-huang16 on 10/28/2024 at 14:19):   user: SolSyncUser,
+users.ts     (amy-huang16 on 10/28/2024 at 14:19):   email: string,
+users.ts     (amy-huang16 on 10/28/2024 at 14:19):   await setDoc(doc(db, "users", user.id), {
+users.ts     (amy-huang16 on 10/28/2024 at 14:19):     id: user.id,
+users.ts     (amy-huang16 on 10/28/2024 at 14:19):     email: email,
+EditHabitForm.tsx (amy-huang16 on 10/28/2024 at 14:19):   const { user, userIsLoading } = useUser();
+EditHabitForm.tsx (amy-huang16 on 10/28/2024 at 14:19):       userId: user.id,
+AuthorizedProfile.tsx (amy-huang16 on 10/28/2024 at 17:27): import { NativeStackScreenProps } from "@react-navigation/native-stack";
+AuthorizedProfile.tsx (amy-huang16 on 10/28/2024 at 14:19): import { signOut } from "firebase/auth";
+AuthorizedProfile.tsx (amy-huang16 on 10/28/2024 at 17:27): import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+AuthorizedProfile.tsx (amy-huang16 on 10/28/2024 at 14:19): import { ActivityIndicator } from "react-native";
+AuthorizedProfile.tsx (amy-huang16 on 10/28/2024 at 14:19): import { upsertUser } from "@/server";
+AuthorizedProfile.tsx (amy-huang16 on 10/28/2024 at 17:27): import { ProfileStackParamList } from ".";
+AuthorizedProfile.tsx (amy-huang16 on 10/28/2024 at 17:27): type AuthorizedProfilePageProps = NativeStackScreenProps<
+AuthorizedProfile.tsx (amy-huang16 on 10/28/2024 at 17:27):   ProfileStackParamList,
+AuthorizedProfile.tsx (amy-huang16 on 10/28/2024 at 17:27):   "AuthorizedProfile"
+AuthorizedProfile.tsx (amy-huang16 on 10/28/2024 at 17:27): >;
+AuthorizedProfile.tsx (amy-huang16 on 10/28/2024 at 17:27): export default function AuthorizedProfile({
+AuthorizedProfile.tsx (amy-huang16 on 10/28/2024 at 17:27):   navigation,
+AuthorizedProfile.tsx (amy-huang16 on 10/28/2024 at 17:27): }: AuthorizedProfilePageProps) {
+AuthorizedProfile.tsx (amy-huang16 on 10/28/2024 at 14:19):   const { user, userIsLoading, reloadUser } = useUser();
+AuthorizedProfile.tsx (amy-huang16 on 10/28/2024 at 14:19):   if (userIsLoading) {
+AuthorizedProfile.tsx (amy-huang16 on 10/28/2024 at 14:19):     return (
+AuthorizedProfile.tsx (amy-huang16 on 10/28/2024 at 14:19):       <View style={styles.container}>
+AuthorizedProfile.tsx (amy-huang16 on 10/28/2024 at 14:19):         <ActivityIndicator size="small" color="#000000" />
+AuthorizedProfile.tsx (amy-huang16 on 10/28/2024 at 14:19):       </View>
+AuthorizedProfile.tsx (amy-huang16 on 10/28/2024 at 14:19):     );
+AuthorizedProfile.tsx (amy-huang16 on 10/28/2024 at 14:19):   }
+AuthorizedProfile.tsx (amy-huang16 on 10/28/2024 at 14:19):   if (!user) {
+AuthorizedProfile.tsx (amy-huang16 on 10/28/2024 at 14:19):     return <Text>Please log in to view your profile</Text>;
+AuthorizedProfile.tsx (amy-huang16 on 10/28/2024 at 14:19):   }
+AuthorizedProfile.tsx (amy-huang16 on 10/28/2024 at 14:19):   const handleUpdateLocation = async () => {
+AuthorizedProfile.tsx (amy-huang16 on 10/28/2024 at 14:19):     const location = await getLocationFromDevice();
+AuthorizedProfile.tsx (amy-huang16 on 10/28/2024 at 14:19):     const userCopy = user;
+AuthorizedProfile.tsx (amy-huang16 on 10/28/2024 at 14:19):     userCopy.location.latitude = location.latitude;
+AuthorizedProfile.tsx (amy-huang16 on 10/28/2024 at 14:19):     userCopy.location.longitude = location.longitude;
+AuthorizedProfile.tsx (amy-huang16 on 10/28/2024 at 14:19):     await upsertUser(userCopy, userCopy.email, location, userCopy.displayName);
+AuthorizedProfile.tsx (amy-huang16 on 10/28/2024 at 14:19):     await reloadUser();
+AuthorizedProfile.tsx (amy-huang16 on 10/21/2024 at 19:46):   };
+AuthorizedProfile.tsx (amy-huang16 on 10/21/2024 at 19:46):     <View style={styles.container}>
+AuthorizedProfile.tsx (amy-huang16 on 10/21/2024 at 19:46):       <TouchableOpacity style={styles.editButton}>
+AuthorizedProfile.tsx (amy-huang16 on 10/21/2024 at 19:46):         <FeatherIcon
+AuthorizedProfile.tsx (amy-huang16 on 10/21/2024 at 19:46):           name="edit"
+AuthorizedProfile.tsx (amy-huang16 on 10/21/2024 at 19:46):           size={38}
+AuthorizedProfile.tsx (amy-huang16 on 10/21/2024 at 19:46):           color="#5A5A5A"
+AuthorizedProfile.tsx (amy-huang16 on 10/28/2024 at 17:27):           onPress={() => navigation.navigate("EditProfile")}
+AuthorizedProfile.tsx (amy-huang16 on 10/21/2024 at 19:46):         ></FeatherIcon>
+AuthorizedProfile.tsx (amy-huang16 on 10/21/2024 at 19:46):       </TouchableOpacity>
+AuthorizedProfile.tsx (amy-huang16 on 10/21/2024 at 19:46):       <Text style={styles.header}>Hello, {user?.displayName}!</Text>
+AuthorizedProfile.tsx (amy-huang16 on 10/21/2024 at 19:46):       <FAIcon
+AuthorizedProfile.tsx (amy-huang16 on 10/21/2024 at 19:46):         name="user-circle"
+AuthorizedProfile.tsx (amy-huang16 on 10/21/2024 at 19:46):         size={100}
+AuthorizedProfile.tsx (amy-huang16 on 10/21/2024 at 19:46):         color="gray"
+AuthorizedProfile.tsx (amy-huang16 on 10/21/2024 at 19:46):         style={{ marginBottom: 40 }}
+AuthorizedProfile.tsx (amy-huang16 on 10/21/2024 at 19:46):       ></FAIcon>
+AuthorizedProfile.tsx (amy-huang16 on 10/21/2024 at 19:46):       <View style={styles.infoBox}>
+AuthorizedProfile.tsx (amy-huang16 on 10/21/2024 at 19:46):         <View style={styles.infoField}>
+AuthorizedProfile.tsx (amy-huang16 on 10/28/2024 at 17:27):           <Text style={styles.infoTitle}>Name </Text>
+AuthorizedProfile.tsx (amy-huang16 on 10/21/2024 at 19:46):           <Text style={styles.infoValue}>{user?.displayName}</Text>
+AuthorizedProfile.tsx (amy-huang16 on 10/21/2024 at 19:46):         <View style={styles.infoField}>
+AuthorizedProfile.tsx (amy-huang16 on 10/28/2024 at 17:27):           <Text style={styles.infoTitle}>Email </Text>
+AuthorizedProfile.tsx (amy-huang16 on 10/21/2024 at 19:46):           <Text style={styles.infoValue}>{user?.email}</Text>
+AuthorizedProfile.tsx (amy-huang16 on 10/21/2024 at 19:46):       </View>
+AuthorizedProfile.tsx (amy-huang16 on 10/21/2024 at 19:46):       <View style={styles.infoBox}>
+AuthorizedProfile.tsx (amy-huang16 on 10/21/2024 at 19:46):         <View style={styles.infoField}>
+AuthorizedProfile.tsx (amy-huang16 on 10/28/2024 at 17:27):           <Text style={styles.infoTitle}>Latitude </Text>
+AuthorizedProfile.tsx (amy-huang16 on 10/21/2024 at 19:46):           <Text style={styles.infoValue}>
+AuthorizedProfile.tsx (amy-huang16 on 10/21/2024 at 19:46):             {user?.location?.latitude?.toPrecision(7)}
+AuthorizedProfile.tsx (amy-huang16 on 10/21/2024 at 19:46):           </Text>
+AuthorizedProfile.tsx (amy-huang16 on 10/21/2024 at 19:46):         </View>
+AuthorizedProfile.tsx (amy-huang16 on 10/21/2024 at 19:46):         <View style={styles.line}></View>
+AuthorizedProfile.tsx (amy-huang16 on 10/21/2024 at 19:46):         <View style={styles.infoField}>
+AuthorizedProfile.tsx (amy-huang16 on 10/28/2024 at 17:27):           <Text style={styles.infoTitle}>Longitude </Text>
+AuthorizedProfile.tsx (amy-huang16 on 10/21/2024 at 19:46):           <Text style={styles.infoValue}>
+AuthorizedProfile.tsx (amy-huang16 on 10/21/2024 at 19:46):             {user?.location?.longitude?.toPrecision(7)}
+AuthorizedProfile.tsx (amy-huang16 on 10/21/2024 at 19:46):           </Text>
+AuthorizedProfile.tsx (amy-huang16 on 10/21/2024 at 19:46):         </View>
+AuthorizedProfile.tsx (amy-huang16 on 10/21/2024 at 19:46):       <TouchableOpacity
+AuthorizedProfile.tsx (amy-huang16 on 10/21/2024 at 19:46):         style={styles.locationButton}
+AuthorizedProfile.tsx (amy-huang16 on 10/21/2024 at 19:46):         onPress={handleUpdateLocation}
+AuthorizedProfile.tsx (amy-huang16 on 10/21/2024 at 19:46):       >
+AuthorizedProfile.tsx (amy-huang16 on 10/21/2024 at 19:46):         <FAIcon
+AuthorizedProfile.tsx (amy-huang16 on 10/21/2024 at 19:46):           name="location-arrow"
+AuthorizedProfile.tsx (amy-huang16 on 10/21/2024 at 19:46):           size={25}
+AuthorizedProfile.tsx (amy-huang16 on 10/21/2024 at 19:46):           color="white"
+AuthorizedProfile.tsx (amy-huang16 on 10/21/2024 at 19:46):           style={{ marginHorizontal: 6 }}
+AuthorizedProfile.tsx (amy-huang16 on 10/21/2024 at 19:46):         ></FAIcon>
+AuthorizedProfile.tsx (amy-huang16 on 10/21/2024 at 19:46):         <Text style={styles.buttonText}>Reset Your Location</Text>
+AuthorizedProfile.tsx (amy-huang16 on 10/21/2024 at 19:46):       </TouchableOpacity>
+AuthorizedProfile.tsx (amy-huang16 on 10/21/2024 at 19:46):       <TouchableOpacity
+AuthorizedProfile.tsx (amy-huang16 on 10/21/2024 at 19:46):         style={styles.logOutButton}
+AuthorizedProfile.tsx (amy-huang16 on 10/21/2024 at 19:46):         onPress={() => signOut(firebaseAuth)}
+AuthorizedProfile.tsx (amy-huang16 on 10/21/2024 at 19:46):       >
+AuthorizedProfile.tsx (amy-huang16 on 10/21/2024 at 19:46):         <FAIcon
+AuthorizedProfile.tsx (amy-huang16 on 10/21/2024 at 19:46):           name="sign-out"
+AuthorizedProfile.tsx (amy-huang16 on 10/21/2024 at 19:46):           size={25}
+AuthorizedProfile.tsx (amy-huang16 on 10/21/2024 at 19:46):           color="white"
+AuthorizedProfile.tsx (amy-huang16 on 10/21/2024 at 19:46):           style={{ marginHorizontal: 6 }}
+AuthorizedProfile.tsx (amy-huang16 on 10/21/2024 at 19:46):         ></FAIcon>
+AuthorizedProfile.tsx (amy-huang16 on 10/21/2024 at 19:46):         <Text style={styles.buttonText}>Log Out</Text>
+AuthorizedProfile.tsx (amy-huang16 on 10/21/2024 at 19:46):       </TouchableOpacity>
+AuthorizedProfile.tsx (amy-huang16 on 10/21/2024 at 19:46):     </View>
+AuthorizedProfile.tsx (amy-huang16 on 10/21/2024 at 19:46):     backgroundColor: "#F5F5F5",
+AuthorizedProfile.tsx (amy-huang16 on 10/28/2024 at 17:27):     top: 36,
+AuthorizedProfile.tsx (amy-huang16 on 10/28/2024 at 17:27):     right: 20,
+AuthorizedProfile.tsx (amy-huang16 on 10/21/2024 at 19:46):     paddingBottom: 40,
+AuthorizedProfile.tsx (amy-huang16 on 10/28/2024 at 14:19):     marginTop: 50,
+AuthorizedProfile.tsx (amy-huang16 on 10/28/2024 at 14:19):     width: "80%",
+AuthorizedProfile.tsx (amy-huang16 on 10/28/2024 at 14:19):     textAlign: "center",
+AuthorizedProfile.tsx (amy-huang16 on 10/21/2024 at 19:46):   infoBox: {
+AuthorizedProfile.tsx (amy-huang16 on 10/21/2024 at 19:46):     backgroundColor: "#fff",
+AuthorizedProfile.tsx (amy-huang16 on 10/21/2024 at 19:46):     width: "95%",
+AuthorizedProfile.tsx (amy-huang16 on 10/21/2024 at 19:46):     padding: 20,
+AuthorizedProfile.tsx (amy-huang16 on 10/21/2024 at 19:46):     borderRadius: 8,
+AuthorizedProfile.tsx (amy-huang16 on 10/28/2024 at 14:19):     marginBottom: 20,
+AuthorizedProfile.tsx (amy-huang16 on 10/21/2024 at 19:46):   },
+AuthorizedProfile.tsx (amy-huang16 on 10/21/2024 at 19:46):   infoField: {
+AuthorizedProfile.tsx (amy-huang16 on 10/21/2024 at 19:46):     flexDirection: "row",
+AuthorizedProfile.tsx (amy-huang16 on 10/21/2024 at 19:46):     justifyContent: "space-between",
+AuthorizedProfile.tsx (amy-huang16 on 10/21/2024 at 19:46):     width: "100%",
+AuthorizedProfile.tsx (amy-huang16 on 10/21/2024 at 19:46):   },
+AuthorizedProfile.tsx (amy-huang16 on 10/21/2024 at 19:46):   infoTitle: {
+AuthorizedProfile.tsx (amy-huang16 on 10/21/2024 at 19:46):     width: 95,
+AuthorizedProfile.tsx (amy-huang16 on 10/21/2024 at 19:46):     fontSize: 18,
+AuthorizedProfile.tsx (amy-huang16 on 10/21/2024 at 19:46):     flexShrink: 1,
+AuthorizedProfile.tsx (amy-huang16 on 10/21/2024 at 19:46):   },
+AuthorizedProfile.tsx (amy-huang16 on 10/21/2024 at 19:46):   infoValue: {
+AuthorizedProfile.tsx (amy-huang16 on 10/21/2024 at 19:46):     fontSize: 18,
+AuthorizedProfile.tsx (amy-huang16 on 10/21/2024 at 19:46):     color: "#5A5A5A",
+AuthorizedProfile.tsx (amy-huang16 on 10/21/2024 at 19:46):     textAlign: "right",
+AuthorizedProfile.tsx (amy-huang16 on 10/21/2024 at 19:46):     flexShrink: 1,
+AuthorizedProfile.tsx (amy-huang16 on 10/21/2024 at 19:46):     flexGrow: 1,
+AuthorizedProfile.tsx (amy-huang16 on 10/21/2024 at 19:46):     width: "100%",
+AuthorizedProfile.tsx (amy-huang16 on 10/21/2024 at 19:46):     backgroundColor: "#F5F5F5",
+AuthorizedProfile.tsx (amy-huang16 on 10/21/2024 at 19:46):     backgroundColor: "#b38acb", // Light purple color
+AuthorizedProfile.tsx (amy-huang16 on 10/21/2024 at 19:46):     width: "95%",
+AuthorizedProfile.tsx (amy-huang16 on 10/21/2024 at 19:46):     marginTop: 20,
+AuthorizedProfile.tsx (amy-huang16 on 10/21/2024 at 19:46):     backgroundColor: "#f4a58a", // Light orange color
+AuthorizedProfile.tsx (amy-huang16 on 10/21/2024 at 19:46):     width: "95%",
+AuthorizedProfile.tsx (amy-huang16 on 10/21/2024 at 19:46):     marginTop: 20,
+App.tsx      (amy-huang16 on 10/28/2024 at 17:27): import HabitProvider from "@/providers/HabitProvider";
+App.tsx      (amy-huang16 on 10/28/2024 at 17:27): import UserProvider from "@/providers/UserProvider";
+App.tsx      (amy-huang16 on 10/28/2024 at 17:27):     <UserProvider>
+App.tsx      (amy-huang16 on 10/28/2024 at 17:27):       <HabitProvider>
+App.tsx      (amy-huang16 on 10/28/2024 at 17:27):         <NavigationContainer>
+App.tsx      (amy-huang16 on 10/28/2024 at 17:27):           <Tab.Navigator
+App.tsx      (amy-huang16 on 10/28/2024 at 17:27):             screenOptions={({ route }) => ({
+App.tsx      (amy-huang16 on 10/28/2024 at 17:27):               tabBarIcon: ({ focused, color, size }) => {
+App.tsx      (amy-huang16 on 10/28/2024 at 17:27):                 const iconName = getIconName(route.name, focused);
+App.tsx      (amy-huang16 on 10/28/2024 at 17:27):                 return <Ionicons name={iconName} size={size} color={color} />;
+App.tsx      (amy-huang16 on 10/28/2024 at 17:27):               },
+App.tsx      (amy-huang16 on 10/28/2024 at 17:27):               tabBarActiveTintColor: "#908BE8",
+App.tsx      (amy-huang16 on 10/28/2024 at 17:27):               tabBarInactiveTintColor: "gray",
+App.tsx      (amy-huang16 on 10/28/2024 at 17:27):               headerShown: false,
+App.tsx      (amy-huang16 on 10/28/2024 at 17:27):             })}
+App.tsx      (amy-huang16 on 10/28/2024 at 17:27):           >
+App.tsx      (amy-huang16 on 10/28/2024 at 17:27):             <Tab.Screen name="Home" component={HomeScreen} />
+App.tsx      (amy-huang16 on 10/28/2024 at 17:27):             <Tab.Screen name="Habits" component={HabitsScreen} />
+App.tsx      (amy-huang16 on 10/28/2024 at 17:27):             <Tab.Screen name="History" component={HistoryScreen} />
+App.tsx      (amy-huang16 on 10/28/2024 at 17:27):             <Tab.Screen name="Profile" component={ProfileScreen} />
+App.tsx      (amy-huang16 on 10/28/2024 at 17:27):           </Tab.Navigator>
+App.tsx      (amy-huang16 on 10/28/2024 at 17:27):         </NavigationContainer>
+App.tsx      (amy-huang16 on 10/28/2024 at 17:27):       </HabitProvider>
+App.tsx      (amy-huang16 on 10/28/2024 at 17:27):     </UserProvider>
+index.ts     (amy-huang16 on 10/28/2024 at 14:19): export * from "./histories";
+histories.tsx (amy-huang16 on 10/28/2024 at 14:19):     query(collection(db, "history"), where("userId", "==", user?.id)),
+SignUp.tsx   (amy-huang16 on 10/28/2024 at 14:19): import { upsertUser } from "@/server";
+SignUp.tsx   (amy-huang16 on 10/28/2024 at 14:19):         id: credentials.user.uid,
+SignUp.tsx   (amy-huang16 on 10/28/2024 at 14:19):       };
+index.tsx    (amy-huang16 on 10/28/2024 at 17:27): import EditProfile from "./EditProfile";
+index.tsx    (amy-huang16 on 10/28/2024 at 17:27): import LogIn from "./Login";
+index.tsx    (amy-huang16 on 10/28/2024 at 17:27): import SignUp from "./SignUp";
+index.tsx    (amy-huang16 on 10/28/2024 at 17:27):   EditProfile: undefined;
+index.tsx    (amy-huang16 on 10/28/2024 at 14:19):   const { user, userIsLoading } = useUser();
+index.tsx    (amy-huang16 on 10/28/2024 at 17:27):         <>
+index.tsx    (amy-huang16 on 10/28/2024 at 17:27):           <Stack.Screen
+index.tsx    (amy-huang16 on 10/28/2024 at 17:27):             name="AuthorizedProfile"
+index.tsx    (amy-huang16 on 10/28/2024 at 17:27):             component={AuthorizedProfile}
+index.tsx    (amy-huang16 on 10/28/2024 at 17:27):             options={{ headerShown: false }}
+index.tsx    (amy-huang16 on 10/28/2024 at 17:27):           />
+index.tsx    (amy-huang16 on 10/28/2024 at 17:27):           <Stack.Screen
+index.tsx    (amy-huang16 on 10/28/2024 at 17:27):             name="EditProfile"
+index.tsx    (amy-huang16 on 10/28/2024 at 17:27):             component={EditProfile}
+index.tsx    (amy-huang16 on 10/28/2024 at 17:27):             options={{ headerShown: false, presentation: "modal" }}
+index.tsx    (amy-huang16 on 10/28/2024 at 17:27):           />
+index.tsx    (amy-huang16 on 10/28/2024 at 17:27):         </>
+index.ts     (amy-huang16 on 10/28/2024 at 14:19): export type SolSyncUser = {
+index.ts     (amy-huang16 on 10/28/2024 at 14:19):   id: string;
+index.ts     (amy-huang16 on 10/28/2024 at 14:19):   email: string;
+EditProfile.tsx (amy-huang16 on 10/28/2024 at 17:27): import { zodResolver } from "@hookform/resolvers/zod";
+EditProfile.tsx (amy-huang16 on 10/28/2024 at 17:27): import { NativeStackScreenProps } from "@react-navigation/native-stack";
+EditProfile.tsx (amy-huang16 on 10/28/2024 at 17:27): import { Controller, SubmitHandler, useForm } from "react-hook-form";
+EditProfile.tsx (amy-huang16 on 10/28/2024 at 17:27): import {
+EditProfile.tsx (amy-huang16 on 10/28/2024 at 17:27):   ActivityIndicator,
+EditProfile.tsx (amy-huang16 on 10/28/2024 at 17:27):   Keyboard,
+EditProfile.tsx (amy-huang16 on 10/28/2024 at 17:27):   SafeAreaView,
+EditProfile.tsx (amy-huang16 on 10/28/2024 at 17:27):   StyleSheet,
+EditProfile.tsx (amy-huang16 on 10/28/2024 at 17:27):   Text,
+EditProfile.tsx (amy-huang16 on 10/28/2024 at 17:27):   TextInput,
+EditProfile.tsx (amy-huang16 on 10/28/2024 at 17:27):   TouchableOpacity,
+EditProfile.tsx (amy-huang16 on 10/28/2024 at 17:27):   TouchableWithoutFeedback,
+EditProfile.tsx (amy-huang16 on 10/28/2024 at 17:27):   View,
+EditProfile.tsx (amy-huang16 on 10/28/2024 at 17:27): } from "react-native";
+EditProfile.tsx (amy-huang16 on 10/28/2024 at 17:27): import { z } from "zod";
+EditProfile.tsx (amy-huang16 on 10/28/2024 at 17:27): import useUser from "@/hooks/useUser";
+EditProfile.tsx (amy-huang16 on 10/28/2024 at 17:27): import { upsertUser } from "@/server";
+EditProfile.tsx (amy-huang16 on 10/28/2024 at 17:27): import { ProfileStackParamList } from ".";
+EditProfile.tsx (amy-huang16 on 10/28/2024 at 17:27): const editProfileFormSchema = z.object({
+EditProfile.tsx (amy-huang16 on 10/28/2024 at 17:27):   displayName: z.string().min(1, { message: "Name is required" }),
+EditProfile.tsx (amy-huang16 on 10/28/2024 at 17:27): });
+EditProfile.tsx (amy-huang16 on 10/28/2024 at 17:27): type EditProfileFormValues = z.infer<typeof editProfileFormSchema>;
+EditProfile.tsx (amy-huang16 on 10/28/2024 at 17:27): type EditProfileScreenProps = NativeStackScreenProps<
+EditProfile.tsx (amy-huang16 on 10/28/2024 at 17:27):   ProfileStackParamList,
+EditProfile.tsx (amy-huang16 on 10/28/2024 at 17:27):   "EditProfile"
+EditProfile.tsx (amy-huang16 on 10/28/2024 at 17:27): >;
+EditProfile.tsx (amy-huang16 on 10/28/2024 at 17:27): export default function EditProfile({ navigation }: EditProfileScreenProps) {
+EditProfile.tsx (amy-huang16 on 10/28/2024 at 17:27):   const { user, userIsLoading, reloadUser } = useUser();
+EditProfile.tsx (amy-huang16 on 10/28/2024 at 17:27):   const {
+EditProfile.tsx (amy-huang16 on 10/28/2024 at 17:27):     control,
+EditProfile.tsx (amy-huang16 on 10/28/2024 at 17:27):     handleSubmit,
+EditProfile.tsx (amy-huang16 on 10/28/2024 at 17:27):     formState: { errors },
+EditProfile.tsx (amy-huang16 on 10/28/2024 at 17:27):   } = useForm<EditProfileFormValues>({
+EditProfile.tsx (amy-huang16 on 10/28/2024 at 17:27):     resolver: zodResolver(editProfileFormSchema),
+EditProfile.tsx (amy-huang16 on 10/28/2024 at 17:27):     defaultValues: {
+EditProfile.tsx (amy-huang16 on 10/28/2024 at 17:27):       displayName: user?.displayName,
+EditProfile.tsx (amy-huang16 on 10/28/2024 at 17:27):     },
+EditProfile.tsx (amy-huang16 on 10/28/2024 at 17:27):   });
+EditProfile.tsx (amy-huang16 on 10/28/2024 at 17:27):   if (userIsLoading) {
+EditProfile.tsx (amy-huang16 on 10/28/2024 at 17:27):     return (
+EditProfile.tsx (amy-huang16 on 10/28/2024 at 17:27):       <View style={styles.container}>
+EditProfile.tsx (amy-huang16 on 10/28/2024 at 17:27):         <ActivityIndicator size="small" color="#000000" />
+EditProfile.tsx (amy-huang16 on 10/28/2024 at 17:27):       </View>
+EditProfile.tsx (amy-huang16 on 10/28/2024 at 17:27):     );
+EditProfile.tsx (amy-huang16 on 10/28/2024 at 17:27):   }
+EditProfile.tsx (amy-huang16 on 10/28/2024 at 17:27):   if (!user) {
+EditProfile.tsx (amy-huang16 on 10/28/2024 at 17:27):     return;
+EditProfile.tsx (amy-huang16 on 10/28/2024 at 17:27):   }
+EditProfile.tsx (amy-huang16 on 10/28/2024 at 17:27):   const onSubmit: SubmitHandler<EditProfileFormValues> = async (data) => {
+EditProfile.tsx (amy-huang16 on 10/28/2024 at 17:27):     const { displayName } = data;
+EditProfile.tsx (amy-huang16 on 10/28/2024 at 17:27):     await upsertUser(user, user.email, user.location, displayName);
+EditProfile.tsx (amy-huang16 on 10/28/2024 at 17:27):     await reloadUser();
+EditProfile.tsx (amy-huang16 on 10/28/2024 at 17:27):     navigation.navigate("AuthorizedProfile");
+EditProfile.tsx (amy-huang16 on 10/28/2024 at 17:27):   };
+EditProfile.tsx (amy-huang16 on 10/28/2024 at 17:27):   return (
+EditProfile.tsx (amy-huang16 on 10/28/2024 at 17:27):     <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+EditProfile.tsx (amy-huang16 on 10/28/2024 at 17:27):       <SafeAreaView style={styles.container}>
+EditProfile.tsx (amy-huang16 on 10/28/2024 at 17:27):         <Text style={styles.header}>Edit Profile</Text>
+EditProfile.tsx (amy-huang16 on 10/28/2024 at 17:27):         <Text style={styles.fieldTitle}>Name</Text>
+EditProfile.tsx (amy-huang16 on 10/28/2024 at 17:27):         <Controller
+EditProfile.tsx (amy-huang16 on 10/28/2024 at 17:27):           control={control}
+EditProfile.tsx (amy-huang16 on 10/28/2024 at 17:27):           name="displayName"
+EditProfile.tsx (amy-huang16 on 10/28/2024 at 17:27):           render={({ field: { onChange, onBlur, value } }) => (
+EditProfile.tsx (amy-huang16 on 10/28/2024 at 17:27):             <TextInput
+EditProfile.tsx (amy-huang16 on 10/28/2024 at 17:27):               autoCorrect={false}
+EditProfile.tsx (amy-huang16 on 10/28/2024 at 17:27):               autoCapitalize="words"
+EditProfile.tsx (amy-huang16 on 10/28/2024 at 17:27):               style={styles.input}
+EditProfile.tsx (amy-huang16 on 10/28/2024 at 17:27):               onChangeText={onChange}
+EditProfile.tsx (amy-huang16 on 10/28/2024 at 17:27):               onBlur={onBlur}
+EditProfile.tsx (amy-huang16 on 10/28/2024 at 17:27):               value={value}
+EditProfile.tsx (amy-huang16 on 10/28/2024 at 17:27):             />
+EditProfile.tsx (amy-huang16 on 10/28/2024 at 17:27):           )}
+EditProfile.tsx (amy-huang16 on 10/28/2024 at 17:27):         />
+EditProfile.tsx (amy-huang16 on 10/28/2024 at 17:27):         {errors.displayName && (
+EditProfile.tsx (amy-huang16 on 10/28/2024 at 17:27):           <Text style={{ color: "red" }}>{errors.displayName.message}</Text>
+EditProfile.tsx (amy-huang16 on 10/28/2024 at 17:27):         )}
+EditProfile.tsx (amy-huang16 on 10/28/2024 at 17:27):         {/* <Text>Icon picker here</Text> */}
+EditProfile.tsx (amy-huang16 on 10/28/2024 at 17:27):         <TouchableOpacity
+EditProfile.tsx (amy-huang16 on 10/28/2024 at 17:27):           style={styles.saveButton}
+EditProfile.tsx (amy-huang16 on 10/28/2024 at 17:27):           onPress={handleSubmit(onSubmit)}
+EditProfile.tsx (amy-huang16 on 10/28/2024 at 17:27):         >
+EditProfile.tsx (amy-huang16 on 10/28/2024 at 17:27):           <Text style={styles.buttonText}>Save</Text>
+EditProfile.tsx (amy-huang16 on 10/28/2024 at 17:27):         </TouchableOpacity>
+EditProfile.tsx (amy-huang16 on 10/28/2024 at 17:27):         <TouchableOpacity
+EditProfile.tsx (amy-huang16 on 10/28/2024 at 17:27):           style={styles.cancelButton}
+EditProfile.tsx (amy-huang16 on 10/28/2024 at 17:27):           onPress={() => navigation.navigate("AuthorizedProfile")}
+EditProfile.tsx (amy-huang16 on 10/28/2024 at 17:27):         >
+EditProfile.tsx (amy-huang16 on 10/28/2024 at 17:27):           <Text style={styles.buttonText}>Cancel</Text>
+EditProfile.tsx (amy-huang16 on 10/28/2024 at 17:27):         </TouchableOpacity>
+EditProfile.tsx (amy-huang16 on 10/28/2024 at 17:27):       </SafeAreaView>
+EditProfile.tsx (amy-huang16 on 10/28/2024 at 17:27):     </TouchableWithoutFeedback>
+EditProfile.tsx (amy-huang16 on 10/28/2024 at 17:27):   );
+EditProfile.tsx (amy-huang16 on 10/28/2024 at 17:27): }
+EditProfile.tsx (amy-huang16 on 10/28/2024 at 17:27): const styles = StyleSheet.create({
+EditProfile.tsx (amy-huang16 on 10/28/2024 at 17:27):   container: {
+EditProfile.tsx (amy-huang16 on 10/28/2024 at 17:27):     flex: 1,
+EditProfile.tsx (amy-huang16 on 10/28/2024 at 17:27):     backgroundColor: "#fff",
+EditProfile.tsx (amy-huang16 on 10/28/2024 at 17:27):     alignItems: "center",
+EditProfile.tsx (amy-huang16 on 10/28/2024 at 17:27):     justifyContent: "center",
+EditProfile.tsx (amy-huang16 on 10/28/2024 at 17:27):     padding: "2%",
+EditProfile.tsx (amy-huang16 on 10/28/2024 at 17:27):   },
+EditProfile.tsx (amy-huang16 on 10/28/2024 at 17:27):   header: {
+EditProfile.tsx (amy-huang16 on 10/28/2024 at 17:27):     fontSize: 24,
+EditProfile.tsx (amy-huang16 on 10/28/2024 at 17:27):     paddingBottom: "10%",
+EditProfile.tsx (amy-huang16 on 10/28/2024 at 17:27):     marginTop: -50,
+EditProfile.tsx (amy-huang16 on 10/28/2024 at 17:27):   },
+EditProfile.tsx (amy-huang16 on 10/28/2024 at 17:27):   fieldTitle: {
+EditProfile.tsx (amy-huang16 on 10/28/2024 at 17:27):     paddingLeft: "10%",
+EditProfile.tsx (amy-huang16 on 10/28/2024 at 17:27):     fontSize: 18,
+EditProfile.tsx (amy-huang16 on 10/28/2024 at 17:27):     alignSelf: "flex-start",
+EditProfile.tsx (amy-huang16 on 10/28/2024 at 17:27):     marginBottom: "3%",
+EditProfile.tsx (amy-huang16 on 10/28/2024 at 17:27):   },
+EditProfile.tsx (amy-huang16 on 10/28/2024 at 17:27):   input: {
+EditProfile.tsx (amy-huang16 on 10/28/2024 at 17:27):     width: "80%",
+EditProfile.tsx (amy-huang16 on 10/28/2024 at 17:27):     height: 50,
+EditProfile.tsx (amy-huang16 on 10/28/2024 at 17:27):     borderColor: "#ccc",
+EditProfile.tsx (amy-huang16 on 10/28/2024 at 17:27):     borderWidth: 1,
+EditProfile.tsx (amy-huang16 on 10/28/2024 at 17:27):     borderRadius: 8,
+EditProfile.tsx (amy-huang16 on 10/28/2024 at 17:27):     paddingHorizontal: 10,
+EditProfile.tsx (amy-huang16 on 10/28/2024 at 17:27):     marginBottom: "3%",
+EditProfile.tsx (amy-huang16 on 10/28/2024 at 17:27):   },
+EditProfile.tsx (amy-huang16 on 10/28/2024 at 17:27):   buttonText: {
+EditProfile.tsx (amy-huang16 on 10/28/2024 at 17:27):     color: "#fff",
+EditProfile.tsx (amy-huang16 on 10/28/2024 at 17:27):     fontSize: 16,
+EditProfile.tsx (amy-huang16 on 10/28/2024 at 17:27):     fontWeight: "600",
+EditProfile.tsx (amy-huang16 on 10/28/2024 at 17:27):   },
+EditProfile.tsx (amy-huang16 on 10/28/2024 at 17:27):   saveButton: {
+EditProfile.tsx (amy-huang16 on 10/28/2024 at 17:27):     backgroundColor: "#b38acb", // Light purple color
+EditProfile.tsx (amy-huang16 on 10/28/2024 at 17:27):     width: "80%",
+EditProfile.tsx (amy-huang16 on 10/28/2024 at 17:27):     paddingVertical: 10,
+EditProfile.tsx (amy-huang16 on 10/28/2024 at 17:27):     borderRadius: 8,
+EditProfile.tsx (amy-huang16 on 10/28/2024 at 17:27):     alignItems: "center",
+EditProfile.tsx (amy-huang16 on 10/28/2024 at 17:27):     marginTop: 12,
+EditProfile.tsx (amy-huang16 on 10/28/2024 at 17:27):   },
+EditProfile.tsx (amy-huang16 on 10/28/2024 at 17:27):   cancelButton: {
+EditProfile.tsx (amy-huang16 on 10/28/2024 at 17:27):     backgroundColor: "#f4a58a", // Light orange color
+EditProfile.tsx (amy-huang16 on 10/28/2024 at 17:27):     width: "80%",
+EditProfile.tsx (amy-huang16 on 10/28/2024 at 17:27):     paddingVertical: 10,
+EditProfile.tsx (amy-huang16 on 10/28/2024 at 17:27):     borderRadius: 8,
+EditProfile.tsx (amy-huang16 on 10/28/2024 at 17:27):     alignItems: "center",
+EditProfile.tsx (amy-huang16 on 10/28/2024 at 17:27):     marginTop: 12,
+EditProfile.tsx (amy-huang16 on 10/28/2024 at 17:27):   },
+EditProfile.tsx (amy-huang16 on 10/28/2024 at 17:27): });
+index.tsx    (amy-huang16 on 10/28/2024 at 14:19):   const { user, userIsLoading } = useUser();
+HabitProvider.tsx (amy-huang16 on 10/28/2024 at 14:19):   const { user } = useUser();
+useUser.ts   (amy-huang16 on 10/28/2024 at 17:27): import { useContext } from "react";
+useUser.ts   (amy-huang16 on 10/28/2024 at 17:27): import { UserContext } from "@/providers/UserProvider";
+useUser.ts   (amy-huang16 on 10/28/2024 at 17:27): const useUser = () => {
+useUser.ts   (amy-huang16 on 10/28/2024 at 17:27):   const context = useContext(UserContext);
+useUser.ts   (amy-huang16 on 10/28/2024 at 17:27):   if (!context) {
+useUser.ts   (amy-huang16 on 10/28/2024 at 17:27):     throw new Error("useUser must be used within a UserProvider");
+useUser.ts   (amy-huang16 on 10/28/2024 at 17:27):   }
+useUser.ts   (amy-huang16 on 10/28/2024 at 17:27):   return context;
+AddHabitForm.tsx (amy-huang16 on 10/28/2024 at 14:19):   const { user, userIsLoading } = useUser();
+AddHabitForm.tsx (amy-huang16 on 10/28/2024 at 14:19):       userId: user.id,
+useHabit.ts  (amy-huang16 on 10/28/2024 at 17:27): import { HabitContext } from "@/providers/HabitProvider";
+index.tsx    (amy-huang16 on 10/28/2024 at 14:19):   const { user } = useUser();
+Login.tsx    (amy-huang16 on 10/28/2024 at 17:27): import { ProfileStackParamList } from ".";
+Login.tsx    (amy-huang16 on 10/28/2024 at 17:27):     marginBottom: 15,
+index.tsx    (amy-huang16 on 10/28/2024 at 14:19):   const { user, userIsLoading } = useUser();
+UserProvider.tsx (amy-huang16 on 10/28/2024 at 17:27): import { onAuthStateChanged } from "firebase/auth";
+UserProvider.tsx (amy-huang16 on 10/28/2024 at 17:27): import { createContext, useEffect, useState } from "react";
+UserProvider.tsx (amy-huang16 on 10/28/2024 at 17:27): import { getUserFromFirestore } from "@/server";
+UserProvider.tsx (amy-huang16 on 10/28/2024 at 17:27): import { SolSyncUser } from "@/types";
+UserProvider.tsx (amy-huang16 on 10/28/2024 at 17:27): import { firebaseAuth } from "../../firebaseConfig";
+UserProvider.tsx (amy-huang16 on 10/28/2024 at 17:27): export type UserContextType = {
+UserProvider.tsx (amy-huang16 on 10/28/2024 at 17:27):   user: SolSyncUser | null;
+UserProvider.tsx (amy-huang16 on 10/28/2024 at 17:27):   userIsLoading: boolean;
+UserProvider.tsx (amy-huang16 on 10/28/2024 at 17:27):   reloadUser: () => Promise<void>;
+UserProvider.tsx (amy-huang16 on 10/28/2024 at 17:27): };
+UserProvider.tsx (amy-huang16 on 10/28/2024 at 17:27): export const UserContext = createContext<UserContextType | null>(null);
+UserProvider.tsx (amy-huang16 on 10/28/2024 at 17:27): type UserProviderProps = {
+UserProvider.tsx (amy-huang16 on 10/28/2024 at 17:27):   children: React.ReactNode;
+UserProvider.tsx (amy-huang16 on 10/28/2024 at 17:27): };
+UserProvider.tsx (amy-huang16 on 10/28/2024 at 17:27): export default function UserProvider({ children }: UserProviderProps) {
+UserProvider.tsx (amy-huang16 on 10/28/2024 at 17:27):   const [user, setUser] = useState<SolSyncUser | null>(null);
+UserProvider.tsx (amy-huang16 on 10/28/2024 at 17:27):   const [userIsLoading, setUserIsLoading] = useState(true);
+UserProvider.tsx (amy-huang16 on 10/28/2024 at 17:27):   const loadUser = () => {
+UserProvider.tsx (amy-huang16 on 10/28/2024 at 17:27):     setUserIsLoading(true);
+UserProvider.tsx (amy-huang16 on 10/28/2024 at 17:27):     onAuthStateChanged(firebaseAuth, async (firebaseAuthUser) => {
+UserProvider.tsx (amy-huang16 on 10/28/2024 at 17:27):       const solSyncUser = await getUserFromFirestore(firebaseAuthUser);
+UserProvider.tsx (amy-huang16 on 10/28/2024 at 17:27):       setUser(solSyncUser);
+UserProvider.tsx (amy-huang16 on 10/28/2024 at 17:27):       setUserIsLoading(false);
+UserProvider.tsx (amy-huang16 on 10/28/2024 at 17:27):     });
+UserProvider.tsx (amy-huang16 on 10/28/2024 at 17:27):   };
+UserProvider.tsx (amy-huang16 on 10/28/2024 at 17:27):   useEffect(() => {
+UserProvider.tsx (amy-huang16 on 10/28/2024 at 17:27):     loadUser();
+UserProvider.tsx (amy-huang16 on 10/28/2024 at 17:27):   }, []);
+UserProvider.tsx (amy-huang16 on 10/28/2024 at 17:27):   const reloadUser = async () => {
+UserProvider.tsx (amy-huang16 on 10/28/2024 at 17:27):     setUserIsLoading(true);
+UserProvider.tsx (amy-huang16 on 10/28/2024 at 17:27):     const currentUser = firebaseAuth.currentUser;
+UserProvider.tsx (amy-huang16 on 10/28/2024 at 17:27):     const solSyncUser = await getUserFromFirestore(currentUser);
+UserProvider.tsx (amy-huang16 on 10/28/2024 at 17:27):     setUser(solSyncUser);
+UserProvider.tsx (amy-huang16 on 10/28/2024 at 17:27):     setUserIsLoading(false);
+UserProvider.tsx (amy-huang16 on 10/28/2024 at 17:27):   };
+UserProvider.tsx (amy-huang16 on 10/28/2024 at 17:27):   return (
+UserProvider.tsx (amy-huang16 on 10/28/2024 at 17:27):     <UserContext.Provider
+UserProvider.tsx (amy-huang16 on 10/28/2024 at 17:27):       value={{
+UserProvider.tsx (amy-huang16 on 10/28/2024 at 17:27):         user,
+UserProvider.tsx (amy-huang16 on 10/28/2024 at 17:27):         userIsLoading,
+UserProvider.tsx (amy-huang16 on 10/28/2024 at 17:27):         reloadUser,
+UserProvider.tsx (amy-huang16 on 10/28/2024 at 17:27):       }}
+UserProvider.tsx (amy-huang16 on 10/28/2024 at 17:27):     >
+UserProvider.tsx (amy-huang16 on 10/28/2024 at 17:27):       {children}
+UserProvider.tsx (amy-huang16 on 10/28/2024 at 17:27):     </UserContext.Provider>
+UserProvider.tsx (amy-huang16 on 10/28/2024 at 17:27):   );
+UserProvider.tsx (amy-huang16 on 10/28/2024 at 17:27): }
+habits.ts    (amy-huang16 on 10/28/2024 at 14:19):     query(collection(db, "habits"), where("userId", "==", user.id)),
