@@ -2,30 +2,39 @@
 Valli Paladugu, vallipaladugu, Solsync
 
 ## What you planned to do
-- 
-    - Issue number: #
-    - 
-- 
-    - Issue number: #
-    - 
-- 
-    - Issue number: #
-    - 
+- Update home page to care about auth
+    - Issue number: #67
+    - https://github.com/utk-cs340-fall24/SolSync/issues/67
+- Design habits form
+    - Issue number: #73
+    - https://github.com/utk-cs340-fall24/SolSync/issues/73
+- Implement design on habits form
+    - Issue number: #74
+    - https://github.com/utk-cs340-fall24/SolSync/issues/74
 
 ## What you did not do
-- 
+- For issue #67, I was not able to account for no location permission on my device when the user is not logged in.
 
 ## What problems you encountered
-- 
+- While designing the add and edit habit forms, the text boxes kept moving when there was an input in the box for the first two digits but it stopped moving after that. Also I am not able to get a background color on the form so that will have to be figured out in the next sprint.
 
 ## What issues you worked on
-Issue number: , 
-Issue number: , 
-Issue number: , 
+Issue number: 67, https://github.com/utk-cs340-fall24/SolSync/issues/67
+Issue number: 73, https://github.com/utk-cs340-fall24/SolSync/issues/73
+Issue number: 74, https://github.com/utk-cs340-fall24/SolSync/issues/74
 
 ## Files you worked on
-- designs/habits_page_no_auth.png
-- designs/habits_page_with_auth.png
+- designs/add_habit_form.png
+- designs/edit_habit_form.png
+- src/components/Home/index.tsx
+- src/components/SignUp/index.tsx
+- designs/habit_page_no_auth.png
+- designs/history_page_no_auth.png
+- src/components/Habits/AddHabitForm.tsx 
+- src/components/Habits/EditHabitForm.tsx
+- src/components/Habits/HabitList.tsx
+- src/components/Habits/index.tsx
+- src/components/History/index.tsx
 
 ## What you accomplished
-For sprint 2, I was in charge of fetching the sunrise sunset data from backend, designing the habits page, and designing and implementing the sign up page. I called the sunrise and sunset data from the API with a hard coded location for this sprint, which I will change to the phone's/user's location in the next sprint. I formatted the homepage to show one linear gradient style from hours 0 to 12 and another linear gradient style from hours 12 to 0. I added an activity indicator that shows a loading symbol while the API call is getting the sunrise and sunset times. I also created designs of the habits pages based on if the user is signed in or not, which will be implemented in the next sprint. Finally, I designed the sign up page and implemented it, allowing users to create their account. It requires a username, email and password. The sign up page can be accessed by clicking the Create an Account button on the sign in page. 
+For sprint 3, I was in charge of designing pages related to the habits form, implementing them and updating the homepage to care about authorization. I designed the habits and history page when there is no auth, and the add and edit habit forms in Figma and implemented them afterwards. For the homepage, I updated it to take the device's location when the user is signed out for the current location's sunrise and sunset times. I also updated the times to be based on the location the user set when signing up when the user is signed in to their account. 
