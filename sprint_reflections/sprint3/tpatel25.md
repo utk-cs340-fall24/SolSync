@@ -14,7 +14,7 @@ Group: SolSync
 
 ## What you did not do
 
-I want to fetch the information from firestore for the daily emails in AWS, but I was able to do it within a local node server. Next sprint, I plan to margate my node function into AWS lambda and configure the function so that it gets triggered automatically.
+I want to fetch the information from firestore for the daily emails in AWS, but I was able to do it within a local node server. Next sprint, I plan to migrate my node function into AWS lambda and configure the function so that it gets triggered automatically.
 
 ## What problems you encountered
 
