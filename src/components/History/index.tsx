@@ -71,7 +71,7 @@ export default function HistoryComponent() {
       id: randomUUID(),
       date: dayjs().startOf("day").toDate(),
       habitId: currentHabit.id,
-      userId: user.uid,
+      userId: user.id,
     };
 
     setHistory([...history, newHistory]);
@@ -86,7 +86,7 @@ export default function HistoryComponent() {
       history?.filter((history) => {
         if (
           !(
-            history.userId === user.uid &&
+            history.userId === user.id &&
             history.habitId === currentHabit.id &&
             dayjs().isSame(history.date, "day")
           )
