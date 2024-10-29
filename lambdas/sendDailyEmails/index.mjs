@@ -35,7 +35,7 @@ const getSunriseSunsetTime = async (user) => {
     const response = await fetch(url, {
       method: "GET",
       headers: {
-        "x-api-key": process.env.EXPO_PUBLIC_SENDWDAILYEMAIL_API_KEY,
+        "x-api-key": process.env.EXPO_PUBLIC_SENDDAILYEMAIL_API_KEY,
       },
     });
 
