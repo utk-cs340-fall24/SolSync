@@ -1,0 +1,280 @@
+SignUp.tsx   (rudra patel on 10/20/2024 at 17:37): import { zodResolver } from "@hookform/resolvers/zod";
+SignUp.tsx   (rudra patel on 10/20/2024 at 17:37): import { FirebaseError } from "firebase/app";
+SignUp.tsx   (rudra patel on 10/20/2024 at 17:37): import { Controller, SubmitHandler, useForm } from "react-hook-form";
+SignUp.tsx   (rudra patel on 10/20/2024 at 17:37):   Keyboard,
+SignUp.tsx   (rudra patel on 10/20/2024 at 17:37):   TouchableWithoutFeedback,
+SignUp.tsx   (rudra patel on 10/20/2024 at 17:37):   View,
+SignUp.tsx   (rudra patel on 10/20/2024 at 17:37): import getLocationFromDevice from "@/utils/getLocationFromDevice";
+SignUp.tsx   (rudra patel on 10/20/2024 at 17:37): import { firebaseAuth } from "../../../firebaseConfig";
+Login.tsx    (rudra patel on 10/20/2024 at 17:37): import { zodResolver } from "@hookform/resolvers/zod";
+Login.tsx    (rudra patel on 10/20/2024 at 17:37): import { NativeStackScreenProps } from "@react-navigation/native-stack";
+Login.tsx    (rudra patel on 10/20/2024 at 17:37): import { FirebaseError } from "firebase/app";
+Login.tsx    (rudra patel on 10/20/2024 at 17:37): import { Controller, SubmitHandler, useForm } from "react-hook-form";
+Login.tsx    (rudra patel on 10/20/2024 at 17:37):   Keyboard,
+Login.tsx    (rudra patel on 10/20/2024 at 17:37):   TouchableWithoutFeedback,
+Login.tsx    (rudra patel on 10/20/2024 at 17:37):   View,
+Login.tsx    (rudra patel on 10/20/2024 at 17:37): import { firebaseAuth } from "../../../firebaseConfig";
+habits.ts    (rudra patel on 10/20/2024 at 17:37): import {
+habits.ts    (rudra patel on 10/20/2024 at 17:37):   collection,
+habits.ts    (rudra patel on 10/20/2024 at 17:37):   deleteDoc,
+habits.ts    (rudra patel on 10/20/2024 at 17:37):   doc,
+habits.ts    (rudra patel on 10/20/2024 at 17:37):   getDocs,
+habits.ts    (rudra patel on 10/20/2024 at 17:37):   query,
+habits.ts    (rudra patel on 10/20/2024 at 17:37):   setDoc,
+habits.ts    (rudra patel on 10/20/2024 at 17:37):   where,
+habits.ts    (rudra patel on 10/20/2024 at 17:37): } from "firebase/firestore";
+habits.ts    (rudra patel on 10/20/2024 at 17:37): import { Habit, SolSyncUser } from "@/types";
+habits.ts    (rudra patel on 10/20/2024 at 17:37): import { db } from "../../firebaseConfig";
+habits.ts    (rudra patel on 10/20/2024 at 17:37): export const getHabits = async (user: SolSyncUser): Promise<Habit[]> => {
+habits.ts    (rudra patel on 10/20/2024 at 17:37):   const habitsQuery = await getDocs(
+habits.ts    (rudra patel on 10/20/2024 at 17:37):   );
+habits.ts    (rudra patel on 10/20/2024 at 17:37):   const habits = habitsQuery.docs.map(
+habits.ts    (rudra patel on 10/20/2024 at 17:37):     (doc) => ({ id: doc.id, ...doc.data() }) as Habit,
+habits.ts    (rudra patel on 10/20/2024 at 17:37):   );
+habits.ts    (rudra patel on 10/20/2024 at 17:37):   return habits;
+habits.ts    (rudra patel on 10/20/2024 at 17:37): };
+habits.ts    (rudra patel on 10/22/2024 at 08:35): export const upsertHabit = async (habit: Habit) => {
+habits.ts    (rudra patel on 10/20/2024 at 17:37):   await setDoc(doc(db, "habits", habit.id), habit);
+habits.ts    (rudra patel on 10/20/2024 at 17:37): };
+habits.ts    (rudra patel on 10/20/2024 at 17:37): export const deleteHabit = async (habit: Habit) => {
+habits.ts    (rudra patel on 10/20/2024 at 17:37):   await deleteDoc(doc(db, "habits", habit.id));
+habits.ts    (rudra patel on 10/20/2024 at 17:37): };
+AddHabitForm.tsx (rudra patel on 10/20/2024 at 17:37): import { NativeStackScreenProps } from "@react-navigation/native-stack";
+AddHabitForm.tsx (rudra patel on 10/20/2024 at 17:37): import { randomUUID } from "expo-crypto";
+AddHabitForm.tsx (rudra patel on 10/20/2024 at 17:37): import { Controller, SubmitHandler, useForm } from "react-hook-form";
+AddHabitForm.tsx (rudra patel on 10/20/2024 at 17:37):   ActivityIndicator,
+AddHabitForm.tsx (rudra patel on 10/20/2024 at 17:37):   View,
+AddHabitForm.tsx (rudra patel on 10/20/2024 at 17:37): import { z } from "zod";
+AddHabitForm.tsx (rudra patel on 10/20/2024 at 17:37): import { useHabit } from "@/hooks/useHabit";
+AddHabitForm.tsx (rudra patel on 10/20/2024 at 17:37): import useUser from "@/hooks/useUser";
+AddHabitForm.tsx (rudra patel on 10/20/2024 at 17:37): import { HabitStackParamList } from ".";
+AddHabitForm.tsx (rudra patel on 10/22/2024 at 08:35): const addHabitFormSchema = z.object({
+AddHabitForm.tsx (rudra patel on 10/22/2024 at 08:35): type AddHabitFormValues = z.infer<typeof addHabitFormSchema>;
+AddHabitForm.tsx (rudra patel on 10/22/2024 at 08:35): type AddHabitFormProps = NativeStackScreenProps<
+AddHabitForm.tsx (rudra patel on 10/22/2024 at 08:35):   HabitStackParamList,
+AddHabitForm.tsx (rudra patel on 10/22/2024 at 08:35):   "AddHabitForm"
+AddHabitForm.tsx (rudra patel on 10/22/2024 at 08:35): >;
+AddHabitForm.tsx (rudra patel on 10/22/2024 at 08:35): export default function AddHabitForm({ navigation }: AddHabitFormProps) {
+AddHabitForm.tsx (rudra patel on 10/22/2024 at 08:35):   } = useForm<AddHabitFormValues>({
+AddHabitForm.tsx (rudra patel on 10/22/2024 at 08:35):     resolver: zodResolver(addHabitFormSchema),
+AddHabitForm.tsx (rudra patel on 10/20/2024 at 17:37):   if (userIsLoading) {
+AddHabitForm.tsx (rudra patel on 10/20/2024 at 17:37):     return (
+AddHabitForm.tsx (rudra patel on 10/20/2024 at 17:37):       <View style={styles.container}>
+AddHabitForm.tsx (rudra patel on 10/20/2024 at 17:37):         <ActivityIndicator size="small" color="#000000" />
+AddHabitForm.tsx (rudra patel on 10/20/2024 at 17:37):       </View>
+AddHabitForm.tsx (rudra patel on 10/20/2024 at 17:37):     );
+AddHabitForm.tsx (rudra patel on 10/20/2024 at 17:37):   }
+AddHabitForm.tsx (rudra patel on 10/22/2024 at 08:35):   const onSubmit: SubmitHandler<AddHabitFormValues> = async (data) => {
+HabitProvider.tsx (rudra patel on 10/20/2024 at 17:37): import { createContext, useEffect, useState } from "react";
+HabitProvider.tsx (rudra patel on 10/22/2024 at 08:35): import { deleteHabit, getHabits, upsertHabit } from "@/server";
+HabitProvider.tsx (rudra patel on 10/20/2024 at 17:37): import { Habit } from "@/types";
+HabitProvider.tsx (rudra patel on 10/22/2024 at 08:35):   updateHabit: (habit: Habit) => void;
+HabitProvider.tsx (rudra patel on 10/20/2024 at 17:37):       const habits = await getHabits(user);
+HabitProvider.tsx (rudra patel on 10/22/2024 at 08:35):     await upsertHabit(habit);
+HabitProvider.tsx (rudra patel on 10/22/2024 at 08:35):   };
+HabitProvider.tsx (rudra patel on 10/22/2024 at 08:35):   const updateHabit = async (habit: Habit) => {
+HabitProvider.tsx (rudra patel on 10/22/2024 at 08:35):     setHabits((prevHabits) =>
+HabitProvider.tsx (rudra patel on 10/22/2024 at 08:35):       prevHabits.map((prevHabit) =>
+HabitProvider.tsx (rudra patel on 10/22/2024 at 08:35):         prevHabit.id === habit.id ? habit : prevHabit,
+HabitProvider.tsx (rudra patel on 10/22/2024 at 08:35):       ),
+HabitProvider.tsx (rudra patel on 10/22/2024 at 08:35):     );
+HabitProvider.tsx (rudra patel on 10/22/2024 at 08:35):     await upsertHabit(habit);
+HabitProvider.tsx (rudra patel on 10/20/2024 at 17:37):     await deleteHabit(habit);
+HabitProvider.tsx (rudra patel on 10/22/2024 at 08:35):         updateHabit,
+histories.tsx (rudra patel on 10/20/2024 at 17:37): import { collection, getDocs, query, where } from "firebase/firestore";
+histories.tsx (rudra patel on 10/20/2024 at 17:37): import { History, SolSyncUser } from "@/types";
+histories.tsx (rudra patel on 10/20/2024 at 17:37): import { db } from "../../firebaseConfig";
+histories.tsx (rudra patel on 10/20/2024 at 17:37): export const getHistory = async (user: SolSyncUser): Promise<History[]> => {
+histories.tsx (rudra patel on 10/20/2024 at 17:37):   const historyQuery = await getDocs(
+histories.tsx (rudra patel on 10/20/2024 at 17:37):   );
+histories.tsx (rudra patel on 10/20/2024 at 17:37):   const history = historyQuery.docs.map(
+histories.tsx (rudra patel on 10/20/2024 at 17:37):     (doc) =>
+histories.tsx (rudra patel on 10/20/2024 at 17:37):       ({
+histories.tsx (rudra patel on 10/20/2024 at 17:37):         id: doc.id,
+histories.tsx (rudra patel on 10/20/2024 at 17:37):         date: doc.data().date.toDate(),
+histories.tsx (rudra patel on 10/20/2024 at 17:37):         habitId: doc.data().habitId,
+histories.tsx (rudra patel on 10/20/2024 at 17:37):         userId: doc.data().userId,
+histories.tsx (rudra patel on 10/20/2024 at 17:37):       }) as History,
+histories.tsx (rudra patel on 10/20/2024 at 17:37):   );
+histories.tsx (rudra patel on 10/20/2024 at 17:37):   return history;
+histories.tsx (rudra patel on 10/20/2024 at 17:37): };
+index.tsx    (rudra patel on 10/20/2024 at 17:37): import { useHabit } from "@/hooks/useHabit";
+index.tsx    (rudra patel on 10/20/2024 at 17:37): import useUser from "@/hooks/useUser";
+index.tsx    (rudra patel on 10/20/2024 at 17:37): import { getHistory } from "@/server/histories";
+index.tsx    (rudra patel on 10/20/2024 at 17:37): import { Habit, History } from "@/types";
+index.tsx    (rudra patel on 10/20/2024 at 17:37): export default function HistoryComponent() {
+index.tsx    (rudra patel on 10/20/2024 at 17:37):     const fetchHistory = async () => {
+index.tsx    (rudra patel on 10/20/2024 at 17:37):       const history = await getHistory(user);
+index.tsx    (rudra patel on 10/20/2024 at 17:37):     fetchHistory();
+index.tsx    (rudra patel on 10/20/2024 at 17:37):   if (userIsLoading) {
+index.tsx    (rudra patel on 10/20/2024 at 17:37):     return (
+index.tsx    (rudra patel on 10/20/2024 at 17:37):       <View style={styles.container}>
+index.tsx    (rudra patel on 10/20/2024 at 17:37):         <ActivityIndicator size="small" color="#000000" />
+index.tsx    (rudra patel on 10/20/2024 at 17:37):       </View>
+index.tsx    (rudra patel on 10/20/2024 at 17:37):     );
+index.tsx    (rudra patel on 10/20/2024 at 17:37):   }
+package.json (rudra patel on 10/20/2024 at 17:37):     "lint": "eslint src App.tsx --fix",
+package.json (rudra patel on 10/20/2024 at 17:37):     "check-lint": "eslint src App.tsx",
+package.json (rudra patel on 10/20/2024 at 17:37):     "eslint-plugin-simple-import-sort": "^12.1.1",
+getLocationFromDevice.ts (rudra patel on 10/20/2024 at 17:37):   requestForegroundPermissionsAsync,
+README.md    (rudra patel on 10/20/2024 at 17:37): <h1 align="center">
+README.md    (rudra patel on 10/20/2024 at 17:37):   <br>
+README.md    (rudra patel on 10/20/2024 at 17:37):     <img src="assets/app-icon.png" alt="SolSync Logo" width="25%">  
+README.md    (rudra patel on 10/20/2024 at 17:37):   <br>
+README.md    (rudra patel on 10/20/2024 at 17:37):     SolSync
+README.md    (rudra patel on 10/20/2024 at 17:37):   <br>
+README.md    (rudra patel on 10/20/2024 at 17:37): </h1>
+README.md    (rudra patel on 10/20/2024 at 17:37): <h2 align="center">An app to track your habits with the sun</h2>
+README.md    (rudra patel on 10/20/2024 at 17:37): ## Group Members
+README.md    (rudra patel on 10/20/2024 at 17:37): - Rudra Patel (RudraPatel2003)
+README.md    (rudra patel on 10/20/2024 at 17:37): - Kaylee Bae (baekay000)
+README.md    (rudra patel on 10/20/2024 at 17:37): - Amy Huang (amy-huang16)
+README.md    (rudra patel on 10/20/2024 at 17:37): - Trishu Patel (Trishu-Patel)
+README.md    (rudra patel on 10/20/2024 at 17:37): - Valli Paladugu (vallipaladugu)
+README.md    (rudra patel on 10/20/2024 at 17:37): ### Installing and Running the App
+README.md    (rudra patel on 10/20/2024 at 17:37): ## Usage
+README.md    (rudra patel on 10/20/2024 at 17:37): Upon first opening the app, you will be taken to the home page.
+README.md    (rudra patel on 10/20/2024 at 17:37): The home page asks for your location and displays the sunrise and sunset times for the current location.
+README.md    (rudra patel on 10/20/2024 at 17:37): If not logged in, this is the only functionality available.
+README.md    (rudra patel on 10/20/2024 at 17:37): The profile page is accessed by clicking the profile icon at the bottom. This takes you to a page where you can log in or sign up.
+README.md    (rudra patel on 10/20/2024 at 17:37): Upon logging in, the app has many more features.
+README.md    (rudra patel on 10/20/2024 at 17:37): - The app remembers the location you typically use so that the time displayed on the home page is accurate even if you move around. This location can be reset by clicking the "Reset Your Location" button found on the profile page.
+README.md    (rudra patel on 10/20/2024 at 17:37): - The habits page lets users add, edit, and delete habits, as well as set up notifications for each habit.
+README.md    (rudra patel on 10/20/2024 at 17:37): - The history page shows how consistent the user has been with their habits. A habit can be tracked on it on the habits page on a given day.
+App.tsx      (rudra patel on 10/20/2024 at 17:37): import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+App.tsx      (rudra patel on 10/20/2024 at 17:37): import { NavigationContainer } from "@react-navigation/native";
+App.tsx      (rudra patel on 10/20/2024 at 17:37): import HabitsScreen from "@/screens/HabitsScreen";
+App.tsx      (rudra patel on 10/20/2024 at 17:37): import HomeScreen from "@/screens/HomeScreen";
+App.tsx      (rudra patel on 10/20/2024 at 17:37): import ProfileScreen from "@/screens/ProfileScreen";
+index.tsx    (rudra patel on 10/20/2024 at 17:37): import { StyleSheet, Text, View } from "react-native";
+index.tsx    (rudra patel on 10/20/2024 at 17:37): import { ActivityIndicator } from "react-native";
+index.tsx    (rudra patel on 10/20/2024 at 17:37): import useUser from "@/hooks/useUser";
+index.tsx    (rudra patel on 10/22/2024 at 08:35): import { Habit } from "@/types";
+index.tsx    (rudra patel on 10/22/2024 at 08:35): import AddHabitForm from "./AddHabitForm";
+index.tsx    (rudra patel on 10/22/2024 at 08:35): import EditHabitForm from "./EditHabitForm";
+index.tsx    (rudra patel on 10/20/2024 at 17:37): import HabitList from "./HabitList";
+index.tsx    (rudra patel on 10/22/2024 at 08:35):   AddHabitForm: undefined;
+index.tsx    (rudra patel on 10/22/2024 at 08:35):   EditHabitForm: { habit: Habit };
+index.tsx    (rudra patel on 10/20/2024 at 17:37):   if (userIsLoading) {
+index.tsx    (rudra patel on 10/20/2024 at 17:37):     return (
+index.tsx    (rudra patel on 10/20/2024 at 17:37):       <View style={styles.container}>
+index.tsx    (rudra patel on 10/20/2024 at 17:37):         <ActivityIndicator size="small" color="#000000" />
+index.tsx    (rudra patel on 10/20/2024 at 17:37):       </View>
+index.tsx    (rudra patel on 10/20/2024 at 17:37):     );
+index.tsx    (rudra patel on 10/20/2024 at 17:37):   }
+index.tsx    (rudra patel on 10/22/2024 at 08:35):         <Stack.Screen name="AddHabitForm" component={AddHabitForm} />
+index.tsx    (rudra patel on 10/22/2024 at 08:35):       </Stack.Group>
+index.tsx    (rudra patel on 10/22/2024 at 08:35):       <Stack.Group screenOptions={{ presentation: "modal" }}>
+index.tsx    (rudra patel on 10/22/2024 at 08:35):         <Stack.Screen name="EditHabitForm" component={EditHabitForm} />
+EditHabitForm.tsx (rudra patel on 10/20/2024 at 17:37): import { NativeStackScreenProps } from "@react-navigation/native-stack";
+EditHabitForm.tsx (rudra patel on 10/20/2024 at 17:37): import { Controller, SubmitHandler, useForm } from "react-hook-form";
+EditHabitForm.tsx (rudra patel on 10/20/2024 at 17:37):   ActivityIndicator,
+EditHabitForm.tsx (rudra patel on 10/22/2024 at 08:35):   SafeAreaView,
+EditHabitForm.tsx (rudra patel on 10/22/2024 at 08:35):   StyleSheet,
+EditHabitForm.tsx (rudra patel on 10/20/2024 at 17:37):   View,
+EditHabitForm.tsx (rudra patel on 10/20/2024 at 17:37): import { z } from "zod";
+EditHabitForm.tsx (rudra patel on 10/20/2024 at 17:37): import { useHabit } from "@/hooks/useHabit";
+EditHabitForm.tsx (rudra patel on 10/20/2024 at 17:37): import useUser from "@/hooks/useUser";
+EditHabitForm.tsx (rudra patel on 10/22/2024 at 08:35): import { Habit } from "@/types";
+EditHabitForm.tsx (rudra patel on 10/20/2024 at 17:37): import { HabitStackParamList } from ".";
+EditHabitForm.tsx (rudra patel on 10/22/2024 at 08:35): const editHabitFormSchema = z.object({
+EditHabitForm.tsx (rudra patel on 10/22/2024 at 08:35): type EditHabitFormValues = z.infer<typeof editHabitFormSchema>;
+EditHabitForm.tsx (rudra patel on 10/22/2024 at 08:35): type EditHabitFormProps = NativeStackScreenProps<
+EditHabitForm.tsx (rudra patel on 10/22/2024 at 08:35):   HabitStackParamList,
+EditHabitForm.tsx (rudra patel on 10/22/2024 at 08:35):   "EditHabitForm"
+EditHabitForm.tsx (rudra patel on 10/22/2024 at 08:35): >;
+EditHabitForm.tsx (rudra patel on 10/22/2024 at 08:35): export default function EditHabitForm({
+EditHabitForm.tsx (rudra patel on 10/22/2024 at 08:35):   navigation,
+EditHabitForm.tsx (rudra patel on 10/22/2024 at 08:35):   route,
+EditHabitForm.tsx (rudra patel on 10/22/2024 at 08:35): }: EditHabitFormProps) {
+EditHabitForm.tsx (rudra patel on 10/22/2024 at 08:35):   const { habit } = route.params;
+EditHabitForm.tsx (rudra patel on 10/22/2024 at 08:35):   } = useForm<EditHabitFormValues>({
+EditHabitForm.tsx (rudra patel on 10/22/2024 at 08:35):     resolver: zodResolver(editHabitFormSchema),
+EditHabitForm.tsx (rudra patel on 10/22/2024 at 08:35):       name: habit.name,
+EditHabitForm.tsx (rudra patel on 10/22/2024 at 08:35):       notificationPeriod: habit.notificationPeriod,
+EditHabitForm.tsx (rudra patel on 10/22/2024 at 08:35):       emailNotificationEnabled: habit.emailNotificationEnabled,
+EditHabitForm.tsx (rudra patel on 10/22/2024 at 08:35):       hourOffset: habit.hourOffset,
+EditHabitForm.tsx (rudra patel on 10/22/2024 at 08:35):       minuteOffset: habit.minuteOffset,
+EditHabitForm.tsx (rudra patel on 10/22/2024 at 08:35):       offsetDirection: habit.offsetDirection,
+EditHabitForm.tsx (rudra patel on 10/22/2024 at 08:35):   const { updateHabit, removeHabit } = useHabit();
+EditHabitForm.tsx (rudra patel on 10/20/2024 at 17:37):   if (userIsLoading) {
+EditHabitForm.tsx (rudra patel on 10/20/2024 at 17:37):     return (
+EditHabitForm.tsx (rudra patel on 10/20/2024 at 17:37):       <View style={styles.container}>
+EditHabitForm.tsx (rudra patel on 10/20/2024 at 17:37):         <ActivityIndicator size="small" color="#000000" />
+EditHabitForm.tsx (rudra patel on 10/20/2024 at 17:37):       </View>
+EditHabitForm.tsx (rudra patel on 10/20/2024 at 17:37):     );
+EditHabitForm.tsx (rudra patel on 10/20/2024 at 17:37):   }
+EditHabitForm.tsx (rudra patel on 10/22/2024 at 08:35):   const onSubmit: SubmitHandler<EditHabitFormValues> = async (data) => {
+EditHabitForm.tsx (rudra patel on 10/22/2024 at 08:35):     await updateHabit({
+EditHabitForm.tsx (rudra patel on 10/22/2024 at 08:35):       id: habit.id,
+EditHabitForm.tsx (rudra patel on 10/22/2024 at 08:35):   const handleDelete = async (habit: Habit) => {
+EditHabitForm.tsx (rudra patel on 10/22/2024 at 08:35):     await removeHabit(habit);
+EditHabitForm.tsx (rudra patel on 10/22/2024 at 08:35):     navigation.navigate("HabitList");
+EditHabitForm.tsx (rudra patel on 10/22/2024 at 08:35):   };
+index.tsx    (rudra patel on 10/20/2024 at 17:37): import sun from "@assets/sun.png";
+index.tsx    (rudra patel on 10/20/2024 at 17:37): import { LinearGradient } from "expo-linear-gradient";
+index.tsx    (rudra patel on 10/20/2024 at 17:37): import React, { useEffect, useState } from "react";
+index.tsx    (rudra patel on 10/20/2024 at 17:37): import { ActivityIndicator, Image, StyleSheet, Text, View } from "react-native";
+users.ts     (rudra patel on 10/20/2024 at 17:37): import { User } from "firebase/auth";
+users.ts     (rudra patel on 10/20/2024 at 17:37): import { doc, getDoc, setDoc } from "firebase/firestore";
+users.ts     (rudra patel on 10/20/2024 at 17:37): import { Location, SolSyncUser } from "@/types";
+users.ts     (rudra patel on 10/20/2024 at 17:37): import { db } from "../../firebaseConfig";
+users.ts     (rudra patel on 10/20/2024 at 17:37):   user: User | null,
+users.ts     (rudra patel on 10/20/2024 at 17:37): ): Promise<SolSyncUser | null> => {
+users.ts     (rudra patel on 10/20/2024 at 17:37):   if (!user) {
+users.ts     (rudra patel on 10/20/2024 at 17:37):     return null;
+users.ts     (rudra patel on 10/20/2024 at 17:37):   }
+users.ts     (rudra patel on 10/20/2024 at 17:37):   const userDoc = await getDoc(doc(db, "users", user.uid));
+users.ts     (rudra patel on 10/20/2024 at 17:37):   const userData = userDoc.data();
+users.ts     (rudra patel on 10/20/2024 at 17:37):   if (!userData) {
+users.ts     (rudra patel on 10/20/2024 at 17:37):     return null;
+users.ts     (rudra patel on 10/20/2024 at 17:37):   }
+users.ts     (rudra patel on 10/20/2024 at 17:37):   return {
+users.ts     (rudra patel on 10/20/2024 at 17:37):     displayName: userData.displayName,
+users.ts     (rudra patel on 10/20/2024 at 17:37):     location: {
+users.ts     (rudra patel on 10/20/2024 at 17:37):       latitude: userData.latitude,
+users.ts     (rudra patel on 10/20/2024 at 17:37):       longitude: userData.longitude,
+users.ts     (rudra patel on 10/20/2024 at 17:37):     },
+users.ts     (rudra patel on 10/20/2024 at 17:37):   };
+users.ts     (rudra patel on 10/20/2024 at 17:37): };
+users.ts     (rudra patel on 10/20/2024 at 17:37):   location: Location,
+users.ts     (rudra patel on 10/20/2024 at 17:37):   displayName: string,
+users.ts     (rudra patel on 10/20/2024 at 17:37): ) => {
+users.ts     (rudra patel on 10/20/2024 at 17:37):     displayName: displayName,
+users.ts     (rudra patel on 10/20/2024 at 17:37):     latitude: location.latitude,
+users.ts     (rudra patel on 10/20/2024 at 17:37):     longitude: location.longitude,
+users.ts     (rudra patel on 10/20/2024 at 17:37):   });
+users.ts     (rudra patel on 10/20/2024 at 17:37): };
+index.ts     (rudra patel on 10/20/2024 at 17:37): export * from "./habits";
+index.ts     (rudra patel on 10/20/2024 at 17:37): export * from "./users";
+index.tsx    (rudra patel on 10/20/2024 at 17:37): import { createNativeStackNavigator } from "@react-navigation/native-stack";
+index.tsx    (rudra patel on 10/20/2024 at 17:37): import { ActivityIndicator, StyleSheet, View } from "react-native";
+index.tsx    (rudra patel on 10/20/2024 at 17:37): import useUser from "@/hooks/useUser";
+index.tsx    (rudra patel on 10/20/2024 at 17:37): import AuthorizedProfile from "./AuthorizedProfile";
+index.tsx    (rudra patel on 10/20/2024 at 17:37):   if (userIsLoading) {
+index.tsx    (rudra patel on 10/20/2024 at 17:37):     return (
+index.tsx    (rudra patel on 10/20/2024 at 17:37):       <View style={styles.container}>
+index.tsx    (rudra patel on 10/20/2024 at 17:37):         <ActivityIndicator size="small" color="#000000" />
+index.tsx    (rudra patel on 10/20/2024 at 17:37):       </View>
+index.tsx    (rudra patel on 10/20/2024 at 17:37):     );
+index.tsx    (rudra patel on 10/20/2024 at 17:37):   }
+index.tsx    (rudra patel on 10/20/2024 at 17:37): const styles = StyleSheet.create({
+index.tsx    (rudra patel on 10/20/2024 at 17:37):   container: {
+index.tsx    (rudra patel on 10/20/2024 at 17:37):     flex: 1,
+index.tsx    (rudra patel on 10/20/2024 at 17:37):     backgroundColor: "#fff",
+index.tsx    (rudra patel on 10/20/2024 at 17:37):     alignItems: "center",
+index.tsx    (rudra patel on 10/20/2024 at 17:37):     justifyContent: "center",
+index.tsx    (rudra patel on 10/20/2024 at 17:37):   },
+index.tsx    (rudra patel on 10/20/2024 at 17:37): });
+HabitList.tsx (rudra patel on 10/20/2024 at 17:37):   SafeAreaView,
+HabitList.tsx (rudra patel on 10/20/2024 at 17:37):   Text,
+HabitList.tsx (rudra patel on 10/20/2024 at 17:37): import { useHabit } from "@/hooks/useHabit";
+HabitList.tsx (rudra patel on 10/20/2024 at 17:37): import { HabitStackParamList } from ".";
+HabitList.tsx (rudra patel on 10/22/2024 at 08:35):   const { habits } = useHabit();
+HabitList.tsx (rudra patel on 10/22/2024 at 08:35):             onPress={() =>
+HabitList.tsx (rudra patel on 10/22/2024 at 08:35):               navigation.navigate("EditHabitForm", { habit: item })
+HabitList.tsx (rudra patel on 10/22/2024 at 08:35):             }
+HabitList.tsx (rudra patel on 10/22/2024 at 08:35):         onPress={() => navigation.navigate("AddHabitForm")}
+AuthorizedProfile.tsx (rudra patel on 10/20/2024 at 17:37): import { default as FAIcon } from "react-native-vector-icons/FontAwesome";
+AuthorizedProfile.tsx (rudra patel on 10/20/2024 at 17:37): import getLocationFromDevice from "@/utils/getLocationFromDevice";
+AuthorizedProfile.tsx (rudra patel on 10/20/2024 at 17:37): import { firebaseAuth } from "../../../firebaseConfig";
