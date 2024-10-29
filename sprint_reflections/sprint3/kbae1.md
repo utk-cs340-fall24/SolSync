@@ -27,7 +27,6 @@ I was able to complete all tasks that were assigned to me; however, to add on to
 ### Files you worked on
 
 - SolSync/lambdas/exampleMailgunTest.js
-- SolSync/lambdas/sendEmail.js
 - SolSync/lambdas/getSunriseSunset.mjs
 - SolSync/lambdas/sendWelcomeEmail.mjs
 - SolSync/src/components/Home/index.tsx

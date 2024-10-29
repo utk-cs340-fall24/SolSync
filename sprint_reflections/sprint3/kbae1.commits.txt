@@ -1,0 +1,309 @@
+file: lambdas/exampleMailgunTest.js
+
+31e7a50b (Kaylee Bae  2024-10-24 18:01:42 -0400  1) const formData = require("form-data");
+31e7a50b (Kaylee Bae  2024-10-24 18:01:42 -0400  2) const Mailgun = require("mailgun.js");
+31e7a50b (Kaylee Bae  2024-10-24 18:01:42 -0400  3) const mailgun = new Mailgun(formData);
+31e7a50b (Kaylee Bae  2024-10-24 18:01:42 -0400  4) const mg = mailgun.client({
+31e7a50b (Kaylee Bae  2024-10-24 18:01:42 -0400  5)   username: "api",
+40aa2ebb (Kaylee Bae  2024-10-25 12:44:36 -0400  6)   key: process.env.EXPO_PUBLIC_MAILGUN_API_KEY,
+31e7a50b (Kaylee Bae  2024-10-24 18:01:42 -0400  7) });
+31e7a50b (Kaylee Bae  2024-10-24 18:01:42 -0400  8) 
+31e7a50b (Kaylee Bae  2024-10-24 18:01:42 -0400  9) mg.messages
+40aa2ebb (Kaylee Bae  2024-10-25 12:44:36 -0400 10)   .create("process.env.EXPO_PUBLIC_MAILGUN_URL", {
+31e7a50b (Kaylee Bae  2024-10-24 18:01:42 -0400 11)     from: "SolSync <solsync340@gmail.com>",
+31e7a50b (Kaylee Bae  2024-10-24 18:01:42 -0400 12)     to: ["kbae1@vols.utk.edu"],
+31e7a50b (Kaylee Bae  2024-10-24 18:01:42 -0400 13)     subject: "Hello",
+31e7a50b (Kaylee Bae  2024-10-24 18:01:42 -0400 14)     text: "Testing some Mailgun.",
+31e7a50b (Kaylee Bae  2024-10-24 18:01:42 -0400 15)     html: "<h1>Hello, world.</h1>",
+40aa2ebb (Kaylee Bae  2024-10-25 12:44:36 -0400 16) 
+31e7a50b (Kaylee Bae  2024-10-24 18:01:42 -0400 18)   .then((msg) => console.log(msg)) // logs response data
+31e7a50b (Kaylee Bae  2024-10-24 18:01:42 -0400 19)   .catch((err) => console.log(err)); // logs any error
+
+file: lambdas/getSunriseSunset.mjs
+
+40aa2ebb lambdas/getSunriseSunset.mjs (Kaylee Bae 2024-10-25 12:44:36 -0400  4) // modified to take in query parameters (latitude, longitude)
+40aa2ebb lambdas/getSunriseSunset.mjs (Kaylee Bae 2024-10-25 12:44:36 -0400 13) export const handler = async function (event) {
+40aa2ebb lambdas/getSunriseSunset.mjs (Kaylee Bae 2024-10-25 12:44:36 -0400 14)   console.log("Received event:", JSON.stringify(event, null, 2));
+40aa2ebb lambdas/getSunriseSunset.mjs (Kaylee Bae 2024-10-25 12:44:36 -0400 16)   let latitude, longitude;
+40aa2ebb lambdas/getSunriseSunset.mjs (Kaylee Bae 2024-10-25 12:44:36 -0400 18)   // Extract latitude and longitude from the event
+40aa2ebb lambdas/getSunriseSunset.mjs (Kaylee Bae 2024-10-25 12:44:36 -0400 19)   if (event.latitude && event.latitude !== "" && event.longitude && event.longitude !== "") {
+40aa2ebb lambdas/getSunriseSunset.mjs (Kaylee Bae 2024-10-25 12:44:36 -0400 20)       latitude = event.latitude;
+40aa2ebb lambdas/getSunriseSunset.mjs (Kaylee Bae 2024-10-25 12:44:36 -0400 21)       longitude = event.longitude;
+40aa2ebb lambdas/getSunriseSunset.mjs (Kaylee Bae 2024-10-25 12:44:36 -0400 22)   } else if (event.body && event.body !== "") {
+40aa2ebb lambdas/getSunriseSunset.mjs (Kaylee Bae 2024-10-25 12:44:36 -0400 23)       const body = JSON.parse(event.body);
+40aa2ebb lambdas/getSunriseSunset.mjs (Kaylee Bae 2024-10-25 12:44:36 -0400 24)       latitude = body.latitude;
+40aa2ebb lambdas/getSunriseSunset.mjs (Kaylee Bae 2024-10-25 12:44:36 -0400 25)       longitude = body.longitude;
+40aa2ebb lambdas/getSunriseSunset.mjs (Kaylee Bae 2024-10-25 12:44:36 -0400 26)   } else if (event.queryStringParameters && event.queryStringParameters.latitude && event.queryStringParameters.longitude) {
+40aa2ebb lambdas/getSunriseSunset.mjs (Kaylee Bae 2024-10-25 12:44:36 -0400 27)       latitude = event.queryStringParameters.latitude;
+40aa2ebb lambdas/getSunriseSunset.mjs (Kaylee Bae 2024-10-25 12:44:36 -0400 28)       longitude = event.queryStringParameters.longitude;
+40aa2ebb lambdas/getSunriseSunset.mjs (Kaylee Bae 2024-10-25 12:44:36 -0400 29)   } else if (event.headers && event.headers.latitude && event.headers.longitude) {
+40aa2ebb lambdas/getSunriseSunset.mjs (Kaylee Bae 2024-10-25 12:44:36 -0400 30)       latitude = event.headers.latitude;
+40aa2ebb lambdas/getSunriseSunset.mjs (Kaylee Bae 2024-10-25 12:44:36 -0400 31)       longitude = event.headers.longitude;
+40aa2ebb lambdas/getSunriseSunset.mjs (Kaylee Bae 2024-10-25 12:44:36 -0400 32)   } else {
+40aa2ebb lambdas/getSunriseSunset.mjs (Kaylee Bae 2024-10-25 12:44:36 -0400 33)       return {
+40aa2ebb lambdas/getSunriseSunset.mjs (Kaylee Bae 2024-10-25 12:44:36 -0400 34)           statusCode: 400,
+40aa2ebb lambdas/getSunriseSunset.mjs (Kaylee Bae 2024-10-25 12:44:36 -0400 35)           body: JSON.stringify({ error: "Latitude and longitude are required" }),
+40aa2ebb lambdas/getSunriseSunset.mjs (Kaylee Bae 2024-10-25 12:44:36 -0400 36)       };
+40aa2ebb lambdas/getSunriseSunset.mjs (Kaylee Bae 2024-10-25 12:44:36 -0400 40)       const response = await fetch(`https://api.sunrisesunset.io/json?lat=${latitude}&lng=${longitude}&timezone=UTC&date_start=today&date_end=tomorrow&time_format=24`);
+40aa2ebb lambdas/getSunriseSunset.mjs (Kaylee Bae 2024-10-25 12:44:36 -0400 41)       const json = await response.json();
+40aa2ebb lambdas/getSunriseSunset.mjs (Kaylee Bae 2024-10-25 12:44:36 -0400 43)       const todayResults = json.results[0];
+40aa2ebb lambdas/getSunriseSunset.mjs (Kaylee Bae 2024-10-25 12:44:36 -0400 44)       const tomorrowResults = json.results[1];
+40aa2ebb lambdas/getSunriseSunset.mjs (Kaylee Bae 2024-10-25 12:44:36 -0400 46)       const todaySunrise = new Date(`${todayResults.date}T${todayResults.sunrise}Z`).toISOString();
+40aa2ebb lambdas/getSunriseSunset.mjs (Kaylee Bae 2024-10-25 12:44:36 -0400 47)       const todaySunset = new Date(`${todayResults.date}T${todayResults.sunset}Z`).toISOString();
+40aa2ebb lambdas/getSunriseSunset.mjs (Kaylee Bae 2024-10-25 12:44:36 -0400 48)       const tomorrowSunrise = new Date(`${tomorrowResults.date}T${tomorrowResults.sunrise}Z`).toISOString();
+40aa2ebb lambdas/getSunriseSunset.mjs (Kaylee Bae 2024-10-25 12:44:36 -0400 50)       const payload = {
+40aa2ebb lambdas/getSunriseSunset.mjs (Kaylee Bae 2024-10-25 12:44:36 -0400 51)           todaySunrise,
+40aa2ebb lambdas/getSunriseSunset.mjs (Kaylee Bae 2024-10-25 12:44:36 -0400 52)           todaySunset,
+40aa2ebb lambdas/getSunriseSunset.mjs (Kaylee Bae 2024-10-25 12:44:36 -0400 53)           tomorrowSunrise,
+40aa2ebb lambdas/getSunriseSunset.mjs (Kaylee Bae 2024-10-25 12:44:36 -0400 54)       };
+40aa2ebb lambdas/getSunriseSunset.mjs (Kaylee Bae 2024-10-25 12:44:36 -0400 56)       return {
+40aa2ebb lambdas/getSunriseSunset.mjs (Kaylee Bae 2024-10-25 12:44:36 -0400 57)           statusCode: 200,
+40aa2ebb lambdas/getSunriseSunset.mjs (Kaylee Bae 2024-10-25 12:44:36 -0400 58)           body: JSON.stringify(payload),
+40aa2ebb lambdas/getSunriseSunset.mjs (Kaylee Bae 2024-10-25 12:44:36 -0400 59)       };
+40aa2ebb lambdas/getSunriseSunset.mjs (Kaylee Bae 2024-10-25 12:44:36 -0400 61)       console.error("Error fetching data:", error);
+40aa2ebb lambdas/getSunriseSunset.mjs (Kaylee Bae 2024-10-25 12:44:36 -0400 62)       return {
+40aa2ebb lambdas/getSunriseSunset.mjs (Kaylee Bae 2024-10-25 12:44:36 -0400 63)           statusCode: 500,
+40aa2ebb lambdas/getSunriseSunset.mjs (Kaylee Bae 2024-10-25 12:44:36 -0400 64)           body: JSON.stringify({ error: "An error occurred while fetching data" }),
+40aa2ebb lambdas/getSunriseSunset.mjs (Kaylee Bae 2024-10-25 12:44:36 -0400 65)       };
+
+file: lambdas/sendWelcomeEmail.mjs
+
+40aa2ebb (Kaylee Bae 2024-10-25 12:44:36 -0400   1) // Takes in an email and a name
+40aa2ebb (Kaylee Bae 2024-10-25 12:44:36 -0400   2) // Send welcome email, should be triggered when user signs up
+40aa2ebb (Kaylee Bae 2024-10-25 12:44:36 -0400   3) 
+40aa2ebb (Kaylee Bae 2024-10-25 12:44:36 -0400   4) export const handler = async (event) => {
+40aa2ebb (Kaylee Bae 2024-10-25 12:44:36 -0400   5)   // Verify the parameters
+40aa2ebb (Kaylee Bae 2024-10-25 12:44:36 -0400   6)   console.log("Received event:", JSON.stringify(event, null, 2));
+40aa2ebb (Kaylee Bae 2024-10-25 12:44:36 -0400   7) 
+40aa2ebb (Kaylee Bae 2024-10-25 12:44:36 -0400   8)   let emailTo, emailName;
+40aa2ebb (Kaylee Bae 2024-10-25 12:44:36 -0400   9) 
+40aa2ebb (Kaylee Bae 2024-10-25 12:44:36 -0400  10)   // Extract email details from the event
+40aa2ebb (Kaylee Bae 2024-10-25 12:44:36 -0400  11)   if (event.to && event.name ) {
+40aa2ebb (Kaylee Bae 2024-10-25 12:44:36 -0400  12)     emailTo = event.to;
+40aa2ebb (Kaylee Bae 2024-10-25 12:44:36 -0400  13)     emailName = event.name;
+40aa2ebb (Kaylee Bae 2024-10-25 12:44:36 -0400  14)   } else if (event.body) {
+40aa2ebb (Kaylee Bae 2024-10-25 12:44:36 -0400  15)     try {
+40aa2ebb (Kaylee Bae 2024-10-25 12:44:36 -0400  16)       const body = JSON.parse(event.body);
+40aa2ebb (Kaylee Bae 2024-10-25 12:44:36 -0400  17)       emailTo = body.to;
+40aa2ebb (Kaylee Bae 2024-10-25 12:44:36 -0400  18)       emailName = body.name; // Ensure name is extracted
+40aa2ebb (Kaylee Bae 2024-10-25 12:44:36 -0400  19)     } catch (error) {
+40aa2ebb (Kaylee Bae 2024-10-25 12:44:36 -0400  20)       console.error("Failed to parse JSON body:", error);
+40aa2ebb (Kaylee Bae 2024-10-25 12:44:36 -0400  21)       return {
+40aa2ebb (Kaylee Bae 2024-10-25 12:44:36 -0400  22)         statusCode: 400,
+40aa2ebb (Kaylee Bae 2024-10-25 12:44:36 -0400  23)         body: JSON.stringify({ error: "Invalid JSON body" }),
+40aa2ebb (Kaylee Bae 2024-10-25 12:44:36 -0400  24)       };
+40aa2ebb (Kaylee Bae 2024-10-25 12:44:36 -0400  25)     }
+40aa2ebb (Kaylee Bae 2024-10-25 12:44:36 -0400  26)   } else if (
+40aa2ebb (Kaylee Bae 2024-10-25 12:44:36 -0400  27)     event.queryStringParameters &&
+40aa2ebb (Kaylee Bae 2024-10-25 12:44:36 -0400  28)     event.queryStringParameters.to &&
+40aa2ebb (Kaylee Bae 2024-10-25 12:44:36 -0400  29)     event.queryStringParameters.name
+40aa2ebb (Kaylee Bae 2024-10-25 12:44:36 -0400  30)   ) {
+40aa2ebb (Kaylee Bae 2024-10-25 12:44:36 -0400  31)     // Try various methods to parse the emailTo and emailHabit
+40aa2ebb (Kaylee Bae 2024-10-25 12:44:36 -0400  32)     emailTo = event.queryStringParameters.to;
+40aa2ebb (Kaylee Bae 2024-10-25 12:44:36 -0400  33)     emailName = event.queryStringParameters.name;
+40aa2ebb (Kaylee Bae 2024-10-25 12:44:36 -0400  34)   } else if (event.headers && event.headers.to && event.headers.name) {
+40aa2ebb (Kaylee Bae 2024-10-25 12:44:36 -0400  35)     emailTo = event.headers.to;
+40aa2ebb (Kaylee Bae 2024-10-25 12:44:36 -0400  36)     emailName = event.headers.name;
+40aa2ebb (Kaylee Bae 2024-10-25 12:44:36 -0400  37)   } else {
+40aa2ebb (Kaylee Bae 2024-10-25 12:44:36 -0400  38)     return {
+40aa2ebb (Kaylee Bae 2024-10-25 12:44:36 -0400  39)       statusCode: 400,
+40aa2ebb (Kaylee Bae 2024-10-25 12:44:36 -0400  40)       body: JSON.stringify({ error: "Email recipient and name are required" }),
+40aa2ebb (Kaylee Bae 2024-10-25 12:44:36 -0400  41)     };
+40aa2ebb (Kaylee Bae 2024-10-25 12:44:36 -0400  42)   }
+40aa2ebb (Kaylee Bae 2024-10-25 12:44:36 -0400  43) 
+40aa2ebb (Kaylee Bae 2024-10-25 12:44:36 -0400  44)   // Create a new date object for the current date
+40aa2ebb (Kaylee Bae 2024-10-25 12:44:36 -0400  45)   let now = new Date();
+40aa2ebb (Kaylee Bae 2024-10-25 12:44:36 -0400  46) 
+40aa2ebb (Kaylee Bae 2024-10-25 12:44:36 -0400  47)   // Add 10 seconds to allow for both lambdas to finish
+40aa2ebb (Kaylee Bae 2024-10-25 12:44:36 -0400  48)   now.setSeconds(now.getSeconds() + 10);
+40aa2ebb (Kaylee Bae 2024-10-25 12:44:36 -0400  49) 
+40aa2ebb (Kaylee Bae 2024-10-25 12:44:36 -0400  50)   // Convert to RFC 2822 format to match mailgun's requirements
+40aa2ebb (Kaylee Bae 2024-10-25 12:44:36 -0400  51)   let rfc2822Time = now.toUTCString();
+40aa2ebb (Kaylee Bae 2024-10-25 12:44:36 -0400  52) 
+40aa2ebb (Kaylee Bae 2024-10-25 12:44:36 -0400  53)   // Make sure this variable is correct
+40aa2ebb (Kaylee Bae 2024-10-25 12:44:36 -0400  54)   console.log(rfc2822Time);
+40aa2ebb (Kaylee Bae 2024-10-25 12:44:36 -0400  55) 
+40aa2ebb (Kaylee Bae 2024-10-25 12:44:36 -0400  56)   // Define HTML
+40aa2ebb (Kaylee Bae 2024-10-25 12:44:36 -0400  57)   const emailHTML = `
+40aa2ebb (Kaylee Bae 2024-10-25 12:44:36 -0400  58)   <div style="font-family: Arial, sans-serif; padding: 20px; background-color: #FFCC80; color: #000; text-align: center;">
+40aa2ebb (Kaylee Bae 2024-10-25 12:44:36 -0400  59)       <h1 style="color: #D65F0D;">Welcome to SolSync!</h1>
+40aa2ebb (Kaylee Bae 2024-10-25 12:44:36 -0400  60)       <div style="background-color: rgba(255, 255, 255, 0.8); padding: 15px; border-radius: 8px; display: inline-block; text-align: left;">
+40aa2ebb (Kaylee Bae 2024-10-25 12:44:36 -0400  61)           <p style="font-size: 20px;">
+40aa2ebb (Kaylee Bae 2024-10-25 12:44:36 -0400  62)               We are thrilled to have you join our community! At SolSync, we believe in the power of daily reflection and personal growth.
+40aa2ebb (Kaylee Bae 2024-10-25 12:44:36 -0400  63)           </p>
+40aa2ebb (Kaylee Bae 2024-10-25 12:44:36 -0400  64)           <p style="font-size: 18px;">
+40aa2ebb (Kaylee Bae 2024-10-25 12:44:36 -0400  65)               SolSync helps you quickly and easily keep track of your habits, making aligning habits with sunrise and sunset times easy.
+40aa2ebb (Kaylee Bae 2024-10-25 12:44:36 -0400  66)           </p>
+40aa2ebb (Kaylee Bae 2024-10-25 12:44:36 -0400  67) 
+40aa2ebb (Kaylee Bae 2024-10-25 12:44:36 -0400  68)           <h2 style="color: #D65F0D;">Account Details</h2>
+40aa2ebb (Kaylee Bae 2024-10-25 12:44:36 -0400  69)           <p style="font-size: 18px;">
+40aa2ebb (Kaylee Bae 2024-10-25 12:44:36 -0400  70)               Name: ${emailName}
+40aa2ebb (Kaylee Bae 2024-10-25 12:44:36 -0400  71)           </p>
+40aa2ebb (Kaylee Bae 2024-10-25 12:44:36 -0400  72)           <p style="font-size: 18px;">
+40aa2ebb (Kaylee Bae 2024-10-25 12:44:36 -0400  73)               Email: ${emailTo}
+40aa2ebb (Kaylee Bae 2024-10-25 12:44:36 -0400  74)           </p>
+40aa2ebb (Kaylee Bae 2024-10-25 12:44:36 -0400  75) 
+40aa2ebb (Kaylee Bae 2024-10-25 12:44:36 -0400  76) 
+40aa2ebb (Kaylee Bae 2024-10-25 12:44:36 -0400  77)           <h2 style="color: #D65F0D;">Getting Started</h2>
+40aa2ebb (Kaylee Bae 2024-10-25 12:44:36 -0400  78)           <p style="font-size: 18px;">
+40aa2ebb (Kaylee Bae 2024-10-25 12:44:36 -0400  79)               Here are a few tips for using SolSync:
+40aa2ebb (Kaylee Bae 2024-10-25 12:44:36 -0400  80)           </p>
+40aa2ebb (Kaylee Bae 2024-10-25 12:44:36 -0400  81)           <ul style="font-size: 18px; margin: 10px 0; padding-left: 20px;">
+40aa2ebb (Kaylee Bae 2024-10-25 12:44:36 -0400  82)               <li>Customize your icons, habits, and profile picture to make this app uniquely yours.</li>
+40aa2ebb (Kaylee Bae 2024-10-25 12:44:36 -0400  83)               <li>Log into the app daily to track your progress.</li>
+40aa2ebb (Kaylee Bae 2024-10-25 12:44:36 -0400  84)               <li>Keep your email updated to receive daily reminders.</li>
+40aa2ebb (Kaylee Bae 2024-10-25 12:44:36 -0400  85)           </ul>
+40aa2ebb (Kaylee Bae 2024-10-25 12:44:36 -0400  86)           <p style="font-size: 18px;">
+40aa2ebb (Kaylee Bae 2024-10-25 12:44:36 -0400  87)               Remember, every small step counts on your habit-building journey!
+40aa2ebb (Kaylee Bae 2024-10-25 12:44:36 -0400  88)           </p>
+40aa2ebb (Kaylee Bae 2024-10-25 12:44:36 -0400  89)       </div>
+40aa2ebb (Kaylee Bae 2024-10-25 12:44:36 -0400  90)   </div>
+40aa2ebb (Kaylee Bae 2024-10-25 12:44:36 -0400  91)   `;
+40aa2ebb (Kaylee Bae 2024-10-25 12:44:36 -0400  92) 
+40aa2ebb (Kaylee Bae 2024-10-25 12:44:36 -0400  93)   try {
+40aa2ebb (Kaylee Bae 2024-10-25 12:44:36 -0400  94)     // Fetch the sendEmail API with the required body
+40aa2ebb (Kaylee Bae 2024-10-25 12:44:36 -0400  95)     const response = await fetch(process.env.SENDEMAIL_API_URL, {
+40aa2ebb (Kaylee Bae 2024-10-25 12:44:36 -0400  96)       method: "POST",
+40aa2ebb (Kaylee Bae 2024-10-25 12:44:36 -0400  97)       headers: {
+40aa2ebb (Kaylee Bae 2024-10-25 12:44:36 -0400  98)         "x-api-key": process.env.SENDEMAIL_API_KEY,
+40aa2ebb (Kaylee Bae 2024-10-25 12:44:36 -0400  99)       },
+40aa2ebb (Kaylee Bae 2024-10-25 12:44:36 -0400 100)       body: JSON.stringify({
+40aa2ebb (Kaylee Bae 2024-10-25 12:44:36 -0400 101)         to: emailTo,
+40aa2ebb (Kaylee Bae 2024-10-25 12:44:36 -0400 102)         subject: "Welcome to SolSync",
+40aa2ebb (Kaylee Bae 2024-10-25 12:44:36 -0400 103)         text: "We are glad you have chosen to become a part of the SolSync community.",
+40aa2ebb (Kaylee Bae 2024-10-25 12:44:36 -0400 104)         textFormat: emailHTML,
+40aa2ebb (Kaylee Bae 2024-10-25 12:44:36 -0400 105)         deliveryTime: rfc2822Time,
+40aa2ebb (Kaylee Bae 2024-10-25 12:44:36 -0400 106)       }),
+40aa2ebb (Kaylee Bae 2024-10-25 12:44:36 -0400 107)     });
+40aa2ebb (Kaylee Bae 2024-10-25 12:44:36 -0400 108) 
+40aa2ebb (Kaylee Bae 2024-10-25 12:44:36 -0400 109)     // Convert to JSON
+40aa2ebb (Kaylee Bae 2024-10-25 12:44:36 -0400 110)     const jsonData = await response.json();
+40aa2ebb (Kaylee Bae 2024-10-25 12:44:36 -0400 111)     if (response.ok) {
+40aa2ebb (Kaylee Bae 2024-10-25 12:44:36 -0400 112)       // Return success message and event data
+40aa2ebb (Kaylee Bae 2024-10-25 12:44:36 -0400 113)       return {
+40aa2ebb (Kaylee Bae 2024-10-25 12:44:36 -0400 114)         statusCode: 200,
+40aa2ebb (Kaylee Bae 2024-10-25 12:44:36 -0400 115)         body: JSON.stringify({
+40aa2ebb (Kaylee Bae 2024-10-25 12:44:36 -0400 116)           message: "Email sent successfully!",
+40aa2ebb (Kaylee Bae 2024-10-25 12:44:36 -0400 117)           event: jsonData.eventTo,
+40aa2ebb (Kaylee Bae 2024-10-25 12:44:36 -0400 118)           data: jsonData.data,
+40aa2ebb (Kaylee Bae 2024-10-25 12:44:36 -0400 119)         }),
+40aa2ebb (Kaylee Bae 2024-10-25 12:44:36 -0400 120)       };
+40aa2ebb (Kaylee Bae 2024-10-25 12:44:36 -0400 121)     } else {
+40aa2ebb (Kaylee Bae 2024-10-25 12:44:36 -0400 122)       // Log the response data for debugging
+40aa2ebb (Kaylee Bae 2024-10-25 12:44:36 -0400 123)       console.log(jsonData);
+40aa2ebb (Kaylee Bae 2024-10-25 12:44:36 -0400 124) 
+40aa2ebb (Kaylee Bae 2024-10-25 12:44:36 -0400 125)       // Return failure status and error from sendEmail
+40aa2ebb (Kaylee Bae 2024-10-25 12:44:36 -0400 126)       return {
+40aa2ebb (Kaylee Bae 2024-10-25 12:44:36 -0400 127)         statusCode: 500,
+40aa2ebb (Kaylee Bae 2024-10-25 12:44:36 -0400 128)         body: JSON.stringify({
+40aa2ebb (Kaylee Bae 2024-10-25 12:44:36 -0400 129)           message: "Failed to send email.",
+40aa2ebb (Kaylee Bae 2024-10-25 12:44:36 -0400 130)           error: jsonData.message || "Unknown error",
+40aa2ebb (Kaylee Bae 2024-10-25 12:44:36 -0400 131)           error2: jsonData.error || "Unknown error",
+40aa2ebb (Kaylee Bae 2024-10-25 12:44:36 -0400 132)           emailTo: jsonData.emailTo,
+40aa2ebb (Kaylee Bae 2024-10-25 12:44:36 -0400 133)         }),
+40aa2ebb (Kaylee Bae 2024-10-25 12:44:36 -0400 134)       };
+40aa2ebb (Kaylee Bae 2024-10-25 12:44:36 -0400 135)     }
+40aa2ebb (Kaylee Bae 2024-10-25 12:44:36 -0400 136)   } catch (err) {
+40aa2ebb (Kaylee Bae 2024-10-25 12:44:36 -0400 137)     // Log the error
+40aa2ebb (Kaylee Bae 2024-10-25 12:44:36 -0400 138)     console.log(err);
+40aa2ebb (Kaylee Bae 2024-10-25 12:44:36 -0400 139) 
+40aa2ebb (Kaylee Bae 2024-10-25 12:44:36 -0400 140)     // Return failure status
+40aa2ebb (Kaylee Bae 2024-10-25 12:44:36 -0400 141)     return {
+40aa2ebb (Kaylee Bae 2024-10-25 12:44:36 -0400 142)       statusCode: 500,
+40aa2ebb (Kaylee Bae 2024-10-25 12:44:36 -0400 143)       body: JSON.stringify({
+40aa2ebb (Kaylee Bae 2024-10-25 12:44:36 -0400 144)         message: "Failed to send email 1.",
+40aa2ebb (Kaylee Bae 2024-10-25 12:44:36 -0400 145)         error: err.message,
+40aa2ebb (Kaylee Bae 2024-10-25 12:44:36 -0400 146)       }),
+40aa2ebb (Kaylee Bae 2024-10-25 12:44:36 -0400 147)     };
+40aa2ebb (Kaylee Bae 2024-10-25 12:44:36 -0400 148)   }
+40aa2ebb (Kaylee Bae 2024-10-25 12:44:36 -0400 149) };
+
+
+file: src/components/Home/index.tsx
+
+31e7a50b (Kaylee Bae     2024-10-24 18:01:42 -0400  60)     // Assuming process.env.GETSUNRISESUNSET_API_URL is a valid URL
+31e7a50b (Kaylee Bae     2024-10-24 18:01:42 -0400  61)     const apiUrl = process.env.EXPO_PUBLIC_GETSUNRISESUNSET_API_URL;
+31e7a50b (Kaylee Bae     2024-10-24 18:01:42 -0400  62) 
+31e7a50b (Kaylee Bae     2024-10-24 18:01:42 -0400  63)     // Check if the API URL is defined
+31e7a50b (Kaylee Bae     2024-10-24 18:01:42 -0400  64)     if (!apiUrl) {
+31e7a50b (Kaylee Bae     2024-10-24 18:01:42 -0400  65)       throw new Error(
+31e7a50b (Kaylee Bae     2024-10-24 18:01:42 -0400  66)         "GETSUNRISESUNSET_API_URL is not defined in the environment variables.",
+31e7a50b (Kaylee Bae     2024-10-24 18:01:42 -0400  67)       );
+31e7a50b (Kaylee Bae     2024-10-24 18:01:42 -0400  68)     }
+31e7a50b (Kaylee Bae     2024-10-24 18:01:42 -0400  69)     const url = new URL(apiUrl);
+31e7a50b (Kaylee Bae     2024-10-24 18:01:42 -0400  70) 
+31e7a50b (Kaylee Bae     2024-10-24 18:01:42 -0400  71)     // Adding query parameters
+31e7a50b (Kaylee Bae     2024-10-24 18:01:42 -0400  72)     if (location && location.latitude && location.longitude) {
+31e7a50b (Kaylee Bae     2024-10-24 18:01:42 -0400  73)       url.searchParams.append("latitude", location.latitude.toString());
+31e7a50b (Kaylee Bae     2024-10-24 18:01:42 -0400  74)       url.searchParams.append("longitude", location.longitude.toString());
+31e7a50b (Kaylee Bae     2024-10-24 18:01:42 -0400  75)     } else {
+31e7a50b (Kaylee Bae     2024-10-24 18:01:42 -0400  76)       console.log("Unable to fetch longitude and latitude");
+31e7a50b (Kaylee Bae     2024-10-24 18:01:42 -0400  77)     }
+31e7a50b (Kaylee Bae     2024-10-24 18:01:42 -0400  78) 
+31e7a50b (Kaylee Bae     2024-10-24 18:01:42 -0400  80)       const response = await fetch(url, {
+31e7a50b (Kaylee Bae     2024-10-24 18:01:42 -0400  81)         method: "GET",
+31e7a50b (Kaylee Bae     2024-10-24 18:01:42 -0400  82)         headers: {
+31e7a50b (Kaylee Bae     2024-10-24 18:01:42 -0400  83)           "x-api-key": process.env
+31e7a50b (Kaylee Bae     2024-10-24 18:01:42 -0400  84)             .EXPO_PUBLIC_GETSUNRISESUNSET_API_KEY as string,
+31e7a50b (Kaylee Bae     2024-10-24 18:01:42 -0400  86)       });
+
+file: src/components/Profile/SignUp.tsx
+
+a7026aa9 src/components/Profile/SignUp.tsx (Kaylee Bae     2024-10-29 00:29:17 -0400  17) import { SolSyncUser } from "@/types";
+a7026aa9 src/components/Profile/SignUp.tsx (Kaylee Bae     2024-10-29 00:29:17 -0400  44)     // Collect necessary information
+a7026aa9 src/components/Profile/SignUp.tsx (Kaylee Bae     2024-10-29 00:29:17 -0400  46) 
+a7026aa9 src/components/Profile/SignUp.tsx (Kaylee Bae     2024-10-29 00:29:17 -0400  47)     // Add to firebase
+a7026aa9 src/components/Profile/SignUp.tsx (Kaylee Bae     2024-10-29 00:29:17 -0400  57)       const solSyncUser: SolSyncUser = {
+a7026aa9 src/components/Profile/SignUp.tsx (Kaylee Bae     2024-10-29 00:29:17 -0400  59)         email,
+a7026aa9 src/components/Profile/SignUp.tsx (Kaylee Bae     2024-10-29 00:29:17 -0400  60)         location,
+a7026aa9 src/components/Profile/SignUp.tsx (Kaylee Bae     2024-10-29 00:29:17 -0400  61)         displayName,
+a7026aa9 src/components/Profile/SignUp.tsx (Kaylee Bae     2024-10-29 00:29:17 -0400  72) 
+a7026aa9 src/components/Profile/SignUp.tsx (Kaylee Bae     2024-10-29 00:29:17 -0400  73)     // Send welcome email
+a7026aa9 src/components/Profile/SignUp.tsx (Kaylee Bae     2024-10-29 00:29:17 -0400  74)     // Will only progress past this line if the user is not in firebase
+a7026aa9 src/components/Profile/SignUp.tsx (Kaylee Bae     2024-10-29 00:29:17 -0400  75) 
+a7026aa9 src/components/Profile/SignUp.tsx (Kaylee Bae     2024-10-29 00:29:17 -0400  76)     // Check if the URL is valid
+a7026aa9 src/components/Profile/SignUp.tsx (Kaylee Bae     2024-10-29 00:29:17 -0400  77)     const apiUrl = process.env.EXPO_PUBLIC_SENDWELCOMEEMAIL_API_URL;
+a7026aa9 src/components/Profile/SignUp.tsx (Kaylee Bae     2024-10-29 00:29:17 -0400  78) 
+a7026aa9 src/components/Profile/SignUp.tsx (Kaylee Bae     2024-10-29 00:29:17 -0400  79)     // Check if the API URL is defined
+a7026aa9 src/components/Profile/SignUp.tsx (Kaylee Bae     2024-10-29 00:29:17 -0400  80)     if (!apiUrl) {
+a7026aa9 src/components/Profile/SignUp.tsx (Kaylee Bae     2024-10-29 00:29:17 -0400  81)       throw new Error(
+a7026aa9 src/components/Profile/SignUp.tsx (Kaylee Bae     2024-10-29 00:29:17 -0400  82)         "SENDWELCOMEEMAIL_API_URL is not defined in the environment variables.",
+a7026aa9 src/components/Profile/SignUp.tsx (Kaylee Bae     2024-10-29 00:29:17 -0400  83)       );
+a7026aa9 src/components/Profile/SignUp.tsx (Kaylee Bae     2024-10-29 00:29:17 -0400  84)     }
+a7026aa9 src/components/Profile/SignUp.tsx (Kaylee Bae     2024-10-29 00:29:17 -0400  85)     const url = new URL(apiUrl);
+a7026aa9 src/components/Profile/SignUp.tsx (Kaylee Bae     2024-10-29 00:29:17 -0400  86) 
+a7026aa9 src/components/Profile/SignUp.tsx (Kaylee Bae     2024-10-29 00:29:17 -0400  87)     // Adding query parameters by using to and name
+a7026aa9 src/components/Profile/SignUp.tsx (Kaylee Bae     2024-10-29 00:29:17 -0400  88)     if (displayName && email) {
+a7026aa9 src/components/Profile/SignUp.tsx (Kaylee Bae     2024-10-29 00:29:17 -0400  89)       url.searchParams.append("to", email.toString());
+a7026aa9 src/components/Profile/SignUp.tsx (Kaylee Bae     2024-10-29 00:29:17 -0400  90)       url.searchParams.append("name", displayName.toString());
+a7026aa9 src/components/Profile/SignUp.tsx (Kaylee Bae     2024-10-29 00:29:17 -0400  91) 
+a7026aa9 src/components/Profile/SignUp.tsx (Kaylee Bae     2024-10-29 00:29:17 -0400  92)       console.log("Parameters successfully added.");
+a7026aa9 src/components/Profile/SignUp.tsx (Kaylee Bae     2024-10-29 00:29:17 -0400  93)     } else {
+a7026aa9 src/components/Profile/SignUp.tsx (Kaylee Bae     2024-10-29 00:29:17 -0400  94)       console.log("Unable to fetch email and name.");
+a7026aa9 src/components/Profile/SignUp.tsx (Kaylee Bae     2024-10-29 00:29:17 -0400  95)     }
+a7026aa9 src/components/Profile/SignUp.tsx (Kaylee Bae     2024-10-29 00:29:17 -0400  96) 
+a7026aa9 src/components/Profile/SignUp.tsx (Kaylee Bae     2024-10-29 00:29:17 -0400  97)     // Try sending the email using a get request with the parameters
+a7026aa9 src/components/Profile/SignUp.tsx (Kaylee Bae     2024-10-29 00:29:17 -0400  98)     try {
+a7026aa9 src/components/Profile/SignUp.tsx (Kaylee Bae     2024-10-29 00:29:17 -0400  99)       const response = await fetch(url, {
+a7026aa9 src/components/Profile/SignUp.tsx (Kaylee Bae     2024-10-29 00:29:17 -0400 100)         method: "GET",
+a7026aa9 src/components/Profile/SignUp.tsx (Kaylee Bae     2024-10-29 00:29:17 -0400 101)         headers: {
+a7026aa9 src/components/Profile/SignUp.tsx (Kaylee Bae     2024-10-29 00:29:17 -0400 102)           "x-api-key": process.env
+a7026aa9 src/components/Profile/SignUp.tsx (Kaylee Bae     2024-10-29 00:29:17 -0400 103)             .EXPO_PUBLIC_SENDWELCOMEEMAIL_API_KEY as string,
+a7026aa9 src/components/Profile/SignUp.tsx (Kaylee Bae     2024-10-29 00:29:17 -0400 104)         },
+a7026aa9 src/components/Profile/SignUp.tsx (Kaylee Bae     2024-10-29 00:29:17 -0400 105)       });
+a7026aa9 src/components/Profile/SignUp.tsx (Kaylee Bae     2024-10-29 00:29:17 -0400 106) 
+a7026aa9 src/components/Profile/SignUp.tsx (Kaylee Bae     2024-10-29 00:29:17 -0400 107)       // Check if the response was successful
+a7026aa9 src/components/Profile/SignUp.tsx (Kaylee Bae     2024-10-29 00:29:17 -0400 108)       if (!response.ok) {
+a7026aa9 src/components/Profile/SignUp.tsx (Kaylee Bae     2024-10-29 00:29:17 -0400 109)         throw new Error(`HTTP error! status: ${response.status}`);
+a7026aa9 src/components/Profile/SignUp.tsx (Kaylee Bae     2024-10-29 00:29:17 -0400 110)       }
+a7026aa9 src/components/Profile/SignUp.tsx (Kaylee Bae     2024-10-29 00:29:17 -0400 111) 
+a7026aa9 src/components/Profile/SignUp.tsx (Kaylee Bae     2024-10-29 00:29:17 -0400 112)       // Console log
+a7026aa9 src/components/Profile/SignUp.tsx (Kaylee Bae     2024-10-29 00:29:17 -0400 113)       console.log("Sent!");
+a7026aa9 src/components/Profile/SignUp.tsx (Kaylee Bae     2024-10-29 00:29:17 -0400 114) 
+a7026aa9 src/components/Profile/SignUp.tsx (Kaylee Bae     2024-10-29 00:29:17 -0400 115)       const jsonData = await response.json();
+a7026aa9 src/components/Profile/SignUp.tsx (Kaylee Bae     2024-10-29 00:29:17 -0400 116) 
+a7026aa9 src/components/Profile/SignUp.tsx (Kaylee Bae     2024-10-29 00:29:17 -0400 117)       // Print out success or error
+a7026aa9 src/components/Profile/SignUp.tsx (Kaylee Bae     2024-10-29 00:29:17 -0400 118)       console.log(jsonData.message);
+a7026aa9 src/components/Profile/SignUp.tsx (Kaylee Bae     2024-10-29 00:29:17 -0400 119)     } catch (err) {
+a7026aa9 src/components/Profile/SignUp.tsx (Kaylee Bae     2024-10-29 00:29:17 -0400 120)       console.log(err);
+a7026aa9 src/components/Profile/SignUp.tsx (Kaylee Bae     2024-10-29 00:29:17 -0400 121)     }
