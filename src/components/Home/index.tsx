@@ -21,14 +21,14 @@ if (isDay) {
   colorsLocations = [0.2, 0.4, 0.7, 0.9];
 }
 
-let IntroMsg = "";
+let introMessage = "";
 
 if (hour >= 3 && hour < 12) {
-  IntroMsg = "Good Morning";
+  introMessage = "Good Morning";
 } else if (hour >= 12 && hour < 18) {
-  IntroMsg = "Good Afternoon";
+  introMessage = "Good Afternoon";
 } else {
-  IntroMsg = "Good Evening";
+  introMessage = "Good Evening";
 }
 
 export default function Home() {
@@ -38,11 +38,16 @@ export default function Home() {
   const [isLocationPermissionGranted, setIsLocationPermissionGranted] =
     useState<boolean>(true);
   const [loading, setLoading] = useState(true);
-  const { user } = useUser();
+  const { user, userIsLoading } = useUser();
 
   useEffect(() => {
     const fetchSunriseSunsetTime = async () => {
       setLoading(true);
+
+      if (userIsLoading) {
+        return;
+      }
+
       const response = await getSunriseSunsetTime(user);
 
       setIsLocationPermissionGranted(response.isLocationPermissionGranted);
@@ -53,7 +58,7 @@ export default function Home() {
     };
 
     fetchSunriseSunsetTime();
-  }, [user]);
+  }, [user, userIsLoading]);
 
   return (
     <LinearGradient
@@ -62,7 +67,7 @@ export default function Home() {
       style={styles.container}
     >
       <View style={styles.content}>
-        <Text style={styles.Hello}>{IntroMsg}</Text>
+        <Text style={styles.Hello}>{introMessage}</Text>
         <Image style={styles.sun} source={sun} />
         <Image style={styles.cloud} source={cloud} />
         {loading ? (
