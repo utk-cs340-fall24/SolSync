@@ -305,6 +305,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     padding: 15,
     marginBottom: 20,
+    backgroundColor: "#FFFFFF",
   },
   titleContainer: {
     alignItems: "center",
@@ -332,6 +333,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     borderColor: "#ccc",
     fontSize: 16,
+    backgroundColor: "#FFFFFF",
   },
   habitTimeHeader: {
     fontSize: 18,
@@ -352,6 +354,7 @@ const styles = StyleSheet.create({
     padding: 10,
     borderRadius: 8,
     borderColor: "#ccc",
+    backgroundColor: "#FFFFFF",
   },
   timeHeader: {
     fontSize: 20,
@@ -367,6 +370,7 @@ const styles = StyleSheet.create({
     borderColor: "#ccc",
     height: 50,
     width: "80%",
+    backgroundColor: "#FFFFFF",
   },
   emailText: {
     fontSize: 18,
@@ -380,18 +384,6 @@ const styles = StyleSheet.create({
     marginLeft: 40,
     color: "#5A5A5A",
   },
-  input: {
-    height: 40,
-    width: "70%",
-    marginHorizontal: 12,
-    margin: 12,
-    borderWidth: 1,
-    padding: 10,
-  },
-  picker: {
-    width: "70%",
-    borderWidth: 1,
-  },
   offsetPicker: {
     width: "100%",
     height: 30,
@@ -402,6 +394,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 8,
     borderColor: "#ccc",
+    backgroundColor: "#FFFFFF",
   },
   offsetDivider: {
     height: 1,
