@@ -62,7 +62,9 @@ export default function HabitList({ navigation }: HabitListProps) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: "#F5F5F5",
+    alignItems: "center",
+    justifyContent: "center",
   },
   titleContainer: {
     alignItems: "center",
@@ -88,7 +90,7 @@ const styles = StyleSheet.create({
     color: "#4a3f4c",
     borderWidth: 1,
     borderRadius: 8,
-    width: "85%",
+    width: "95%",
     height: 80,
     marginBottom: 20,
   },
