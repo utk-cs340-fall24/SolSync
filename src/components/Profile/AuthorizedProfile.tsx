@@ -8,6 +8,7 @@ import { default as FAIcon } from "react-native-vector-icons/FontAwesome";
 
 import useUser from "@/hooks/useUser";
 import { upsertUser } from "@/server";
+import { sendDataEmail } from "@/server/emails";
 import getLocationFromDevice from "@/utils/getLocationFromDevice";
 
 import { firebaseAuth } from "../../../firebaseConfig";
@@ -48,38 +49,12 @@ export default function AuthorizedProfile({
     await reloadUser();
   };
 
-  const requestData = async () => {
-    try {
-      setRequestDataLoading(true);
+  const requestDataEmail = async () => {
+    setRequestDataLoading(true);
 
-      const apiUrl = process.env.EXPO_PUBLIC_SENDDATAEMAIL_API_URL;
+    await sendDataEmail(user.id);
 
-      if (!apiUrl) {
-        throw new Error(
-          "GETSUNRISESUNSET_API_URL is not defined in the environment variables.",
-        );
-      }
-      const url = new URL(apiUrl);
-
-      const response = await fetch(url, {
-        method: "POST",
-        headers: {
-          "x-api-key": process.env
-            .EXPO_PUBLIC_GETSUNRISESUNSET_API_KEY as string,
-        },
-        body: JSON.stringify({
-          userId: user.id,
-        }),
-      });
-
-      const jsonData = await response.json();
-
-      console.log(jsonData);
-    } catch (err) {
-      console.log(err);
-    } finally {
-      setRequestDataLoading(false);
-    }
+    setRequestDataLoading(false);
   };
 
   return (
@@ -130,7 +105,10 @@ export default function AuthorizedProfile({
         </View>
       </View>
 
-      <TouchableOpacity style={styles.requestDateButton} onPress={requestData}>
+      <TouchableOpacity
+        style={styles.requestDateButton}
+        onPress={requestDataEmail}
+      >
         {requestDataLoading ? (
           <ActivityIndicator size="small" color="#FFFFFF" />
         ) : (
