@@ -8,7 +8,7 @@ export const handler = async (event) => {
   let emailTo, emailName;
 
   // Extract email details from the event
-  if (event.to && event.name ) {
+  if (event.to && event.name) {
     emailTo = event.to;
     emailName = event.name;
   } else if (event.body) {
@@ -55,39 +55,36 @@ export const handler = async (event) => {
 
   // Define HTML
   const emailHTML = `
-  <div style="font-family: Arial, sans-serif; padding: 20px; background-color: #FFCC80; color: #000; text-align: center;">
-      <h1 style="color: #D65F0D;">Welcome to SolSync!</h1>
+    <div style="font-family: Arial, sans-serif; padding: 20px; background: linear-gradient(191.16deg, #CC9ED0 3.26%, #F7A592 49.91%, #FFD18A 96.57%); color: #000; text-align: center;">
       <div style="background-color: rgba(255, 255, 255, 0.8); padding: 15px; border-radius: 8px; display: inline-block; text-align: left;">
-          <p style="font-size: 20px;">
-              We are thrilled to have you join our community! At SolSync, we believe in the power of daily reflection and personal growth.
-          </p>
-          <p style="font-size: 18px;">
-              SolSync helps you quickly and easily keep track of your habits, making aligning habits with sunrise and sunset times easy.
-          </p>
-
-          <h2 style="color: #D65F0D;">Account Details</h2>
-          <p style="font-size: 18px;">
-              Name: ${emailName}
-          </p>
-          <p style="font-size: 18px;">
-              Email: ${emailTo}
-          </p>
-
-
-          <h2 style="color: #D65F0D;">Getting Started</h2>
-          <p style="font-size: 18px;">
-              Here are a few tips for using SolSync:
-          </p>
-          <ul style="font-size: 18px; margin: 10px 0; padding-left: 20px;">
-              <li>Customize your icons, habits, and profile picture to make this app uniquely yours.</li>
-              <li>Log into the app daily to track your progress.</li>
-              <li>Keep your email updated to receive daily reminders.</li>
-          </ul>
-          <p style="font-size: 18px;">
-              Remember, every small step counts on your habit-building journey!
-          </p>
+        <h1 style="color: #f4a58a; text-align: center;">Welcome to SolSync!</h1>
+        <p style="font-size: 20px;">
+          We are thrilled to have you join our community! At SolSync, we believe in the power of daily reflection and personal growth.
+        </p>
+        <p style="font-size: 18px;">
+          SolSync helps you quickly and easily keep track of your habits, making aligning habits with sunrise and sunset times easy.
+        </p>
+        <h2 style="color: #b38acb;">Account Details</h2>
+        <p style="font-size: 18px;">
+          Name: ${emailName}
+        </p>
+        <p style="font-size: 18px;">
+          Email: ${emailTo}
+        </p>
+        <h2 style="color: #b38acb;">Getting Started</h2>
+        <p style="font-size: 18px;">
+          Here are a few tips for using SolSync:
+        </p>
+        <ul style="font-size: 18px; margin: 10px 0; padding-left: 20px;">
+          <li>Customize your icons, habits, and profile picture to make this app uniquely yours.</li>
+          <li>Log into the app daily to track your progress.</li>
+          <li>Keep your email updated to receive daily reminders.</li>
+        </ul>
+        <p style="font-size: 18px;">
+          Remember, every small step counts on your habit-building journey!
+        </p>
       </div>
-  </div>
+    </div>
   `;
 
   try {
