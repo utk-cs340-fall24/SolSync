@@ -38,7 +38,7 @@ export async function sendDataEmail(userId: string) {
 
     if (!apiUrl) {
       throw new Error(
-        "GETSUNRISESUNSET_API_URL is not defined in the environment variables.",
+        "SENDDATAEMAIL_API_URL is not defined in the environment variables.",
       );
     }
     const url = new URL(apiUrl);
@@ -46,7 +46,7 @@ export async function sendDataEmail(userId: string) {
     const response = await fetch(url, {
       method: "POST",
       headers: {
-        "x-api-key": process.env.EXPO_PUBLIC_GETSUNRISESUNSET_API_KEY as string,
+        "x-api-key": process.env.EXPO_PUBLIC_SENDDATAEMAIL_API_KEY as string,
       },
       body: JSON.stringify({
         userId: userId,
