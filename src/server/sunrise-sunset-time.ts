@@ -70,7 +70,7 @@ export async function getSunriseSunsetTime(
       };
     }
   } catch (error) {
-    console.error(error);
+    console.log(error);
     return {
       isLocationPermissionGranted: true,
       sunrise: null,
