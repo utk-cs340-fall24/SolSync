@@ -31,3 +31,32 @@ export async function sendWelcomeEmail(displayName: string, email: string) {
     console.error(err);
   }
 }
+
+export async function sendDataEmail(userId: string) {
+  try {
+    const apiUrl = process.env.EXPO_PUBLIC_SENDDATAEMAIL_API_URL;
+
+    if (!apiUrl) {
+      throw new Error(
+        "GETSUNRISESUNSET_API_URL is not defined in the environment variables.",
+      );
+    }
+    const url = new URL(apiUrl);
+
+    const response = await fetch(url, {
+      method: "POST",
+      headers: {
+        "x-api-key": process.env.EXPO_PUBLIC_GETSUNRISESUNSET_API_KEY as string,
+      },
+      body: JSON.stringify({
+        userId: userId,
+      }),
+    });
+
+    const jsonData = await response.json();
+
+    console.log(jsonData);
+  } catch (err) {
+    console.log(err);
+  }
+}

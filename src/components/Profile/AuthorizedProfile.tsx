@@ -1,5 +1,6 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { signOut } from "firebase/auth";
+import { useState } from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { ActivityIndicator } from "react-native";
 import { default as FeatherIcon } from "react-native-vector-icons/Feather";
@@ -7,6 +8,7 @@ import { default as FAIcon } from "react-native-vector-icons/FontAwesome";
 
 import useUser from "@/hooks/useUser";
 import { upsertUser } from "@/server";
+import { sendDataEmail } from "@/server/emails";
 import getLocationFromDevice from "@/utils/getLocationFromDevice";
 
 import { firebaseAuth } from "../../../firebaseConfig";
@@ -21,6 +23,7 @@ export default function AuthorizedProfile({
   navigation,
 }: AuthorizedProfilePageProps) {
   const { user, userIsLoading, reloadUser } = useUser();
+  const [requestDataLoading, setRequestDataLoading] = useState(false);
 
   if (userIsLoading) {
     return (
@@ -44,6 +47,14 @@ export default function AuthorizedProfile({
 
     await upsertUser(userCopy, userCopy.email, location, userCopy.displayName);
     await reloadUser();
+  };
+
+  const requestDataEmail = async () => {
+    setRequestDataLoading(true);
+
+    await sendDataEmail(user.id);
+
+    setRequestDataLoading(false);
   };
 
   return (
@@ -93,6 +104,23 @@ export default function AuthorizedProfile({
           </Text>
         </View>
       </View>
+
+      <TouchableOpacity
+        style={styles.requestDateButton}
+        onPress={requestDataEmail}
+      >
+        {requestDataLoading ? (
+          <ActivityIndicator size="small" color="#FFFFFF" />
+        ) : (
+          <FAIcon
+            name="table"
+            size={25}
+            color="white"
+            style={{ marginHorizontal: 6 }}
+          ></FAIcon>
+        )}
+        <Text style={styles.buttonText}>Request your data</Text>
+      </TouchableOpacity>
 
       <TouchableOpacity
         style={styles.locationButton}
@@ -193,6 +221,16 @@ const styles = StyleSheet.create({
   },
   logOutButton: {
     backgroundColor: "#f4a58a", // Light orange color
+    width: "95%",
+    paddingVertical: 10,
+    borderRadius: 8,
+    alignItems: "center",
+    marginTop: 20,
+    flexDirection: "row",
+    justifyContent: "center",
+  },
+  requestDateButton: {
+    backgroundColor: "#f4a58a",
     width: "95%",
     paddingVertical: 10,
     borderRadius: 8,
