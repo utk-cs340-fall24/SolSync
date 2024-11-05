@@ -1,6 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { useState } from "react";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import {
   ActivityIndicator,
@@ -18,11 +17,14 @@ import { z } from "zod";
 
 import useUser from "@/hooks/useUser";
 import { upsertUser } from "@/server";
+import { Avatar } from "@/types";
 
 import { ProfileStackParamList } from ".";
 
 const editProfileFormSchema = z.object({
   displayName: z.string().min(1, { message: "Name is required" }),
+  emoji: z.string().nullable(),
+  background: z.string().nullable(),
 });
 
 type EditProfileFormValues = z.infer<typeof editProfileFormSchema>;
@@ -34,14 +36,14 @@ type EditProfileScreenProps = NativeStackScreenProps<
 
 const emojis = [
   "😀",
-  "😂",
+  "😊",
+  "😇",
   "😘",
-  "🤔",
   "😎",
-  "🤯",
   "🥳",
   "😴",
   "🤠",
+  "🌻",
   "☀️",
   "🌙",
   "🌟",
@@ -60,18 +62,15 @@ const colors = [
   "#FFC3A0", // Light Pastel Coral
   "#F7B7E6", // Pastel pink
   "#D3C5FF", // Light Pastel Purple
-  "#D3D3D3", // Light Pastel Mint
+  "#D3D3D3", // Light Gray
 ];
 
 type EmojiPickerProps = {
-  selectedEmoji: string;
-  onSelect: (emoji: string) => void;
+  value: string | null;
+  onChange: (emoji: string) => void;
 };
 
-const EmojiPicker: React.FC<EmojiPickerProps> = ({
-  selectedEmoji,
-  onSelect,
-}) => {
+const EmojiPicker: React.FC<EmojiPickerProps> = ({ value, onChange }) => {
   return (
     <FlatList
       data={emojis}
@@ -79,10 +78,10 @@ const EmojiPicker: React.FC<EmojiPickerProps> = ({
       numColumns={5}
       renderItem={({ item }) => (
         <TouchableOpacity
-          onPress={() => onSelect(item)}
+          onPress={() => onChange(item)}
           style={[
             styles.emojiItem,
-            item === selectedEmoji && styles.selectedEmojiItem, // Apply border if selected
+            item === value && styles.selectedEmojiItem, // Apply border if selected
           ]}
         >
           <Text style={styles.emojiText}>{item}</Text>
@@ -93,14 +92,11 @@ const EmojiPicker: React.FC<EmojiPickerProps> = ({
 };
 
 type ColorPickerProps = {
-  selectedColor: string;
-  onSelectColor: (color: string) => void;
+  value: string | null;
+  onChange: (color: string) => void;
 };
 
-const ColorPicker: React.FC<ColorPickerProps> = ({
-  selectedColor,
-  onSelectColor,
-}) => {
+const ColorPicker: React.FC<ColorPickerProps> = ({ value, onChange }) => {
   return (
     <FlatList
       data={colors}
@@ -108,11 +104,11 @@ const ColorPicker: React.FC<ColorPickerProps> = ({
       numColumns={5}
       renderItem={({ item }) => (
         <TouchableOpacity
-          onPress={() => onSelectColor(item)}
+          onPress={() => onChange(item)}
           style={[
             styles.colorItem,
             { backgroundColor: item },
-            item === selectedColor && styles.selectedColorItem,
+            item === value && styles.selectedColorItem,
           ]}
         />
       )}
@@ -131,19 +127,10 @@ export default function EditProfile({ navigation }: EditProfileScreenProps) {
     resolver: zodResolver(editProfileFormSchema),
     defaultValues: {
       displayName: user?.displayName,
+      emoji: user?.avatar.emoji,
+      background: user?.avatar.background,
     },
   });
-
-  const [selectedEmoji, setSelectedEmoji] = useState<string>("🙂");
-
-  const handleEmojiSelect = (emoji: string): void => {
-    setSelectedEmoji(emoji);
-  };
-
-  const [selectedColor, setSelectedColor] = useState<string>("#FF5733"); // Default color
-  const handleColorSelect = (color: string): void => {
-    setSelectedColor(color);
-  };
 
   if (userIsLoading) {
     return (
@@ -158,9 +145,21 @@ export default function EditProfile({ navigation }: EditProfileScreenProps) {
   }
 
   const onSubmit: SubmitHandler<EditProfileFormValues> = async (data) => {
-    const { displayName } = data;
+    // eslint-disable-next-line prefer-const
+    let { displayName, emoji, background } = data;
 
-    await upsertUser(user, user.email, user.location, displayName, user.avatar); // TODO: new avatar here instead of user.avatar
+    if (!emoji) {
+      background = null;
+    } else {
+      background = background || colors[0];
+    }
+
+    const newAvatar: Avatar = {
+      emoji,
+      background,
+    };
+
+    await upsertUser(user, user.email, user.location, displayName, newAvatar);
     await reloadUser();
 
     navigation.navigate("AuthorizedProfile");
@@ -196,14 +195,20 @@ export default function EditProfile({ navigation }: EditProfileScreenProps) {
         <Text style={styles.fieldTitle}>Profile Icon</Text>
 
         <View style={styles.avatarContainer}>
-          <EmojiPicker
-            selectedEmoji={selectedEmoji}
-            onSelect={handleEmojiSelect}
+          <Controller
+            control={control}
+            name="emoji"
+            render={({ field: { onChange, value } }) => (
+              <EmojiPicker value={value} onChange={onChange} />
+            )}
           />
           <View style={styles.line} />
-          <ColorPicker
-            selectedColor={selectedColor}
-            onSelectColor={handleColorSelect}
+          <Controller
+            control={control}
+            name="background"
+            render={({ field: { onChange, value } }) => (
+              <ColorPicker value={value} onChange={onChange} />
+            )}
           />
         </View>
 
