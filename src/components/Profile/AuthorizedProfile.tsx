@@ -1,5 +1,6 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { signOut } from "firebase/auth";
+import { useState } from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { ActivityIndicator } from "react-native";
 import { default as FeatherIcon } from "react-native-vector-icons/Feather";
@@ -21,6 +22,7 @@ export default function AuthorizedProfile({
   navigation,
 }: AuthorizedProfilePageProps) {
   const { user, userIsLoading, reloadUser } = useUser();
+  const [requestDataLoading, setRequestDataLoading] = useState(false);
 
   if (userIsLoading) {
     return (
@@ -44,6 +46,40 @@ export default function AuthorizedProfile({
 
     await upsertUser(userCopy, userCopy.email, location, userCopy.displayName);
     await reloadUser();
+  };
+
+  const requestData = async () => {
+    try {
+      setRequestDataLoading(true);
+
+      const apiUrl = process.env.EXPO_PUBLIC_SENDDATAEMAIL_API_URL;
+
+      if (!apiUrl) {
+        throw new Error(
+          "GETSUNRISESUNSET_API_URL is not defined in the environment variables.",
+        );
+      }
+      const url = new URL(apiUrl);
+
+      const response = await fetch(url, {
+        method: "POST",
+        headers: {
+          "x-api-key": process.env
+            .EXPO_PUBLIC_GETSUNRISESUNSET_API_KEY as string,
+        },
+        body: JSON.stringify({
+          userId: user.id,
+        }),
+      });
+
+      const jsonData = await response.json();
+
+      console.log(jsonData);
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setRequestDataLoading(false);
+    }
   };
 
   return (
@@ -93,6 +129,20 @@ export default function AuthorizedProfile({
           </Text>
         </View>
       </View>
+
+      <TouchableOpacity style={styles.requestDateButton} onPress={requestData}>
+        {requestDataLoading ? (
+          <ActivityIndicator size="small" color="#FFFFFF" />
+        ) : (
+          <FAIcon
+            name="table"
+            size={25}
+            color="white"
+            style={{ marginHorizontal: 6 }}
+          ></FAIcon>
+        )}
+        <Text style={styles.buttonText}>Request your data</Text>
+      </TouchableOpacity>
 
       <TouchableOpacity
         style={styles.locationButton}
@@ -193,6 +243,16 @@ const styles = StyleSheet.create({
   },
   logOutButton: {
     backgroundColor: "#f4a58a", // Light orange color
+    width: "95%",
+    paddingVertical: 10,
+    borderRadius: 8,
+    alignItems: "center",
+    marginTop: 20,
+    flexDirection: "row",
+    justifyContent: "center",
+  },
+  requestDateButton: {
+    backgroundColor: "#f4a58a",
     width: "95%",
     paddingVertical: 10,
     borderRadius: 8,
