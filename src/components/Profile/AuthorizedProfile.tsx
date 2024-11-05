@@ -42,7 +42,13 @@ export default function AuthorizedProfile({
     userCopy.location.latitude = location.latitude;
     userCopy.location.longitude = location.longitude;
 
-    await upsertUser(userCopy, userCopy.email, location, userCopy.displayName);
+    await upsertUser(
+      userCopy,
+      userCopy.email,
+      location,
+      userCopy.displayName,
+      userCopy.avatar,
+    );
     await reloadUser();
   };
 
