@@ -28,6 +28,6 @@ export async function sendWelcomeEmail(displayName: string, email: string) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
   } catch (err) {
-    console.error(err);
+    console.log(err);
   }
 }
