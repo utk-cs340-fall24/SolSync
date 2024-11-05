@@ -68,7 +68,7 @@ export default function EditProfile({ navigation }: EditProfileScreenProps) {
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
       <SafeAreaView style={styles.container}>
-        <Text style={styles.header}>Edit Profile</Text>
+        <Text style={styles.header}>Edit Your Profile</Text>
 
         <Text style={styles.fieldTitle}>Name</Text>
         <Controller
@@ -119,7 +119,9 @@ const styles = StyleSheet.create({
     padding: "2%",
   },
   header: {
-    fontSize: 24,
+    fontSize: 20,
+    fontWeight: "bold",
+    color: "#4a3f4c",
     paddingBottom: "10%",
     marginTop: -50,
   },
