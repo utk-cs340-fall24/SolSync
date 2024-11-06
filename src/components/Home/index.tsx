@@ -203,14 +203,16 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     fontSize: 35,
     alignItems: "center",
-    marginBottom: 5,
   },
   PermissionMessage: {
+    marginTop: 15,
+    marginBottom: -10,
     color: "white",
     fontWeight: "normal",
-    fontSize: 15,
+    fontSize: 18,
     alignItems: "center",
     flexShrink: 1,
     paddingHorizontal: 10,
+    textAlign: "center",
   },
 });
