@@ -116,7 +116,7 @@ export default function LogIn({ navigation }: LogInPageProps) {
           )}
         </View>
 
-        <Text>or</Text>
+        <Text style={styles.orText}>or</Text>
 
         <TouchableOpacity
           style={styles.createAccountButton}
@@ -132,7 +132,7 @@ export default function LogIn({ navigation }: LogInPageProps) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: "#FFFFFF",
     alignItems: "center",
     justifyContent: "center",
     padding: 16,
@@ -169,6 +169,12 @@ const styles = StyleSheet.create({
     color: "#fff",
     fontSize: 16,
     fontWeight: "600",
+  },
+  orText: {
+    fontSize: 16,
+    fontWeight: "600",
+    textAlign: "center",
+    color: "#4a3f4c",
   },
   loginButton: {
     backgroundColor: "#b38acb", // Light purple color
