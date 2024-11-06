@@ -13,6 +13,7 @@ import {
   TouchableWithoutFeedback,
   View,
 } from "react-native";
+import { default as IonIcons } from "react-native-vector-icons/Ionicons";
 import { z } from "zod";
 
 import useUser from "@/hooks/useUser";
@@ -213,17 +214,29 @@ export default function EditProfile({ navigation }: EditProfileScreenProps) {
 
         {/* Save and Cancel Buttons */}
         <TouchableOpacity
-          style={styles.saveButton}
-          onPress={handleSubmit(onSubmit)}
-        >
-          <Text style={styles.buttonText}>Save</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity
           style={styles.cancelButton}
           onPress={() => navigation.navigate("AuthorizedProfile")}
         >
+          <IonIcons
+            name="close"
+            size={25}
+            color="white"
+            style={{ marginHorizontal: 6 }}
+          />
           <Text style={styles.buttonText}>Cancel</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={styles.saveButton}
+          onPress={handleSubmit(onSubmit)}
+        >
+          <IonIcons
+            name="checkmark-sharp"
+            size={25}
+            color="white"
+            style={{ marginHorizontal: 6 }}
+          />
+          <Text style={styles.buttonText}>Save</Text>
         </TouchableOpacity>
       </SafeAreaView>
     </TouchableWithoutFeedback>
@@ -273,6 +286,8 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     alignItems: "center",
     marginTop: 12,
+    flexDirection: "row",
+    justifyContent: "center",
   },
   cancelButton: {
     backgroundColor: "#f4a58a", // Light orange color
@@ -281,6 +296,8 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     alignItems: "center",
     marginTop: 12,
+    flexDirection: "row",
+    justifyContent: "center",
   },
   // Emoji Picker
   avatarContainer: {
