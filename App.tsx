@@ -20,6 +20,8 @@ const getIconName = (
       return focused ? "person-circle" : "person-circle-outline";
     case "Habits":
       return focused ? "list" : "list-outline";
+    case "History":
+      return focused ? "calendar" : "calendar-outline";
     default:
       return "caret-up";
   }
