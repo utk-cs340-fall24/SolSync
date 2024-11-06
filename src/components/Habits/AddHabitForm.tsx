@@ -14,6 +14,7 @@ import {
 } from "react-native";
 import { SafeAreaView, StyleSheet } from "react-native";
 import { Dropdown } from "react-native-element-dropdown";
+import { default as IonIcons } from "react-native-vector-icons/Ionicons";
 import { z } from "zod";
 
 import { useHabit } from "@/hooks/useHabit";
@@ -253,19 +254,35 @@ export default function AddHabitForm({ navigation }: AddHabitFormProps) {
             {errors.emailNotificationEnabled.message}
           </Text>
         )}
-        <TouchableOpacity
-          style={styles.addHabitButton}
-          onPress={handleSubmit(onSubmit)}
-        >
-          <Text style={styles.buttonText}>Add Habit</Text>
-        </TouchableOpacity>
+        <View style={styles.buttonRow}>
+          <TouchableOpacity
+            style={styles.addHabitButton}
+            onPress={handleSubmit(onSubmit)}
+          >
+            <IonIcons
+              name="add-circle-outline"
+              size={20}
+              color="white"
+              style={{ marginHorizontal: 6, marginLeft: 100 }}
+            />
+            <Text style={styles.buttonText}>Add Habit</Text>
+          </TouchableOpacity>
+        </View>
 
-        <TouchableOpacity
-          style={styles.cancelButton}
-          onPress={() => navigation.navigate("HabitList")}
-        >
-          <Text style={styles.buttonText}>Cancel</Text>
-        </TouchableOpacity>
+        <View style={styles.buttonRow}>
+          <TouchableOpacity
+            style={styles.cancelButton}
+            onPress={() => navigation.navigate("HabitList")}
+          >
+            <IonIcons
+              name="close"
+              size={20}
+              color="white"
+              style={{ marginHorizontal: 6, marginLeft: 110 }}
+            />
+            <Text style={styles.buttonText}>Cancel</Text>
+          </TouchableOpacity>
+        </View>
       </SafeAreaView>
     </TouchableWithoutFeedback>
   );
@@ -405,6 +422,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   addHabitButton: {
+    flexDirection: "row",
     backgroundColor: "#b38acb",
     width: "80%",
     paddingVertical: 10,
@@ -413,6 +431,7 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   cancelButton: {
+    flexDirection: "row",
     backgroundColor: "#f4a58a",
     width: "80%",
     paddingVertical: 10,
@@ -420,5 +439,11 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginTop: 10,
     marginBottom: -30,
+  },
+  buttonRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginTop: 10,
   },
 });

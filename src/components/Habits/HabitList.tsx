@@ -2,7 +2,6 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import React from "react";
 import {
   FlatList,
-  Pressable,
   SafeAreaView,
   StyleSheet,
   Text,
@@ -10,6 +9,7 @@ import {
   View,
 } from "react-native";
 import { default as FeatherIcon } from "react-native-vector-icons/Feather";
+import { default as IonIcons } from "react-native-vector-icons/Ionicons";
 
 import { useHabit } from "@/hooks/useHabit";
 
@@ -29,7 +29,7 @@ export default function HabitList({ navigation }: HabitListProps) {
         data={habits}
         contentContainerStyle={styles.habitsList}
         renderItem={({ item }) => {
-          let habitTimeMessage = "";
+          let habitTimeMessage = "Habit Time: ";
 
           if (item.hourOffset !== 0) {
             habitTimeMessage += `${item.hourOffset} ${item.hourOffset === 1 ? "hour" : "hours"}`;
@@ -41,6 +41,10 @@ export default function HabitList({ navigation }: HabitListProps) {
           }
 
           habitTimeMessage += ` ${item.offsetDirection} ${item.notificationPeriod}`;
+
+          if (item.minuteOffset === 0 && item.hourOffset === 0) {
+            habitTimeMessage = `Habit Time: ${item.notificationPeriod}`;
+          }
 
           return (
             <View style={styles.habitCard}>
@@ -62,12 +66,20 @@ export default function HabitList({ navigation }: HabitListProps) {
           );
         }}
       />
-      <Pressable
-        style={styles.addHabitButton}
-        onPress={() => navigation.navigate("AddHabitForm")}
-      >
-        <Text style={styles.buttonText}>Add Habit</Text>
-      </Pressable>
+      <View style={styles.buttonRow}>
+        <TouchableOpacity
+          style={styles.addHabitButton}
+          onPress={() => navigation.navigate("AddHabitForm")}
+        >
+          <IonIcons
+            name="add-circle-outline"
+            size={20}
+            color="white"
+            style={{ marginHorizontal: 6, marginLeft: 90 }}
+          />
+          <Text style={styles.buttonText}>Add Habit</Text>
+        </TouchableOpacity>
+      </View>
     </SafeAreaView>
   );
 }
@@ -102,9 +114,10 @@ const styles = StyleSheet.create({
     backgroundColor: "#FFFFFF",
     borderWidth: 1,
     borderRadius: 8,
-    width: "95%",
+    width: 340,
     height: 80,
     marginBottom: 20,
+    marginLeft: -5,
   },
   habitTitle: {
     fontSize: 22,
@@ -113,13 +126,14 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
   habitTime: {
-    fontSize: 14,
+    fontSize: 12,
     color: "#333",
   },
   editIcon: {
     padding: 8,
   },
   addHabitButton: {
+    flexDirection: "row",
     backgroundColor: "#b38acb",
     padding: 10,
     marginTop: "auto",
@@ -133,5 +147,11 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontSize: 16,
     fontWeight: "600",
+  },
+  buttonRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginTop: 10,
   },
 });

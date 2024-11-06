@@ -14,6 +14,7 @@ import {
   View,
 } from "react-native";
 import { Dropdown } from "react-native-element-dropdown";
+import { default as IonIcons } from "react-native-vector-icons/Ionicons";
 import { z } from "zod";
 
 import { useHabit } from "@/hooks/useHabit";
@@ -269,6 +270,12 @@ export default function EditHabitForm({
             style={styles.cancelButton}
             onPress={() => navigation.navigate("HabitList")}
           >
+            <IonIcons
+              name="close"
+              size={20}
+              color="white"
+              style={{ marginHorizontal: 6, marginLeft: 30 }}
+            />
             <Text style={styles.buttonText}>Cancel</Text>
           </TouchableOpacity>
 
@@ -276,15 +283,30 @@ export default function EditHabitForm({
             style={styles.deleteButton}
             onPress={() => handleDelete(habit)}
           >
+            <IonIcons
+              name="trash-outline"
+              size={20}
+              color="white"
+              style={{ marginHorizontal: 6, marginLeft: 30 }}
+            />
             <Text style={styles.buttonText}>Delete</Text>
           </TouchableOpacity>
         </View>
-        <TouchableOpacity
-          style={styles.updateHabitButton}
-          onPress={handleSubmit(onSubmit)}
-        >
-          <Text style={styles.buttonText}>Update Habit</Text>
-        </TouchableOpacity>
+
+        <View style={styles.inButtonRow}>
+          <TouchableOpacity
+            style={styles.updateHabitButton}
+            onPress={handleSubmit(onSubmit)}
+          >
+            <IonIcons
+              name="checkmark-sharp"
+              size={20}
+              color="white"
+              style={{ marginHorizontal: 6, marginLeft: 90 }}
+            />
+            <Text style={styles.buttonText}>Update Habit</Text>
+          </TouchableOpacity>
+        </View>
       </SafeAreaView>
     </TouchableWithoutFeedback>
   );
@@ -429,6 +451,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   updateHabitButton: {
+    flexDirection: "row",
     backgroundColor: "#b38acb",
     width: "80%",
     paddingVertical: 10,
@@ -438,6 +461,7 @@ const styles = StyleSheet.create({
     marginBottom: -30,
   },
   deleteButton: {
+    flexDirection: "row",
     backgroundColor: "#f4a58a",
     width: "37%",
     paddingVertical: 10,
@@ -447,6 +471,7 @@ const styles = StyleSheet.create({
     marginLeft: 10,
   },
   cancelButton: {
+    flexDirection: "row",
     backgroundColor: "#f4a58a",
     width: "37%",
     paddingVertical: 10,
@@ -454,5 +479,11 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginTop: 10,
     marginRight: 10,
+  },
+  inButtonRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginTop: 10,
   },
 });
