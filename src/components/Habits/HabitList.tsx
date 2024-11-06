@@ -71,10 +71,9 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 30,
-    // fontWeight: "bold",
     color: "#4a3f4c",
     marginBottom: 30,
-    marginTop: 20,
+    marginTop: 10,
   },
   habitsList: {
     paddingHorizontal: 16,

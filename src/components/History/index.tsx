@@ -176,14 +176,15 @@ export default function HistoryComponent() {
   if (habits.length === 0) {
     return (
       <View style={styles.container}>
-        <Text>Please add a habit</Text>
+        <Text style={styles.header1}>History</Text>
+        <Text style={styles.noHabitText}>Add a habit to get started</Text>
       </View>
     );
   }
 
   return (
     <View style={styles.container}>
-      <Text style={styles.header}>History</Text>
+      <Text style={styles.header2}>History</Text>
       <Dropdown
         data={getHabits()}
         onChange={onHabitChange}
@@ -240,10 +241,22 @@ const styles = StyleSheet.create({
     marginBottom: 30,
     borderRadius: 8,
   },
-  header: {
+  header1: {
     fontSize: 30,
     paddingBottom: 40,
-    marginTop: 20,
+    marginTop: -290,
+    color: "#4a3f4c",
+  },
+  noHabitText: {
+    fontSize: 18,
+    color: "#4a3f4c",
+    marginTop: 240,
+  },
+  header2: {
+    fontSize: 30,
+    paddingBottom: 40,
+    marginTop: -10,
+    marginBottom: 20,
     color: "#4a3f4c",
   },
   completeHabitButton: {
