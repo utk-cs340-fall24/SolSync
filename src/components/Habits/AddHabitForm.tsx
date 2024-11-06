@@ -274,7 +274,7 @@ export default function AddHabitForm({ navigation }: AddHabitFormProps) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#f9f9f9",
+    backgroundColor: "#F5F5F5",
     alignItems: "center",
     justifyContent: "center",
   },
@@ -285,7 +285,7 @@ const styles = StyleSheet.create({
     borderColor: "#ccc",
     borderRadius: 10,
     padding: 15,
-    backgroundColor: "#f9f9f9",
+    backgroundColor: "#FFFFFF",
     marginBottom: 20,
   },
   titleContainer: {
@@ -322,18 +322,21 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     borderColor: "#ccc",
     fontSize: 16,
+    backgroundColor: "#FFFFFF",
   },
   timeInput: {
     height: 40,
-    width: "40%",
+    width: 40,
     maxWidth: 40,
     textAlign: "center",
-    marginHorizontal: 60,
-    margin: 12,
+    marginHorizontal: 55,
+    margin: 10,
     borderWidth: 1,
-    padding: 10,
+    paddingHorizontal: 5,
     borderRadius: 8,
     borderColor: "#ccc",
+    backgroundColor: "#FFFFFF",
+    fontSize: 15,
   },
   emailRow: {
     flexDirection: "row",
@@ -346,6 +349,7 @@ const styles = StyleSheet.create({
     borderColor: "#ccc",
     height: 50,
     width: "80%",
+    backgroundColor: "#FFFFFF",
   },
   offsetRow: {
     flexDirection: "row",
@@ -382,10 +386,12 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 8,
     borderColor: "#ccc",
+    backgroundColor: "#FFFFFF",
   },
   offsetPicker: {
     width: "100%",
     height: 30,
+    backgroundColor: "#FFFFFF",
   },
   offsetDivider: {
     height: 1,
