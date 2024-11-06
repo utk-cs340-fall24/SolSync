@@ -4,18 +4,14 @@ import { LinearGradient } from "expo-linear-gradient";
 import React, { useEffect, useState } from "react";
 import { ActivityIndicator, Image, StyleSheet, Text, View } from "react-native";
 
-import getLocationFromDevice from "@/utils/getLocationFromDevice";
+import useUser from "@/hooks/useUser";
+import { getSunriseSunsetTime } from "@/server/sunrise-sunset-time";
 
-import useUser from "../../hooks/useUser";
+const hour = new Date().getHours();
+const isDay = hour >= 0 && hour < 12;
 
-const Hour = new Date().getHours();
-const isDay = Hour >= 0 && Hour < 12;
-
-let gradientColors = ["#FFFFFF"];
-let colorsLocations = [0];
-let IntroMsg = "";
-let noPermission = false;
-let permissionMsg = "";
+let gradientColors: string[];
+let colorsLocations: number[];
 
 if (isDay) {
   gradientColors = ["#81A8F4", "#A4B3D6", "#E1C7A3", "#FFD18A"];
@@ -25,81 +21,45 @@ if (isDay) {
   colorsLocations = [0.2, 0.4, 0.7, 0.9];
 }
 
-if (Hour >= 3 && Hour < 12) {
-  IntroMsg = "Good Morning";
-} else if (Hour >= 12 && Hour < 18) {
-  IntroMsg = "Good Afternoon";
+let introMessage = "";
+
+if (hour >= 3 && hour < 12) {
+  introMessage = "Good Morning";
+} else if (hour >= 12 && hour < 18) {
+  introMessage = "Good Afternoon";
 } else {
-  IntroMsg = "Good Evening";
+  introMessage = "Good Evening";
 }
 
 export default function Home() {
-  const [sunrise, setSunrise] = useState<Date | null>();
-  const [sunset, setSunset] = useState<Date | null>();
-  const [nextsunrise, setNextSunrise] = useState<Date | null>();
+  const [sunrise, setSunrise] = useState<Date | null>(null);
+  const [sunset, setSunset] = useState<Date | null>(null);
+  const [nextSunrise, setNextSunrise] = useState<Date | null>(null);
+  const [isLocationPermissionGranted, setIsLocationPermissionGranted] =
+    useState<boolean>(true);
   const [loading, setLoading] = useState(true);
-  const { user } = useUser();
+  const { user, userIsLoading } = useUser();
 
   useEffect(() => {
-    fetchData();
-  }, [user]);
+    const fetchSunriseSunsetTime = async () => {
+      setLoading(true);
 
-  const fetchData = async () => {
-    let location = user?.location;
-    if (user) {
-      location = user.location;
-    } else {
-      location = await getLocationFromDevice();
-      if (!(await getLocationFromDevice())) {
-        noPermission = true;
-        permissionMsg =
-          "Please allow location permissions to view current location's sunrise and sunset times";
+      if (userIsLoading) {
+        return;
       }
-    }
 
-    // Assuming process.env.GETSUNRISESUNSET_API_URL is a valid URL
-    const apiUrl = process.env.EXPO_PUBLIC_GETSUNRISESUNSET_API_URL;
+      const response = await getSunriseSunsetTime(user);
 
-    // Check if the API URL is defined
-    if (!apiUrl) {
-      throw new Error(
-        "GETSUNRISESUNSET_API_URL is not defined in the environment variables.",
-      );
-    }
-    const url = new URL(apiUrl);
-
-    // Adding query parameters
-    if (location && location.latitude && location.longitude) {
-      url.searchParams.append("latitude", location.latitude.toString());
-      url.searchParams.append("longitude", location.longitude.toString());
-    } else {
-      console.log("Unable to fetch longitude and latitude");
-    }
-
-    try {
-      const response = await fetch(url, {
-        method: "GET",
-        headers: {
-          "x-api-key": process.env
-            .EXPO_PUBLIC_GETSUNRISESUNSET_API_KEY as string,
-        },
-      });
-      const jsonData = await response.json();
-      if (jsonData.message) {
-        setSunrise(null);
-        setSunset(null);
-        setNextSunrise(null);
-      } else {
-        setSunrise(new Date(jsonData.todaySunrise));
-        setSunset(new Date(jsonData.todaySunset));
-        setNextSunrise(new Date(jsonData.tomorrowSunrise));
-      }
-    } catch (err) {
-      console.log(err);
-    } finally {
+      setIsLocationPermissionGranted(response.isLocationPermissionGranted);
+      setSunrise(response.sunrise);
+      setSunset(response.sunset);
+      setNextSunrise(response.nextSunrise);
       setLoading(false);
-    }
-  };
+    };
+
+    fetchSunriseSunsetTime();
+  }, [user, userIsLoading]);
+
   return (
     <LinearGradient
       colors={gradientColors}
@@ -107,7 +67,7 @@ export default function Home() {
       style={styles.container}
     >
       <View style={styles.content}>
-        <Text style={styles.Hello}>{IntroMsg}</Text>
+        <Text style={styles.Hello}>{introMessage}</Text>
         <Image style={styles.sun} source={sun} />
         <Image style={styles.cloud} source={cloud} />
         {loading ? (
@@ -151,11 +111,11 @@ export default function Home() {
             <Text style={styles.Sunrise2}>Tomorrow's Sunrise:</Text>
             <ActivityIndicator size="small" color="#FFFFFF" />
           </>
-        ) : nextsunrise ? (
+        ) : nextSunrise ? (
           <>
             <Text style={styles.Sunrise2}>Tomorrow's Sunrise:</Text>
             <Text style={styles.Sunrise2Data}>
-              {nextsunrise?.toLocaleTimeString()}
+              {nextSunrise?.toLocaleTimeString()}
             </Text>
           </>
         ) : (
@@ -164,7 +124,12 @@ export default function Home() {
             <Text style={styles.Sunrise2Data}>Time Not Available</Text>
           </>
         )}
-        {noPermission && <Text style={styles.Sunrise2}>{permissionMsg}</Text>}
+        {!isLocationPermissionGranted && (
+          <Text style={styles.PermissionMessage}>
+            Please allow location permissions to view current location's sunrise
+            and sunset times
+          </Text>
+        )}
       </View>
     </LinearGradient>
   );
@@ -246,5 +211,6 @@ const styles = StyleSheet.create({
     fontSize: 15,
     alignItems: "center",
     flexShrink: 1,
+    paddingHorizontal: 10,
   },
 });

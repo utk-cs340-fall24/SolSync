@@ -14,6 +14,7 @@ import {
 import { z } from "zod";
 
 import { upsertUser } from "@/server";
+import { sendWelcomeEmail } from "@/server/emails";
 import { SolSyncUser } from "@/types";
 import getFirebaseAuthErrorMessage from "@/utils/getFirebaseAuthErrorMessage";
 import getLocationFromDevice from "@/utils/getLocationFromDevice";
@@ -70,55 +71,7 @@ export default function SignUp() {
       }
     }
 
-    // Send welcome email
-    // Will only progress past this line if the user is not in firebase
-
-    // Check if the URL is valid
-    const apiUrl = process.env.EXPO_PUBLIC_SENDWELCOMEEMAIL_API_URL;
-
-    // Check if the API URL is defined
-    if (!apiUrl) {
-      throw new Error(
-        "SENDWELCOMEEMAIL_API_URL is not defined in the environment variables.",
-      );
-    }
-    const url = new URL(apiUrl);
-
-    // Adding query parameters by using to and name
-    if (displayName && email) {
-      url.searchParams.append("to", email.toString());
-      url.searchParams.append("name", displayName.toString());
-
-      console.log("Parameters successfully added.");
-    } else {
-      console.log("Unable to fetch email and name.");
-    }
-
-    // Try sending the email using a get request with the parameters
-    try {
-      const response = await fetch(url, {
-        method: "GET",
-        headers: {
-          "x-api-key": process.env
-            .EXPO_PUBLIC_SENDWELCOMEEMAIL_API_KEY as string,
-        },
-      });
-
-      // Check if the response was successful
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-
-      // Console log
-      console.log("Sent!");
-
-      const jsonData = await response.json();
-
-      // Print out success or error
-      console.log(jsonData.message);
-    } catch (err) {
-      console.log(err);
-    }
+    await sendWelcomeEmail(displayName, email);
   };
 
   return (

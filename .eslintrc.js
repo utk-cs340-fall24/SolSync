@@ -12,7 +12,7 @@ module.exports = {
     "@typescript-eslint/consistent-type-definitions": ["error", "type"],
     "simple-import-sort/imports": "error",
     "simple-import-sort/exports": "error",
-    "no-console": "warn",
+    "no-console": ["warn", { allow: ["log"] }],
   },
   parserOptions: {
     sourceType: "module",
