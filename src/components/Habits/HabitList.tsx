@@ -75,7 +75,7 @@ export default function HabitList({ navigation }: HabitListProps) {
             name="add-circle-outline"
             size={20}
             color="white"
-            style={{ marginHorizontal: 6, marginLeft: 90 }}
+            style={{ marginHorizontal: 6 }}
           />
           <Text style={styles.buttonText}>Add Habit</Text>
         </TouchableOpacity>
@@ -101,7 +101,6 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   habitsList: {
-    paddingHorizontal: 16,
     paddingBottom: 80,
     alignItems: "center",
   },
@@ -109,15 +108,14 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    padding: 16,
+    paddingHorizontal: 20,
+    paddingVertical: 16,
     borderColor: "#ccc",
     backgroundColor: "#FFFFFF",
-    borderWidth: 1,
     borderRadius: 8,
-    width: 340,
+    width: "98%",
     height: 80,
     marginBottom: 20,
-    marginLeft: -5,
   },
   habitTitle: {
     fontSize: 22,
@@ -126,25 +124,26 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
   habitTime: {
-    fontSize: 12,
+    fontSize: 14,
     color: "#333",
   },
   editIcon: {
     padding: 8,
   },
   addHabitButton: {
+    display: "flex",
     flexDirection: "row",
     backgroundColor: "#b38acb",
     padding: 10,
     marginTop: "auto",
     marginBottom: 20,
-    width: "80%",
-    alignSelf: "center",
+    width: "95%",
+    alignItems: "center",
     borderRadius: 10,
+    justifyContent: "center",
   },
   buttonText: {
     color: "white",
-    textAlign: "center",
     fontSize: 16,
     fontWeight: "600",
   },
