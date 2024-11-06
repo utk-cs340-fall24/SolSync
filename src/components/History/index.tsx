@@ -32,7 +32,8 @@ export default function HistoryComponent() {
   const [currentHabit, setCurrentHabit] = useState<Habit | undefined>(
     habits[0],
   );
-  const [history, setHistory] = useState<History[]>();
+  const [completedHabitHistory, setCompletedHabitHistory] =
+    useState<History[]>();
   const [calendarDates, setCalendarDates] = useState<unknown>();
   const [habitsCompleted, setHabitsCompleted] =
     useState<Record<string, boolean>>();
@@ -65,7 +66,7 @@ export default function HistoryComponent() {
   };
 
   const addHistory = () => {
-    if (!history || !user || !currentHabit) return;
+    if (!completedHabitHistory || !user || !currentHabit) return;
 
     const newHistory: History = {
       id: randomUUID(),
@@ -74,16 +75,16 @@ export default function HistoryComponent() {
       userId: user.id,
     };
 
-    setHistory([...history, newHistory]);
+    setCompletedHabitHistory([...completedHabitHistory, newHistory]);
 
     upsertHistory(newHistory);
   };
 
   const removeHistory = () => {
-    if (!history || !user || !currentHabit) return;
+    if (!completedHabitHistory || !user || !currentHabit) return;
 
-    setHistory(
-      history?.filter((history) => {
+    setCompletedHabitHistory(
+      completedHabitHistory?.filter((history) => {
         if (
           !(
             history.userId === user.id &&
@@ -102,7 +103,7 @@ export default function HistoryComponent() {
   };
 
   const handleSubmit = () => {
-    if (!history || !user || !currentHabit) return;
+    if (!completedHabitHistory || !user || !currentHabit) return;
 
     if (habitsCompleted?.[currentHabit?.id]) {
       removeHistory();
@@ -111,36 +112,44 @@ export default function HistoryComponent() {
     }
   };
 
+  const isHabitCompletedToday = (habit: Habit) => {
+    if (!completedHabitHistory) {
+      return false;
+    }
+
+    return completedHabitHistory.some((history) => {
+      const isHistoryToday = dayjs().isSame(history.date, "day");
+      const isCurrentHabit = habit.id === history.habitId;
+
+      return isCurrentHabit && isHistoryToday;
+    });
+  };
+
   useEffect(() => {
     const newHabitsCompleted: Record<string, boolean> = {};
 
     habits.forEach((habit) => {
-      const isHabitCompleted =
-        history?.some(
-          (history) =>
-            habit.id === history.habitId && dayjs().isSame(history.date, "day"),
-        ) ?? false;
-
-      newHabitsCompleted[habit.id] = isHabitCompleted;
+      newHabitsCompleted[habit.id] = isHabitCompletedToday(habit);
     });
 
     setHabitsCompleted(newHabitsCompleted);
+    setCurrentHabit(habits[0]);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [habits, history]);
+  }, [habits, completedHabitHistory]);
 
   useEffect(() => {
     if (!user) return;
 
     const fetchHistory = async () => {
       const history = await getHistory(user);
-      setHistory(history);
+      setCompletedHabitHistory(history);
     };
 
     fetchHistory();
   }, [user]);
 
   useEffect(() => {
-    const dates = history
+    const dates = completedHabitHistory
       ?.filter((history) => history.habitId === currentHabit?.id)
       .map((history) => dayjs(history.date));
 
@@ -154,7 +163,7 @@ export default function HistoryComponent() {
     });
 
     setCalendarDates(calenderDates);
-  }, [currentHabit?.id, history]);
+  }, [currentHabit?.id, completedHabitHistory]);
 
   if (userIsLoading) {
     return (
