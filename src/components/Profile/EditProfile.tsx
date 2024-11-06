@@ -149,16 +149,16 @@ export default function EditProfile({ navigation }: EditProfileScreenProps) {
     // eslint-disable-next-line prefer-const
     let { displayName, emoji, background } = data;
 
-    if (!emoji) {
-      background = null;
-    } else {
-      background = background ? background : colors[0];
-    }
+    let newAvatar: Avatar;
 
-    const newAvatar: Avatar = {
-      emoji: emoji,
-      background: background,
-    };
+    if (!emoji) {
+      newAvatar = { emoji: null, background: null }; // NullAvatar
+    } else {
+      newAvatar = {
+        emoji: emoji,
+        background: background || colors[0], // ValidAvatar with fallback color
+      };
+    }
 
     await upsertUser(user, user.email, user.location, displayName, newAvatar);
     await reloadUser();
