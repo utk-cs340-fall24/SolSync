@@ -76,7 +76,7 @@ export const handler = async (event) => {
 
   const body = JSON.parse(event.body || "{}");
 
-  const { userId } = body;
+  const { userId, email } = body;
   if (!userId) {
     return {
       statusCode: 400,
@@ -97,6 +97,6 @@ export const handler = async (event) => {
 
   return {
     statusCode: 200,
-    body: JSON.stringify(habits),
+    body: JSON.stringify(habits, email),
   };
 };
