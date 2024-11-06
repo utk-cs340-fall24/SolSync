@@ -28,26 +28,39 @@ export default function HabitList({ navigation }: HabitListProps) {
       <FlatList
         data={habits}
         contentContainerStyle={styles.habitsList}
-        renderItem={({ item }) => (
-          <View style={styles.habitCard}>
-            <View>
-              <Text style={styles.habitTitle}>{item.name}</Text>
-              <Text style={styles.habitTime}>
-                Habit Time: {item.notificationPeriod}
-              </Text>
+        renderItem={({ item }) => {
+          let habitTimeMessage = "";
+
+          if (item.hourOffset !== 0) {
+            habitTimeMessage += `${item.hourOffset} ${item.hourOffset === 1 ? "hour" : "hours"}`;
+          }
+
+          if (item.minuteOffset !== 0) {
+            if (habitTimeMessage !== "") habitTimeMessage += " ";
+            habitTimeMessage += `${item.minuteOffset} ${item.minuteOffset === 1 ? "minute" : "minutes"}`;
+          }
+
+          habitTimeMessage += ` ${item.offsetDirection} ${item.notificationPeriod}`;
+
+          return (
+            <View style={styles.habitCard}>
+              <View>
+                <Text style={styles.habitTitle}>{item.name}</Text>
+                <Text style={styles.habitTime}>{habitTimeMessage}</Text>
+              </View>
+              <TouchableOpacity style={styles.editIcon}>
+                <FeatherIcon
+                  name="edit-3"
+                  size={25}
+                  color="#5A5A5A"
+                  onPress={() =>
+                    navigation.navigate("EditHabitForm", { habit: item })
+                  }
+                ></FeatherIcon>
+              </TouchableOpacity>
             </View>
-            <TouchableOpacity style={styles.editIcon}>
-              <FeatherIcon
-                name="edit-3"
-                size={25}
-                color="#5A5A5A"
-                onPress={() =>
-                  navigation.navigate("EditHabitForm", { habit: item })
-                }
-              ></FeatherIcon>
-            </TouchableOpacity>
-          </View>
-        )}
+          );
+        }}
       />
       <Pressable
         style={styles.addHabitButton}
@@ -100,7 +113,7 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
   habitTime: {
-    fontSize: 16,
+    fontSize: 14,
     color: "#333",
   },
   editIcon: {
