@@ -152,12 +152,12 @@ export default function EditProfile({ navigation }: EditProfileScreenProps) {
     if (!emoji) {
       background = null;
     } else {
-      background = background || colors[0];
+      background = background ? background : colors[0];
     }
 
     const newAvatar: Avatar = {
-      emoji,
-      background,
+      emoji: emoji,
+      background: background,
     };
 
     await upsertUser(user, user.email, user.location, displayName, newAvatar);
@@ -321,7 +321,10 @@ const styles = StyleSheet.create({
     borderRadius: 50,
     borderColor: "#4a3f4c",
   },
-  emojiText: { fontSize: 30 },
+  emojiText: {
+    fontSize: 30,
+    marginLeft: 2,
+  },
   line: {
     height: 1,
     backgroundColor: "#ccc",
