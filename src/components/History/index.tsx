@@ -244,7 +244,7 @@ const styles = StyleSheet.create({
   header1: {
     fontSize: 30,
     paddingBottom: 40,
-    marginTop: -290,
+    marginTop: -300,
     color: "#4a3f4c",
   },
   noHabitText: {
