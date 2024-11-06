@@ -55,14 +55,20 @@ export default function SignUp() {
 
       const location = await getLocationFromDevice();
 
+      const avatar = {
+        emoji: null,
+        background: null,
+      };
+
       const solSyncUser: SolSyncUser = {
         id: credentials.user.uid,
         email,
         location,
         displayName,
+        avatar,
       };
 
-      await upsertUser(solSyncUser, email, location, displayName);
+      await upsertUser(solSyncUser, email, location, displayName, avatar);
     } catch (error) {
       if (error instanceof FirebaseError) {
         setError("root", {

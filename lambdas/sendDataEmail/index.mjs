@@ -1,6 +1,6 @@
 import dayjs from "dayjs";
 import { cert, initializeApp } from "firebase-admin/app";
-import { getFirestore } from "firebase-admin/firestore";
+import { getFirestore, Timestamp } from "firebase-admin/firestore";
 
 initializeApp({
   credential: cert({
@@ -36,9 +36,17 @@ const getHabitsByUserId = async (userId) => {
     .where("userId", "==", userId)
     .get();
 
+  const startOfMonth = dayjs().startOf("month");
+  const endOfMonth = dayjs().endOf("month");
+
+  const startTimestamp = Timestamp.fromDate(startOfMonth.toDate());
+  const endTimestamp = Timestamp.fromDate(endOfMonth.toDate());
+
   const historySnapshot = await db
     .collection("history")
     .where("userId", "==", userId)
+    .where("date", ">=", startTimestamp)
+    .where("date", "<=", endTimestamp)
     .get();
 
   const history = [];
@@ -76,7 +84,7 @@ export const handler = async (event) => {
 
   const body = JSON.parse(event.body || "{}");
 
-  const { userId } = body;
+  const { userId, email } = body;
   if (!userId) {
     return {
       statusCode: 400,
@@ -97,6 +105,6 @@ export const handler = async (event) => {
 
   return {
     statusCode: 200,
-    body: JSON.stringify(habits),
+    body: JSON.stringify(habits, email),
   };
 };

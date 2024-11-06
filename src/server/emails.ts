@@ -1,3 +1,5 @@
+import { SolSyncUser } from "@/types";
+
 export async function sendWelcomeEmail(displayName: string, email: string) {
   // Check if the URL is valid
   const apiUrl = process.env.EXPO_PUBLIC_SENDWELCOMEEMAIL_API_URL;
@@ -32,7 +34,7 @@ export async function sendWelcomeEmail(displayName: string, email: string) {
   }
 }
 
-export async function sendDataEmail(userId: string) {
+export async function sendDataEmail(user: SolSyncUser) {
   try {
     const apiUrl = process.env.EXPO_PUBLIC_SENDDATAEMAIL_API_URL;
 
@@ -49,7 +51,8 @@ export async function sendDataEmail(userId: string) {
         "x-api-key": process.env.EXPO_PUBLIC_SENDDATAEMAIL_API_KEY as string,
       },
       body: JSON.stringify({
-        userId: userId,
+        userId: user.id,
+        email: user.email,
       }),
     });
 
