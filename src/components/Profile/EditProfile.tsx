@@ -146,8 +146,7 @@ export default function EditProfile({ navigation }: EditProfileScreenProps) {
   }
 
   const onSubmit: SubmitHandler<EditProfileFormValues> = async (data) => {
-    // eslint-disable-next-line prefer-const
-    let { displayName, emoji, background } = data;
+    const { displayName, emoji, background } = data;
 
     let newAvatar: Avatar;
 
