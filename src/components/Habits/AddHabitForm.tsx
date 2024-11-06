@@ -399,9 +399,10 @@ const styles = StyleSheet.create({
     marginVertical: 10,
   },
   buttonText: {
-    color: "#fff",
+    color: "white",
     fontSize: 16,
     fontWeight: "600",
+    textAlign: "center",
   },
   addHabitButton: {
     backgroundColor: "#b38acb",

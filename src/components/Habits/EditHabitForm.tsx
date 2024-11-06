@@ -417,9 +417,10 @@ const styles = StyleSheet.create({
     marginTop: 15,
   },
   buttonText: {
-    color: "#fff",
+    color: "white",
     fontSize: 16,
     fontWeight: "600",
+    textAlign: "center",
   },
   buttonRow: {
     flexDirection: "row",
@@ -433,7 +434,6 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     borderRadius: 8,
     alignItems: "center",
-
     marginTop: 15,
     marginBottom: -30,
   },

@@ -170,6 +170,7 @@ const styles = StyleSheet.create({
     marginTop: 50,
     width: "80%",
     textAlign: "center",
+    color: "#4a3f4c",
   },
   infoBox: {
     backgroundColor: "#fff",

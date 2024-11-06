@@ -71,7 +71,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 30,
-    fontWeight: "bold",
+    // fontWeight: "bold",
     color: "#4a3f4c",
     marginBottom: 30,
     marginTop: 20,
@@ -95,9 +95,9 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   habitTitle: {
-    fontSize: 23,
+    fontSize: 22,
     fontWeight: "600",
-    color: "#000",
+    color: "#4a3f4c",
     marginBottom: 5,
   },
   habitTime: {
@@ -119,5 +119,7 @@ const styles = StyleSheet.create({
   buttonText: {
     color: "white",
     textAlign: "center",
+    fontSize: 16,
+    fontWeight: "600",
   },
 });
