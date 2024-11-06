@@ -30,7 +30,7 @@ export default function Habits() {
   if (!user) {
     return (
       <View style={styles.container}>
-        <Text style={styles.title}>SolSync</Text>
+        <Text style={styles.title}>My Habits</Text>
         <Text style={styles.LogIn}>Log in to view your habits</Text>
       </View>
     );
@@ -59,14 +59,16 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   title: {
-    fontSize: 42,
-    fontWeight: "bold",
-    color: "#4a3f4c",
-    marginTop: -198,
     alignItems: "center",
+    fontSize: 30,
+    paddingBottom: 40,
+    marginTop: -300,
+    color: "#4a3f4c",
   },
   LogIn: {
-    fontSize: 25,
-    marginTop: 200,
+    fontSize: 20,
+    marginTop: 240,
+    color: "#4a3f4c",
+    alignItems: "center",
   },
 });
