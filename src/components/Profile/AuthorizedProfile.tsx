@@ -52,7 +52,7 @@ export default function AuthorizedProfile({
   const requestDataEmail = async () => {
     setRequestDataLoading(true);
 
-    await sendDataEmail(user.id);
+    await sendDataEmail(user);
 
     setRequestDataLoading(false);
   };
