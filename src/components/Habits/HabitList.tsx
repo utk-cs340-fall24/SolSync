@@ -29,7 +29,7 @@ export default function HabitList({ navigation }: HabitListProps) {
         data={habits}
         contentContainerStyle={styles.habitsList}
         renderItem={({ item }) => {
-          let habitTimeMessage = "Habit Time: ";
+          let habitTimeMessage = "";
 
           if (item.hourOffset !== 0) {
             habitTimeMessage += `${item.hourOffset} ${item.hourOffset === 1 ? "hour" : "hours"}`;
@@ -43,7 +43,7 @@ export default function HabitList({ navigation }: HabitListProps) {
           habitTimeMessage += ` ${item.offsetDirection} ${item.notificationPeriod}`;
 
           if (item.minuteOffset === 0 && item.hourOffset === 0) {
-            habitTimeMessage = `Habit Time: ${item.notificationPeriod}`;
+            habitTimeMessage = `At ${item.notificationPeriod}`;
           }
 
           return (
