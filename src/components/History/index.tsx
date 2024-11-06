@@ -253,6 +253,7 @@ const styles = StyleSheet.create({
     fontSize: 30,
     paddingBottom: 40,
     marginTop: 20,
+    color: "#4a3f4c",
   },
   completeHabitButton: {
     backgroundColor: "#b38acb",

@@ -11,11 +11,24 @@ type NullLocation = {
 
 export type Location = ValidLocation | NullLocation;
 
+type ValidAvatar = {
+  emoji: string;
+  background: string;
+};
+
+type NullAvatar = {
+  emoji: null;
+  background: null;
+};
+
+export type Avatar = ValidAvatar | NullAvatar;
+
 export type SolSyncUser = {
   id: string;
   email: string;
   displayName: string;
   location: Location;
+  avatar: Avatar;
 };
 
 export type Habit = {

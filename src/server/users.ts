@@ -1,7 +1,7 @@
 import { User } from "firebase/auth";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 
-import { Location, SolSyncUser } from "@/types";
+import { Avatar, Location, SolSyncUser } from "@/types";
 
 import { db } from "../../firebaseConfig";
 
@@ -32,6 +32,10 @@ export const getUserFromFirestore = async (
       latitude: userData.latitude,
       longitude: userData.longitude,
     },
+    avatar: {
+      emoji: userData.emoji,
+      background: userData.background,
+    },
   };
 };
 
@@ -40,6 +44,7 @@ export const upsertUser = async (
   email: string,
   location: Location,
   displayName: string,
+  avatar: Avatar,
 ) => {
   await setDoc(doc(db, "users", user.id), {
     id: user.id,
@@ -47,5 +52,7 @@ export const upsertUser = async (
     displayName: displayName,
     latitude: location.latitude,
     longitude: location.longitude,
+    emoji: avatar.emoji,
+    background: avatar.background,
   });
 };

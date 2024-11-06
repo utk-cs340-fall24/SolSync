@@ -45,7 +45,13 @@ export default function AuthorizedProfile({
     userCopy.location.latitude = location.latitude;
     userCopy.location.longitude = location.longitude;
 
-    await upsertUser(userCopy, userCopy.email, location, userCopy.displayName);
+    await upsertUser(
+      userCopy,
+      userCopy.email,
+      location,
+      userCopy.displayName,
+      userCopy.avatar,
+    );
     await reloadUser();
   };
 
@@ -70,12 +76,18 @@ export default function AuthorizedProfile({
 
       <Text style={styles.header}>Hello, {user?.displayName}!</Text>
 
-      <FAIcon
-        name="user-circle"
-        size={100}
-        color="gray"
-        style={{ marginBottom: 40 }}
-      ></FAIcon>
+      <View
+        style={[
+          styles.circle,
+          { backgroundColor: user.avatar.background || "white" }, // Set chosen or default color
+        ]}
+      >
+        {user.avatar.emoji ? (
+          <Text style={styles.emojiText}>{user.avatar.emoji}</Text>
+        ) : (
+          <FAIcon name="user-circle" size={120} color="gray"></FAIcon>
+        )}
+      </View>
 
       <View style={styles.infoBox}>
         <View style={styles.infoField}>
@@ -166,11 +178,26 @@ const styles = StyleSheet.create({
   },
   header: {
     fontSize: 30,
-    paddingBottom: 40,
+    paddingBottom: 30,
     marginTop: 50,
     width: "80%",
     textAlign: "center",
+    color: "#4a3f4c",
   },
+  // Avatar Icon
+  circle: {
+    width: 120,
+    height: 120,
+    borderRadius: 100, // Makes it a circle
+    justifyContent: "center",
+    alignItems: "center",
+    marginBottom: 40,
+  },
+  emojiText: {
+    fontSize: 50,
+    marginLeft: 4,
+  },
+  // Info Boxes
   infoBox: {
     backgroundColor: "#fff",
     width: "95%",
@@ -203,11 +230,22 @@ const styles = StyleSheet.create({
     backgroundColor: "#F5F5F5",
     marginVertical: 14,
   },
+  // Buttons
   buttonText: {
     color: "#fff",
     fontSize: 16,
     fontWeight: "600",
     marginHorizontal: 12,
+  },
+  requestDateButton: {
+    backgroundColor: "#b38acb", // Light purple color
+    width: "95%",
+    paddingVertical: 10,
+    borderRadius: 8,
+    alignItems: "center",
+    marginTop: 10,
+    flexDirection: "row",
+    justifyContent: "center",
   },
   locationButton: {
     backgroundColor: "#b38acb", // Light purple color
@@ -215,7 +253,7 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     borderRadius: 8,
     alignItems: "center",
-    marginTop: 20,
+    marginTop: 10,
     flexDirection: "row",
     justifyContent: "center",
   },
@@ -225,17 +263,8 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     borderRadius: 8,
     alignItems: "center",
-    marginTop: 20,
-    flexDirection: "row",
-    justifyContent: "center",
-  },
-  requestDateButton: {
-    backgroundColor: "#f4a58a",
-    width: "95%",
-    paddingVertical: 10,
-    borderRadius: 8,
-    alignItems: "center",
-    marginTop: 20,
+    marginTop: 10,
+    marginBottom: 30,
     flexDirection: "row",
     justifyContent: "center",
   },
