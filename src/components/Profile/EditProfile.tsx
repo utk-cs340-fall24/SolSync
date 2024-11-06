@@ -193,7 +193,6 @@ export default function EditProfile({ navigation }: EditProfileScreenProps) {
 
         {/* Emoji Icon Picker */}
         <Text style={styles.fieldTitle}>Profile Icon</Text>
-
         <View style={styles.avatarContainer}>
           <Controller
             control={control}
@@ -236,7 +235,6 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#fff",
     alignItems: "center",
-    // justifyContent: "center",
     padding: "2%",
   },
   header: {
@@ -304,7 +302,7 @@ const styles = StyleSheet.create({
   selectedEmojiItem: {
     borderWidth: 2,
     borderRadius: 50,
-    borderColor: "black",
+    borderColor: "#4a3f4c",
   },
   emojiText: { fontSize: 30 },
   line: {
@@ -313,13 +311,13 @@ const styles = StyleSheet.create({
   },
   // Color Picker
   colorItem: {
-    width: 40, // Set fixed width for color item
-    height: 40, // Set fixed height for color item
-    borderRadius: 20, // Make the item round
-    margin: 10, // Add margin to separate items slightly
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    margin: 10,
   },
   selectedColorItem: {
     borderWidth: 2,
-    borderColor: "black", // Black border around selected color
+    borderColor: "#4a3f4c",
   },
 });
