@@ -125,6 +125,7 @@ export default function HistoryComponent() {
     });
 
     setHabitsCompleted(newHabitsCompleted);
+    setCurrentHabit(habits[0]);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [habits, history]);
 
