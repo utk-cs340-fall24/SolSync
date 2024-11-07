@@ -57,22 +57,21 @@ export default function ResetLocation({
 }: ResetLocationScreenProps) {
   const { user, userIsLoading, reloadUser } = useUser();
 
-  const [location, setLocation] = useState<Location>({
-    latitude: 35.9544,
-    longitude: -83.9295,
-  });
+  const [location, setLocation] = useState<Location | null>(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     // Fetch the default location only once when component mounts
     const fetchLocation = async () => {
       const defaultlocation = await getDefaultLocation(user);
       setLocation(defaultlocation);
+      setLoading(false);
     };
 
     fetchLocation();
   }, [user]);
 
-  if (userIsLoading) {
+  if (userIsLoading || loading) {
     return (
       <View style={styles.container}>
         <ActivityIndicator size="small" color="#000000" />
@@ -85,9 +84,16 @@ export default function ResetLocation({
   }
 
   const handleSubmit = async () => {
-    await upsertUser(user, user.email, location, user.displayName, user.avatar);
-    await reloadUser();
-
+    if (location) {
+      await upsertUser(
+        user,
+        user.email,
+        location,
+        user.displayName,
+        user.avatar,
+      );
+      await reloadUser();
+    }
     navigation.navigate("AuthorizedProfile");
   };
 
@@ -97,26 +103,27 @@ export default function ResetLocation({
         <Text style={styles.header}>Reset Your Location</Text>
 
         {/* MapView with onPress for selecting location */}
-        <MapView
-          style={styles.map}
-          initialRegion={{
-            latitude: location.latitude !== null ? location.latitude : 35.9544,
-            longitude:
-              location.longitude !== null ? location.longitude : -83.9295,
-            latitudeDelta: 0.0922,
-            longitudeDelta: 0.0421,
-          }}
-          onPress={(e) => {
-            const { latitude, longitude } = e.nativeEvent.coordinate;
-            setLocation({ latitude, longitude });
-          }}
-        >
-          {location.latitude !== null && location.longitude !== null && (
-            <Marker coordinate={location} />
-          )}
-        </MapView>
-        <Text>Latitude: {location.latitude}</Text>
-        <Text>Longitude: {location.longitude}</Text>
+        {location && (
+          <MapView
+            style={styles.map}
+            initialRegion={{
+              latitude: location.latitude ?? 35.9544,
+              longitude: location.longitude ?? -83.9295,
+              latitudeDelta: 0.0922,
+              longitudeDelta: 0.0421,
+            }}
+            onPress={(e) => {
+              const { latitude, longitude } = e.nativeEvent.coordinate;
+              setLocation({ latitude, longitude });
+            }}
+          >
+            {location.latitude !== null && location.longitude !== null && (
+              <Marker coordinate={location} />
+            )}
+          </MapView>
+        )}
+        <Text style={styles.coordsText}>Latitude: {location?.latitude}</Text>
+        <Text style={styles.coordsText}>Longitude: {location?.longitude}</Text>
 
         {/* Save and Cancel Buttons */}
         <TouchableOpacity
@@ -158,14 +165,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     color: "#4a3f4c",
     paddingTop: "10%",
-    paddingBottom: "10%",
-  },
-  fieldTitle: {
-    paddingLeft: "7%",
-    fontSize: 18,
-    alignSelf: "flex-start",
-    marginBottom: "3%",
-    color: "#5A5A5A",
+    paddingBottom: "5%",
   },
   input: {
     width: "90%",
@@ -180,6 +180,9 @@ const styles = StyleSheet.create({
   map: {
     flex: 1,
     width: "100%",
+  },
+  coordsText: {
+    color: "#4a3f4c",
   },
   // Buttons
   buttonText: {
