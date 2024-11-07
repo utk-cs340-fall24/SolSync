@@ -62,6 +62,9 @@ importers:
       react-native-element-dropdown:
         specifier: ^2.12.1
         version: 2.12.2(react-native@0.74.5(@babel/core@7.26.0)(@babel/preset-env@7.26.0(@babel/core@7.26.0))(@types/react@18.2.79)(react@18.2.0))(react@18.2.0)
+      react-native-maps:
+        specifier: 1.14.0
+        version: 1.14.0(react-native@0.74.5(@babel/core@7.26.0)(@babel/preset-env@7.26.0(@babel/core@7.26.0))(@types/react@18.2.79)(react@18.2.0))(react@18.2.0)
       react-native-vector-icons:
         specifier: ^10.2.0
         version: 10.2.0
@@ -1520,6 +1523,9 @@ packages:
 
   '@types/cacheable-request@6.0.3':
     resolution: {integrity: sha512-IQ3EbTzGxIigb1I3qPZc1rWJnH0BmSKv5QYTalEwweFvyBDLSAe24zP0le/hyi7ecGfZVlIVAg4BZqb8WBwKqw==}
+
+  '@types/geojson@7946.0.14':
+    resolution: {integrity: sha512-WCfD5Ht3ZesJUsONdhvm84dmzWOiOzOAqOncN0++w0lBw1o8OuDNJF2McvvCef/yBqb/HYRahp1BYtODFQ8bRg==}
 
   '@types/http-cache-semantics@4.0.4':
     resolution: {integrity: sha512-1m0bIFVc7eJWyve9S0RnuRgcQqF/Xd5QsUZAZeQFr1Q3/p9JWoQQEqmVy+DPTNpGXwhgIetAoYF8JSc33q29QA==}
@@ -4049,6 +4055,17 @@ packages:
     peerDependencies:
       react: '*'
       react-native: '*'
+
+  react-native-maps@1.14.0:
+    resolution: {integrity: sha512-ai7h4UdRLGPFCguz1fI8n4sKLEh35nZXHAH4nSWyAeHGrN8K9GjICu9Xd4Q5Ok4h+WwrM6Xz5pGbF3Qm1tO6iQ==}
+    engines: {node: '>=18'}
+    peerDependencies:
+      react: '>= 17.0.1'
+      react-native: '>= 0.64.3'
+      react-native-web: '>= 0.11'
+    peerDependenciesMeta:
+      react-native-web:
+        optional: true
 
   react-native-safe-area-context@4.12.0:
     resolution: {integrity: sha512-ukk5PxcF4p3yu6qMZcmeiZgowhb5AsKRnil54YFUUAXVIS7PJcMHGGC+q44fCiBg44/1AJk5njGMez1m9H0BVQ==}
@@ -7192,6 +7209,8 @@ snapshots:
       '@types/node': 22.8.2
       '@types/responselike': 1.0.3
 
+  '@types/geojson@7946.0.14': {}
+
   '@types/http-cache-semantics@4.0.4': {}
 
   '@types/istanbul-lib-coverage@2.0.6': {}
@@ -10104,6 +10123,12 @@ snapshots:
   react-native-element-dropdown@2.12.2(react-native@0.74.5(@babel/core@7.26.0)(@babel/preset-env@7.26.0(@babel/core@7.26.0))(@types/react@18.2.79)(react@18.2.0))(react@18.2.0):
     dependencies:
       lodash: 4.17.21
+      react: 18.2.0
+      react-native: 0.74.5(@babel/core@7.26.0)(@babel/preset-env@7.26.0(@babel/core@7.26.0))(@types/react@18.2.79)(react@18.2.0)
+
+  react-native-maps@1.14.0(react-native@0.74.5(@babel/core@7.26.0)(@babel/preset-env@7.26.0(@babel/core@7.26.0))(@types/react@18.2.79)(react@18.2.0))(react@18.2.0):
+    dependencies:
+      '@types/geojson': 7946.0.14
       react: 18.2.0
       react-native: 0.74.5(@babel/core@7.26.0)(@babel/preset-env@7.26.0(@babel/core@7.26.0))(@types/react@18.2.79)(react@18.2.0)
 

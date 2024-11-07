@@ -7,9 +7,7 @@ import { default as FeatherIcon } from "react-native-vector-icons/Feather";
 import { default as FAIcon } from "react-native-vector-icons/FontAwesome";
 
 import useUser from "@/hooks/useUser";
-import { upsertUser } from "@/server";
 import { sendDataEmail } from "@/server/emails";
-import getLocationFromDevice from "@/utils/getLocationFromDevice";
 
 import { firebaseAuth } from "../../../firebaseConfig";
 import { ProfileStackParamList } from ".";
@@ -22,7 +20,7 @@ type AuthorizedProfilePageProps = NativeStackScreenProps<
 export default function AuthorizedProfile({
   navigation,
 }: AuthorizedProfilePageProps) {
-  const { user, userIsLoading, reloadUser } = useUser();
+  const { user, userIsLoading } = useUser();
   const [requestDataLoading, setRequestDataLoading] = useState(false);
 
   if (userIsLoading) {
@@ -36,24 +34,6 @@ export default function AuthorizedProfile({
   if (!user) {
     return <Text>Please log in to view your profile</Text>;
   }
-
-  const handleUpdateLocation = async () => {
-    const location = await getLocationFromDevice();
-
-    const userCopy = user;
-
-    userCopy.location.latitude = location.latitude;
-    userCopy.location.longitude = location.longitude;
-
-    await upsertUser(
-      userCopy,
-      userCopy.email,
-      location,
-      userCopy.displayName,
-      userCopy.avatar,
-    );
-    await reloadUser();
-  };
 
   const requestDataEmail = async () => {
     setRequestDataLoading(true);
@@ -136,7 +116,7 @@ export default function AuthorizedProfile({
 
       <TouchableOpacity
         style={styles.locationButton}
-        onPress={handleUpdateLocation}
+        onPress={() => navigation.navigate("ResetLocation")}
       >
         <FAIcon
           name="location-arrow"
