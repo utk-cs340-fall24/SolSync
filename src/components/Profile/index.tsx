@@ -7,6 +7,7 @@ import useUser from "@/hooks/useUser";
 import AuthorizedProfile from "./AuthorizedProfile";
 import EditProfile from "./EditProfile";
 import LogIn from "./Login";
+import ResetLocation from "./ResetLocation";
 import SignUp from "./SignUp";
 
 export type ProfileStackParamList = {
@@ -14,6 +15,7 @@ export type ProfileStackParamList = {
   SignUp: undefined;
   AuthorizedProfile: undefined;
   EditProfile: undefined;
+  ResetLocation: undefined;
 };
 
 const Stack = createNativeStackNavigator<ProfileStackParamList>();
@@ -41,6 +43,11 @@ export default function Profile() {
           <Stack.Screen
             name="EditProfile"
             component={EditProfile}
+            options={{ headerShown: false, presentation: "modal" }}
+          />
+          <Stack.Screen
+            name="ResetLocation"
+            component={ResetLocation}
             options={{ headerShown: false, presentation: "modal" }}
           />
         </>
