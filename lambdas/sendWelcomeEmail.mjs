@@ -2,6 +2,13 @@
 // Send welcome email, should be triggered when user signs up
 
 export const handler = async (event) => {
+  if (event.httpMethod !== "POST") {
+    return {
+      statusCode: 405,
+      body: JSON.stringify({ error: "Only POST requests are allowed" }),
+    };
+  }
+
   // Verify the parameters
   console.log("Received event:", JSON.stringify(event, null, 2));
 
@@ -23,17 +30,6 @@ export const handler = async (event) => {
         body: JSON.stringify({ error: "Invalid JSON body" }),
       };
     }
-  } else if (
-    event.queryStringParameters &&
-    event.queryStringParameters.to &&
-    event.queryStringParameters.name
-  ) {
-    // Try various methods to parse the emailTo and emailHabit
-    emailTo = event.queryStringParameters.to;
-    emailName = event.queryStringParameters.name;
-  } else if (event.headers && event.headers.to && event.headers.name) {
-    emailTo = event.headers.to;
-    emailName = event.headers.name;
   } else {
     return {
       statusCode: 400,

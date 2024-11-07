@@ -13,17 +13,17 @@ export async function sendWelcomeEmail(displayName: string, email: string) {
 
   const url = new URL(apiUrl);
 
-  // Adding query parameters by using to and name
-  url.searchParams.append("to", email.toString());
-  url.searchParams.append("name", displayName.toString());
-
   // Try sending the email using a get request with the parameters
   try {
     const response = await fetch(url, {
-      method: "GET",
+      method: "POST",
       headers: {
         "x-api-key": process.env.EXPO_PUBLIC_SENDWELCOMEEMAIL_API_KEY as string,
       },
+      body: JSON.stringify({
+        userId: email.toString(),
+        email: displayName.toString(),
+      }),
     });
 
     if (!response.ok) {
