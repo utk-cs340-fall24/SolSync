@@ -101,7 +101,8 @@ export default function ResetLocation({
           style={{ flex: 1 }}
           initialRegion={{
             latitude: location.latitude !== null ? location.latitude : 35.9544,
-            longitude: location.longitude !== null ? location.longitude : 83.9295,
+            longitude:
+              location.longitude !== null ? location.longitude : 83.9295,
             latitudeDelta: 0.0922,
             longitudeDelta: 0.0421,
           }}
