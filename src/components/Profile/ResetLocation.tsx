@@ -48,7 +48,7 @@ const getDefaultLocation = async (
   // Default to UTK coordinates if no location is available
   return {
     latitude: 35.9544,
-    longitude: 83.9295,
+    longitude: -83.9295,
   };
 };
 
@@ -59,7 +59,7 @@ export default function ResetLocation({
 
   const [location, setLocation] = useState<Location>({
     latitude: 35.9544,
-    longitude: 83.9295,
+    longitude: -83.9295,
   });
 
   useEffect(() => {
@@ -98,11 +98,11 @@ export default function ResetLocation({
 
         {/* MapView with onPress for selecting location */}
         <MapView
-          style={{ flex: 1 }}
+          style={styles.map}
           initialRegion={{
             latitude: location.latitude !== null ? location.latitude : 35.9544,
             longitude:
-              location.longitude !== null ? location.longitude : 83.9295,
+              location.longitude !== null ? location.longitude : -83.9295,
             latitudeDelta: 0.0922,
             longitudeDelta: 0.0421,
           }}
@@ -115,6 +115,8 @@ export default function ResetLocation({
             <Marker coordinate={location} />
           )}
         </MapView>
+        <Text>Latitude: {location.latitude}</Text>
+        <Text>Longitude: {location.longitude}</Text>
 
         {/* Save and Cancel Buttons */}
         <TouchableOpacity
@@ -175,6 +177,11 @@ const styles = StyleSheet.create({
     marginBottom: "5%",
     paddingLeft: "5%",
   },
+  map: {
+    flex: 1,
+    width: "100%",
+  },
+  // Buttons
   buttonText: {
     color: "#fff",
     fontSize: 16,
