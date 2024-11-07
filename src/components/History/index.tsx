@@ -253,7 +253,7 @@ const styles = StyleSheet.create({
   header1: {
     fontSize: 30,
     paddingBottom: 40,
-    marginTop: -300,
+    marginTop: -280,
     color: "#4a3f4c",
   },
   noHabitText: {
@@ -264,7 +264,7 @@ const styles = StyleSheet.create({
   header2: {
     fontSize: 30,
     paddingBottom: 40,
-    marginTop: -10,
+    marginTop: -40,
     marginBottom: 20,
     color: "#4a3f4c",
   },
@@ -306,7 +306,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     fontSize: 30,
     paddingBottom: 40,
-    marginTop: -300,
+    marginTop: -280,
     color: "#4a3f4c",
   },
   LogIn: {

@@ -263,7 +263,7 @@ export default function AddHabitForm({ navigation }: AddHabitFormProps) {
               name="add-circle-outline"
               size={20}
               color="white"
-              style={{ marginHorizontal: 6, marginLeft: 100 }}
+              style={{ marginHorizontal: 6 }}
             />
             <Text style={styles.buttonText}>Add Habit</Text>
           </TouchableOpacity>
@@ -278,7 +278,7 @@ export default function AddHabitForm({ navigation }: AddHabitFormProps) {
               name="close"
               size={20}
               color="white"
-              style={{ marginHorizontal: 6, marginLeft: 110 }}
+              style={{ marginHorizontal: 6 }}
             />
             <Text style={styles.buttonText}>Cancel</Text>
           </TouchableOpacity>
@@ -297,7 +297,7 @@ const styles = StyleSheet.create({
   },
   sectionContainer: {
     paddingHorizontal: 0,
-    width: "80%",
+    width: "90%",
     borderWidth: 1,
     borderColor: "#ccc",
     borderRadius: 10,
@@ -318,7 +318,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     marginTop: 10,
     alignSelf: "flex-start",
-    marginLeft: -155,
+    marginLeft: -175,
     color: "#5A5A5A",
   },
   habitTimeHeader: {
@@ -326,12 +326,12 @@ const styles = StyleSheet.create({
     marginTop: 10,
     marginBottom: 10,
     alignSelf: "flex-start",
-    marginLeft: -155,
+    marginLeft: -175,
     color: "#5A5A5A",
   },
   nameInput: {
     height: 45,
-    width: "80%",
+    width: "90%",
     marginHorizontal: 12,
     margin: 12,
     borderWidth: 1,
@@ -346,7 +346,7 @@ const styles = StyleSheet.create({
     width: 40,
     maxWidth: 40,
     textAlign: "center",
-    marginHorizontal: 55,
+    marginHorizontal: 65,
     margin: 10,
     borderWidth: 1,
     paddingHorizontal: 5,
@@ -365,7 +365,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     borderColor: "#ccc",
     height: 50,
-    width: "80%",
+    width: "90%",
     backgroundColor: "#FFFFFF",
   },
   offsetRow: {
@@ -394,11 +394,11 @@ const styles = StyleSheet.create({
     marginTop: 20,
     marginBottom: 10,
     alignSelf: "flex-start",
-    marginLeft: 40,
+    marginLeft: 20,
     color: "#5A5A5A",
   },
   timePicker: {
-    width: "80%",
+    width: "90%",
     height: 50,
     borderWidth: 1,
     borderRadius: 8,
@@ -419,26 +419,32 @@ const styles = StyleSheet.create({
     color: "white",
     fontSize: 16,
     fontWeight: "600",
-    textAlign: "center",
+    // textAlign: "center",
   },
   addHabitButton: {
+    display: "flex",
     flexDirection: "row",
     backgroundColor: "#b38acb",
-    width: "80%",
+    padding: 10,
+    width: "90%",
     paddingVertical: 10,
     borderRadius: 8,
     alignItems: "center",
     marginTop: 20,
+    justifyContent: "center",
   },
   cancelButton: {
+    display: "flex",
     flexDirection: "row",
     backgroundColor: "#f4a58a",
-    width: "80%",
+    padding: 10,
+    width: "90%",
     paddingVertical: 10,
     borderRadius: 8,
     alignItems: "center",
     marginTop: 10,
     marginBottom: -30,
+    justifyContent: "center",
   },
   buttonRow: {
     flexDirection: "row",

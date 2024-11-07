@@ -62,7 +62,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     fontSize: 30,
     paddingBottom: 40,
-    marginTop: -300,
+    marginTop: -280,
     color: "#4a3f4c",
   },
   LogIn: {

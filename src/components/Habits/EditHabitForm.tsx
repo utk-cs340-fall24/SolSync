@@ -274,7 +274,7 @@ export default function EditHabitForm({
               name="close"
               size={20}
               color="white"
-              style={{ marginHorizontal: 6, marginLeft: 30 }}
+              style={{ marginHorizontal: 6 }}
             />
             <Text style={styles.buttonText}>Cancel</Text>
           </TouchableOpacity>
@@ -287,7 +287,7 @@ export default function EditHabitForm({
               name="trash-outline"
               size={20}
               color="white"
-              style={{ marginHorizontal: 6, marginLeft: 30 }}
+              style={{ marginHorizontal: 6 }}
             />
             <Text style={styles.buttonText}>Delete</Text>
           </TouchableOpacity>
@@ -302,7 +302,7 @@ export default function EditHabitForm({
               name="checkmark-sharp"
               size={20}
               color="white"
-              style={{ marginHorizontal: 6, marginLeft: 90 }}
+              style={{ marginHorizontal: 6 }}
             />
             <Text style={styles.buttonText}>Update Habit</Text>
           </TouchableOpacity>
@@ -321,10 +321,10 @@ const styles = StyleSheet.create({
   },
   sectionContainer: {
     paddingHorizontal: 0,
-    width: "80%",
+    width: "90%",
     borderWidth: 1,
     borderColor: "#ccc",
-    borderRadius: 10,
+    borderRadius: 8,
     padding: 15,
     marginBottom: 20,
     backgroundColor: "#FFFFFF",
@@ -342,12 +342,12 @@ const styles = StyleSheet.create({
     fontSize: 18,
     marginTop: 10,
     alignSelf: "flex-start",
-    marginLeft: -155,
+    marginLeft: -175,
     color: "#5A5A5A",
   },
   nameInput: {
     height: 45,
-    width: "80%",
+    width: "90%",
     marginHorizontal: 12,
     margin: 12,
     borderWidth: 1,
@@ -362,7 +362,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
     marginBottom: 10,
     alignSelf: "flex-start",
-    marginLeft: -155,
+    marginLeft: -175,
     color: "#5A5A5A",
   },
   timeInput: {
@@ -370,7 +370,7 @@ const styles = StyleSheet.create({
     width: 40,
     maxWidth: 40,
     textAlign: "center",
-    marginHorizontal: 55,
+    marginHorizontal: 65,
     margin: 10,
     borderWidth: 1,
     paddingHorizontal: 5,
@@ -392,7 +392,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     borderColor: "#ccc",
     height: 50,
-    width: "80%",
+    width: "90%",
     backgroundColor: "#FFFFFF",
   },
   emailText: {
@@ -404,7 +404,7 @@ const styles = StyleSheet.create({
     marginTop: 20,
     marginBottom: 10,
     alignSelf: "flex-start",
-    marginLeft: 40,
+    marginLeft: 20,
     color: "#5A5A5A",
   },
   offsetPicker: {
@@ -412,7 +412,7 @@ const styles = StyleSheet.create({
     height: 30,
   },
   timePicker: {
-    width: "80%",
+    width: "90%",
     height: 50,
     borderWidth: 1,
     borderRadius: 8,
@@ -453,32 +453,35 @@ const styles = StyleSheet.create({
   updateHabitButton: {
     flexDirection: "row",
     backgroundColor: "#b38acb",
-    width: "80%",
+    width: "90%",
     paddingVertical: 10,
     borderRadius: 8,
     alignItems: "center",
     marginTop: 15,
     marginBottom: -30,
+    justifyContent: "center",
   },
   deleteButton: {
     flexDirection: "row",
     backgroundColor: "#f4a58a",
-    width: "37%",
+    width: "42%",
     paddingVertical: 10,
     borderRadius: 8,
     alignItems: "center",
     marginTop: 10,
     marginLeft: 10,
+    justifyContent: "center",
   },
   cancelButton: {
     flexDirection: "row",
     backgroundColor: "#f4a58a",
-    width: "37%",
+    width: "42%",
     paddingVertical: 10,
     borderRadius: 8,
     alignItems: "center",
     marginTop: 10,
     marginRight: 10,
+    justifyContent: "center",
   },
   inButtonRow: {
     flexDirection: "row",

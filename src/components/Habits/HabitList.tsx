@@ -98,7 +98,7 @@ const styles = StyleSheet.create({
     fontSize: 30,
     color: "#4a3f4c",
     marginBottom: 30,
-    marginTop: 10,
+    marginTop: 17,
   },
   habitsList: {
     paddingBottom: 80,
@@ -113,7 +113,7 @@ const styles = StyleSheet.create({
     borderColor: "#ccc",
     backgroundColor: "#FFFFFF",
     borderRadius: 8,
-    width: "98%",
+    width: "97%",
     height: 80,
     marginBottom: 20,
   },
