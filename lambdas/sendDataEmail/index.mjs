@@ -85,10 +85,18 @@ export const handler = async (event) => {
   const body = JSON.parse(event.body || "{}");
 
   const { userId, email } = body;
+
   if (!userId) {
     return {
       statusCode: 400,
       body: JSON.stringify({ error: "userId not provided in the body" }),
+    };
+  }
+
+  if (!email) {
+    return {
+      statusCode: 400,
+      body: JSON.stringify({ error: "email not provided in the body" }),
     };
   }
 
