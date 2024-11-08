@@ -136,8 +136,8 @@ const sendDailyEmail = async (user, emailBody) => {
       },
       body: JSON.stringify({
         to: user.email,
-        subject: "Welcome to SolSync",
-        text: "We are glad you have chosen to become a part of the SolSync community.",
+        subject: "Daily Habit Reminder",
+        text: "Here is a list of all your habits and what time they will start.",
         textFormat: emailBody,
         deliveryTime: sendTime.format("ddd, DD MMM YYYY HH:mm:ss ZZ"),
       }),
