@@ -1,5 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import React from "react";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import {
   ActivityIndicator,
@@ -191,6 +192,19 @@ export default function EditProfile({ navigation }: EditProfileScreenProps) {
           <Text style={{ color: "red" }}>{errors.displayName.message}</Text>
         )}
 
+        <TouchableOpacity
+          style={styles.changePasswordButton}
+          onPress={() => navigation.navigate("ChangePassword")}
+        >
+          <Text style={styles.buttonText}>Change Your Password</Text>
+          <IonIcons
+            name="arrow-forward"
+            size={25}
+            color="white"
+            style={{ marginHorizontal: 6 }}
+          />
+        </TouchableOpacity>
+
         {/* Emoji Icon Picker */}
         <Text style={styles.fieldTitle}>Profile Icon</Text>
         <View style={styles.avatarContainer}>
@@ -254,7 +268,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     color: "#4a3f4c",
     paddingTop: "10%",
-    paddingBottom: "10%",
+    paddingBottom: "5%",
   },
   fieldTitle: {
     paddingLeft: "7%",
@@ -270,7 +284,6 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 8,
     paddingHorizontal: 10,
-    marginBottom: "5%",
     paddingLeft: "5%",
   },
   buttonText: {
@@ -278,8 +291,19 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "600",
   },
-  saveButton: {
+  changePasswordButton: {
     backgroundColor: "#b38acb", // Light purple color
+    width: "90%",
+    paddingVertical: 10,
+    borderRadius: 8,
+    alignItems: "center",
+    marginTop: "4%",
+    flexDirection: "row",
+    justifyContent: "center",
+    marginBottom: "5%",
+  },
+  cancelButton: {
+    backgroundColor: "#f4a58a", // Light orange color
     width: "90%",
     paddingVertical: 10,
     borderRadius: 8,
@@ -288,8 +312,8 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "center",
   },
-  cancelButton: {
-    backgroundColor: "#f4a58a", // Light orange color
+  saveButton: {
+    backgroundColor: "#b38acb", // Light purple color
     width: "90%",
     paddingVertical: 10,
     borderRadius: 8,
