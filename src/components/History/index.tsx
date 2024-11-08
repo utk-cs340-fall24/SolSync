@@ -321,7 +321,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 12,
   },
   requestDateButton: {
-    backgroundColor: "#f4a58a", // Light purple color
+    backgroundColor: "#b38acb",
     width: "95%",
     paddingVertical: 10,
     borderRadius: 8,
