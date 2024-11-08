@@ -1,32 +1,30 @@
 import dayjs from "dayjs";
-import { URL } from "url";
+
+const dateTimeToDayJS = (date, time) => {
+  const format = "DD-MM-YYYY HH:mm";
+
+  return dayjs(`${date} ${time}`, format);
+};
 
 const getSunriseSunsetTime = async (user) => {
-  const url = new URL(process.env.EXPO_PUBLIC_GETSUNRISESUNSET_API_URL);
-
-  url.searchParams.append("latitude", user.latitude);
-  url.searchParams.append("longitude", user.longitude);
-
-  let sunrise = null;
-  let sunset = null;
-
   try {
-    const response = await fetch(url, {
-      method: "GET",
-      headers: {
-        "x-api-key": process.env.EXPO_PUBLIC_GETSUNRISESUNSET_API_KEY,
-      },
-    });
+    const response = await fetch(
+      `https://api.sunrisesunset.io/json?lat=${user.latitude}&lng=${user.latitude}&time_format=24`,
+    );
 
-    const jsonData = await response.json();
+    const json = await response.json();
 
-    sunrise = dayjs(jsonData.todaySunrise);
-    sunset = dayjs(jsonData.todaySunset);
-  } catch (err) {
-    console.log(err);
+    const { date, sunrise, sunset } = json.results;
+
+    const sunriseTime = dateTimeToDayJS(date, sunrise);
+    const sunsetTime = dateTimeToDayJS(date, sunset);
+
+    return [sunriseTime, sunsetTime];
+  } catch (error) {
+    console.error("Error fetching data:", error);
   }
 
-  return [sunrise, sunset];
+  return [dayjs(), dayjs()];
 };
 
 const getHabitTimeMessage = (habit) => {
@@ -193,26 +191,8 @@ export const handler = async (event) => {
     };
   }
 
-  const {
-    id,
-    email,
-    displayName,
-    latitude,
-    longitude,
-    emoji,
-    background,
-    habits,
-  } = user;
-  if (
-    !id ||
-    !email ||
-    !displayName ||
-    !latitude ||
-    !longitude ||
-    !emoji ||
-    !background ||
-    !habits
-  ) {
+  const { id, email, displayName, latitude, longitude, habits } = user;
+  if (!id || !email || !displayName || !latitude || !longitude || !habits) {
     return {
       statusCode: 400,
     };
