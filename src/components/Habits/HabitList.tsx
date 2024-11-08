@@ -73,7 +73,7 @@ export default function HabitList({ navigation }: HabitListProps) {
         >
           <IonIcons
             name="add-circle-outline"
-            size={20}
+            size={25}
             color="white"
             style={{ marginHorizontal: 6 }}
           />
@@ -98,7 +98,7 @@ const styles = StyleSheet.create({
     fontSize: 30,
     color: "#4a3f4c",
     marginBottom: 30,
-    marginTop: 17,
+    marginTop: "5%",
   },
   habitsList: {
     paddingBottom: 80,

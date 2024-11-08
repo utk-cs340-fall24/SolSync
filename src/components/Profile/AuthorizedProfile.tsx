@@ -1,13 +1,11 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { signOut } from "firebase/auth";
-import { useState } from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { ActivityIndicator } from "react-native";
 import { default as FeatherIcon } from "react-native-vector-icons/Feather";
 import { default as FAIcon } from "react-native-vector-icons/FontAwesome";
 
 import useUser from "@/hooks/useUser";
-import { sendDataEmail } from "@/server/emails";
 
 import { firebaseAuth } from "../../../firebaseConfig";
 import { ProfileStackParamList } from ".";
@@ -21,7 +19,6 @@ export default function AuthorizedProfile({
   navigation,
 }: AuthorizedProfilePageProps) {
   const { user, userIsLoading } = useUser();
-  const [requestDataLoading, setRequestDataLoading] = useState(false);
 
   if (userIsLoading) {
     return (
@@ -34,14 +31,6 @@ export default function AuthorizedProfile({
   if (!user) {
     return <Text>Please log in to view your profile</Text>;
   }
-
-  const requestDataEmail = async () => {
-    setRequestDataLoading(true);
-
-    await sendDataEmail(user);
-
-    setRequestDataLoading(false);
-  };
 
   return (
     <View style={styles.container}>
@@ -98,23 +87,6 @@ export default function AuthorizedProfile({
       </View>
 
       <TouchableOpacity
-        style={styles.requestDateButton}
-        onPress={requestDataEmail}
-      >
-        {requestDataLoading ? (
-          <ActivityIndicator size="small" color="#FFFFFF" />
-        ) : (
-          <FAIcon
-            name="table"
-            size={25}
-            color="white"
-            style={{ marginHorizontal: 6 }}
-          ></FAIcon>
-        )}
-        <Text style={styles.buttonText}>Request your data</Text>
-      </TouchableOpacity>
-
-      <TouchableOpacity
         style={styles.locationButton}
         onPress={() => navigation.navigate("ResetLocation")}
       >
@@ -147,19 +119,19 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#F5F5F5",
-    justifyContent: "center",
+    justifyContent: "flex-start",
     alignItems: "center",
-    marginTop: 20,
+    paddingTop: 20,
   },
   editButton: {
     position: "absolute",
-    top: 36,
-    right: 20,
+    top: 56,
+    right: 22,
   },
   header: {
     fontSize: 30,
-    paddingBottom: 30,
-    marginTop: 50,
+    paddingBottom: 40,
+    marginTop: "15%",
     width: "80%",
     textAlign: "center",
     color: "#4a3f4c",
@@ -171,7 +143,7 @@ const styles = StyleSheet.create({
     borderRadius: 100, // Makes it a circle
     justifyContent: "center",
     alignItems: "center",
-    marginBottom: 40,
+    marginBottom: "12%",
   },
   emojiText: {
     fontSize: 50,
@@ -233,7 +205,7 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     borderRadius: 8,
     alignItems: "center",
-    marginTop: 10,
+    marginTop: 20,
     flexDirection: "row",
     justifyContent: "center",
   },
@@ -244,7 +216,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     alignItems: "center",
     marginTop: 10,
-    marginBottom: 30,
+    marginBottom: "33%",
     flexDirection: "row",
     justifyContent: "center",
   },

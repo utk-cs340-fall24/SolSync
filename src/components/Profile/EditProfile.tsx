@@ -245,7 +245,7 @@ export default function EditProfile({ navigation }: EditProfileScreenProps) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: "#F5F5F5",
     alignItems: "center",
     padding: "2%",
   },
@@ -272,6 +272,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     marginBottom: "5%",
     paddingLeft: "5%",
+    backgroundColor: "white",
   },
   buttonText: {
     color: "#fff",
@@ -307,6 +308,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 8,
     marginBottom: "3%",
+    backgroundColor: "white",
   },
   emojiItem: {
     width: 50,

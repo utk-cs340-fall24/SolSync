@@ -13,9 +13,11 @@ import {
 import { Calendar } from "react-native-calendars";
 import { Dropdown } from "react-native-element-dropdown";
 import { default as FAIcon } from "react-native-vector-icons/FontAwesome";
+import { default as IonIcons } from "react-native-vector-icons/Ionicons";
 
 import { useHabit } from "@/hooks/useHabit";
 import useUser from "@/hooks/useUser";
+import { sendDataEmail } from "@/server/emails";
 import { getHistory } from "@/server/histories";
 import { Habit, History } from "@/types";
 
@@ -37,6 +39,7 @@ export default function HistoryComponent() {
   const [calendarDates, setCalendarDates] = useState<unknown>();
   const [habitsCompleted, setHabitsCompleted] =
     useState<Record<string, boolean>>();
+  const [requestDataLoading, setRequestDataLoading] = useState(false);
 
   const habitToDropdownItem = (habit: Habit) => {
     return {
@@ -181,6 +184,13 @@ export default function HistoryComponent() {
       </View>
     );
   }
+  const requestDataEmail = async () => {
+    setRequestDataLoading(true);
+
+    await sendDataEmail(user);
+
+    setRequestDataLoading(false);
+  };
 
   if (habits.length === 0) {
     return (
@@ -220,11 +230,11 @@ export default function HistoryComponent() {
           }
           onPress={handleSubmit}
         >
-          <FAIcon
-            name="check-circle-o"
+          <IonIcons
+            name="checkmark-circle-outline"
             size={25}
             color="white"
-            style={{ marginHorizontal: 6 }}
+            style={{ marginHorizontal: 3 }}
           />
           <Text style={styles.buttonText}>
             {habitsCompleted[currentHabit?.id]
@@ -233,6 +243,22 @@ export default function HistoryComponent() {
           </Text>
         </TouchableOpacity>
       )}
+      <TouchableOpacity
+        style={styles.requestDateButton}
+        onPress={requestDataEmail}
+      >
+        {requestDataLoading ? (
+          <ActivityIndicator size="small" color="#FFFFFF" />
+        ) : (
+          <FAIcon
+            name="envelope-o"
+            size={25}
+            color="white"
+            style={{ marginHorizontal: 6 }}
+          ></FAIcon>
+        )}
+        <Text style={styles.buttonText}>Request Your History</Text>
+      </TouchableOpacity>
     </View>
   );
 }
@@ -264,7 +290,7 @@ const styles = StyleSheet.create({
   header2: {
     fontSize: 30,
     paddingBottom: 40,
-    marginTop: -40,
+    marginTop: "25%",
     marginBottom: 20,
     color: "#4a3f4c",
   },
@@ -293,6 +319,17 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "600",
     marginHorizontal: 12,
+  },
+  requestDateButton: {
+    backgroundColor: "#f4a58a", // Light purple color
+    width: "95%",
+    paddingVertical: 10,
+    borderRadius: 8,
+    alignItems: "center",
+    marginTop: 10,
+    flexDirection: "row",
+    justifyContent: "center",
+    marginBottom: "20%",
   },
   dropdown: {
     height: 50,

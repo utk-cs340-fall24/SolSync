@@ -160,7 +160,6 @@ const styles = StyleSheet.create({
   },
   Hello: {
     color: "white",
-    fontWeight: "bold",
     fontSize: 45,
     marginTop: 40,
     marginBottom: 5,
@@ -174,9 +173,9 @@ const styles = StyleSheet.create({
   },
   Sunrise1Data: {
     color: "white",
-    fontWeight: "bold",
-    fontSize: 35,
+    fontSize: 30,
     alignItems: "center",
+    marginTop: 7,
     marginBottom: 15,
   },
   Sunset: {
@@ -187,9 +186,9 @@ const styles = StyleSheet.create({
   },
   SunsetData: {
     color: "white",
-    fontWeight: "bold",
-    fontSize: 35,
+    fontSize: 30,
     alignItems: "center",
+    marginTop: 7,
     marginBottom: 15,
   },
   Sunrise2: {
@@ -200,9 +199,9 @@ const styles = StyleSheet.create({
   },
   Sunrise2Data: {
     color: "white",
-    fontWeight: "bold",
-    fontSize: 35,
+    fontSize: 30,
     alignItems: "center",
+    marginTop: 7,
   },
   PermissionMessage: {
     marginTop: 15,

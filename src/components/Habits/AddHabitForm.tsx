@@ -261,7 +261,7 @@ export default function AddHabitForm({ navigation }: AddHabitFormProps) {
           >
             <IonIcons
               name="add-circle-outline"
-              size={20}
+              size={25}
               color="white"
               style={{ marginHorizontal: 6 }}
             />
@@ -276,7 +276,7 @@ export default function AddHabitForm({ navigation }: AddHabitFormProps) {
           >
             <IonIcons
               name="close"
-              size={20}
+              size={25}
               color="white"
               style={{ marginHorizontal: 6 }}
             />
