@@ -196,7 +196,7 @@ export default function EditProfile({ navigation }: EditProfileScreenProps) {
           style={styles.changePasswordButton}
           onPress={() => navigation.navigate("ChangePassword")}
         >
-          <Text style={styles.buttonText}>Change your pasword</Text>
+          <Text style={styles.buttonText}>Change your password</Text>
           <IonIcons
             name="arrow-forward"
             size={25}
@@ -268,7 +268,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     color: "#4a3f4c",
     paddingTop: "10%",
-    paddingBottom: "10%",
+    paddingBottom: "5%",
   },
   fieldTitle: {
     paddingLeft: "7%",
@@ -284,7 +284,6 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 8,
     paddingHorizontal: 10,
-    marginBottom: "3%",
     paddingLeft: "5%",
   },
   buttonText: {
@@ -292,29 +291,29 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "600",
   },
-  saveButton: {
-    backgroundColor: "#b38acb", // Light purple color
-    width: "90%",
-    paddingVertical: 10,
-    borderRadius: 8,
-    alignItems: "center",
-    marginTop: 12,
-    flexDirection: "row",
-    justifyContent: "center",
-  },
   changePasswordButton: {
     backgroundColor: "#b38acb", // Light purple color
     width: "90%",
     paddingVertical: 10,
     borderRadius: 8,
     alignItems: "center",
-    marginTop: 12,
+    marginTop: "4%",
     flexDirection: "row",
     justifyContent: "center",
-    marginBottom: "3%",
+    marginBottom: "5%",
   },
   cancelButton: {
     backgroundColor: "#f4a58a", // Light orange color
+    width: "90%",
+    paddingVertical: 10,
+    borderRadius: 8,
+    alignItems: "center",
+    marginTop: 12,
+    flexDirection: "row",
+    justifyContent: "center",
+  },
+  saveButton: {
+    backgroundColor: "#b38acb", // Light purple color
     width: "90%",
     paddingVertical: 10,
     borderRadius: 8,
