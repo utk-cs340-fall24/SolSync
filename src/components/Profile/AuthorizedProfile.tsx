@@ -128,19 +128,6 @@ export default function AuthorizedProfile({
       </TouchableOpacity>
 
       <TouchableOpacity
-        style={styles.locationButton}
-        onPress={() => navigation.navigate("ChangePassword")}
-      >
-        <FAIcon
-          name="lock"
-          size={25}
-          color="white"
-          style={{ marginHorizontal: 6 }}
-        ></FAIcon>
-        <Text style={styles.buttonText}>Change your pasword</Text>
-      </TouchableOpacity>
-
-      <TouchableOpacity
         style={styles.logOutButton}
         onPress={() => signOut(firebaseAuth)}
       >

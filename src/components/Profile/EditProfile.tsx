@@ -1,5 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import React from "react";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import {
   ActivityIndicator,
@@ -191,6 +192,19 @@ export default function EditProfile({ navigation }: EditProfileScreenProps) {
           <Text style={{ color: "red" }}>{errors.displayName.message}</Text>
         )}
 
+        <TouchableOpacity
+          style={styles.changePasswordButton}
+          onPress={() => navigation.navigate("ChangePassword")}
+        >
+          <Text style={styles.buttonText}>Change your pasword</Text>
+          <IonIcons
+            name="arrow-forward"
+            size={25}
+            color="white"
+            style={{ marginHorizontal: 6 }}
+          />
+        </TouchableOpacity>
+
         {/* Emoji Icon Picker */}
         <Text style={styles.fieldTitle}>Profile Icon</Text>
         <View style={styles.avatarContainer}>
@@ -270,7 +284,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 8,
     paddingHorizontal: 10,
-    marginBottom: "5%",
+    marginBottom: "3%",
     paddingLeft: "5%",
   },
   buttonText: {
@@ -287,6 +301,17 @@ const styles = StyleSheet.create({
     marginTop: 12,
     flexDirection: "row",
     justifyContent: "center",
+  },
+  changePasswordButton: {
+    backgroundColor: "#b38acb", // Light purple color
+    width: "90%",
+    paddingVertical: 10,
+    borderRadius: 8,
+    alignItems: "center",
+    marginTop: 12,
+    flexDirection: "row",
+    justifyContent: "center",
+    marginBottom: "3%",
   },
   cancelButton: {
     backgroundColor: "#f4a58a", // Light orange color
