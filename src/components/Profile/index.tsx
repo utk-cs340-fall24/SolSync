@@ -5,6 +5,7 @@ import { ActivityIndicator, StyleSheet, View } from "react-native";
 import useUser from "@/hooks/useUser";
 
 import AuthorizedProfile from "./AuthorizedProfile";
+import ChangePassword from "./ChangePassword";
 import EditProfile from "./EditProfile";
 import LogIn from "./Login";
 import ResetLocation from "./ResetLocation";
@@ -16,6 +17,7 @@ export type ProfileStackParamList = {
   AuthorizedProfile: undefined;
   EditProfile: undefined;
   ResetLocation: undefined;
+  ChangePassword: undefined;
 };
 
 const Stack = createNativeStackNavigator<ProfileStackParamList>();
@@ -48,6 +50,11 @@ export default function Profile() {
           <Stack.Screen
             name="ResetLocation"
             component={ResetLocation}
+            options={{ headerShown: false, presentation: "modal" }}
+          />
+          <Stack.Screen
+            name="ChangePassword"
+            component={ChangePassword}
             options={{ headerShown: false, presentation: "modal" }}
           />
         </>

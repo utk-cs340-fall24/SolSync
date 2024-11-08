@@ -11,6 +11,8 @@ const getFirebaseAuthErrorMessage = (errorCode: string) => {
       return "Invalid credentials";
     case "auth/too-many-requests":
       return "Too many requests";
+    case "auth/requires-recent-login":
+      return "Please log in again before changing your password";
     default:
       return "There was an error signing in";
   }
