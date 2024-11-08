@@ -196,7 +196,7 @@ export default function EditProfile({ navigation }: EditProfileScreenProps) {
           style={styles.changePasswordButton}
           onPress={() => navigation.navigate("ChangePassword")}
         >
-          <Text style={styles.buttonText}>Change your password</Text>
+          <Text style={styles.buttonText}>Change Your Password</Text>
           <IonIcons
             name="arrow-forward"
             size={25}
