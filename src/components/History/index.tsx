@@ -13,9 +13,11 @@ import {
 import { Calendar } from "react-native-calendars";
 import { Dropdown } from "react-native-element-dropdown";
 import { default as FAIcon } from "react-native-vector-icons/FontAwesome";
+import { default as IonIcons } from "react-native-vector-icons/Ionicons";
 
 import { useHabit } from "@/hooks/useHabit";
 import useUser from "@/hooks/useUser";
+import { sendDataEmail } from "@/server/emails";
 import { getHistory } from "@/server/histories";
 import { Habit, History } from "@/types";
 
@@ -37,6 +39,7 @@ export default function HistoryComponent() {
   const [calendarDates, setCalendarDates] = useState<unknown>();
   const [habitsCompleted, setHabitsCompleted] =
     useState<Record<string, boolean>>();
+  const [requestDataLoading, setRequestDataLoading] = useState(false);
 
   const habitToDropdownItem = (habit: Habit) => {
     return {
@@ -176,23 +179,31 @@ export default function HistoryComponent() {
   if (!user) {
     return (
       <View style={styles.container}>
-        <Text style={styles.title}>SolSync</Text>
+        <Text style={styles.title}>History</Text>
         <Text style={styles.LogIn}>Log in to view your history</Text>
       </View>
     );
   }
+  const requestDataEmail = async () => {
+    setRequestDataLoading(true);
+
+    await sendDataEmail(user);
+
+    setRequestDataLoading(false);
+  };
 
   if (habits.length === 0) {
     return (
       <View style={styles.container}>
-        <Text>Please add a habit</Text>
+        <Text style={styles.header1}>History</Text>
+        <Text style={styles.noHabitText}>Add a habit to get started</Text>
       </View>
     );
   }
 
   return (
     <View style={styles.container}>
-      <Text style={styles.header}>History</Text>
+      <Text style={styles.header2}>History</Text>
       <Dropdown
         data={getHabits()}
         onChange={onHabitChange}
@@ -219,11 +230,11 @@ export default function HistoryComponent() {
           }
           onPress={handleSubmit}
         >
-          <FAIcon
-            name="check-circle-o"
+          <IonIcons
+            name="checkmark-circle-outline"
             size={25}
             color="white"
-            style={{ marginHorizontal: 6 }}
+            style={{ marginHorizontal: 3 }}
           />
           <Text style={styles.buttonText}>
             {habitsCompleted[currentHabit?.id]
@@ -232,6 +243,22 @@ export default function HistoryComponent() {
           </Text>
         </TouchableOpacity>
       )}
+      <TouchableOpacity
+        style={styles.requestDateButton}
+        onPress={requestDataEmail}
+      >
+        {requestDataLoading ? (
+          <ActivityIndicator size="small" color="#FFFFFF" />
+        ) : (
+          <FAIcon
+            name="envelope-o"
+            size={25}
+            color="white"
+            style={{ marginHorizontal: 6 }}
+          ></FAIcon>
+        )}
+        <Text style={styles.buttonText}>Request Your History</Text>
+      </TouchableOpacity>
     </View>
   );
 }
@@ -249,10 +276,22 @@ const styles = StyleSheet.create({
     marginBottom: 30,
     borderRadius: 8,
   },
-  header: {
+  header1: {
     fontSize: 30,
     paddingBottom: 40,
-    marginTop: 20,
+    marginTop: -280,
+    color: "#4a3f4c",
+  },
+  noHabitText: {
+    fontSize: 18,
+    color: "#4a3f4c",
+    marginTop: 240,
+  },
+  header2: {
+    fontSize: 30,
+    paddingBottom: 40,
+    marginTop: "25%",
+    marginBottom: 20,
     color: "#4a3f4c",
   },
   completeHabitButton: {
@@ -281,6 +320,17 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     marginHorizontal: 12,
   },
+  requestDateButton: {
+    backgroundColor: "#b38acb",
+    width: "95%",
+    paddingVertical: 10,
+    borderRadius: 8,
+    alignItems: "center",
+    marginTop: 10,
+    flexDirection: "row",
+    justifyContent: "center",
+    marginBottom: "20%",
+  },
   dropdown: {
     height: 50,
     borderColor: "gray",
@@ -290,14 +340,16 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
   },
   title: {
-    fontSize: 42,
-    fontWeight: "bold",
-    color: "#4a3f4c",
-    marginTop: -198,
     alignItems: "center",
+    fontSize: 30,
+    paddingBottom: 40,
+    marginTop: -280,
+    color: "#4a3f4c",
   },
   LogIn: {
-    fontSize: 25,
-    marginTop: 200,
+    fontSize: 20,
+    marginTop: 240,
+    color: "#4a3f4c",
+    alignItems: "center",
   },
 });

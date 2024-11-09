@@ -122,8 +122,8 @@ export default function ResetLocation({
             )}
           </MapView>
         )}
-        <Text style={styles.coordsText}>Latitude: {location?.latitude}</Text>
-        <Text style={styles.coordsText}>Longitude: {location?.longitude}</Text>
+        <Text style={styles.coordsText1}>Latitude: {location?.latitude}</Text>
+        <Text style={styles.coordsText2}>Longitude: {location?.longitude}</Text>
 
         {/* Save and Cancel Buttons */}
         <TouchableOpacity
@@ -164,7 +164,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: "bold",
     color: "#4a3f4c",
-    paddingTop: "10%",
+    paddingTop: "7%",
     paddingBottom: "5%",
   },
   input: {
@@ -181,7 +181,11 @@ const styles = StyleSheet.create({
     flex: 1,
     width: "100%",
   },
-  coordsText: {
+  coordsText1: {
+    color: "#4a3f4c",
+    marginTop: 10,
+  },
+  coordsText2: {
     color: "#4a3f4c",
   },
   // Buttons
@@ -199,6 +203,7 @@ const styles = StyleSheet.create({
     marginTop: 12,
     flexDirection: "row",
     justifyContent: "center",
+    marginBottom: "4%",
   },
   cancelButton: {
     backgroundColor: "#f4a58a", // Light orange color

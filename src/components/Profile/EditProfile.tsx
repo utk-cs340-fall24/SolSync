@@ -259,7 +259,7 @@ export default function EditProfile({ navigation }: EditProfileScreenProps) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: "#F5F5F5",
     alignItems: "center",
     padding: "2%",
   },
@@ -269,6 +269,7 @@ const styles = StyleSheet.create({
     color: "#4a3f4c",
     paddingTop: "10%",
     paddingBottom: "5%",
+    marginTop: "-3%",
   },
   fieldTitle: {
     paddingLeft: "7%",
@@ -285,6 +286,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     paddingHorizontal: 10,
     paddingLeft: "5%",
+    backgroundColor: "white",
   },
   buttonText: {
     color: "#fff",
@@ -331,6 +333,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 8,
     marginBottom: "3%",
+    backgroundColor: "white",
   },
   emojiItem: {
     width: 50,
