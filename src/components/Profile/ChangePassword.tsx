@@ -108,7 +108,7 @@ export default function ChangePassword({
                 autoCorrect={false}
                 autoCapitalize="none"
                 style={styles.input}
-                placeholder="Password"
+                placeholder="New Password"
                 placeholderTextColor="gray"
                 secureTextEntry
                 onChangeText={onChange}
@@ -130,7 +130,7 @@ export default function ChangePassword({
                 autoCorrect={false}
                 autoCapitalize="none"
                 style={styles.input}
-                placeholder="Confirm Password"
+                placeholder="Confirm New Password"
                 placeholderTextColor="gray"
                 secureTextEntry
                 onChangeText={onChange}

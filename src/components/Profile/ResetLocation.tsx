@@ -164,7 +164,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: "bold",
     color: "#4a3f4c",
-    paddingTop: "10%",
+    paddingTop: "7%",
     paddingBottom: "5%",
   },
   input: {
@@ -203,6 +203,7 @@ const styles = StyleSheet.create({
     marginTop: 12,
     flexDirection: "row",
     justifyContent: "center",
+    marginBottom: "4%",
   },
   cancelButton: {
     backgroundColor: "#f4a58a", // Light orange color

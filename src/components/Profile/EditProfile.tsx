@@ -269,6 +269,7 @@ const styles = StyleSheet.create({
     color: "#4a3f4c",
     paddingTop: "10%",
     paddingBottom: "5%",
+    marginTop: "-3%",
   },
   fieldTitle: {
     paddingLeft: "7%",
