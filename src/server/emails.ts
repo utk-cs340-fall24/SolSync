@@ -21,14 +21,15 @@ export async function sendWelcomeEmail(displayName: string, email: string) {
         "x-api-key": process.env.EXPO_PUBLIC_SENDWELCOMEEMAIL_API_KEY as string,
       },
       body: JSON.stringify({
-        userId: email.toString(),
-        email: displayName.toString(),
+        to: email.toString(),
+        name: displayName.toString(),
       }),
     });
 
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
+    console.log("Successfully sent email.");
   } catch (err) {
     console.log(err);
   }
