@@ -1,0 +1,399 @@
+src/components/Habits/AddHabitForm.tsx
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500  17) import { default as IonIcons } from "react-native-vector-icons/Ionicons";
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 257)         <View style={styles.buttonRow}>
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 258)           <TouchableOpacity
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 259)             style={styles.addHabitButton}
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 260)             onPress={handleSubmit(onSubmit)}
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 261)           >
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 262)             <IonIcons
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 263)               name="add-circle-outline"
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 264)               size={25}
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 265)               color="white"
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 266)               style={{ marginHorizontal: 6 }}
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 267)             />
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 268)             <Text style={styles.buttonText}>Add Habit</Text>
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 269)           </TouchableOpacity>
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 270)         </View>
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 272)         <View style={styles.buttonRow}>
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 273)           <TouchableOpacity
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 274)             style={styles.cancelButton}
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 275)             onPress={() => navigation.navigate("HabitList")}
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 276)           >
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 277)             <IonIcons
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 278)               name="close"
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 279)               size={25}
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 280)               color="white"
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 281)               style={{ marginHorizontal: 6 }}
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 282)             />
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 283)             <Text style={styles.buttonText}>Cancel</Text>
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 284)           </TouchableOpacity>
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 285)         </View>
+4b7bbc19 (Valli Paladugu 2024-11-05 20:00:04 -0500 294)     backgroundColor: "#F5F5F5",
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 300)     width: "90%",
+4b7bbc19 (Valli Paladugu 2024-11-05 20:00:04 -0500 305)     backgroundColor: "#FFFFFF",
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 321)     marginLeft: -175,
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 329)     marginLeft: -175,
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 334)     width: "90%",
+4b7bbc19 (Valli Paladugu 2024-11-05 20:00:04 -0500 342)     backgroundColor: "#FFFFFF",
+4b7bbc19 (Valli Paladugu 2024-11-05 20:00:04 -0500 346)     width: 40,
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 349)     marginHorizontal: 65,
+4b7bbc19 (Valli Paladugu 2024-11-05 20:00:04 -0500 350)     margin: 10,
+4b7bbc19 (Valli Paladugu 2024-11-05 20:00:04 -0500 352)     paddingHorizontal: 5,
+4b7bbc19 (Valli Paladugu 2024-11-05 20:00:04 -0500 355)     backgroundColor: "#FFFFFF",
+4b7bbc19 (Valli Paladugu 2024-11-05 20:00:04 -0500 356)     fontSize: 15,
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 368)     width: "90%",
+4b7bbc19 (Valli Paladugu 2024-11-05 20:00:04 -0500 369)     backgroundColor: "#FFFFFF",
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 397)     marginLeft: 20,
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 401)     width: "90%",
+4b7bbc19 (Valli Paladugu 2024-11-05 20:00:04 -0500 406)     backgroundColor: "#FFFFFF",
+4b7bbc19 (Valli Paladugu 2024-11-05 20:00:04 -0500 411)     backgroundColor: "#FFFFFF",
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 419)     color: "white",
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 422)     // textAlign: "center",
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 425)     display: "flex",
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 426)     flexDirection: "row",
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 428)     padding: 10,
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 429)     width: "90%",
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 434)     justifyContent: "center",
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 437)     display: "flex",
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 438)     flexDirection: "row",
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 440)     padding: 10,
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 441)     width: "90%",
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 447)     justifyContent: "center",
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 448)   },
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 449)   buttonRow: {
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 450)     flexDirection: "row",
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 451)     justifyContent: "space-between",
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 452)     alignItems: "center",
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 453)     marginTop: 10,
+
+src/components/Habits/EditHabitForm.tsx
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500  17) import { default as IonIcons } from "react-native-vector-icons/Ionicons";
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 273)             <IonIcons
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 274)               name="close"
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 275)               size={20}
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 276)               color="white"
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 277)               style={{ marginHorizontal: 6 }}
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 278)             />
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 286)             <IonIcons
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 287)               name="trash-outline"
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 288)               size={20}
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 289)               color="white"
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 290)               style={{ marginHorizontal: 6 }}
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 291)             />
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 295) 
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 296)         <View style={styles.inButtonRow}>
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 297)           <TouchableOpacity
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 298)             style={styles.updateHabitButton}
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 299)             onPress={handleSubmit(onSubmit)}
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 300)           >
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 301)             <IonIcons
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 302)               name="checkmark-sharp"
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 303)               size={20}
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 304)               color="white"
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 305)               style={{ marginHorizontal: 6 }}
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 306)             />
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 307)             <Text style={styles.buttonText}>Update Habit</Text>
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 308)           </TouchableOpacity>
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 309)         </View>
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 324)     width: "90%",
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 327)     borderRadius: 8,
+4b7bbc19 (Valli Paladugu 2024-11-05 20:00:04 -0500 330)     backgroundColor: "#FFFFFF",
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 345)     marginLeft: -175,
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 350)     width: "90%",
+4b7bbc19 (Valli Paladugu 2024-11-05 20:00:04 -0500 358)     backgroundColor: "#FFFFFF",
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 365)     marginLeft: -175,
+4b7bbc19 (Valli Paladugu 2024-11-05 20:00:04 -0500 370)     width: 40,
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 373)     marginHorizontal: 65,
+4b7bbc19 (Valli Paladugu 2024-11-05 20:00:04 -0500 374)     margin: 10,
+4b7bbc19 (Valli Paladugu 2024-11-05 20:00:04 -0500 376)     paddingHorizontal: 5,
+4b7bbc19 (Valli Paladugu 2024-11-05 20:00:04 -0500 379)     backgroundColor: "#FFFFFF",
+4b7bbc19 (Valli Paladugu 2024-11-05 20:00:04 -0500 380)     fontSize: 15,
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 395)     width: "90%",
+4b7bbc19 (Valli Paladugu 2024-11-05 20:00:04 -0500 396)     backgroundColor: "#FFFFFF",
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 407)     marginLeft: 20,
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 415)     width: "90%",
+4b7bbc19 (Valli Paladugu 2024-11-05 20:00:04 -0500 420)     backgroundColor: "#FFFFFF",
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 442)     color: "white",
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 445)     textAlign: "center",
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 454)     flexDirection: "row",
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 456)     width: "90%",
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 462)     justifyContent: "center",
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 465)     flexDirection: "row",
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 467)     width: "42%",
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 473)     justifyContent: "center",
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 476)     flexDirection: "row",
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 478)     width: "42%",
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 484)     justifyContent: "center",
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 485)   },
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 486)   inButtonRow: {
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 487)     flexDirection: "row",
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 488)     justifyContent: "space-between",
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 489)     alignItems: "center",
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 490)     marginTop: 10,
+
+src/components/Habits/HabitList.tsx
+4b7bbc19 (Valli Paladugu 2024-11-05 20:00:04 -0500   8)   TouchableOpacity,
+4b7bbc19 (Valli Paladugu 2024-11-05 20:00:04 -0500   9)   View,
+4b7bbc19 (Valli Paladugu 2024-11-05 20:00:04 -0500  11) import { default as FeatherIcon } from "react-native-vector-icons/Feather";
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500  12) import { default as IonIcons } from "react-native-vector-icons/Ionicons";
+4b7bbc19 (Valli Paladugu 2024-11-05 20:00:04 -0500  25)       <View style={styles.titleContainer}>
+4b7bbc19 (Valli Paladugu 2024-11-05 20:00:04 -0500  26)         <Text style={[styles.title]}>My Habits</Text>
+4b7bbc19 (Valli Paladugu 2024-11-05 20:00:04 -0500  27)       </View>
+4b7bbc19 (Valli Paladugu 2024-11-05 20:00:04 -0500  30)         contentContainerStyle={styles.habitsList}
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500  31)         renderItem={({ item }) => {
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500  32)           let habitTimeMessage = "";
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500  33) 
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500  34)           if (item.hourOffset !== 0) {
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500  35)             habitTimeMessage += `${item.hourOffset} ${item.hourOffset === 1 ? "hour" : "hours"}`;
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500  36)           }
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500  37) 
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500  38)           if (item.minuteOffset !== 0) {
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500  39)             if (habitTimeMessage !== "") habitTimeMessage += " ";
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500  40)             habitTimeMessage += `${item.minuteOffset} ${item.minuteOffset === 1 ? "minute" : "minutes"}`;
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500  41)           }
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500  42) 
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500  43)           habitTimeMessage += ` ${item.offsetDirection} ${item.notificationPeriod}`;
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500  44) 
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500  45)           if (item.minuteOffset === 0 && item.hourOffset === 0) {
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500  46)             habitTimeMessage = `At ${item.notificationPeriod}`;
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500  47)           }
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500  48) 
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500  49)           return (
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500  50)             <View style={styles.habitCard}>
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500  51)               <View>
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500  52)                 <Text style={styles.habitTitle}>{item.name}</Text>
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500  53)                 <Text style={styles.habitTime}>{habitTimeMessage}</Text>
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500  54)               </View>
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500  55)               <TouchableOpacity style={styles.editIcon}>
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500  56)                 <FeatherIcon
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500  57)                   name="edit-3"
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500  58)                   size={25}
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500  59)                   color="#5A5A5A"
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500  60)                   onPress={() =>
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500  61)                     navigation.navigate("EditHabitForm", { habit: item })
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500  62)                   }
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500  63)                 ></FeatherIcon>
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500  64)               </TouchableOpacity>
+4b7bbc19 (Valli Paladugu 2024-11-05 20:00:04 -0500  65)             </View>
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500  66)           );
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500  67)         }}
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500  69)       <View style={styles.buttonRow}>
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500  70)         <TouchableOpacity
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500  71)           style={styles.addHabitButton}
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500  72)           onPress={() => navigation.navigate("AddHabitForm")}
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500  73)         >
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500  74)           <IonIcons
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500  75)             name="add-circle-outline"
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500  76)             size={25}
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500  77)             color="white"
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500  78)             style={{ marginHorizontal: 6 }}
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500  79)           />
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500  80)           <Text style={styles.buttonText}>Add Habit</Text>
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500  81)         </TouchableOpacity>
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500  82)       </View>
+4b7bbc19 (Valli Paladugu 2024-11-05 20:00:04 -0500  90)     backgroundColor: "#F5F5F5",
+4b7bbc19 (Valli Paladugu 2024-11-05 20:00:04 -0500  91)     alignItems: "center",
+4b7bbc19 (Valli Paladugu 2024-11-05 20:00:04 -0500  92)     justifyContent: "center",
+4b7bbc19 (Valli Paladugu 2024-11-05 20:00:04 -0500  93)   },
+4b7bbc19 (Valli Paladugu 2024-11-05 20:00:04 -0500  94)   titleContainer: {
+4b7bbc19 (Valli Paladugu 2024-11-05 20:00:04 -0500  95)     alignItems: "center",
+4b7bbc19 (Valli Paladugu 2024-11-05 20:00:04 -0500  96)   },
+4b7bbc19 (Valli Paladugu 2024-11-05 20:00:04 -0500  97)   title: {
+4b7bbc19 (Valli Paladugu 2024-11-05 20:00:04 -0500  98)     fontSize: 30,
+4b7bbc19 (Valli Paladugu 2024-11-05 20:00:04 -0500  99)     color: "#4a3f4c",
+4b7bbc19 (Valli Paladugu 2024-11-05 20:00:04 -0500 100)     marginBottom: 30,
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 101)     marginTop: "5%",
+4b7bbc19 (Valli Paladugu 2024-11-05 20:00:04 -0500 102)   },
+4b7bbc19 (Valli Paladugu 2024-11-05 20:00:04 -0500 103)   habitsList: {
+4b7bbc19 (Valli Paladugu 2024-11-05 20:00:04 -0500 104)     paddingBottom: 80,
+4b7bbc19 (Valli Paladugu 2024-11-05 20:00:04 -0500 105)     alignItems: "center",
+4b7bbc19 (Valli Paladugu 2024-11-05 20:00:04 -0500 106)   },
+4b7bbc19 (Valli Paladugu 2024-11-05 20:00:04 -0500 107)   habitCard: {
+4b7bbc19 (Valli Paladugu 2024-11-05 20:00:04 -0500 108)     flexDirection: "row",
+4b7bbc19 (Valli Paladugu 2024-11-05 20:00:04 -0500 109)     justifyContent: "space-between",
+4b7bbc19 (Valli Paladugu 2024-11-05 20:00:04 -0500 110)     alignItems: "center",
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 111)     paddingHorizontal: 20,
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 112)     paddingVertical: 16,
+4b7bbc19 (Valli Paladugu 2024-11-05 20:00:04 -0500 113)     borderColor: "#ccc",
+4b7bbc19 (Valli Paladugu 2024-11-05 20:00:04 -0500 114)     backgroundColor: "#FFFFFF",
+4b7bbc19 (Valli Paladugu 2024-11-05 20:00:04 -0500 115)     borderRadius: 8,
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 116)     width: "97%",
+4b7bbc19 (Valli Paladugu 2024-11-05 20:00:04 -0500 117)     height: 80,
+4b7bbc19 (Valli Paladugu 2024-11-05 20:00:04 -0500 118)     marginBottom: 20,
+4b7bbc19 (Valli Paladugu 2024-11-05 20:00:04 -0500 119)   },
+4b7bbc19 (Valli Paladugu 2024-11-05 20:00:04 -0500 120)   habitTitle: {
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 121)     fontSize: 22,
+4b7bbc19 (Valli Paladugu 2024-11-05 20:00:04 -0500 122)     fontWeight: "600",
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 123)     color: "#4a3f4c",
+4b7bbc19 (Valli Paladugu 2024-11-05 20:00:04 -0500 124)     marginBottom: 5,
+4b7bbc19 (Valli Paladugu 2024-11-05 20:00:04 -0500 125)   },
+4b7bbc19 (Valli Paladugu 2024-11-05 20:00:04 -0500 126)   habitTime: {
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 127)     fontSize: 14,
+4b7bbc19 (Valli Paladugu 2024-11-05 20:00:04 -0500 128)     color: "#333",
+4b7bbc19 (Valli Paladugu 2024-11-05 20:00:04 -0500 129)   },
+4b7bbc19 (Valli Paladugu 2024-11-05 20:00:04 -0500 130)   editIcon: {
+4b7bbc19 (Valli Paladugu 2024-11-05 20:00:04 -0500 131)     padding: 8,
+4b7bbc19 (Valli Paladugu 2024-11-05 20:00:04 -0500 132)   },
+4b7bbc19 (Valli Paladugu 2024-11-05 20:00:04 -0500 133)   addHabitButton: {
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 134)     display: "flex",
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 135)     flexDirection: "row",
+4b7bbc19 (Valli Paladugu 2024-11-05 20:00:04 -0500 136)     backgroundColor: "#b38acb",
+4b7bbc19 (Valli Paladugu 2024-11-05 20:00:04 -0500 137)     padding: 10,
+4b7bbc19 (Valli Paladugu 2024-11-05 20:00:04 -0500 138)     marginTop: "auto",
+4b7bbc19 (Valli Paladugu 2024-11-05 20:00:04 -0500 139)     marginBottom: 20,
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 140)     width: "95%",
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 141)     alignItems: "center",
+4b7bbc19 (Valli Paladugu 2024-11-05 20:00:04 -0500 142)     borderRadius: 10,
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 143)     justifyContent: "center",
+4b7bbc19 (Valli Paladugu 2024-11-05 20:00:04 -0500 144)   },
+4b7bbc19 (Valli Paladugu 2024-11-05 20:00:04 -0500 145)   buttonText: {
+4b7bbc19 (Valli Paladugu 2024-11-05 20:00:04 -0500 146)     color: "white",
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 147)     fontSize: 16,
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 148)     fontWeight: "600",
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 149)   },
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 150)   buttonRow: {
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 151)     flexDirection: "row",
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 152)     justifyContent: "space-between",
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 153)     alignItems: "center",
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 154)     marginTop: 10,
+
+src/components/Habits/index.tsx
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 33)         <Text style={styles.title}>My Habits</Text>
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 57)     backgroundColor: "#F5F5F5",
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 63)     fontSize: 30,
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 64)     paddingBottom: 40,
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 65)     marginTop: -280,
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 66)     color: "#4a3f4c",
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 69)     fontSize: 20,
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 70)     marginTop: 240,
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 71)     color: "#4a3f4c",
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 72)     alignItems: "center",
+
+src/components/History/index.tsx
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500  16) import { default as IonIcons } from "react-native-vector-icons/Ionicons";
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500  20) import { sendDataEmail } from "@/server/emails";
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500  42)   const [requestDataLoading, setRequestDataLoading] = useState(false);
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 182)         <Text style={styles.title}>History</Text>
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 187)   const requestDataEmail = async () => {
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 188)     setRequestDataLoading(true);
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 189) 
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 190)     await sendDataEmail(user);
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 191) 
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 192)     setRequestDataLoading(false);
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 193)   };
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 198)         <Text style={styles.header1}>History</Text>
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 199)         <Text style={styles.noHabitText}>Add a habit to get started</Text>
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 206)       <Text style={styles.header2}>History</Text>
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 233)           <IonIcons
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 234)             name="checkmark-circle-outline"
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 237)             style={{ marginHorizontal: 3 }}
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 246)       <TouchableOpacity
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 247)         style={styles.requestDateButton}
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 248)         onPress={requestDataEmail}
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 249)       >
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 250)         {requestDataLoading ? (
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 251)           <ActivityIndicator size="small" color="#FFFFFF" />
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 252)         ) : (
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 253)           <FAIcon
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 254)             name="envelope-o"
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 255)             size={25}
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 256)             color="white"
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 257)             style={{ marginHorizontal: 6 }}
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 258)           ></FAIcon>
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 259)         )}
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 260)         <Text style={styles.buttonText}>Request Your History</Text>
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 261)       </TouchableOpacity>
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 279)   header1: {
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 282)     marginTop: -280,
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 283)     color: "#4a3f4c",
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 284)   },
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 285)   noHabitText: {
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 286)     fontSize: 18,
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 287)     color: "#4a3f4c",
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 288)     marginTop: 240,
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 289)   },
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 290)   header2: {
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 291)     fontSize: 30,
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 292)     paddingBottom: 40,
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 293)     marginTop: "25%",
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 294)     marginBottom: 20,
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 323)   requestDateButton: {
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 324)     backgroundColor: "#b38acb",
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 325)     width: "95%",
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 326)     paddingVertical: 10,
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 327)     borderRadius: 8,
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 328)     alignItems: "center",
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 329)     marginTop: 10,
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 330)     flexDirection: "row",
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 331)     justifyContent: "center",
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 332)     marginBottom: "20%",
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 333)   },
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 344)     fontSize: 30,
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 345)     paddingBottom: 40,
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 346)     marginTop: -280,
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 347)     color: "#4a3f4c",
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 350)     fontSize: 20,
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 351)     marginTop: 240,
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 352)     color: "#4a3f4c",
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 353)     alignItems: "center",
+
+src/components/Home/index.tsx
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 176)     fontSize: 30,
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 178)     marginTop: 7,
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 189)     fontSize: 30,
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 191)     marginTop: 7,
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 202)     fontSize: 30,
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 204)     marginTop: 7,
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 207)     marginTop: 15,
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 208)     marginBottom: -10,
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 211)     fontSize: 18,
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 215)     textAlign: "center",
+
+src/components/Profile/AuthorizedProfile.tsx
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 122)     justifyContent: "flex-start",
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 124)     paddingTop: 20,
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 128)     top: 56,
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 129)     right: 22,
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 133)     paddingBottom: 40,
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 134)     marginTop: "15%",
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 146)     marginBottom: "12%",
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 208)     marginTop: 20,
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 219)     marginBottom: "33%",
+
+src/components/Profile/ChangePassword.tsx
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 111)                 placeholder="New Password"
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 133)                 placeholder="Confirm New Password"
+
+src/components/Profile/EditProfile.tsx
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 262)     backgroundColor: "#F5F5F5",
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 272)     marginTop: "-3%",
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 289)     backgroundColor: "white",
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 336)     backgroundColor: "white",
+
+src/components/Profile/Login.tsx
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 119)         <Text style={styles.orText}>or</Text>
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 135)     backgroundColor: "#FFFFFF",
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 173)   orText: {
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 174)     fontSize: 16,
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 175)     fontWeight: "600",
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 176)     textAlign: "center",
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 177)     color: "#4a3f4c",
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 178)   },
+
+src/components/Profile/ResetLocation.tsx
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 125)         <Text style={styles.coordsText1}>Latitude: {location?.latitude}</Text>
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 126)         <Text style={styles.coordsText2}>Longitude: {location?.longitude}</Text>
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 167)     paddingTop: "7%",
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 184)   coordsText1: {
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 185)     color: "#4a3f4c",
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 186)     marginTop: 10,
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 187)   },
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 188)   coordsText2: {
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 206)     marginBottom: "4%",
+
+src/components/Profile/SignUp.tsx
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 169)     backgroundColor: "#FFFFFF",
+
+App.tsx
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 23)     case "History":
+6291c594 (Valli Paladugu 2024-11-09 16:07:04 -0500 24)       return focused ? "calendar" : "calendar-outline";
