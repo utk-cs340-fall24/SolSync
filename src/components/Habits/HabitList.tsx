@@ -2,7 +2,6 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import React from "react";
 import {
   FlatList,
-  Pressable,
   SafeAreaView,
   StyleSheet,
   Text,
@@ -10,6 +9,7 @@ import {
   View,
 } from "react-native";
 import { default as FeatherIcon } from "react-native-vector-icons/Feather";
+import { default as IonIcons } from "react-native-vector-icons/Ionicons";
 
 import { useHabit } from "@/hooks/useHabit";
 
@@ -28,33 +28,58 @@ export default function HabitList({ navigation }: HabitListProps) {
       <FlatList
         data={habits}
         contentContainerStyle={styles.habitsList}
-        renderItem={({ item }) => (
-          <View style={styles.habitCard}>
-            <View>
-              <Text style={styles.habitTitle}>{item.name}</Text>
-              <Text style={styles.habitTime}>
-                Habit Time: {item.notificationPeriod}
-              </Text>
+        renderItem={({ item }) => {
+          let habitTimeMessage = "";
+
+          if (item.hourOffset !== 0) {
+            habitTimeMessage += `${item.hourOffset} ${item.hourOffset === 1 ? "hour" : "hours"}`;
+          }
+
+          if (item.minuteOffset !== 0) {
+            if (habitTimeMessage !== "") habitTimeMessage += " ";
+            habitTimeMessage += `${item.minuteOffset} ${item.minuteOffset === 1 ? "minute" : "minutes"}`;
+          }
+
+          habitTimeMessage += ` ${item.offsetDirection} ${item.notificationPeriod}`;
+
+          if (item.minuteOffset === 0 && item.hourOffset === 0) {
+            habitTimeMessage = `At ${item.notificationPeriod}`;
+          }
+
+          return (
+            <View style={styles.habitCard}>
+              <View>
+                <Text style={styles.habitTitle}>{item.name}</Text>
+                <Text style={styles.habitTime}>{habitTimeMessage}</Text>
+              </View>
+              <TouchableOpacity style={styles.editIcon}>
+                <FeatherIcon
+                  name="edit-3"
+                  size={25}
+                  color="#5A5A5A"
+                  onPress={() =>
+                    navigation.navigate("EditHabitForm", { habit: item })
+                  }
+                ></FeatherIcon>
+              </TouchableOpacity>
             </View>
-            <TouchableOpacity style={styles.editIcon}>
-              <FeatherIcon
-                name="edit-3"
-                size={25}
-                color="#5A5A5A"
-                onPress={() =>
-                  navigation.navigate("EditHabitForm", { habit: item })
-                }
-              ></FeatherIcon>
-            </TouchableOpacity>
-          </View>
-        )}
+          );
+        }}
       />
-      <Pressable
-        style={styles.addHabitButton}
-        onPress={() => navigation.navigate("AddHabitForm")}
-      >
-        <Text style={styles.buttonText}>Add Habit</Text>
-      </Pressable>
+      <View style={styles.buttonRow}>
+        <TouchableOpacity
+          style={styles.addHabitButton}
+          onPress={() => navigation.navigate("AddHabitForm")}
+        >
+          <IonIcons
+            name="add-circle-outline"
+            size={25}
+            color="white"
+            style={{ marginHorizontal: 6 }}
+          />
+          <Text style={styles.buttonText}>Add Habit</Text>
+        </TouchableOpacity>
+      </View>
     </SafeAreaView>
   );
 }
@@ -71,13 +96,11 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 30,
-    fontWeight: "bold",
     color: "#4a3f4c",
     marginBottom: 30,
-    marginTop: 20,
+    marginTop: "5%",
   },
   habitsList: {
-    paddingHorizontal: 16,
     paddingBottom: 80,
     alignItems: "center",
   },
@@ -85,39 +108,49 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    padding: 16,
+    paddingHorizontal: 20,
+    paddingVertical: 16,
     borderColor: "#ccc",
     backgroundColor: "#FFFFFF",
-    borderWidth: 1,
     borderRadius: 8,
-    width: "95%",
+    width: "97%",
     height: 80,
     marginBottom: 20,
   },
   habitTitle: {
-    fontSize: 23,
+    fontSize: 22,
     fontWeight: "600",
-    color: "#000",
+    color: "#4a3f4c",
     marginBottom: 5,
   },
   habitTime: {
-    fontSize: 16,
+    fontSize: 14,
     color: "#333",
   },
   editIcon: {
     padding: 8,
   },
   addHabitButton: {
+    display: "flex",
+    flexDirection: "row",
     backgroundColor: "#b38acb",
     padding: 10,
     marginTop: "auto",
     marginBottom: 20,
-    width: "80%",
-    alignSelf: "center",
+    width: "95%",
+    alignItems: "center",
     borderRadius: 10,
+    justifyContent: "center",
   },
   buttonText: {
     color: "white",
-    textAlign: "center",
+    fontSize: 16,
+    fontWeight: "600",
+  },
+  buttonRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginTop: 10,
   },
 });

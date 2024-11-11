@@ -1,9 +1,10 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { FirebaseError } from "firebase/app";
-import { signInWithEmailAndPassword } from "firebase/auth";
+import { updatePassword } from "firebase/auth";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import {
+  ActivityIndicator,
   Keyboard,
   StyleSheet,
   Text,
@@ -14,38 +15,76 @@ import {
 } from "react-native";
 import { z } from "zod";
 
+import useUser from "@/hooks/useUser";
 import getFirebaseAuthErrorMessage from "@/utils/getFirebaseAuthErrorMessage";
 
 import { firebaseAuth } from "../../../firebaseConfig";
 import { ProfileStackParamList } from ".";
 
-type LogInPageProps = NativeStackScreenProps<ProfileStackParamList, "LogIn">;
+type ChangePasswordPageProps = NativeStackScreenProps<
+  ProfileStackParamList,
+  "ChangePassword"
+>;
 
-const loginFormSchema = z.object({
-  email: z.string().email({ message: "Invalid email" }),
-  password: z
-    .string()
-    .min(6, { message: "Password must be at least 6 characters" }),
-});
+const changePasswordFormSchema = z
+  .object({
+    newPassword: z
+      .string()
+      .min(6, { message: "Password must be at least 6 characters" }),
+    confirmPassword: z
+      .string()
+      .min(6, { message: "Password must be at least 6 characters" }),
+  })
+  .superRefine((data, ctx) => {
+    if (data.newPassword !== data.confirmPassword) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "Passwords do not match",
+        path: ["confirmPassword"],
+      });
+    }
+  });
 
-type LoginFormValues = z.infer<typeof loginFormSchema>;
+type ChangePasswordFormValues = z.infer<typeof changePasswordFormSchema>;
 
-export default function LogIn({ navigation }: LogInPageProps) {
+export default function ChangePassword({
+  navigation,
+}: ChangePasswordPageProps) {
+  const { user, userIsLoading } = useUser();
   const {
     control,
     handleSubmit,
     formState: { errors },
     setError,
-  } = useForm<LoginFormValues>({
-    resolver: zodResolver(loginFormSchema),
+  } = useForm<ChangePasswordFormValues>({
+    resolver: zodResolver(changePasswordFormSchema),
   });
 
-  const onSubmit: SubmitHandler<LoginFormValues> = async (data) => {
-    const { email, password } = data;
+  if (userIsLoading) {
+    return (
+      <View style={styles.container}>
+        <ActivityIndicator size="small" color="#000000" />
+      </View>
+    );
+  }
+
+  if (!user) {
+    return <Text>Please log in to view your profile</Text>;
+  }
+
+  const onSubmit: SubmitHandler<ChangePasswordFormValues> = async (data) => {
+    const { newPassword } = data;
 
     try {
-      await signInWithEmailAndPassword(firebaseAuth, email, password);
-    } catch (error) {
+      const user = firebaseAuth.currentUser;
+
+      if (!user) {
+        return;
+      }
+
+      await updatePassword(user, newPassword);
+      navigation.navigate("AuthorizedProfile");
+    } catch (error: unknown) {
       if (error instanceof FirebaseError) {
         setError("root", {
           message: getFirebaseAuthErrorMessage(error.code),
@@ -53,7 +92,6 @@ export default function LogIn({ navigation }: LogInPageProps) {
       }
     }
   };
-
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
       <View style={styles.container}>
@@ -64,34 +102,14 @@ export default function LogIn({ navigation }: LogInPageProps) {
         <View style={styles.inputContainer}>
           <Controller
             control={control}
-            name="email"
+            name="newPassword"
             render={({ field: { onChange, onBlur, value } }) => (
               <TextInput
                 autoCorrect={false}
                 autoCapitalize="none"
                 style={styles.input}
-                placeholder="Email"
-                keyboardType="email-address"
-                onChangeText={onChange}
-                onBlur={onBlur}
-                value={value}
-              />
-            )}
-          />
-
-          {errors.email && (
-            <Text style={{ color: "red" }}>{errors.email.message}</Text>
-          )}
-
-          <Controller
-            control={control}
-            name="password"
-            render={({ field: { onChange, onBlur, value } }) => (
-              <TextInput
-                autoCorrect={false}
-                autoCapitalize="none"
-                style={styles.input}
-                placeholder="Password"
+                placeholder="New Password"
+                placeholderTextColor="gray"
                 secureTextEntry
                 onChangeText={onChange}
                 onBlur={onBlur}
@@ -100,30 +118,45 @@ export default function LogIn({ navigation }: LogInPageProps) {
             )}
           />
 
-          {errors.password && (
-            <Text style={{ color: "red" }}>{errors.password.message}</Text>
+          {errors.newPassword && (
+            <Text style={{ color: "red" }}>{errors.newPassword.message}</Text>
+          )}
+
+          <Controller
+            control={control}
+            name="confirmPassword"
+            render={({ field: { onChange, onBlur, value } }) => (
+              <TextInput
+                autoCorrect={false}
+                autoCapitalize="none"
+                style={styles.input}
+                placeholder="Confirm New Password"
+                placeholderTextColor="gray"
+                secureTextEntry
+                onChangeText={onChange}
+                onBlur={onBlur}
+                value={value}
+              />
+            )}
+          />
+
+          {errors.confirmPassword && (
+            <Text style={{ color: "red" }}>
+              {errors.confirmPassword.message}
+            </Text>
           )}
 
           <TouchableOpacity
             style={styles.loginButton}
             onPress={handleSubmit(onSubmit)}
           >
-            <Text style={styles.buttonText}>Log In</Text>
+            <Text style={styles.buttonText}>Change password</Text>
           </TouchableOpacity>
 
           {errors.root && (
             <Text style={{ color: "red" }}>{errors.root.message}</Text>
           )}
         </View>
-
-        <Text style={styles.orText}>or</Text>
-
-        <TouchableOpacity
-          style={styles.createAccountButton}
-          onPress={() => navigation.navigate("SignUp")}
-        >
-          <Text style={styles.buttonText}>Create an Account</Text>
-        </TouchableOpacity>
       </View>
     </TouchableWithoutFeedback>
   );
@@ -132,7 +165,7 @@ export default function LogIn({ navigation }: LogInPageProps) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#FFFFFF",
+    backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "center",
     padding: 16,
@@ -164,17 +197,12 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     paddingHorizontal: 10,
     marginBottom: 12,
+    color: "black",
   },
   buttonText: {
     color: "#fff",
     fontSize: 16,
     fontWeight: "600",
-  },
-  orText: {
-    fontSize: 16,
-    fontWeight: "600",
-    textAlign: "center",
-    color: "#4a3f4c",
   },
   loginButton: {
     backgroundColor: "#b38acb", // Light purple color
@@ -182,13 +210,5 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     borderRadius: 8,
     alignItems: "center",
-  },
-  createAccountButton: {
-    backgroundColor: "#f4a58a", // Light orange color
-    width: "80%",
-    paddingVertical: 10,
-    borderRadius: 8,
-    alignItems: "center",
-    marginTop: 12,
   },
 });

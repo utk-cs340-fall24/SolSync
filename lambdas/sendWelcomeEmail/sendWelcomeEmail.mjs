@@ -85,10 +85,10 @@ export const handler = async (event) => {
 
   try {
     // Fetch the sendEmail API with the required body
-    const response = await fetch(process.env.SENDEMAIL_API_URL, {
+    const response = await fetch(process.env.EXPO_PUBLIC_SENDEMAIL_API_URL, {
       method: "POST",
       headers: {
-        "x-api-key": process.env.SENDEMAIL_API_KEY,
+        "x-api-key": process.env.EXPO_PUBLIC_SENDEMAIL_API_KEY,
       },
       body: JSON.stringify({
         to: emailTo,

@@ -49,12 +49,12 @@ export const handler = async (event) => {
   // Use API key to begin creating email
   const mg = mailgun.client({
     username: "api",
-    key: process.env.MAILGUN_API_KEY,
+    key: process.env.EXPO_PUBLIC_MAILGUN_API_KEY,
   });
 
   try {
     const msg = await mg.messages.create(
-      process.env.MAILGUN_URL,
+      process.env.EXPO_PUBLIC_EXPO_PUBLIC_MAILGUN_URL,
       {
         from: `SolSync <solsync340@gmail.com>`,
         to: [emailTo],
