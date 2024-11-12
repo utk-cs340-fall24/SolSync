@@ -1,0 +1,370 @@
+ChangePassword.tsx (rudra patel on 11/08/2024 at 15:31): import { zodResolver } from "@hookform/resolvers/zod";
+ChangePassword.tsx (rudra patel on 11/08/2024 at 15:31): import { NativeStackScreenProps } from "@react-navigation/native-stack";
+ChangePassword.tsx (rudra patel on 11/08/2024 at 15:31): import { FirebaseError } from "firebase/app";
+ChangePassword.tsx (rudra patel on 11/08/2024 at 15:31): import { updatePassword } from "firebase/auth";
+ChangePassword.tsx (rudra patel on 11/08/2024 at 15:31): import { Controller, SubmitHandler, useForm } from "react-hook-form";
+ChangePassword.tsx (rudra patel on 11/08/2024 at 15:31): import {
+ChangePassword.tsx (rudra patel on 11/08/2024 at 15:31):   ActivityIndicator,
+ChangePassword.tsx (rudra patel on 11/08/2024 at 15:31):   Keyboard,
+ChangePassword.tsx (rudra patel on 11/08/2024 at 15:31):   StyleSheet,
+ChangePassword.tsx (rudra patel on 11/08/2024 at 15:31):   Text,
+ChangePassword.tsx (rudra patel on 11/08/2024 at 15:31):   TextInput,
+ChangePassword.tsx (rudra patel on 11/08/2024 at 15:31):   TouchableOpacity,
+ChangePassword.tsx (rudra patel on 11/08/2024 at 15:31):   TouchableWithoutFeedback,
+ChangePassword.tsx (rudra patel on 11/08/2024 at 15:31):   View,
+ChangePassword.tsx (rudra patel on 11/08/2024 at 15:31): } from "react-native";
+ChangePassword.tsx (rudra patel on 11/08/2024 at 15:31): import { z } from "zod";
+ChangePassword.tsx (rudra patel on 11/08/2024 at 15:31): import useUser from "@/hooks/useUser";
+ChangePassword.tsx (rudra patel on 11/08/2024 at 15:31): import getFirebaseAuthErrorMessage from "@/utils/getFirebaseAuthErrorMessage";
+ChangePassword.tsx (rudra patel on 11/08/2024 at 15:31): import { firebaseAuth } from "../../../firebaseConfig";
+ChangePassword.tsx (rudra patel on 11/08/2024 at 15:31): import { ProfileStackParamList } from ".";
+ChangePassword.tsx (rudra patel on 11/08/2024 at 15:31): type ChangePasswordPageProps = NativeStackScreenProps<
+ChangePassword.tsx (rudra patel on 11/08/2024 at 15:31):   ProfileStackParamList,
+ChangePassword.tsx (rudra patel on 11/08/2024 at 15:31):   "ChangePassword"
+ChangePassword.tsx (rudra patel on 11/08/2024 at 15:31): >;
+ChangePassword.tsx (rudra patel on 11/08/2024 at 15:31): const changePasswordFormSchema = z
+ChangePassword.tsx (rudra patel on 11/08/2024 at 15:31):   .object({
+ChangePassword.tsx (rudra patel on 11/08/2024 at 15:31):     newPassword: z
+ChangePassword.tsx (rudra patel on 11/08/2024 at 15:31):       .string()
+ChangePassword.tsx (rudra patel on 11/08/2024 at 15:31):       .min(6, { message: "Password must be at least 6 characters" }),
+ChangePassword.tsx (rudra patel on 11/08/2024 at 15:31):     confirmPassword: z
+ChangePassword.tsx (rudra patel on 11/08/2024 at 15:31):       .string()
+ChangePassword.tsx (rudra patel on 11/08/2024 at 15:31):       .min(6, { message: "Password must be at least 6 characters" }),
+ChangePassword.tsx (rudra patel on 11/08/2024 at 15:31):   })
+ChangePassword.tsx (rudra patel on 11/08/2024 at 15:31):   .superRefine((data, ctx) => {
+ChangePassword.tsx (rudra patel on 11/08/2024 at 15:31):     if (data.newPassword !== data.confirmPassword) {
+ChangePassword.tsx (rudra patel on 11/08/2024 at 15:31):       ctx.addIssue({
+ChangePassword.tsx (rudra patel on 11/08/2024 at 15:31):         code: z.ZodIssueCode.custom,
+ChangePassword.tsx (rudra patel on 11/08/2024 at 15:31):         message: "Passwords do not match",
+ChangePassword.tsx (rudra patel on 11/08/2024 at 15:31):         path: ["confirmPassword"],
+ChangePassword.tsx (rudra patel on 11/08/2024 at 15:31):       });
+ChangePassword.tsx (rudra patel on 11/08/2024 at 15:31):     }
+ChangePassword.tsx (rudra patel on 11/08/2024 at 15:31):   });
+ChangePassword.tsx (rudra patel on 11/08/2024 at 15:31): type ChangePasswordFormValues = z.infer<typeof changePasswordFormSchema>;
+ChangePassword.tsx (rudra patel on 11/08/2024 at 15:31): export default function ChangePassword({
+ChangePassword.tsx (rudra patel on 11/08/2024 at 15:31):   navigation,
+ChangePassword.tsx (rudra patel on 11/08/2024 at 15:31): }: ChangePasswordPageProps) {
+ChangePassword.tsx (rudra patel on 11/08/2024 at 15:31):   const { user, userIsLoading } = useUser();
+ChangePassword.tsx (rudra patel on 11/08/2024 at 15:31):   const {
+ChangePassword.tsx (rudra patel on 11/08/2024 at 15:31):     control,
+ChangePassword.tsx (rudra patel on 11/08/2024 at 15:31):     handleSubmit,
+ChangePassword.tsx (rudra patel on 11/08/2024 at 15:31):     formState: { errors },
+ChangePassword.tsx (rudra patel on 11/08/2024 at 15:31):     setError,
+ChangePassword.tsx (rudra patel on 11/08/2024 at 15:31):   } = useForm<ChangePasswordFormValues>({
+ChangePassword.tsx (rudra patel on 11/08/2024 at 15:31):     resolver: zodResolver(changePasswordFormSchema),
+ChangePassword.tsx (rudra patel on 11/08/2024 at 15:31):   });
+ChangePassword.tsx (rudra patel on 11/08/2024 at 15:31):   if (userIsLoading) {
+ChangePassword.tsx (rudra patel on 11/08/2024 at 15:31):     return (
+ChangePassword.tsx (rudra patel on 11/08/2024 at 15:31):       <View style={styles.container}>
+ChangePassword.tsx (rudra patel on 11/08/2024 at 15:31):         <ActivityIndicator size="small" color="#000000" />
+ChangePassword.tsx (rudra patel on 11/08/2024 at 15:31):       </View>
+ChangePassword.tsx (rudra patel on 11/08/2024 at 15:31):     );
+ChangePassword.tsx (rudra patel on 11/08/2024 at 15:31):   }
+ChangePassword.tsx (rudra patel on 11/08/2024 at 15:31):   if (!user) {
+ChangePassword.tsx (rudra patel on 11/08/2024 at 15:31):     return <Text>Please log in to view your profile</Text>;
+ChangePassword.tsx (rudra patel on 11/08/2024 at 15:31):   }
+ChangePassword.tsx (rudra patel on 11/08/2024 at 15:31):   const onSubmit: SubmitHandler<ChangePasswordFormValues> = async (data) => {
+ChangePassword.tsx (rudra patel on 11/08/2024 at 15:31):     const { newPassword } = data;
+ChangePassword.tsx (rudra patel on 11/08/2024 at 15:31):     try {
+ChangePassword.tsx (rudra patel on 11/08/2024 at 15:31):       const user = firebaseAuth.currentUser;
+ChangePassword.tsx (rudra patel on 11/08/2024 at 15:31):       if (!user) {
+ChangePassword.tsx (rudra patel on 11/08/2024 at 15:31):         return;
+ChangePassword.tsx (rudra patel on 11/08/2024 at 15:31):       }
+ChangePassword.tsx (rudra patel on 11/08/2024 at 15:31):       await updatePassword(user, newPassword);
+ChangePassword.tsx (rudra patel on 11/08/2024 at 15:31):       navigation.navigate("AuthorizedProfile");
+ChangePassword.tsx (rudra patel on 11/08/2024 at 15:31):     } catch (error: unknown) {
+ChangePassword.tsx (rudra patel on 11/08/2024 at 15:31):       if (error instanceof FirebaseError) {
+ChangePassword.tsx (rudra patel on 11/08/2024 at 15:31):         setError("root", {
+ChangePassword.tsx (rudra patel on 11/08/2024 at 15:31):           message: getFirebaseAuthErrorMessage(error.code),
+ChangePassword.tsx (rudra patel on 11/08/2024 at 15:31):         });
+ChangePassword.tsx (rudra patel on 11/08/2024 at 15:31):       }
+ChangePassword.tsx (rudra patel on 11/08/2024 at 15:31):     }
+ChangePassword.tsx (rudra patel on 11/08/2024 at 15:31):   };
+ChangePassword.tsx (rudra patel on 11/08/2024 at 15:31):   return (
+ChangePassword.tsx (rudra patel on 11/08/2024 at 15:31):     <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+ChangePassword.tsx (rudra patel on 11/08/2024 at 15:31):       <View style={styles.container}>
+ChangePassword.tsx (rudra patel on 11/08/2024 at 15:31):         <View style={styles.titleContainer}>
+ChangePassword.tsx (rudra patel on 11/08/2024 at 15:31):           <Text style={styles.title}>SolSync</Text>
+ChangePassword.tsx (rudra patel on 11/08/2024 at 15:31):         </View>
+ChangePassword.tsx (rudra patel on 11/08/2024 at 15:31):         <View style={styles.inputContainer}>
+ChangePassword.tsx (rudra patel on 11/08/2024 at 15:31):           <Controller
+ChangePassword.tsx (rudra patel on 11/08/2024 at 15:31):             control={control}
+ChangePassword.tsx (rudra patel on 11/08/2024 at 15:31):             name="newPassword"
+ChangePassword.tsx (rudra patel on 11/08/2024 at 15:31):             render={({ field: { onChange, onBlur, value } }) => (
+ChangePassword.tsx (rudra patel on 11/08/2024 at 15:31):               <TextInput
+ChangePassword.tsx (rudra patel on 11/08/2024 at 15:31):                 autoCorrect={false}
+ChangePassword.tsx (rudra patel on 11/08/2024 at 15:31):                 autoCapitalize="none"
+ChangePassword.tsx (rudra patel on 11/08/2024 at 15:31):                 style={styles.input}
+ChangePassword.tsx (rudra patel on 11/08/2024 at 15:31):                 placeholderTextColor="gray"
+ChangePassword.tsx (rudra patel on 11/08/2024 at 15:31):                 secureTextEntry
+ChangePassword.tsx (rudra patel on 11/08/2024 at 15:31):                 onChangeText={onChange}
+ChangePassword.tsx (rudra patel on 11/08/2024 at 15:31):                 onBlur={onBlur}
+ChangePassword.tsx (rudra patel on 11/08/2024 at 15:31):                 value={value}
+ChangePassword.tsx (rudra patel on 11/08/2024 at 15:31):               />
+ChangePassword.tsx (rudra patel on 11/08/2024 at 15:31):             )}
+ChangePassword.tsx (rudra patel on 11/08/2024 at 15:31):           />
+ChangePassword.tsx (rudra patel on 11/08/2024 at 15:31):           {errors.newPassword && (
+ChangePassword.tsx (rudra patel on 11/08/2024 at 15:31):             <Text style={{ color: "red" }}>{errors.newPassword.message}</Text>
+ChangePassword.tsx (rudra patel on 11/08/2024 at 15:31):           )}
+ChangePassword.tsx (rudra patel on 11/08/2024 at 15:31):           <Controller
+ChangePassword.tsx (rudra patel on 11/08/2024 at 15:31):             control={control}
+ChangePassword.tsx (rudra patel on 11/08/2024 at 15:31):             name="confirmPassword"
+ChangePassword.tsx (rudra patel on 11/08/2024 at 15:31):             render={({ field: { onChange, onBlur, value } }) => (
+ChangePassword.tsx (rudra patel on 11/08/2024 at 15:31):               <TextInput
+ChangePassword.tsx (rudra patel on 11/08/2024 at 15:31):                 autoCorrect={false}
+ChangePassword.tsx (rudra patel on 11/08/2024 at 15:31):                 autoCapitalize="none"
+ChangePassword.tsx (rudra patel on 11/08/2024 at 15:31):                 style={styles.input}
+ChangePassword.tsx (rudra patel on 11/08/2024 at 15:31):                 placeholderTextColor="gray"
+ChangePassword.tsx (rudra patel on 11/08/2024 at 15:31):                 secureTextEntry
+ChangePassword.tsx (rudra patel on 11/08/2024 at 15:31):                 onChangeText={onChange}
+ChangePassword.tsx (rudra patel on 11/08/2024 at 15:31):                 onBlur={onBlur}
+ChangePassword.tsx (rudra patel on 11/08/2024 at 15:31):                 value={value}
+ChangePassword.tsx (rudra patel on 11/08/2024 at 15:31):               />
+ChangePassword.tsx (rudra patel on 11/08/2024 at 15:31):             )}
+ChangePassword.tsx (rudra patel on 11/08/2024 at 15:31):           />
+ChangePassword.tsx (rudra patel on 11/08/2024 at 15:31):           {errors.confirmPassword && (
+ChangePassword.tsx (rudra patel on 11/08/2024 at 15:31):             <Text style={{ color: "red" }}>
+ChangePassword.tsx (rudra patel on 11/08/2024 at 15:31):               {errors.confirmPassword.message}
+ChangePassword.tsx (rudra patel on 11/08/2024 at 15:31):             </Text>
+ChangePassword.tsx (rudra patel on 11/08/2024 at 15:31):           )}
+ChangePassword.tsx (rudra patel on 11/08/2024 at 15:31):           <TouchableOpacity
+ChangePassword.tsx (rudra patel on 11/08/2024 at 15:31):             style={styles.loginButton}
+ChangePassword.tsx (rudra patel on 11/08/2024 at 15:31):             onPress={handleSubmit(onSubmit)}
+ChangePassword.tsx (rudra patel on 11/08/2024 at 15:31):           >
+ChangePassword.tsx (rudra patel on 11/08/2024 at 15:31):             <Text style={styles.buttonText}>Change password</Text>
+ChangePassword.tsx (rudra patel on 11/08/2024 at 15:31):           </TouchableOpacity>
+ChangePassword.tsx (rudra patel on 11/08/2024 at 15:31):           {errors.root && (
+ChangePassword.tsx (rudra patel on 11/08/2024 at 15:31):             <Text style={{ color: "red" }}>{errors.root.message}</Text>
+ChangePassword.tsx (rudra patel on 11/08/2024 at 15:31):           )}
+ChangePassword.tsx (rudra patel on 11/08/2024 at 15:31):         </View>
+ChangePassword.tsx (rudra patel on 11/08/2024 at 15:31):       </View>
+ChangePassword.tsx (rudra patel on 11/08/2024 at 15:31):     </TouchableWithoutFeedback>
+ChangePassword.tsx (rudra patel on 11/08/2024 at 15:31):   );
+ChangePassword.tsx (rudra patel on 11/08/2024 at 15:31): }
+ChangePassword.tsx (rudra patel on 11/08/2024 at 15:31): const styles = StyleSheet.create({
+ChangePassword.tsx (rudra patel on 11/08/2024 at 15:31):   container: {
+ChangePassword.tsx (rudra patel on 11/08/2024 at 15:31):     flex: 1,
+ChangePassword.tsx (rudra patel on 11/08/2024 at 15:31):     backgroundColor: "#fff",
+ChangePassword.tsx (rudra patel on 11/08/2024 at 15:31):     alignItems: "center",
+ChangePassword.tsx (rudra patel on 11/08/2024 at 15:31):     justifyContent: "center",
+ChangePassword.tsx (rudra patel on 11/08/2024 at 15:31):     padding: 16,
+ChangePassword.tsx (rudra patel on 11/08/2024 at 15:31):   },
+ChangePassword.tsx (rudra patel on 11/08/2024 at 15:31):   titleContainer: {
+ChangePassword.tsx (rudra patel on 11/08/2024 at 15:31):     alignItems: "center",
+ChangePassword.tsx (rudra patel on 11/08/2024 at 15:31):   },
+ChangePassword.tsx (rudra patel on 11/08/2024 at 15:31):   title: {
+ChangePassword.tsx (rudra patel on 11/08/2024 at 15:31):     fontSize: 42,
+ChangePassword.tsx (rudra patel on 11/08/2024 at 15:31):     fontWeight: "bold",
+ChangePassword.tsx (rudra patel on 11/08/2024 at 15:31):     color: "#4a3f4c",
+ChangePassword.tsx (rudra patel on 11/08/2024 at 15:31):     marginBottom: 90,
+ChangePassword.tsx (rudra patel on 11/08/2024 at 15:31):     marginTop: -40,
+ChangePassword.tsx (rudra patel on 11/08/2024 at 15:31):   },
+ChangePassword.tsx (rudra patel on 11/08/2024 at 15:31):   inputContainer: {
+ChangePassword.tsx (rudra patel on 11/08/2024 at 15:31):     width: "95%",
+ChangePassword.tsx (rudra patel on 11/08/2024 at 15:31):     padding: 25,
+ChangePassword.tsx (rudra patel on 11/08/2024 at 15:31):     borderColor: "#ccc",
+ChangePassword.tsx (rudra patel on 11/08/2024 at 15:31):     borderWidth: 1,
+ChangePassword.tsx (rudra patel on 11/08/2024 at 15:31):     borderRadius: 8,
+ChangePassword.tsx (rudra patel on 11/08/2024 at 15:31):     marginBottom: 15,
+ChangePassword.tsx (rudra patel on 11/08/2024 at 15:31):     alignItems: "center",
+ChangePassword.tsx (rudra patel on 11/08/2024 at 15:31):   },
+ChangePassword.tsx (rudra patel on 11/08/2024 at 15:31):   input: {
+ChangePassword.tsx (rudra patel on 11/08/2024 at 15:31):     width: "100%",
+ChangePassword.tsx (rudra patel on 11/08/2024 at 15:31):     height: 50,
+ChangePassword.tsx (rudra patel on 11/08/2024 at 15:31):     borderColor: "#ccc",
+ChangePassword.tsx (rudra patel on 11/08/2024 at 15:31):     borderWidth: 1,
+ChangePassword.tsx (rudra patel on 11/08/2024 at 15:31):     borderRadius: 8,
+ChangePassword.tsx (rudra patel on 11/08/2024 at 15:31):     paddingHorizontal: 10,
+ChangePassword.tsx (rudra patel on 11/08/2024 at 15:31):     marginBottom: 12,
+ChangePassword.tsx (rudra patel on 11/08/2024 at 15:31):     color: "black",
+ChangePassword.tsx (rudra patel on 11/08/2024 at 15:31):   },
+ChangePassword.tsx (rudra patel on 11/08/2024 at 15:31):   buttonText: {
+ChangePassword.tsx (rudra patel on 11/08/2024 at 15:31):     color: "#fff",
+ChangePassword.tsx (rudra patel on 11/08/2024 at 15:31):     fontSize: 16,
+ChangePassword.tsx (rudra patel on 11/08/2024 at 15:31):     fontWeight: "600",
+ChangePassword.tsx (rudra patel on 11/08/2024 at 15:31):   },
+ChangePassword.tsx (rudra patel on 11/08/2024 at 15:31):   loginButton: {
+ChangePassword.tsx (rudra patel on 11/08/2024 at 15:31):     backgroundColor: "#b38acb", // Light purple color
+ChangePassword.tsx (rudra patel on 11/08/2024 at 15:31):     width: "100%",
+ChangePassword.tsx (rudra patel on 11/08/2024 at 15:31):     paddingVertical: 10,
+ChangePassword.tsx (rudra patel on 11/08/2024 at 15:31):     borderRadius: 8,
+ChangePassword.tsx (rudra patel on 11/08/2024 at 15:31):     alignItems: "center",
+ChangePassword.tsx (rudra patel on 11/08/2024 at 15:31):   },
+ChangePassword.tsx (rudra patel on 11/08/2024 at 15:31): });
+sunrise-sunset-time.ts (rudra patel on 11/04/2024 at 21:45): "location ";
+sunrise-sunset-time.ts (rudra patel on 11/04/2024 at 21:45): import { SolSyncUser } from "@/types";
+sunrise-sunset-time.ts (rudra patel on 11/04/2024 at 21:45): import { Location } from "@/types";
+sunrise-sunset-time.ts (rudra patel on 11/04/2024 at 21:45): import getLocationFromDevice from "@/utils/getLocationFromDevice";
+sunrise-sunset-time.ts (rudra patel on 11/04/2024 at 21:45): type SunriseSunsetResponse = {
+sunrise-sunset-time.ts (rudra patel on 11/04/2024 at 21:45):   isLocationPermissionGranted: boolean;
+sunrise-sunset-time.ts (rudra patel on 11/04/2024 at 21:45):   sunrise: Date | null;
+sunrise-sunset-time.ts (rudra patel on 11/04/2024 at 21:45):   sunset: Date | null;
+sunrise-sunset-time.ts (rudra patel on 11/04/2024 at 21:45):   nextSunrise: Date | null;
+sunrise-sunset-time.ts (rudra patel on 11/04/2024 at 21:45): };
+sunrise-sunset-time.ts (rudra patel on 11/04/2024 at 21:45): export async function getSunriseSunsetTime(
+sunrise-sunset-time.ts (rudra patel on 11/04/2024 at 21:45):   user: SolSyncUser | null,
+sunrise-sunset-time.ts (rudra patel on 11/04/2024 at 21:45): ): Promise<SunriseSunsetResponse> {
+sunrise-sunset-time.ts (rudra patel on 11/04/2024 at 21:45):   let location: Location;
+sunrise-sunset-time.ts (rudra patel on 11/04/2024 at 21:45):   if (user) {
+sunrise-sunset-time.ts (rudra patel on 11/04/2024 at 21:45):     location = user.location;
+sunrise-sunset-time.ts (rudra patel on 11/04/2024 at 21:45):   } else {
+sunrise-sunset-time.ts (rudra patel on 11/04/2024 at 21:45):     location = await getLocationFromDevice();
+sunrise-sunset-time.ts (rudra patel on 11/04/2024 at 21:45):   }
+sunrise-sunset-time.ts (rudra patel on 11/04/2024 at 21:45):   if (!location.latitude || !location.longitude) {
+sunrise-sunset-time.ts (rudra patel on 11/04/2024 at 21:45):     return {
+sunrise-sunset-time.ts (rudra patel on 11/04/2024 at 21:45):       isLocationPermissionGranted: false,
+sunrise-sunset-time.ts (rudra patel on 11/04/2024 at 21:45):       sunrise: null,
+sunrise-sunset-time.ts (rudra patel on 11/04/2024 at 21:45):       sunset: null,
+sunrise-sunset-time.ts (rudra patel on 11/04/2024 at 21:45):       nextSunrise: null,
+sunrise-sunset-time.ts (rudra patel on 11/04/2024 at 21:45):     };
+sunrise-sunset-time.ts (rudra patel on 11/04/2024 at 21:45):   }
+sunrise-sunset-time.ts (rudra patel on 11/04/2024 at 21:45):   const apiUrl = process.env.EXPO_PUBLIC_GETSUNRISESUNSET_API_URL;
+sunrise-sunset-time.ts (rudra patel on 11/04/2024 at 21:45):   if (!apiUrl) {
+sunrise-sunset-time.ts (rudra patel on 11/04/2024 at 21:45):     throw new Error(
+sunrise-sunset-time.ts (rudra patel on 11/04/2024 at 21:45):       "GETSUNRISESUNSET_API_URL is not defined in the environment variables.",
+sunrise-sunset-time.ts (rudra patel on 11/04/2024 at 21:45):     );
+sunrise-sunset-time.ts (rudra patel on 11/04/2024 at 21:45):   }
+sunrise-sunset-time.ts (rudra patel on 11/04/2024 at 21:45):   const url = new URL(apiUrl);
+sunrise-sunset-time.ts (rudra patel on 11/04/2024 at 21:45):   url.searchParams.append("latitude", location.latitude.toString());
+sunrise-sunset-time.ts (rudra patel on 11/04/2024 at 21:45):   url.searchParams.append("longitude", location.longitude.toString());
+sunrise-sunset-time.ts (rudra patel on 11/04/2024 at 21:45):   try {
+sunrise-sunset-time.ts (rudra patel on 11/04/2024 at 21:45):     const response = await fetch(url, {
+sunrise-sunset-time.ts (rudra patel on 11/04/2024 at 21:45):       method: "GET",
+sunrise-sunset-time.ts (rudra patel on 11/04/2024 at 21:45):       headers: {
+sunrise-sunset-time.ts (rudra patel on 11/04/2024 at 21:45):         "x-api-key": process.env.EXPO_PUBLIC_GETSUNRISESUNSET_API_KEY as string,
+sunrise-sunset-time.ts (rudra patel on 11/04/2024 at 21:45):       },
+sunrise-sunset-time.ts (rudra patel on 11/04/2024 at 21:45):     });
+sunrise-sunset-time.ts (rudra patel on 11/04/2024 at 21:45):     const jsonData = await response.json();
+sunrise-sunset-time.ts (rudra patel on 11/04/2024 at 21:45):     if (jsonData.message) {
+sunrise-sunset-time.ts (rudra patel on 11/04/2024 at 21:45):       return {
+sunrise-sunset-time.ts (rudra patel on 11/04/2024 at 21:45):         isLocationPermissionGranted: true,
+sunrise-sunset-time.ts (rudra patel on 11/04/2024 at 21:45):         sunrise: null,
+sunrise-sunset-time.ts (rudra patel on 11/04/2024 at 21:45):         sunset: null,
+sunrise-sunset-time.ts (rudra patel on 11/04/2024 at 21:45):         nextSunrise: null,
+sunrise-sunset-time.ts (rudra patel on 11/04/2024 at 21:45):       };
+sunrise-sunset-time.ts (rudra patel on 11/04/2024 at 21:45):     } else {
+sunrise-sunset-time.ts (rudra patel on 11/04/2024 at 21:45):       return {
+sunrise-sunset-time.ts (rudra patel on 11/04/2024 at 21:45):         isLocationPermissionGranted: true,
+sunrise-sunset-time.ts (rudra patel on 11/04/2024 at 21:45):         sunrise: new Date(jsonData.todaySunrise),
+sunrise-sunset-time.ts (rudra patel on 11/04/2024 at 21:45):         sunset: new Date(jsonData.todaySunset),
+sunrise-sunset-time.ts (rudra patel on 11/04/2024 at 21:45):         nextSunrise: new Date(jsonData.tomorrowSunrise),
+sunrise-sunset-time.ts (rudra patel on 11/04/2024 at 21:45):       };
+sunrise-sunset-time.ts (rudra patel on 11/04/2024 at 21:45):     }
+sunrise-sunset-time.ts (rudra patel on 11/04/2024 at 21:45):   } catch (error) {
+sunrise-sunset-time.ts (rudra patel on 11/05/2024 at 17:05):     console.log(error);
+sunrise-sunset-time.ts (rudra patel on 11/04/2024 at 21:45):     return {
+sunrise-sunset-time.ts (rudra patel on 11/04/2024 at 21:45):       isLocationPermissionGranted: true,
+sunrise-sunset-time.ts (rudra patel on 11/04/2024 at 21:45):       sunrise: null,
+sunrise-sunset-time.ts (rudra patel on 11/04/2024 at 21:45):       sunset: null,
+sunrise-sunset-time.ts (rudra patel on 11/04/2024 at 21:45):       nextSunrise: null,
+sunrise-sunset-time.ts (rudra patel on 11/04/2024 at 21:45):     };
+sunrise-sunset-time.ts (rudra patel on 11/04/2024 at 21:45):   }
+sunrise-sunset-time.ts (rudra patel on 11/04/2024 at 21:45): }
+EditProfile.tsx (rudra patel on 11/08/2024 at 15:31): import React from "react";
+EditProfile.tsx (rudra patel on 11/08/2024 at 15:31):         <TouchableOpacity
+EditProfile.tsx (rudra patel on 11/08/2024 at 15:31):           style={styles.changePasswordButton}
+EditProfile.tsx (rudra patel on 11/08/2024 at 15:31):           onPress={() => navigation.navigate("ChangePassword")}
+EditProfile.tsx (rudra patel on 11/08/2024 at 15:31):         >
+EditProfile.tsx (rudra patel on 11/08/2024 at 15:31):           <Text style={styles.buttonText}>Change Your Password</Text>
+EditProfile.tsx (rudra patel on 11/08/2024 at 15:31):           <IonIcons
+EditProfile.tsx (rudra patel on 11/08/2024 at 15:31):             name="arrow-forward"
+EditProfile.tsx (rudra patel on 11/08/2024 at 15:31):             size={25}
+EditProfile.tsx (rudra patel on 11/08/2024 at 15:31):             color="white"
+EditProfile.tsx (rudra patel on 11/08/2024 at 15:31):             style={{ marginHorizontal: 6 }}
+EditProfile.tsx (rudra patel on 11/08/2024 at 15:31):           />
+EditProfile.tsx (rudra patel on 11/08/2024 at 15:31):         </TouchableOpacity>
+EditProfile.tsx (rudra patel on 11/08/2024 at 15:31):     paddingBottom: "5%",
+EditProfile.tsx (rudra patel on 11/08/2024 at 15:31):   changePasswordButton: {
+EditProfile.tsx (rudra patel on 11/08/2024 at 15:31):     marginTop: "4%",
+EditProfile.tsx (rudra patel on 11/08/2024 at 15:31):     marginBottom: "5%",
+EditProfile.tsx (rudra patel on 11/08/2024 at 15:31):   saveButton: {
+EditProfile.tsx (rudra patel on 11/08/2024 at 15:31):     backgroundColor: "#b38acb", // Light purple color
+EditProfile.tsx (rudra patel on 11/08/2024 at 15:31):     width: "90%",
+EditProfile.tsx (rudra patel on 11/08/2024 at 15:31):     paddingVertical: 10,
+EditProfile.tsx (rudra patel on 11/08/2024 at 15:31):     borderRadius: 8,
+EditProfile.tsx (rudra patel on 11/08/2024 at 15:31):     alignItems: "center",
+EditProfile.tsx (rudra patel on 11/08/2024 at 15:31):     marginTop: 12,
+EditProfile.tsx (rudra patel on 11/08/2024 at 15:31):     flexDirection: "row",
+EditProfile.tsx (rudra patel on 11/08/2024 at 15:31):     justifyContent: "center",
+EditProfile.tsx (rudra patel on 11/08/2024 at 15:31):   },
+getFirebaseAuthErrorMessage.ts (rudra patel on 11/08/2024 at 15:31):     case "auth/requires-recent-login":
+getFirebaseAuthErrorMessage.ts (rudra patel on 11/08/2024 at 15:31):       return "Please log in again before changing your password";
+index.tsx    (rudra patel on 11/04/2024 at 21:45): import useUser from "@/hooks/useUser";
+index.tsx    (rudra patel on 11/04/2024 at 21:45): import { getSunriseSunsetTime } from "@/server/sunrise-sunset-time";
+index.tsx    (rudra patel on 11/04/2024 at 21:45): const hour = new Date().getHours();
+index.tsx    (rudra patel on 11/04/2024 at 21:45): const isDay = hour >= 0 && hour < 12;
+index.tsx    (rudra patel on 11/04/2024 at 21:45): let gradientColors: string[];
+index.tsx    (rudra patel on 11/04/2024 at 21:45): let colorsLocations: number[];
+index.tsx    (rudra patel on 11/04/2024 at 21:45): let introMessage = "";
+index.tsx    (rudra patel on 11/04/2024 at 21:45): if (hour >= 3 && hour < 12) {
+index.tsx    (rudra patel on 11/04/2024 at 21:45):   introMessage = "Good Morning";
+index.tsx    (rudra patel on 11/04/2024 at 21:45): } else if (hour >= 12 && hour < 18) {
+index.tsx    (rudra patel on 11/04/2024 at 21:45):   introMessage = "Good Afternoon";
+index.tsx    (rudra patel on 11/04/2024 at 21:45):   introMessage = "Good Evening";
+index.tsx    (rudra patel on 11/04/2024 at 21:45):   const [sunrise, setSunrise] = useState<Date | null>(null);
+index.tsx    (rudra patel on 11/04/2024 at 21:45):   const [sunset, setSunset] = useState<Date | null>(null);
+index.tsx    (rudra patel on 11/04/2024 at 21:45):   const [nextSunrise, setNextSunrise] = useState<Date | null>(null);
+index.tsx    (rudra patel on 11/04/2024 at 21:45):   const [isLocationPermissionGranted, setIsLocationPermissionGranted] =
+index.tsx    (rudra patel on 11/04/2024 at 21:45):     useState<boolean>(true);
+index.tsx    (rudra patel on 11/04/2024 at 21:45):   const { user, userIsLoading } = useUser();
+index.tsx    (rudra patel on 11/04/2024 at 21:45):     const fetchSunriseSunsetTime = async () => {
+index.tsx    (rudra patel on 11/04/2024 at 21:45):       setLoading(true);
+index.tsx    (rudra patel on 11/04/2024 at 21:45):       if (userIsLoading) {
+index.tsx    (rudra patel on 11/04/2024 at 21:45):         return;
+index.tsx    (rudra patel on 11/04/2024 at 21:45):       const response = await getSunriseSunsetTime(user);
+index.tsx    (rudra patel on 11/04/2024 at 21:45):       setIsLocationPermissionGranted(response.isLocationPermissionGranted);
+index.tsx    (rudra patel on 11/04/2024 at 21:45):       setSunrise(response.sunrise);
+index.tsx    (rudra patel on 11/04/2024 at 21:45):       setSunset(response.sunset);
+index.tsx    (rudra patel on 11/04/2024 at 21:45):       setNextSunrise(response.nextSunrise);
+index.tsx    (rudra patel on 11/04/2024 at 21:45):       setLoading(false);
+index.tsx    (rudra patel on 11/04/2024 at 21:45):     };
+index.tsx    (rudra patel on 11/04/2024 at 21:45):     fetchSunriseSunsetTime();
+index.tsx    (rudra patel on 11/04/2024 at 21:45):   }, [user, userIsLoading]);
+index.tsx    (rudra patel on 11/04/2024 at 21:45):         <Text style={styles.Hello}>{introMessage}</Text>
+index.tsx    (rudra patel on 11/04/2024 at 21:45):         ) : nextSunrise ? (
+index.tsx    (rudra patel on 11/04/2024 at 21:45):               {nextSunrise?.toLocaleTimeString()}
+index.tsx    (rudra patel on 11/04/2024 at 21:45):         {!isLocationPermissionGranted && (
+index.tsx    (rudra patel on 11/04/2024 at 21:45):           <Text style={styles.PermissionMessage}>
+index.tsx    (rudra patel on 11/04/2024 at 21:45):             Please allow location permissions to view current location's sunrise
+index.tsx    (rudra patel on 11/04/2024 at 21:45):             and sunset times
+index.tsx    (rudra patel on 11/04/2024 at 21:45):           </Text>
+index.tsx    (rudra patel on 11/04/2024 at 21:45):         )}
+index.tsx    (rudra patel on 11/04/2024 at 21:45):     paddingHorizontal: 10,
+SignUp.tsx   (rudra patel on 11/04/2024 at 21:45): import { sendWelcomeEmail } from "@/server/emails";
+SignUp.tsx   (rudra patel on 11/04/2024 at 21:45):     await sendWelcomeEmail(displayName, email);
+index.tsx    (rudra patel on 11/08/2024 at 15:31): import ChangePassword from "./ChangePassword";
+index.tsx    (rudra patel on 11/08/2024 at 15:31):   ChangePassword: undefined;
+index.tsx    (rudra patel on 11/08/2024 at 15:31):           <Stack.Screen
+index.tsx    (rudra patel on 11/08/2024 at 15:31):             name="ChangePassword"
+index.tsx    (rudra patel on 11/08/2024 at 15:31):             component={ChangePassword}
+index.tsx    (rudra patel on 11/08/2024 at 15:31):             options={{ headerShown: false, presentation: "modal" }}
+index.tsx    (rudra patel on 11/08/2024 at 15:31):           />
+emails.ts    (rudra patel on 11/04/2024 at 21:45): export async function sendWelcomeEmail(displayName: string, email: string) {
+emails.ts    (rudra patel on 11/04/2024 at 21:45):   // Check if the URL is valid
+emails.ts    (rudra patel on 11/04/2024 at 21:45):   const apiUrl = process.env.EXPO_PUBLIC_SENDWELCOMEEMAIL_API_URL;
+emails.ts    (rudra patel on 11/04/2024 at 21:45):   // Check if the API URL is defined
+emails.ts    (rudra patel on 11/04/2024 at 21:45):   if (!apiUrl) {
+emails.ts    (rudra patel on 11/04/2024 at 21:45):     throw new Error(
+emails.ts    (rudra patel on 11/04/2024 at 21:45):       "SENDWELCOMEEMAIL_API_URL is not defined in the environment variables.",
+emails.ts    (rudra patel on 11/04/2024 at 21:45):     );
+emails.ts    (rudra patel on 11/04/2024 at 21:45):   }
+emails.ts    (rudra patel on 11/04/2024 at 21:45):   const url = new URL(apiUrl);
+emails.ts    (rudra patel on 11/04/2024 at 21:45):   // Adding query parameters by using to and name
+emails.ts    (rudra patel on 11/04/2024 at 21:45):   url.searchParams.append("to", email.toString());
+emails.ts    (rudra patel on 11/04/2024 at 21:45):   url.searchParams.append("name", displayName.toString());
+emails.ts    (rudra patel on 11/04/2024 at 21:45):   // Try sending the email using a get request with the parameters
+emails.ts    (rudra patel on 11/04/2024 at 21:45):   try {
+emails.ts    (rudra patel on 11/04/2024 at 21:45):     const response = await fetch(url, {
+emails.ts    (rudra patel on 11/04/2024 at 21:45):       method: "GET",
+emails.ts    (rudra patel on 11/04/2024 at 21:45):       headers: {
+emails.ts    (rudra patel on 11/04/2024 at 21:45):         "x-api-key": process.env.EXPO_PUBLIC_SENDWELCOMEEMAIL_API_KEY as string,
+emails.ts    (rudra patel on 11/04/2024 at 21:45):       },
+emails.ts    (rudra patel on 11/04/2024 at 21:45):     });
+emails.ts    (rudra patel on 11/04/2024 at 21:45):     if (!response.ok) {
+emails.ts    (rudra patel on 11/04/2024 at 21:45):       throw new Error(`HTTP error! status: ${response.status}`);
+emails.ts    (rudra patel on 11/04/2024 at 21:45):     }
+emails.ts    (rudra patel on 11/04/2024 at 21:45):   } catch (err) {
+emails.ts    (rudra patel on 11/05/2024 at 17:05):     console.log(err);
+emails.ts    (rudra patel on 11/04/2024 at 21:45):   }
+emails.ts    (rudra patel on 11/04/2024 at 21:45): }
+index.ts     (rudra patel on 11/04/2024 at 21:45): export * from "./sunrise-sunset-time";
