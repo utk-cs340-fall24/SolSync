@@ -1,0 +1,233 @@
+file: lambdas/sendDailyEmail/sendDailyEmail.mjs 
+
+a91ef85d lambdas/sendDailyEmail/sendDailyEmail.mjs (Kaylee Bae   2024-11-11 11:31:42 -0500  54)         process.env.EXPO_PUBLIC_SENDEMAIL_API_URL,
+a91ef85d lambdas/sendDailyEmail/sendDailyEmail.mjs (Kaylee Bae   2024-11-11 11:31:42 -0500  58)             "x-api-key": process.env.EXPO_PUBLIC_SENDEMAIL_API_KEY,
+
+file : lambdas/sendEmail/sendEmail.mjs
+
+a91ef85d lambdas/sendEmail/sendEmail.mjs (Kaylee Bae   2024-11-11 11:31:42 -0500 52)     key: process.env.EXPO_PUBLIC_MAILGUN_API_KEY,
+a91ef85d lambdas/sendEmail/sendEmail.mjs (Kaylee Bae   2024-11-11 11:31:42 -0500 57)       process.env.EXPO_PUBLIC_EXPO_PUBLIC_MAILGUN_URL,
+
+file : lambdas/sendWelcomeEmail/sendWelcomeEmail.mjs
+
+8aa34580 lambdas/sendWelcomeEmail/sendWelcomeEmail.mjs (Kaylee Bae   2024-11-12 08:37:47 -0500   5)   if (event.httpMethod !== "POST") {
+8aa34580 lambdas/sendWelcomeEmail/sendWelcomeEmail.mjs (Kaylee Bae   2024-11-12 08:37:47 -0500   6)     return {
+8aa34580 lambdas/sendWelcomeEmail/sendWelcomeEmail.mjs (Kaylee Bae   2024-11-12 08:37:47 -0500   7)       statusCode: 405,
+8aa34580 lambdas/sendWelcomeEmail/sendWelcomeEmail.mjs (Kaylee Bae   2024-11-12 08:37:47 -0500   8)       body: JSON.stringify({ error: "Only POST requests are allowed" }),
+8aa34580 lambdas/sendWelcomeEmail/sendWelcomeEmail.mjs (Kaylee Bae   2024-11-12 08:37:47 -0500   9)     };
+8aa34580 lambdas/sendWelcomeEmail/sendWelcomeEmail.mjs (Kaylee Bae   2024-11-12 08:37:47 -0500  10)   }
+8aa34580 lambdas/sendWelcomeEmail/sendWelcomeEmail.mjs (Kaylee Bae   2024-11-12 08:37:47 -0500  11) 
+a91ef85d lambdas/sendWelcomeEmail/sendWelcomeEmail.mjs (Kaylee Bae   2024-11-11 11:31:42 -0500  88)     const response = await fetch(process.env.EXPO_PUBLIC_SENDEMAIL_API_URL, {
+a91ef85d lambdas/sendWelcomeEmail/sendWelcomeEmail.mjs (Kaylee Bae   2024-11-11 11:31:42 -0500  91)         "x-api-key": process.env.EXPO_PUBLIC_SENDEMAIL_API_KEY,
+
+file : lambdas/sendDataEmail/index.mjs
+
+2b9cefff (Kaylee Bae   2024-11-07 23:51:39 -0500  77) const constructEmailBody = (habits) => {
+2b9cefff (Kaylee Bae   2024-11-07 23:51:39 -0500  78)   // Construct the email body header
+2b9cefff (Kaylee Bae   2024-11-07 23:51:39 -0500  79)   const habitHTML = "Your Habit History";
+2b9cefff (Kaylee Bae   2024-11-07 23:51:39 -0500  80) 
+2b9cefff (Kaylee Bae   2024-11-07 23:51:39 -0500  81)   // Set up basic HTML
+2b9cefff (Kaylee Bae   2024-11-07 23:51:39 -0500  82)   let emailHTML = `
+2b9cefff (Kaylee Bae   2024-11-07 23:51:39 -0500  83)   <div style="font-family: Arial, sans-serif; padding: 20px; background: linear-gradient(191.16deg, #CC9ED0 3.26%, #F7A592 49.91%, #FFD18A 96.57%); color: #000; text-align: center;">
+2b9cefff (Kaylee Bae   2024-11-07 23:51:39 -0500  84)     <div style="background-color: rgba(255, 255, 255, 0.8); padding: 15px; border-radius: 8px; display: inline-block; text-align: center; min-width: 80%">
+2b9cefff (Kaylee Bae   2024-11-07 23:51:39 -0500  85)       <h1 style="color: #f4a58a; text-align: center; font-size: 24px; margin: 0;">${habitHTML}</h1>
+2b9cefff (Kaylee Bae   2024-11-07 23:51:39 -0500  86)       <p style="font-size: 20px; margin-top: 15px;">
+2b9cefff (Kaylee Bae   2024-11-07 23:51:39 -0500  87)         You have recently requested your habit history.
+2b9cefff (Kaylee Bae   2024-11-07 23:51:39 -0500  88)       </p>
+2b9cefff (Kaylee Bae   2024-11-07 23:51:39 -0500  89)   `;
+2b9cefff (Kaylee Bae   2024-11-07 23:51:39 -0500  90) 
+2b9cefff (Kaylee Bae   2024-11-07 23:51:39 -0500  91)   // Iterate through each habit and generate a calendar for each
+2b9cefff (Kaylee Bae   2024-11-07 23:51:39 -0500  92)   habits.forEach((habit) => {
+2b9cefff (Kaylee Bae   2024-11-07 23:51:39 -0500  93)     const markedDates = habit.datesCompleted.map((date) =>
+2b9cefff (Kaylee Bae   2024-11-07 23:51:39 -0500  94)       new Date(date).getDate(),
+2b9cefff (Kaylee Bae   2024-11-07 23:51:39 -0500  95)     );
+2b9cefff (Kaylee Bae   2024-11-07 23:51:39 -0500  96) 
+2b9cefff (Kaylee Bae   2024-11-07 23:51:39 -0500  97)     // Fetch current month and year
+2b9cefff (Kaylee Bae   2024-11-07 23:51:39 -0500  98)     const currentMonth = dayjs().month();
+2b9cefff (Kaylee Bae   2024-11-07 23:51:39 -0500  99)     const currentYear = dayjs().year();
+2b9cefff (Kaylee Bae   2024-11-07 23:51:39 -0500 100) 
+2b9cefff (Kaylee Bae   2024-11-07 23:51:39 -0500 101)     // Generate the calendar for the required month
+2b9cefff (Kaylee Bae   2024-11-07 23:51:39 -0500 102)     const calendarHTML = generateCalendarHTML(currentMonth, currentYear, markedDates);
+2b9cefff (Kaylee Bae   2024-11-07 23:51:39 -0500 103) 
+2b9cefff (Kaylee Bae   2024-11-07 23:51:39 -0500 104)     // Add the calendarHTML to the email HTML
+2b9cefff (Kaylee Bae   2024-11-07 23:51:39 -0500 105)     emailHTML += `
+2b9cefff (Kaylee Bae   2024-11-07 23:51:39 -0500 106)       <h2 style="color: #f4a58a; font-size: 22px; margin: 20px 0 5px;">${habit.name}</h2>
+2b9cefff (Kaylee Bae   2024-11-07 23:51:39 -0500 107)       ${calendarHTML}
+2b9cefff (Kaylee Bae   2024-11-07 23:51:39 -0500 108)     `;
+2b9cefff (Kaylee Bae   2024-11-07 23:51:39 -0500 109)   });
+2b9cefff (Kaylee Bae   2024-11-07 23:51:39 -0500 110) 
+2b9cefff (Kaylee Bae   2024-11-07 23:51:39 -0500 111)   // Closing the email HTML
+2b9cefff (Kaylee Bae   2024-11-07 23:51:39 -0500 112)   emailHTML += `
+2b9cefff (Kaylee Bae   2024-11-07 23:51:39 -0500 113)     </div>
+2b9cefff (Kaylee Bae   2024-11-07 23:51:39 -0500 114)   </div>
+2b9cefff (Kaylee Bae   2024-11-07 23:51:39 -0500 115)   `;
+2b9cefff (Kaylee Bae   2024-11-07 23:51:39 -0500 116) 
+2b9cefff (Kaylee Bae   2024-11-07 23:51:39 -0500 117)   // Return the full email HTML
+2b9cefff (Kaylee Bae   2024-11-07 23:51:39 -0500 118)   return emailHTML;
+2b9cefff (Kaylee Bae   2024-11-07 23:51:39 -0500 119) };
+2b9cefff (Kaylee Bae   2024-11-07 23:51:39 -0500 120) 
+2b9cefff (Kaylee Bae   2024-11-07 23:51:39 -0500 121) // Generates the calendar in HTML given a month and year
+2b9cefff (Kaylee Bae   2024-11-07 23:51:39 -0500 122) function generateCalendarHTML(month, year, markedDates) {
+2b9cefff (Kaylee Bae   2024-11-07 23:51:39 -0500 123)   // Inspiration for this calendar: https://www.geeksforgeeks.org/design-a-calendar-using-html-and-css/
+2b9cefff (Kaylee Bae   2024-11-07 23:51:39 -0500 124)   const firstDay = new Date(year, month, 1).getDay();
+2b9cefff (Kaylee Bae   2024-11-07 23:51:39 -0500 125)   const numDays = new Date(year, month + 1, 0).getDate();
+2b9cefff (Kaylee Bae   2024-11-07 23:51:39 -0500 126) 
+2b9cefff (Kaylee Bae   2024-11-07 23:51:39 -0500 127)   // Store a list of month names to print
+2b9cefff (Kaylee Bae   2024-11-07 23:51:39 -0500 128)   const monthNames = [
+2b9cefff (Kaylee Bae   2024-11-07 23:51:39 -0500 129)     "January",
+2b9cefff (Kaylee Bae   2024-11-07 23:51:39 -0500 130)     "February",
+2b9cefff (Kaylee Bae   2024-11-07 23:51:39 -0500 131)     "March",
+2b9cefff (Kaylee Bae   2024-11-07 23:51:39 -0500 132)     "April",
+2b9cefff (Kaylee Bae   2024-11-07 23:51:39 -0500 133)     "May",
+2b9cefff (Kaylee Bae   2024-11-07 23:51:39 -0500 134)     "June",
+2b9cefff (Kaylee Bae   2024-11-07 23:51:39 -0500 135)     "July",
+2b9cefff (Kaylee Bae   2024-11-07 23:51:39 -0500 136)     "August",
+2b9cefff (Kaylee Bae   2024-11-07 23:51:39 -0500 137)     "September",
+2b9cefff (Kaylee Bae   2024-11-07 23:51:39 -0500 138)     "October",
+2b9cefff (Kaylee Bae   2024-11-07 23:51:39 -0500 139)     "November",
+2b9cefff (Kaylee Bae   2024-11-07 23:51:39 -0500 140)     "December",
+2b9cefff (Kaylee Bae   2024-11-07 23:51:39 -0500 141)   ];
+2b9cefff (Kaylee Bae   2024-11-07 23:51:39 -0500 142)   const monthName = monthNames[month];
+2b9cefff (Kaylee Bae   2024-11-07 23:51:39 -0500 143) 
+2b9cefff (Kaylee Bae   2024-11-07 23:51:39 -0500 144)   // Create a table with a month label
+2b9cefff (Kaylee Bae   2024-11-07 23:51:39 -0500 145)   let table = `<h4>${monthName} ${year}</h4>`;
+2b9cefff (Kaylee Bae   2024-11-07 23:51:39 -0500 146)   table +=
+2b9cefff (Kaylee Bae   2024-11-07 23:51:39 -0500 147)     "<table style='border-collapse: collapse; width: 50%; margin-top: 20px; margin-left: auto; margin-right: auto'><thead><tr>";
+2b9cefff (Kaylee Bae   2024-11-07 23:51:39 -0500 148) 
+2b9cefff (Kaylee Bae   2024-11-07 23:51:39 -0500 149)   // Days of the week header
+2b9cefff (Kaylee Bae   2024-11-07 23:51:39 -0500 150)   const daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+2b9cefff (Kaylee Bae   2024-11-07 23:51:39 -0500 151) 
+2b9cefff (Kaylee Bae   2024-11-07 23:51:39 -0500 152)   // Add formatting for each day
+2b9cefff (Kaylee Bae   2024-11-07 23:51:39 -0500 153)   daysOfWeek.forEach((day) => {
+2b9cefff (Kaylee Bae   2024-11-07 23:51:39 -0500 154)     table += `<th style='padding: 10px; text-align: center; background-color: #D8B9E6; font-weight: bold;'>${day}</th>`;
+2b9cefff (Kaylee Bae   2024-11-07 23:51:39 -0500 155)   });
+2b9cefff (Kaylee Bae   2024-11-07 23:51:39 -0500 156)   table += "</tr></thead><tbody>";
+2b9cefff (Kaylee Bae   2024-11-07 23:51:39 -0500 157) 
+2b9cefff (Kaylee Bae   2024-11-07 23:51:39 -0500 158)   // Iterate through each day of the week and fill in the table
+2b9cefff (Kaylee Bae   2024-11-07 23:51:39 -0500 159)   let currentDay = 1;
+2b9cefff (Kaylee Bae   2024-11-07 23:51:39 -0500 160)   for (let row = 0; currentDay <= numDays; row++) {
+2b9cefff (Kaylee Bae   2024-11-07 23:51:39 -0500 161)     table += "<tr>";
+2b9cefff (Kaylee Bae   2024-11-07 23:51:39 -0500 162)     for (let col = 0; col < 7; col++) {
+2b9cefff (Kaylee Bae   2024-11-07 23:51:39 -0500 163)       if (row === 0 && col < firstDay) {
+2b9cefff (Kaylee Bae   2024-11-07 23:51:39 -0500 164)         table += "<td style='background-color: #efefef;'></td>";
+2b9cefff (Kaylee Bae   2024-11-07 23:51:39 -0500 165)       } else if (currentDay <= numDays) {
+2b9cefff (Kaylee Bae   2024-11-07 23:51:39 -0500 166)         const isMarked = markedDates.includes(currentDay);
+2b9cefff (Kaylee Bae   2024-11-07 23:51:39 -0500 167)         table += `<td style='padding: 10px; text-align: center; background-color: #eaeaea; font-size: 18px; ${isMarked ? "background-color: #F4A58A;" : ""}'>${currentDay}</td>`;
+2b9cefff (Kaylee Bae   2024-11-07 23:51:39 -0500 168)         currentDay++;
+2b9cefff (Kaylee Bae   2024-11-07 23:51:39 -0500 169)       } else {
+2b9cefff (Kaylee Bae   2024-11-07 23:51:39 -0500 170)         table += "<td style='background-color: #efefef;'></td>";
+2b9cefff (Kaylee Bae   2024-11-07 23:51:39 -0500 171)       }
+2b9cefff (Kaylee Bae   2024-11-07 23:51:39 -0500 172)     }
+2b9cefff (Kaylee Bae   2024-11-07 23:51:39 -0500 173)     table += "</tr>";
+2b9cefff (Kaylee Bae   2024-11-07 23:51:39 -0500 174)   }
+2b9cefff (Kaylee Bae   2024-11-07 23:51:39 -0500 175)   table += "</tbody></table>";
+2b9cefff (Kaylee Bae   2024-11-07 23:51:39 -0500 176) 
+2b9cefff (Kaylee Bae   2024-11-07 23:51:39 -0500 177)   // Return the table / calendar
+2b9cefff (Kaylee Bae   2024-11-07 23:51:39 -0500 178)   return table;
+2b9cefff (Kaylee Bae   2024-11-07 23:51:39 -0500 179) }
+2b9cefff (Kaylee Bae   2024-11-07 23:51:39 -0500 180) 
+2b9cefff (Kaylee Bae   2024-11-07 23:51:39 -0500 181) // Sends the email
+2b9cefff (Kaylee Bae   2024-11-07 23:51:39 -0500 182) const sendDataEmail = async (userEmail, emailBody) => {
+2b9cefff (Kaylee Bae   2024-11-07 23:51:39 -0500 183) 
+2b9cefff (Kaylee Bae   2024-11-07 23:51:39 -0500 184)   // Check to make sure emailBody is as intended
+2b9cefff (Kaylee Bae   2024-11-07 23:51:39 -0500 185)   console.log(emailBody);
+2b9cefff (Kaylee Bae   2024-11-07 23:51:39 -0500 186) 
+2b9cefff (Kaylee Bae   2024-11-07 23:51:39 -0500 187)   // Add send time as a buffer for the email
+2b9cefff (Kaylee Bae   2024-11-07 23:51:39 -0500 188)   const sendTime = dayjs().add(20, "second");
+2b9cefff (Kaylee Bae   2024-11-07 23:51:39 -0500 189) 
+2b9cefff (Kaylee Bae   2024-11-07 23:51:39 -0500 190)   // Try sending the email
+2b9cefff (Kaylee Bae   2024-11-07 23:51:39 -0500 191)   try {
+2b9cefff (Kaylee Bae   2024-11-07 23:51:39 -0500 192)     const response = await fetch(
+2b9cefff (Kaylee Bae   2024-11-07 23:51:39 -0500 193)       process.env.EXPO_PUBLIC_SENDEMAIL_API_URL,
+2b9cefff (Kaylee Bae   2024-11-07 23:51:39 -0500 194)       {
+2b9cefff (Kaylee Bae   2024-11-07 23:51:39 -0500 195)         method: "POST",
+2b9cefff (Kaylee Bae   2024-11-07 23:51:39 -0500 196)         headers: {
+2b9cefff (Kaylee Bae   2024-11-07 23:51:39 -0500 197)           "x-api-key": process.env.EXPO_PUBLIC_SENDEMAIL_API_KEY,
+2b9cefff (Kaylee Bae   2024-11-07 23:51:39 -0500 198)         },
+2b9cefff (Kaylee Bae   2024-11-07 23:51:39 -0500 199)         body: JSON.stringify({
+2b9cefff (Kaylee Bae   2024-11-07 23:51:39 -0500 200)           to: userEmail,
+2b9cefff (Kaylee Bae   2024-11-07 23:51:39 -0500 201)           subject: "Habit Data Request",
+2b9cefff (Kaylee Bae   2024-11-07 23:51:39 -0500 202)           text: "Habit Request",
+2b9cefff (Kaylee Bae   2024-11-07 23:51:39 -0500 203)           textFormat: emailBody,
+2b9cefff (Kaylee Bae   2024-11-07 23:51:39 -0500 204)           deliveryTime: sendTime.format("ddd, DD MMM YYYY HH:mm:ss ZZ"),
+2b9cefff (Kaylee Bae   2024-11-07 23:51:39 -0500 205)         }),
+2b9cefff (Kaylee Bae   2024-11-07 23:51:39 -0500 206)       },
+2b9cefff (Kaylee Bae   2024-11-07 23:51:39 -0500 207)     );
+2b9cefff (Kaylee Bae   2024-11-07 23:51:39 -0500 208) 
+2b9cefff (Kaylee Bae   2024-11-07 23:51:39 -0500 209)     // Store the json and make sure the email sent successfully
+2b9cefff (Kaylee Bae   2024-11-07 23:51:39 -0500 210)     const jsonData = await response.json();
+2b9cefff (Kaylee Bae   2024-11-07 23:51:39 -0500 211)     if (response.ok) {
+2b9cefff (Kaylee Bae   2024-11-07 23:51:39 -0500 212)       return {
+2b9cefff (Kaylee Bae   2024-11-07 23:51:39 -0500 213)         statusCode: 200,
+2b9cefff (Kaylee Bae   2024-11-07 23:51:39 -0500 214)         body: JSON.stringify({
+2b9cefff (Kaylee Bae   2024-11-07 23:51:39 -0500 215)           message: "Email sent successfully!",
+2b9cefff (Kaylee Bae   2024-11-07 23:51:39 -0500 216)         }),
+2b9cefff (Kaylee Bae   2024-11-07 23:51:39 -0500 217)       };
+2b9cefff (Kaylee Bae   2024-11-07 23:51:39 -0500 218)     }
+2b9cefff (Kaylee Bae   2024-11-07 23:51:39 -0500 219) 
+2b9cefff (Kaylee Bae   2024-11-07 23:51:39 -0500 220)     // Return other error codes
+2b9cefff (Kaylee Bae   2024-11-07 23:51:39 -0500 221)     return {
+2b9cefff (Kaylee Bae   2024-11-07 23:51:39 -0500 222)       statusCode: 500,
+2b9cefff (Kaylee Bae   2024-11-07 23:51:39 -0500 223)       body: JSON.stringify({
+2b9cefff (Kaylee Bae   2024-11-07 23:51:39 -0500 224)         message: "Failed to send email.",
+2b9cefff (Kaylee Bae   2024-11-07 23:51:39 -0500 225)         error: jsonData.message || "Unknown error",
+2b9cefff (Kaylee Bae   2024-11-07 23:51:39 -0500 226)         error2: jsonData.error || "Unknown error",
+2b9cefff (Kaylee Bae   2024-11-07 23:51:39 -0500 227)         emailTo: jsonData.emailTo,
+2b9cefff (Kaylee Bae   2024-11-07 23:51:39 -0500 228)       }),
+2b9cefff (Kaylee Bae   2024-11-07 23:51:39 -0500 229)     };
+2b9cefff (Kaylee Bae   2024-11-07 23:51:39 -0500 230)   } catch (err) {
+2b9cefff (Kaylee Bae   2024-11-07 23:51:39 -0500 231)     return {
+2b9cefff (Kaylee Bae   2024-11-07 23:51:39 -0500 232)       statusCode: 500,
+2b9cefff (Kaylee Bae   2024-11-07 23:51:39 -0500 233)       body: JSON.stringify({
+2b9cefff (Kaylee Bae   2024-11-07 23:51:39 -0500 234)         message: "Failed to send email 1.",
+2b9cefff (Kaylee Bae   2024-11-07 23:51:39 -0500 235)         error: err.message,
+2b9cefff (Kaylee Bae   2024-11-07 23:51:39 -0500 236)       }),
+2b9cefff (Kaylee Bae   2024-11-07 23:51:39 -0500 237)     };
+2b9cefff (Kaylee Bae   2024-11-07 23:51:39 -0500 238)   }
+2b9cefff (Kaylee Bae   2024-11-07 23:51:39 -0500 239) };
+2b9cefff (Kaylee Bae   2024-11-07 23:51:39 -0500 240) 
+2b9cefff (Kaylee Bae   2024-11-07 23:51:39 -0500 241) // Lambda function runs
+2b9cefff (Kaylee Bae   2024-11-07 23:51:39 -0500 243) 
+2b9cefff (Kaylee Bae   2024-11-07 23:51:39 -0500 244)   // Ensure that the request is a POST request
+2b9cefff (Kaylee Bae   2024-11-07 23:51:39 -0500 252)   // Extract userId and email from the event body (if available)
+2b9cefff (Kaylee Bae   2024-11-07 23:51:39 -0500 253)   let userId, email;
+2b9cefff (Kaylee Bae   2024-11-07 23:51:39 -0500 255)   // To ensure the body can be parsed in AWS lambda console and from app
+2b9cefff (Kaylee Bae   2024-11-07 23:51:39 -0500 256)   if (event.body) {
+2b9cefff (Kaylee Bae   2024-11-07 23:51:39 -0500 257)     const body = JSON.parse(event.body);
+2b9cefff (Kaylee Bae   2024-11-07 23:51:39 -0500 258)     userId = body.userId;
+2b9cefff (Kaylee Bae   2024-11-07 23:51:39 -0500 259)     email = body.email;
+2b9cefff (Kaylee Bae   2024-11-07 23:51:39 -0500 260)   } else {
+2b9cefff (Kaylee Bae   2024-11-07 23:51:39 -0500 261)     userId = event.userId;
+2b9cefff (Kaylee Bae   2024-11-07 23:51:39 -0500 262)     email = event.email;
+2b9cefff (Kaylee Bae   2024-11-07 23:51:39 -0500 263)   }
+2b9cefff (Kaylee Bae   2024-11-07 23:51:39 -0500 264) 
+2b9cefff (Kaylee Bae   2024-11-07 23:51:39 -0500 265)   // Check to make sure the variables are valid
+2b9cefff (Kaylee Bae   2024-11-07 23:51:39 -0500 271)   } if (!email) {
+2b9cefff (Kaylee Bae   2024-11-07 23:51:39 -0500 272)     return {
+2b9cefff (Kaylee Bae   2024-11-07 23:51:39 -0500 273)       statusCode: 400,
+2b9cefff (Kaylee Bae   2024-11-07 23:51:39 -0500 274)       body: JSON.stringify({ error: "email not provided in the body" }),
+2b9cefff (Kaylee Bae   2024-11-07 23:51:39 -0500 275)     };
+2b9cefff (Kaylee Bae   2024-11-07 23:51:39 -0500 287)   // Fetch habits
+2b9cefff (Kaylee Bae   2024-11-07 23:51:39 -0500 290)   console.log(habits);
+2b9cefff (Kaylee Bae   2024-11-07 23:51:39 -0500 291) 
+2b9cefff (Kaylee Bae   2024-11-07 23:51:39 -0500 292)   // Construct the email body and send the email
+2b9cefff (Kaylee Bae   2024-11-07 23:51:39 -0500 293)   const emailBody = constructEmailBody(habits);
+2b9cefff (Kaylee Bae   2024-11-07 23:51:39 -0500 294)   console.log(emailBody);
+2b9cefff (Kaylee Bae   2024-11-07 23:51:39 -0500 295)   await sendDataEmail(email, emailBody);
+2b9cefff (Kaylee Bae   2024-11-07 23:51:39 -0500 296) 
+2b9cefff (Kaylee Bae   2024-11-07 23:51:39 -0500 297)   // Success
+2b9cefff (Kaylee Bae   2024-11-07 23:51:39 -0500 300)     body: JSON.stringify({
+2b9cefff (Kaylee Bae   2024-11-07 23:51:39 -0500 301)       message: "Email sent successfully!",
+2b9cefff (Kaylee Bae   2024-11-07 23:51:39 -0500 302)       event: habits
+2b9cefff (Kaylee Bae   2024-11-07 23:51:39 -0500 303)     }),
+2b9cefff (Kaylee Bae   2024-11-07 23:51:39 -0500 306) 
+2b9cefff (Kaylee Bae   2024-11-07 23:51:39 -0500 307) handler()
+
+file : src/server/emails.ts
+
+8aa34580 (Kaylee Bae   2024-11-12 08:37:47 -0500 19)       method: "POST",
+8aa34580 (Kaylee Bae   2024-11-12 08:37:47 -0500 23)       body: JSON.stringify({
+8aa34580 (Kaylee Bae   2024-11-12 08:37:47 -0500 24)         to: email.toString(),
+8aa34580 (Kaylee Bae   2024-11-12 08:37:47 -0500 25)         name: displayName.toString(),
+8aa34580 (Kaylee Bae   2024-11-12 08:37:47 -0500 26)       }),
+8aa34580 (Kaylee Bae   2024-11-12 08:37:47 -0500 32)     console.log("Successfully sent email.");
