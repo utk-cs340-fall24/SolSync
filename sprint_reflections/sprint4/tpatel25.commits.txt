@@ -1,0 +1,418 @@
+lambdas/sendDailyHabitEmail/index.mjs    (trishu patel on 11/11/2024 at 11:56): import dayjs from "dayjs";
+lambdas/sendDailyHabitEmail/index.mjs    (trishu patel on 11/11/2024 at 11:56): const dateTimeToDayJS = (date, time) => {
+lambdas/sendDailyHabitEmail/index.mjs    (trishu patel on 11/11/2024 at 11:56):   const format = "DD-MM-YYYY HH:mm";
+lambdas/sendDailyHabitEmail/index.mjs    (trishu patel on 11/11/2024 at 11:56):   return dayjs(`${date} ${time}`, format);
+lambdas/sendDailyHabitEmail/index.mjs    (trishu patel on 11/11/2024 at 11:56): };
+lambdas/sendDailyHabitEmail/index.mjs    (trishu patel on 11/11/2024 at 11:56): const getSunriseSunsetTime = async (user) => {
+lambdas/sendDailyHabitEmail/index.mjs    (trishu patel on 11/11/2024 at 11:56):   try {
+lambdas/sendDailyHabitEmail/index.mjs    (trishu patel on 11/11/2024 at 11:56):     const response = await fetch(
+lambdas/sendDailyHabitEmail/index.mjs    (trishu patel on 11/11/2024 at 11:56):       `https://api.sunrisesunset.io/json?lat=${user.latitude}&lng=${user.latitude}&time_format=24`,
+lambdas/sendDailyHabitEmail/index.mjs    (trishu patel on 11/11/2024 at 11:56):     );
+lambdas/sendDailyHabitEmail/index.mjs    (trishu patel on 11/11/2024 at 11:56):     const json = await response.json();
+lambdas/sendDailyHabitEmail/index.mjs    (trishu patel on 11/11/2024 at 11:56):     const { date, sunrise, sunset } = json.results;
+lambdas/sendDailyHabitEmail/index.mjs    (trishu patel on 11/11/2024 at 11:56):     const sunriseTime = dateTimeToDayJS(date, sunrise);
+lambdas/sendDailyHabitEmail/index.mjs    (trishu patel on 11/11/2024 at 11:56):     const sunsetTime = dateTimeToDayJS(date, sunset);
+lambdas/sendDailyHabitEmail/index.mjs    (trishu patel on 11/11/2024 at 11:56):     return [sunriseTime, sunsetTime];
+lambdas/sendDailyHabitEmail/index.mjs    (trishu patel on 11/11/2024 at 11:56):   } catch (error) {
+lambdas/sendDailyHabitEmail/index.mjs    (trishu patel on 11/11/2024 at 11:56):     console.error("Error fetching data:", error);
+lambdas/sendDailyHabitEmail/index.mjs    (trishu patel on 11/11/2024 at 11:56):   }
+lambdas/sendDailyHabitEmail/index.mjs    (trishu patel on 11/11/2024 at 11:56):   return [dayjs(), dayjs()];
+lambdas/sendDailyHabitEmail/index.mjs    (trishu patel on 11/11/2024 at 11:56): };
+lambdas/sendDailyHabitEmail/index.mjs    (trishu patel on 11/11/2024 at 11:56): const getHabitTimeMessage = (habit) => {
+lambdas/sendDailyHabitEmail/index.mjs    (trishu patel on 11/11/2024 at 11:56):   if (habit.hourOffset === 0 && habit.minuteOffset === 0) {
+lambdas/sendDailyHabitEmail/index.mjs    (trishu patel on 11/11/2024 at 11:56):     return `at ${habit.notificationPeriod}`;
+lambdas/sendDailyHabitEmail/index.mjs    (trishu patel on 11/11/2024 at 11:56):   }
+lambdas/sendDailyHabitEmail/index.mjs    (trishu patel on 11/11/2024 at 11:56):   let habitTimeMessage = "";
+lambdas/sendDailyHabitEmail/index.mjs    (trishu patel on 11/11/2024 at 11:56):   if (habit.hourOffset !== 0) {
+lambdas/sendDailyHabitEmail/index.mjs    (trishu patel on 11/11/2024 at 11:56):     habitTimeMessage += `${habit.hourOffset} ${habit.hourOffset === 1 ? "hour" : "hours"}`;
+lambdas/sendDailyHabitEmail/index.mjs    (trishu patel on 11/11/2024 at 11:56):   }
+lambdas/sendDailyHabitEmail/index.mjs    (trishu patel on 11/11/2024 at 11:56):   if (habit.minuteOffset !== 0) {
+lambdas/sendDailyHabitEmail/index.mjs    (trishu patel on 11/11/2024 at 11:56):     if (habitTimeMessage !== "") habitTimeMessage += " ";
+lambdas/sendDailyHabitEmail/index.mjs    (trishu patel on 11/11/2024 at 11:56):     habitTimeMessage += `${habit.minuteOffset} ${habit.minuteOffset === 1 ? "minute" : "minutes"}`;
+lambdas/sendDailyHabitEmail/index.mjs    (trishu patel on 11/11/2024 at 11:56):   }
+lambdas/sendDailyHabitEmail/index.mjs    (trishu patel on 11/11/2024 at 11:56):   habitTimeMessage += ` ${habit.offsetDirection} ${habit.notificationPeriod}`;
+lambdas/sendDailyHabitEmail/index.mjs    (trishu patel on 11/11/2024 at 11:56):   return habitTimeMessage;
+lambdas/sendDailyHabitEmail/index.mjs    (trishu patel on 11/11/2024 at 11:56): };
+lambdas/sendDailyHabitEmail/index.mjs    (trishu patel on 11/11/2024 at 11:56): const constructEmailBody = async (user) => {
+lambdas/sendDailyHabitEmail/index.mjs    (trishu patel on 11/11/2024 at 11:56):   const [sunrise, sunset] = await getSunriseSunsetTime(user);
+lambdas/sendDailyHabitEmail/index.mjs    (trishu patel on 11/11/2024 at 11:56):   let habitHTML = "";
+lambdas/sendDailyHabitEmail/index.mjs    (trishu patel on 11/11/2024 at 11:56):   user.habits = user.habits.map((habit) => {
+lambdas/sendDailyHabitEmail/index.mjs    (trishu patel on 11/11/2024 at 11:56):     let habitTime = null;
+lambdas/sendDailyHabitEmail/index.mjs    (trishu patel on 11/11/2024 at 11:56):     switch (habit.notificationPeriod) {
+lambdas/sendDailyHabitEmail/index.mjs    (trishu patel on 11/11/2024 at 11:56):       case "sunrise":
+lambdas/sendDailyHabitEmail/index.mjs    (trishu patel on 11/11/2024 at 11:56):         habitTime = sunrise;
+lambdas/sendDailyHabitEmail/index.mjs    (trishu patel on 11/11/2024 at 11:56):         break;
+lambdas/sendDailyHabitEmail/index.mjs    (trishu patel on 11/11/2024 at 11:56):       case "sunset":
+lambdas/sendDailyHabitEmail/index.mjs    (trishu patel on 11/11/2024 at 11:56):         habitTime = sunset;
+lambdas/sendDailyHabitEmail/index.mjs    (trishu patel on 11/11/2024 at 11:56):         break;
+lambdas/sendDailyHabitEmail/index.mjs    (trishu patel on 11/11/2024 at 11:56):       default:
+lambdas/sendDailyHabitEmail/index.mjs    (trishu patel on 11/11/2024 at 11:56):         console.log("Incorrect notification period");
+lambdas/sendDailyHabitEmail/index.mjs    (trishu patel on 11/11/2024 at 11:56):         return;
+lambdas/sendDailyHabitEmail/index.mjs    (trishu patel on 11/11/2024 at 11:56):     }
+lambdas/sendDailyHabitEmail/index.mjs    (trishu patel on 11/11/2024 at 11:56):     switch (habit.offsetDirection) {
+lambdas/sendDailyHabitEmail/index.mjs    (trishu patel on 11/11/2024 at 11:56):       case "before":
+lambdas/sendDailyHabitEmail/index.mjs    (trishu patel on 11/11/2024 at 11:56):         habitTime = habitTime.subtract(habit.hourOffset, "hour");
+lambdas/sendDailyHabitEmail/index.mjs    (trishu patel on 11/11/2024 at 11:56):         habitTime = habitTime.subtract(habit.minuteOffset, "minute");
+lambdas/sendDailyHabitEmail/index.mjs    (trishu patel on 11/11/2024 at 11:56):         break;
+lambdas/sendDailyHabitEmail/index.mjs    (trishu patel on 11/11/2024 at 11:56):       case "after":
+lambdas/sendDailyHabitEmail/index.mjs    (trishu patel on 11/11/2024 at 11:56):         habitTime = habitTime.add(habit.hourOffset, "hour");
+lambdas/sendDailyHabitEmail/index.mjs    (trishu patel on 11/11/2024 at 11:56):         habitTime = habitTime.add(habit.minuteOffset, "minute");
+lambdas/sendDailyHabitEmail/index.mjs    (trishu patel on 11/11/2024 at 11:56):         break;
+lambdas/sendDailyHabitEmail/index.mjs    (trishu patel on 11/11/2024 at 11:56):       default:
+lambdas/sendDailyHabitEmail/index.mjs    (trishu patel on 11/11/2024 at 11:56):         console.log("Incorrect offset direction");
+lambdas/sendDailyHabitEmail/index.mjs    (trishu patel on 11/11/2024 at 11:56):         return;
+lambdas/sendDailyHabitEmail/index.mjs    (trishu patel on 11/11/2024 at 11:56):     }
+lambdas/sendDailyHabitEmail/index.mjs    (trishu patel on 11/11/2024 at 11:56):     return { ...habit, todaysTime: habitTime };
+lambdas/sendDailyHabitEmail/index.mjs    (trishu patel on 11/11/2024 at 11:56):   });
+lambdas/sendDailyHabitEmail/index.mjs    (trishu patel on 11/11/2024 at 11:56):   user.habits.sort((habit1, habit2) =>
+lambdas/sendDailyHabitEmail/index.mjs    (trishu patel on 11/11/2024 at 11:56):     habit1.todaysTime.isBefore(habit2.todaysTime) ? -1 : 1,
+lambdas/sendDailyHabitEmail/index.mjs    (trishu patel on 11/11/2024 at 11:56):   );
+lambdas/sendDailyHabitEmail/index.mjs    (trishu patel on 11/11/2024 at 11:56):   user.habits.forEach((habit) => {
+lambdas/sendDailyHabitEmail/index.mjs    (trishu patel on 11/11/2024 at 11:56):     const habitTimeMessage = getHabitTimeMessage(habit);
+lambdas/sendDailyHabitEmail/index.mjs    (trishu patel on 11/11/2024 at 11:56):     habitHTML += `
+lambdas/sendDailyHabitEmail/index.mjs    (trishu patel on 11/11/2024 at 11:56):         <p style="font-size: 18px;">
+lambdas/sendDailyHabitEmail/index.mjs    (trishu patel on 11/11/2024 at 11:56):             <strong style="color: #b38acb;">${habit.name}:</strong> <span style="color: #000;">${habit.todaysTime.format("h:mm A")} (${habitTimeMessage})</span>
+lambdas/sendDailyHabitEmail/index.mjs    (trishu patel on 11/11/2024 at 11:56):         </p>`;
+lambdas/sendDailyHabitEmail/index.mjs    (trishu patel on 11/11/2024 at 11:56):   });
+lambdas/sendDailyHabitEmail/index.mjs    (trishu patel on 11/11/2024 at 11:56):   const emailHTML = `
+lambdas/sendDailyHabitEmail/index.mjs    (trishu patel on 11/11/2024 at 11:56):     <div style="font-family: Arial, sans-serif; padding: 20px; background: linear-gradient(191.16deg, #CC9ED0 3.26%, #F7A592 49.91%, #FFD18A 96.57%); color: #000; text-align: center;">
+lambdas/sendDailyHabitEmail/index.mjs    (trishu patel on 11/11/2024 at 11:56):         <div style="background-color: rgba(255, 255, 255, 0.8); padding: 15px; border-radius: 8px; display: inline-block; text-align: left;">
+lambdas/sendDailyHabitEmail/index.mjs    (trishu patel on 11/11/2024 at 11:56):             <h1 style="color: #f4a58a; text-align: center">SolSync Daily Reflection</h1>
+lambdas/sendDailyHabitEmail/index.mjs    (trishu patel on 11/11/2024 at 11:56):             <p style="font-size: 20px;">
+lambdas/sendDailyHabitEmail/index.mjs    (trishu patel on 11/11/2024 at 11:56):                 Embrace the beauty of each day. Remember to practice your habits!
+lambdas/sendDailyHabitEmail/index.mjs    (trishu patel on 11/11/2024 at 11:56):             </p>
+lambdas/sendDailyHabitEmail/index.mjs    (trishu patel on 11/11/2024 at 11:56):             <p style="font-size: 18px;">
+lambdas/sendDailyHabitEmail/index.mjs    (trishu patel on 11/11/2024 at 11:56):                 <strong style="color: #b38acb;">Sunrise:</strong> <span style="color: #000;">${sunrise.format("h:mm A")}</span>
+lambdas/sendDailyHabitEmail/index.mjs    (trishu patel on 11/11/2024 at 11:56):             </p>
+lambdas/sendDailyHabitEmail/index.mjs    (trishu patel on 11/11/2024 at 11:56):             <p style="font-size: 18px;">
+lambdas/sendDailyHabitEmail/index.mjs    (trishu patel on 11/11/2024 at 11:56):                 <strong style="color: #b38acb;">Sunset:</strong> <span style="color: #000;">${sunset.format("h:mm A")}</span>
+lambdas/sendDailyHabitEmail/index.mjs    (trishu patel on 11/11/2024 at 11:56):             </p>
+lambdas/sendDailyHabitEmail/index.mjs    (trishu patel on 11/11/2024 at 11:56):             <h2 style="color: #f4a58a;">Upcoming Habits (${dayjs().format("dddd, MMMM D YYYY")})</h2>
+lambdas/sendDailyHabitEmail/index.mjs    (trishu patel on 11/11/2024 at 11:56):             ${habitHTML}
+lambdas/sendDailyHabitEmail/index.mjs    (trishu patel on 11/11/2024 at 11:56):             <h2 style="color: #f4a58a;">Tips for Your Habit</h2>
+lambdas/sendDailyHabitEmail/index.mjs    (trishu patel on 11/11/2024 at 11:56):             <ul style="font-size: 18px; margin: 10px 0; padding-left: 20px;">
+lambdas/sendDailyHabitEmail/index.mjs    (trishu patel on 11/11/2024 at 11:56):                 <li>Set a specific time to practice your habit each day.</li>
+lambdas/sendDailyHabitEmail/index.mjs    (trishu patel on 11/11/2024 at 11:56):                 <li>Track your progress to stay motivated.</li>
+lambdas/sendDailyHabitEmail/index.mjs    (trishu patel on 11/11/2024 at 11:56):                 <li>Find a friend to share your goals with.</li>
+lambdas/sendDailyHabitEmail/index.mjs    (trishu patel on 11/11/2024 at 11:56):             </ul>
+lambdas/sendDailyHabitEmail/index.mjs    (trishu patel on 11/11/2024 at 11:56):         </div>
+lambdas/sendDailyHabitEmail/index.mjs    (trishu patel on 11/11/2024 at 11:56):     </div>`;
+lambdas/sendDailyHabitEmail/index.mjs    (trishu patel on 11/11/2024 at 11:56):   return emailHTML;
+lambdas/sendDailyHabitEmail/index.mjs    (trishu patel on 11/11/2024 at 11:56): };
+lambdas/sendDailyHabitEmail/index.mjs    (trishu patel on 11/11/2024 at 11:56): const sendDailyEmail = async (user, emailBody) => {
+lambdas/sendDailyHabitEmail/index.mjs    (trishu patel on 11/11/2024 at 11:56):   const sendTime = dayjs().add(20, "second");
+lambdas/sendDailyHabitEmail/index.mjs    (trishu patel on 11/11/2024 at 11:56):   try {
+lambdas/sendDailyHabitEmail/index.mjs    (trishu patel on 11/11/2024 at 11:56):     const response = await fetch(process.env.EXPO_PUBLIC_SENDEMAIL_API_URL, {
+lambdas/sendDailyHabitEmail/index.mjs    (trishu patel on 11/11/2024 at 11:56):       method: "POST",
+lambdas/sendDailyHabitEmail/index.mjs    (trishu patel on 11/11/2024 at 11:56):       headers: {
+lambdas/sendDailyHabitEmail/index.mjs    (trishu patel on 11/11/2024 at 11:56):         "x-api-key": process.env.EXPO_PUBLIC_SENDEMAIL_API_KEY,
+lambdas/sendDailyHabitEmail/index.mjs    (trishu patel on 11/11/2024 at 11:56):       },
+lambdas/sendDailyHabitEmail/index.mjs    (trishu patel on 11/11/2024 at 11:56):       body: JSON.stringify({
+lambdas/sendDailyHabitEmail/index.mjs    (trishu patel on 11/11/2024 at 11:56):         to: user.email,
+lambdas/sendDailyHabitEmail/index.mjs    (trishu patel on 11/11/2024 at 11:56):         subject: "Daily Habit Reminder",
+lambdas/sendDailyHabitEmail/index.mjs    (trishu patel on 11/11/2024 at 11:56):         text: "Here is a list of all your habits and what time they will start.",
+lambdas/sendDailyHabitEmail/index.mjs    (trishu patel on 11/11/2024 at 11:56):         textFormat: emailBody,
+lambdas/sendDailyHabitEmail/index.mjs    (trishu patel on 11/11/2024 at 11:56):         deliveryTime: sendTime.format("ddd, DD MMM YYYY HH:mm:ss ZZ"),
+lambdas/sendDailyHabitEmail/index.mjs    (trishu patel on 11/11/2024 at 11:56):       }),
+lambdas/sendDailyHabitEmail/index.mjs    (trishu patel on 11/11/2024 at 11:56):     });
+lambdas/sendDailyHabitEmail/index.mjs    (trishu patel on 11/11/2024 at 11:56):     const jsonData = await response.json();
+lambdas/sendDailyHabitEmail/index.mjs    (trishu patel on 11/11/2024 at 11:56):     if (response.ok) {
+lambdas/sendDailyHabitEmail/index.mjs    (trishu patel on 11/11/2024 at 11:56):       return {
+lambdas/sendDailyHabitEmail/index.mjs    (trishu patel on 11/11/2024 at 11:56):         statusCode: 200,
+lambdas/sendDailyHabitEmail/index.mjs    (trishu patel on 11/11/2024 at 11:56):         body: JSON.stringify({
+lambdas/sendDailyHabitEmail/index.mjs    (trishu patel on 11/11/2024 at 11:56):           message: "Email sent successfully!",
+lambdas/sendDailyHabitEmail/index.mjs    (trishu patel on 11/11/2024 at 11:56):           event: jsonData.eventTo,
+lambdas/sendDailyHabitEmail/index.mjs    (trishu patel on 11/11/2024 at 11:56):           data: jsonData.data,
+lambdas/sendDailyHabitEmail/index.mjs    (trishu patel on 11/11/2024 at 11:56):         }),
+lambdas/sendDailyHabitEmail/index.mjs    (trishu patel on 11/11/2024 at 11:56):       };
+lambdas/sendDailyHabitEmail/index.mjs    (trishu patel on 11/11/2024 at 11:56):     }
+lambdas/sendDailyHabitEmail/index.mjs    (trishu patel on 11/11/2024 at 11:56):     return {
+lambdas/sendDailyHabitEmail/index.mjs    (trishu patel on 11/11/2024 at 11:56):       statusCode: 500,
+lambdas/sendDailyHabitEmail/index.mjs    (trishu patel on 11/11/2024 at 11:56):       body: JSON.stringify({
+lambdas/sendDailyHabitEmail/index.mjs    (trishu patel on 11/11/2024 at 11:56):         message: "Failed to send email.",
+lambdas/sendDailyHabitEmail/index.mjs    (trishu patel on 11/11/2024 at 11:56):         error: jsonData.message || "Unknown error",
+lambdas/sendDailyHabitEmail/index.mjs    (trishu patel on 11/11/2024 at 11:56):         error2: jsonData.error || "Unknown error",
+lambdas/sendDailyHabitEmail/index.mjs    (trishu patel on 11/11/2024 at 11:56):         emailTo: jsonData.emailTo,
+lambdas/sendDailyHabitEmail/index.mjs    (trishu patel on 11/11/2024 at 11:56):       }),
+lambdas/sendDailyHabitEmail/index.mjs    (trishu patel on 11/11/2024 at 11:56):     };
+lambdas/sendDailyHabitEmail/index.mjs    (trishu patel on 11/11/2024 at 11:56):   } catch (err) {
+lambdas/sendDailyHabitEmail/index.mjs    (trishu patel on 11/11/2024 at 11:56):     return {
+lambdas/sendDailyHabitEmail/index.mjs    (trishu patel on 11/11/2024 at 11:56):       statusCode: 500,
+lambdas/sendDailyHabitEmail/index.mjs    (trishu patel on 11/11/2024 at 11:56):       body: JSON.stringify({
+lambdas/sendDailyHabitEmail/index.mjs    (trishu patel on 11/11/2024 at 11:56):         message: "Failed to send email 1.",
+lambdas/sendDailyHabitEmail/index.mjs    (trishu patel on 11/11/2024 at 11:56):         error: err.message,
+lambdas/sendDailyHabitEmail/index.mjs    (trishu patel on 11/11/2024 at 11:56):       }),
+lambdas/sendDailyHabitEmail/index.mjs    (trishu patel on 11/11/2024 at 11:56):     };
+lambdas/sendDailyHabitEmail/index.mjs    (trishu patel on 11/11/2024 at 11:56):   }
+lambdas/sendDailyHabitEmail/index.mjs    (trishu patel on 11/11/2024 at 11:56): };
+lambdas/sendDailyHabitEmail/index.mjs    (trishu patel on 11/11/2024 at 11:56): export const handler = async (event) => {
+lambdas/sendDailyHabitEmail/index.mjs    (trishu patel on 11/11/2024 at 11:56):   if (event.httpMethod !== "POST") {
+lambdas/sendDailyHabitEmail/index.mjs    (trishu patel on 11/11/2024 at 11:56):     return {
+lambdas/sendDailyHabitEmail/index.mjs    (trishu patel on 11/11/2024 at 11:56):       statusCode: 405,
+lambdas/sendDailyHabitEmail/index.mjs    (trishu patel on 11/11/2024 at 11:56):     };
+lambdas/sendDailyHabitEmail/index.mjs    (trishu patel on 11/11/2024 at 11:56):   }
+lambdas/sendDailyHabitEmail/index.mjs    (trishu patel on 11/11/2024 at 11:56):   const body = JSON.parse(event.body || "{}");
+lambdas/sendDailyHabitEmail/index.mjs    (trishu patel on 11/11/2024 at 11:56):   const { user } = body;
+lambdas/sendDailyHabitEmail/index.mjs    (trishu patel on 11/11/2024 at 11:56):   if (!user) {
+lambdas/sendDailyHabitEmail/index.mjs    (trishu patel on 11/11/2024 at 11:56):     return {
+lambdas/sendDailyHabitEmail/index.mjs    (trishu patel on 11/11/2024 at 11:56):       statusCode: 400,
+lambdas/sendDailyHabitEmail/index.mjs    (trishu patel on 11/11/2024 at 11:56):     };
+lambdas/sendDailyHabitEmail/index.mjs    (trishu patel on 11/11/2024 at 11:56):   }
+lambdas/sendDailyHabitEmail/index.mjs    (trishu patel on 11/11/2024 at 11:56):   const { id, email, displayName, latitude, longitude, habits } = user;
+lambdas/sendDailyHabitEmail/index.mjs    (trishu patel on 11/11/2024 at 11:56):   if (!id || !email || !displayName || !latitude || !longitude || !habits) {
+lambdas/sendDailyHabitEmail/index.mjs    (trishu patel on 11/11/2024 at 11:56):     return {
+lambdas/sendDailyHabitEmail/index.mjs    (trishu patel on 11/11/2024 at 11:56):       statusCode: 400,
+lambdas/sendDailyHabitEmail/index.mjs    (trishu patel on 11/11/2024 at 11:56):     };
+lambdas/sendDailyHabitEmail/index.mjs    (trishu patel on 11/11/2024 at 11:56):   }
+lambdas/sendDailyHabitEmail/index.mjs    (trishu patel on 11/11/2024 at 11:56):   const emailBody = await constructEmailBody(user);
+lambdas/sendDailyHabitEmail/index.mjs    (trishu patel on 11/11/2024 at 11:56):   await sendDailyEmail(user, emailBody);
+lambdas/sendDailyHabitEmail/index.mjs    (trishu patel on 11/11/2024 at 11:56):   return {
+lambdas/sendDailyHabitEmail/index.mjs    (trishu patel on 11/11/2024 at 11:56):     statusCode: 200,
+lambdas/sendDailyHabitEmail/index.mjs    (trishu patel on 11/11/2024 at 11:56):   };
+lambdas/sendDailyHabitEmail/index.mjs    (trishu patel on 11/11/2024 at 11:56): };
+
+src/components/Profile/AuthorizedProfile.tsx (trishu patel on 11/05/2024 at 16:28):     width: "95%",
+src/components/Profile/AuthorizedProfile.tsx (trishu patel on 11/05/2024 at 16:28):     paddingVertical: 10,
+src/components/Profile/AuthorizedProfile.tsx (trishu patel on 11/05/2024 at 16:28):     borderRadius: 8,
+src/components/Profile/AuthorizedProfile.tsx (trishu patel on 11/05/2024 at 16:28):     alignItems: "center",
+src/components/Profile/AuthorizedProfile.tsx (trishu patel on 11/05/2024 at 16:28):     flexDirection: "row",
+src/components/Profile/AuthorizedProfile.tsx (trishu patel on 11/05/2024 at 16:28):     justifyContent: "center",
+src/components/Profile/AuthorizedProfile.tsx (trishu patel on 11/05/2024 at 16:28):   },
+
+src/components/History/index.tsx    (trishu patel on 11/06/2024 at 17:49):   const [completedHabitHistory, setCompletedHabitHistory] =
+src/components/History/index.tsx    (trishu patel on 11/06/2024 at 17:49):     useState<History[]>();
+src/components/History/index.tsx    (trishu patel on 11/06/2024 at 17:49):     if (!completedHabitHistory || !user || !currentHabit) return;
+src/components/History/index.tsx    (trishu patel on 11/06/2024 at 17:49):     setCompletedHabitHistory([...completedHabitHistory, newHistory]);
+src/components/History/index.tsx    (trishu patel on 11/06/2024 at 17:49):     if (!completedHabitHistory || !user || !currentHabit) return;
+src/components/History/index.tsx    (trishu patel on 11/06/2024 at 17:49):     setCompletedHabitHistory(
+src/components/History/index.tsx    (trishu patel on 11/06/2024 at 17:49):       completedHabitHistory?.filter((history) => {
+src/components/History/index.tsx    (trishu patel on 11/06/2024 at 17:49):     if (!completedHabitHistory || !user || !currentHabit) return;
+src/components/History/index.tsx    (trishu patel on 11/06/2024 at 17:49):   const isHabitCompletedToday = (habit: Habit) => {
+src/components/History/index.tsx    (trishu patel on 11/06/2024 at 17:49):     if (!completedHabitHistory) {
+src/components/History/index.tsx    (trishu patel on 11/06/2024 at 17:49):       return false;
+src/components/History/index.tsx    (trishu patel on 11/06/2024 at 17:49):     }
+src/components/History/index.tsx    (trishu patel on 11/06/2024 at 17:49):     return completedHabitHistory.some((history) => {
+src/components/History/index.tsx    (trishu patel on 11/06/2024 at 17:49):       const isHistoryToday = dayjs().isSame(history.date, "day");
+src/components/History/index.tsx    (trishu patel on 11/06/2024 at 17:49):       const isCurrentHabit = habit.id === history.habitId;
+src/components/History/index.tsx    (trishu patel on 11/06/2024 at 17:49):       return isCurrentHabit && isHistoryToday;
+src/components/History/index.tsx    (trishu patel on 11/06/2024 at 17:49):     });
+src/components/History/index.tsx    (trishu patel on 11/06/2024 at 17:49):   };
+src/components/History/index.tsx    (trishu patel on 11/06/2024 at 17:49):       newHabitsCompleted[habit.id] = isHabitCompletedToday(habit);
+src/components/History/index.tsx    (trishu patel on 11/06/2024 at 17:49):     setCurrentHabit(habits[0]);
+src/components/History/index.tsx    (trishu patel on 11/06/2024 at 17:49):   }, [habits, completedHabitHistory]);
+src/components/History/index.tsx    (trishu patel on 11/06/2024 at 17:49):       setCompletedHabitHistory(history);
+src/components/History/index.tsx    (trishu patel on 11/06/2024 at 17:49):     const dates = completedHabitHistory
+src/components/History/index.tsx    (trishu patel on 11/06/2024 at 17:49):   }, [currentHabit?.id, completedHabitHistory]);
+
+src/server/emails.ts    (trishu patel on 11/06/2024 at 14:14): import { SolSyncUser } from "@/types";
+src/server/emails.ts    (trishu patel on 11/06/2024 at 14:14): export async function sendDataEmail(user: SolSyncUser) {
+src/server/emails.ts    (trishu patel on 11/05/2024 at 16:28):   try {
+src/server/emails.ts    (trishu patel on 11/05/2024 at 16:28):     const apiUrl = process.env.EXPO_PUBLIC_SENDDATAEMAIL_API_URL;
+src/server/emails.ts    (trishu patel on 11/05/2024 at 16:28):     if (!apiUrl) {
+src/server/emails.ts    (trishu patel on 11/05/2024 at 16:28):       throw new Error(
+src/server/emails.ts    (trishu patel on 11/05/2024 at 16:50):         "SENDDATAEMAIL_API_URL is not defined in the environment variables.",
+src/server/emails.ts    (trishu patel on 11/05/2024 at 16:28):       );
+src/server/emails.ts    (trishu patel on 11/05/2024 at 16:28):     }
+src/server/emails.ts    (trishu patel on 11/05/2024 at 16:28):     const url = new URL(apiUrl);
+src/server/emails.ts    (trishu patel on 11/05/2024 at 16:28):     const response = await fetch(url, {
+src/server/emails.ts    (trishu patel on 11/05/2024 at 16:28):       method: "POST",
+src/server/emails.ts    (trishu patel on 11/05/2024 at 16:28):       headers: {
+src/server/emails.ts    (trishu patel on 11/05/2024 at 16:50):         "x-api-key": process.env.EXPO_PUBLIC_SENDDATAEMAIL_API_KEY as string,
+src/server/emails.ts    (trishu patel on 11/05/2024 at 16:28):       },
+src/server/emails.ts    (trishu patel on 11/05/2024 at 16:28):       body: JSON.stringify({
+src/server/emails.ts    (trishu patel on 11/06/2024 at 14:14):         userId: user.id,
+src/server/emails.ts    (trishu patel on 11/06/2024 at 14:14):         email: user.email,
+src/server/emails.ts    (trishu patel on 11/05/2024 at 16:28):       }),
+src/server/emails.ts    (trishu patel on 11/05/2024 at 16:28):     });
+src/server/emails.ts    (trishu patel on 11/05/2024 at 16:28):     const jsonData = await response.json();
+src/server/emails.ts    (trishu patel on 11/05/2024 at 16:28):     console.log(jsonData);
+src/server/emails.ts    (trishu patel on 11/05/2024 at 16:28):   } catch (err) {
+src/server/emails.ts    (trishu patel on 11/05/2024 at 16:28):     console.log(err);
+src/server/emails.ts    (trishu patel on 11/05/2024 at 16:28):   }
+src/server/emails.ts    (trishu patel on 11/05/2024 at 16:28): }
+
+lambdas/sendDataEmail/index.mjs    (trishu patel on 11/05/2024 at 16:28): import dayjs from "dayjs";
+lambdas/sendDataEmail/index.mjs    (trishu patel on 11/05/2024 at 16:28): import { cert, initializeApp } from "firebase-admin/app";
+lambdas/sendDataEmail/index.mjs    (trishu patel on 11/06/2024 at 14:12): import { getFirestore, Timestamp } from "firebase-admin/firestore";
+lambdas/sendDataEmail/index.mjs    (trishu patel on 11/05/2024 at 16:28): initializeApp({
+lambdas/sendDataEmail/index.mjs    (trishu patel on 11/05/2024 at 16:28):   credential: cert({
+lambdas/sendDataEmail/index.mjs    (trishu patel on 11/05/2024 at 16:28):     type: process.env.FIREBASE_ADMIN_TYPE,
+lambdas/sendDataEmail/index.mjs    (trishu patel on 11/05/2024 at 16:28):     project_id: process.env.FIREBASE_ADMIN_PROJECT_ID,
+lambdas/sendDataEmail/index.mjs    (trishu patel on 11/05/2024 at 16:28):     private_key_id: process.env.FIREBASE_ADMIN_PRIVATE_KEY_id,
+lambdas/sendDataEmail/index.mjs    (trishu patel on 11/05/2024 at 16:28):     private_key: process.env.FIREBASE_ADMIN_PRIVATE_KEY,
+lambdas/sendDataEmail/index.mjs    (trishu patel on 11/05/2024 at 16:28):     client_email: process.env.FIREBASE_ADMIN_CLIENT_EMAIL,
+lambdas/sendDataEmail/index.mjs    (trishu patel on 11/05/2024 at 16:28):     client_id: process.env.FIREBASE_ADMIN_CLIENT_ID,
+lambdas/sendDataEmail/index.mjs    (trishu patel on 11/05/2024 at 16:28):     auth_uri: process.env.FIREBASE_ADMIN_AUTH_URI,
+lambdas/sendDataEmail/index.mjs    (trishu patel on 11/05/2024 at 16:28):     token_uri: process.env.FIREBASE_ADMIN_TOKEN_URI,
+lambdas/sendDataEmail/index.mjs    (trishu patel on 11/05/2024 at 16:28):     auth_provider_x509_cert_url:
+lambdas/sendDataEmail/index.mjs    (trishu patel on 11/05/2024 at 16:28):       process.env.FIREBASE_ADMIN_AUTH_PROVIDER_X509_CERT_URL,
+lambdas/sendDataEmail/index.mjs    (trishu patel on 11/05/2024 at 16:28):     client_x509_cert_url: process.env.FIREBASE_ADMIN_CLIENT_X509_CERT_URL,
+lambdas/sendDataEmail/index.mjs    (trishu patel on 11/05/2024 at 16:28):     universe_domain: process.env.FIREBASE_ADMIN_UNIVERSE_DOMAIN,
+lambdas/sendDataEmail/index.mjs    (trishu patel on 11/05/2024 at 16:28):   }),
+lambdas/sendDataEmail/index.mjs    (trishu patel on 11/05/2024 at 16:28): });
+lambdas/sendDataEmail/index.mjs    (trishu patel on 11/05/2024 at 16:28): const db = getFirestore();
+lambdas/sendDataEmail/index.mjs    (trishu patel on 11/05/2024 at 16:28): const doesUserExist = async (userId) => {
+lambdas/sendDataEmail/index.mjs    (trishu patel on 11/05/2024 at 16:28):   const userSnapshot = await db
+lambdas/sendDataEmail/index.mjs    (trishu patel on 11/05/2024 at 16:28):     .collection("users")
+lambdas/sendDataEmail/index.mjs    (trishu patel on 11/05/2024 at 16:28):     .where("id", "==", userId)
+lambdas/sendDataEmail/index.mjs    (trishu patel on 11/05/2024 at 16:28):     .get();
+lambdas/sendDataEmail/index.mjs    (trishu patel on 11/05/2024 at 16:28):   return !userSnapshot.empty;
+lambdas/sendDataEmail/index.mjs    (trishu patel on 11/05/2024 at 16:28): };
+lambdas/sendDataEmail/index.mjs    (trishu patel on 11/05/2024 at 16:28): const getHabitsByUserId = async (userId) => {
+lambdas/sendDataEmail/index.mjs    (trishu patel on 11/05/2024 at 16:28):   const habitsSnapshot = await db
+lambdas/sendDataEmail/index.mjs    (trishu patel on 11/05/2024 at 16:28):     .collection("habits")
+lambdas/sendDataEmail/index.mjs    (trishu patel on 11/05/2024 at 16:28):     .where("userId", "==", userId)
+lambdas/sendDataEmail/index.mjs    (trishu patel on 11/05/2024 at 16:28):     .get();
+lambdas/sendDataEmail/index.mjs    (trishu patel on 11/06/2024 at 14:12):   const startOfMonth = dayjs().startOf("month");
+lambdas/sendDataEmail/index.mjs    (trishu patel on 11/06/2024 at 14:12):   const endOfMonth = dayjs().endOf("month");
+lambdas/sendDataEmail/index.mjs    (trishu patel on 11/06/2024 at 14:12):   const startTimestamp = Timestamp.fromDate(startOfMonth.toDate());
+lambdas/sendDataEmail/index.mjs    (trishu patel on 11/06/2024 at 14:12):   const endTimestamp = Timestamp.fromDate(endOfMonth.toDate());
+lambdas/sendDataEmail/index.mjs    (trishu patel on 11/05/2024 at 16:28):   const historySnapshot = await db
+lambdas/sendDataEmail/index.mjs    (trishu patel on 11/05/2024 at 16:28):     .collection("history")
+lambdas/sendDataEmail/index.mjs    (trishu patel on 11/05/2024 at 16:28):     .where("userId", "==", userId)
+lambdas/sendDataEmail/index.mjs    (trishu patel on 11/06/2024 at 14:12):     .where("date", ">=", startTimestamp)
+lambdas/sendDataEmail/index.mjs    (trishu patel on 11/06/2024 at 14:12):     .where("date", "<=", endTimestamp)
+lambdas/sendDataEmail/index.mjs    (trishu patel on 11/05/2024 at 16:28):     .get();
+lambdas/sendDataEmail/index.mjs    (trishu patel on 11/05/2024 at 16:28):   const history = [];
+lambdas/sendDataEmail/index.mjs    (trishu patel on 11/05/2024 at 16:28):   historySnapshot.forEach((doc) => {
+lambdas/sendDataEmail/index.mjs    (trishu patel on 11/05/2024 at 16:28):     history.push({
+lambdas/sendDataEmail/index.mjs    (trishu patel on 11/05/2024 at 16:28):       id: doc.id,
+lambdas/sendDataEmail/index.mjs    (trishu patel on 11/05/2024 at 16:28):       habitId: doc.data().habitId,
+lambdas/sendDataEmail/index.mjs    (trishu patel on 11/05/2024 at 16:28):       date: doc.data().date.toDate(),
+lambdas/sendDataEmail/index.mjs    (trishu patel on 11/05/2024 at 16:28):     });
+lambdas/sendDataEmail/index.mjs    (trishu patel on 11/05/2024 at 16:28):   });
+lambdas/sendDataEmail/index.mjs    (trishu patel on 11/05/2024 at 16:28):   const habits = [];
+lambdas/sendDataEmail/index.mjs    (trishu patel on 11/05/2024 at 16:28):   habitsSnapshot.forEach((doc) => {
+lambdas/sendDataEmail/index.mjs    (trishu patel on 11/05/2024 at 16:28):     const habitHistory = history
+lambdas/sendDataEmail/index.mjs    (trishu patel on 11/05/2024 at 16:28):       .filter((history) => history.habitId === doc.id)
+lambdas/sendDataEmail/index.mjs    (trishu patel on 11/05/2024 at 16:28):       .map((history) => dayjs(history.date));
+lambdas/sendDataEmail/index.mjs    (trishu patel on 11/05/2024 at 16:28):     habits.push({
+lambdas/sendDataEmail/index.mjs    (trishu patel on 11/05/2024 at 16:28):       id: doc.id,
+lambdas/sendDataEmail/index.mjs    (trishu patel on 11/05/2024 at 16:28):       name: doc.data().name,
+lambdas/sendDataEmail/index.mjs    (trishu patel on 11/05/2024 at 16:28):       datesCompleted: habitHistory,
+lambdas/sendDataEmail/index.mjs    (trishu patel on 11/05/2024 at 16:28):     });
+lambdas/sendDataEmail/index.mjs    (trishu patel on 11/05/2024 at 16:28):   });
+lambdas/sendDataEmail/index.mjs    (trishu patel on 11/05/2024 at 16:28):   return habits;
+lambdas/sendDataEmail/index.mjs    (trishu patel on 11/05/2024 at 16:28): };
+lambdas/sendDataEmail/index.mjs    (trishu patel on 11/05/2024 at 16:28): export const handler = async (event) => {
+lambdas/sendDataEmail/index.mjs    (trishu patel on 11/05/2024 at 16:28):   if (event.httpMethod !== "POST") {
+lambdas/sendDataEmail/index.mjs    (trishu patel on 11/05/2024 at 16:28):     return {
+lambdas/sendDataEmail/index.mjs    (trishu patel on 11/05/2024 at 16:28):       statusCode: 405,
+lambdas/sendDataEmail/index.mjs    (trishu patel on 11/05/2024 at 16:28):       body: JSON.stringify({ error: "Only POST requests are allowed" }),
+lambdas/sendDataEmail/index.mjs    (trishu patel on 11/05/2024 at 16:28):     };
+lambdas/sendDataEmail/index.mjs    (trishu patel on 11/05/2024 at 16:28):   }
+lambdas/sendDataEmail/index.mjs    (trishu patel on 11/05/2024 at 16:28):   if (!userId) {
+lambdas/sendDataEmail/index.mjs    (trishu patel on 11/05/2024 at 16:28):     return {
+lambdas/sendDataEmail/index.mjs    (trishu patel on 11/05/2024 at 16:28):       statusCode: 400,
+lambdas/sendDataEmail/index.mjs    (trishu patel on 11/05/2024 at 16:28):       body: JSON.stringify({ error: "userId not provided in the body" }),
+lambdas/sendDataEmail/index.mjs    (trishu patel on 11/05/2024 at 16:28):     };
+lambdas/sendDataEmail/index.mjs    (trishu patel on 11/05/2024 at 16:28):   }
+lambdas/sendDataEmail/index.mjs    (trishu patel on 11/05/2024 at 16:28):   const isUserInFirebase = await doesUserExist(userId);
+lambdas/sendDataEmail/index.mjs    (trishu patel on 11/05/2024 at 16:28):   if (!isUserInFirebase) {
+lambdas/sendDataEmail/index.mjs    (trishu patel on 11/05/2024 at 16:28):     return {
+lambdas/sendDataEmail/index.mjs    (trishu patel on 11/05/2024 at 16:28):       statusCode: 400,
+lambdas/sendDataEmail/index.mjs    (trishu patel on 11/05/2024 at 16:28):       body: JSON.stringify({ error: "invalid userId" }),
+lambdas/sendDataEmail/index.mjs    (trishu patel on 11/05/2024 at 16:28):     };
+lambdas/sendDataEmail/index.mjs    (trishu patel on 11/05/2024 at 16:28):   }
+lambdas/sendDataEmail/index.mjs    (trishu patel on 11/05/2024 at 16:28):   const habits = await getHabitsByUserId(userId);
+lambdas/sendDataEmail/index.mjs    (trishu patel on 11/05/2024 at 16:28):   return {
+lambdas/sendDataEmail/index.mjs    (trishu patel on 11/05/2024 at 16:28):     statusCode: 200,
+lambdas/sendDataEmail/index.mjs    (trishu patel on 11/05/2024 at 16:28):   };
+lambdas/sendDataEmail/index.mjs    (trishu patel on 11/05/2024 at 16:28): };
+
+lambdas/sendWelcomeEmail/sendWelcomeEmail.mjs (trishu patel on 11/05/2024 at 16:29):   if (event.to && event.name) {
+lambdas/sendWelcomeEmail/sendWelcomeEmail.mjs (trishu patel on 11/05/2024 at 16:29):     <div style="font-family: Arial, sans-serif; padding: 20px; background: linear-gradient(191.16deg, #CC9ED0 3.26%, #F7A592 49.91%, #FFD18A 96.57%); color: #000; text-align: center;">
+lambdas/sendWelcomeEmail/sendWelcomeEmail.mjs (trishu patel on 11/05/2024 at 16:29):         <h1 style="color: #f4a58a; text-align: center;">Welcome to SolSync!</h1>
+lambdas/sendWelcomeEmail/sendWelcomeEmail.mjs (trishu patel on 11/05/2024 at 16:29):         <p style="font-size: 20px;">
+lambdas/sendWelcomeEmail/sendWelcomeEmail.mjs (trishu patel on 11/05/2024 at 16:29):           We are thrilled to have you join our community! At SolSync, we believe in the power of daily reflection and personal growth.
+lambdas/sendWelcomeEmail/sendWelcomeEmail.mjs (trishu patel on 11/05/2024 at 16:29):         </p>
+lambdas/sendWelcomeEmail/sendWelcomeEmail.mjs (trishu patel on 11/05/2024 at 16:29):         <p style="font-size: 18px;">
+lambdas/sendWelcomeEmail/sendWelcomeEmail.mjs (trishu patel on 11/05/2024 at 16:29):           SolSync helps you quickly and easily keep track of your habits, making aligning habits with sunrise and sunset times easy.
+lambdas/sendWelcomeEmail/sendWelcomeEmail.mjs (trishu patel on 11/05/2024 at 16:29):         </p>
+lambdas/sendWelcomeEmail/sendWelcomeEmail.mjs (trishu patel on 11/05/2024 at 16:29):         <h2 style="color: #b38acb;">Account Details</h2>
+lambdas/sendWelcomeEmail/sendWelcomeEmail.mjs (trishu patel on 11/05/2024 at 16:29):         <p style="font-size: 18px;">
+lambdas/sendWelcomeEmail/sendWelcomeEmail.mjs (trishu patel on 11/05/2024 at 16:29):           Name: ${emailName}
+lambdas/sendWelcomeEmail/sendWelcomeEmail.mjs (trishu patel on 11/05/2024 at 16:29):         </p>
+lambdas/sendWelcomeEmail/sendWelcomeEmail.mjs (trishu patel on 11/05/2024 at 16:29):         <p style="font-size: 18px;">
+lambdas/sendWelcomeEmail/sendWelcomeEmail.mjs (trishu patel on 11/05/2024 at 16:29):           Email: ${emailTo}
+lambdas/sendWelcomeEmail/sendWelcomeEmail.mjs (trishu patel on 11/05/2024 at 16:29):         </p>
+lambdas/sendWelcomeEmail/sendWelcomeEmail.mjs (trishu patel on 11/05/2024 at 16:29):         <h2 style="color: #b38acb;">Getting Started</h2>
+lambdas/sendWelcomeEmail/sendWelcomeEmail.mjs (trishu patel on 11/05/2024 at 16:29):         <p style="font-size: 18px;">
+lambdas/sendWelcomeEmail/sendWelcomeEmail.mjs (trishu patel on 11/05/2024 at 16:29):           Here are a few tips for using SolSync:
+lambdas/sendWelcomeEmail/sendWelcomeEmail.mjs (trishu patel on 11/05/2024 at 16:29):         </p>
+lambdas/sendWelcomeEmail/sendWelcomeEmail.mjs (trishu patel on 11/05/2024 at 16:29):         <ul style="font-size: 18px; margin: 10px 0; padding-left: 20px;">
+lambdas/sendWelcomeEmail/sendWelcomeEmail.mjs (trishu patel on 11/05/2024 at 16:29):           <li>Customize your icons, habits, and profile picture to make this app uniquely yours.</li>
+lambdas/sendWelcomeEmail/sendWelcomeEmail.mjs (trishu patel on 11/05/2024 at 16:29):           <li>Log into the app daily to track your progress.</li>
+lambdas/sendWelcomeEmail/sendWelcomeEmail.mjs (trishu patel on 11/05/2024 at 16:29):           <li>Keep your email updated to receive daily reminders.</li>
+lambdas/sendWelcomeEmail/sendWelcomeEmail.mjs (trishu patel on 11/05/2024 at 16:29):         </ul>
+lambdas/sendWelcomeEmail/sendWelcomeEmail.mjs (trishu patel on 11/05/2024 at 16:29):         <p style="font-size: 18px;">
+lambdas/sendWelcomeEmail/sendWelcomeEmail.mjs (trishu patel on 11/05/2024 at 16:29):           Remember, every small step counts on your habit-building journey!
+lambdas/sendWelcomeEmail/sendWelcomeEmail.mjs (trishu patel on 11/05/2024 at 16:29):         </p>
+lambdas/sendWelcomeEmail/sendWelcomeEmail.mjs (trishu patel on 11/05/2024 at 16:29):     </div>
+
+lambdas/sendAllDailyHabitEmails/index.mjs    (trishu patel on 11/11/2024 at 11:56): import { cert, initializeApp } from "firebase-admin/app";
+lambdas/sendAllDailyHabitEmails/index.mjs    (trishu patel on 11/11/2024 at 11:56): import { getFirestore } from "firebase-admin/firestore";
+lambdas/sendAllDailyHabitEmails/index.mjs    (trishu patel on 11/11/2024 at 11:56): initializeApp({
+lambdas/sendAllDailyHabitEmails/index.mjs    (trishu patel on 11/11/2024 at 11:56):   credential: cert({
+lambdas/sendAllDailyHabitEmails/index.mjs    (trishu patel on 11/11/2024 at 11:56):     type: process.env.FIREBASE_ADMIN_TYPE,
+lambdas/sendAllDailyHabitEmails/index.mjs    (trishu patel on 11/11/2024 at 11:56):     project_id: process.env.FIREBASE_ADMIN_PROJECT_ID,
+lambdas/sendAllDailyHabitEmails/index.mjs    (trishu patel on 11/11/2024 at 11:56):     private_key_id: process.env.FIREBASE_ADMIN_PRIVATE_KEY_id,
+lambdas/sendAllDailyHabitEmails/index.mjs    (trishu patel on 11/11/2024 at 11:56):     private_key: process.env.FIREBASE_ADMIN_PRIVATE_KEY,
+lambdas/sendAllDailyHabitEmails/index.mjs    (trishu patel on 11/11/2024 at 11:56):     client_email: process.env.FIREBASE_ADMIN_CLIENT_EMAIL,
+lambdas/sendAllDailyHabitEmails/index.mjs    (trishu patel on 11/11/2024 at 11:56):     client_id: process.env.FIREBASE_ADMIN_CLIENT_ID,
+lambdas/sendAllDailyHabitEmails/index.mjs    (trishu patel on 11/11/2024 at 11:56):     auth_uri: process.env.FIREBASE_ADMIN_AUTH_URI,
+lambdas/sendAllDailyHabitEmails/index.mjs    (trishu patel on 11/11/2024 at 11:56):     token_uri: process.env.FIREBASE_ADMIN_TOKEN_URI,
+lambdas/sendAllDailyHabitEmails/index.mjs    (trishu patel on 11/11/2024 at 11:56):     auth_provider_x509_cert_url:
+lambdas/sendAllDailyHabitEmails/index.mjs    (trishu patel on 11/11/2024 at 11:56):       process.env.FIREBASE_ADMIN_AUTH_PROVIDER_X509_CERT_URL,
+lambdas/sendAllDailyHabitEmails/index.mjs    (trishu patel on 11/11/2024 at 11:56):     client_x509_cert_url: process.env.FIREBASE_ADMIN_CLIENT_X509_CERT_URL,
+lambdas/sendAllDailyHabitEmails/index.mjs    (trishu patel on 11/11/2024 at 11:56):     universe_domain: process.env.FIREBASE_ADMIN_UNIVERSE_DOMAIN,
+lambdas/sendAllDailyHabitEmails/index.mjs    (trishu patel on 11/11/2024 at 11:56):   }),
+lambdas/sendAllDailyHabitEmails/index.mjs    (trishu patel on 11/11/2024 at 11:56): });
+lambdas/sendAllDailyHabitEmails/index.mjs    (trishu patel on 11/11/2024 at 11:56): const db = getFirestore();
+lambdas/sendAllDailyHabitEmails/index.mjs    (trishu patel on 11/11/2024 at 11:56): const fetchHabits = async () => {
+lambdas/sendAllDailyHabitEmails/index.mjs    (trishu patel on 11/11/2024 at 11:56):   const habitsSnapshot = await db.collection("habits").get();
+lambdas/sendAllDailyHabitEmails/index.mjs    (trishu patel on 11/11/2024 at 11:56):   const habits = [];
+lambdas/sendAllDailyHabitEmails/index.mjs    (trishu patel on 11/11/2024 at 11:56):   habitsSnapshot.forEach((doc) => {
+lambdas/sendAllDailyHabitEmails/index.mjs    (trishu patel on 11/11/2024 at 11:56):     habits.push({ id: doc.id, ...doc.data() });
+lambdas/sendAllDailyHabitEmails/index.mjs    (trishu patel on 11/11/2024 at 11:56):   });
+lambdas/sendAllDailyHabitEmails/index.mjs    (trishu patel on 11/11/2024 at 11:56):   return habits;
+lambdas/sendAllDailyHabitEmails/index.mjs    (trishu patel on 11/11/2024 at 11:56): };
+lambdas/sendAllDailyHabitEmails/index.mjs    (trishu patel on 11/11/2024 at 11:56): const fetchUsers = async () => {
+lambdas/sendAllDailyHabitEmails/index.mjs    (trishu patel on 11/11/2024 at 11:56):   const userSnapshot = await db.collection("users").get();
+lambdas/sendAllDailyHabitEmails/index.mjs    (trishu patel on 11/11/2024 at 11:56):   const users = [];
+lambdas/sendAllDailyHabitEmails/index.mjs    (trishu patel on 11/11/2024 at 11:56):   userSnapshot.forEach((doc) => {
+lambdas/sendAllDailyHabitEmails/index.mjs    (trishu patel on 11/11/2024 at 11:56):     users.push({ id: doc.id, ...doc.data() });
+lambdas/sendAllDailyHabitEmails/index.mjs    (trishu patel on 11/11/2024 at 11:56):   });
+lambdas/sendAllDailyHabitEmails/index.mjs    (trishu patel on 11/11/2024 at 11:56):   return users;
+lambdas/sendAllDailyHabitEmails/index.mjs    (trishu patel on 11/11/2024 at 11:56): };
+lambdas/sendAllDailyHabitEmails/index.mjs    (trishu patel on 11/11/2024 at 11:56): const sendDailyEmail = async (user, allHabits) => {
+lambdas/sendAllDailyHabitEmails/index.mjs    (trishu patel on 11/11/2024 at 11:56):   const usersHabits = allHabits.filter(
+lambdas/sendAllDailyHabitEmails/index.mjs    (trishu patel on 11/11/2024 at 11:56):     (habit) => habit.userId === user.id && habit.emailNotificationEnabled,
+lambdas/sendAllDailyHabitEmails/index.mjs    (trishu patel on 11/11/2024 at 11:56):   );
+lambdas/sendAllDailyHabitEmails/index.mjs    (trishu patel on 11/11/2024 at 11:56):   user["habits"] = usersHabits;
+lambdas/sendAllDailyHabitEmails/index.mjs    (trishu patel on 11/11/2024 at 11:56):   const url = process.env.EXPO_PUBLIC_SENDDAILYHABITEMAIL_API_URL;
+lambdas/sendAllDailyHabitEmails/index.mjs    (trishu patel on 11/11/2024 at 11:56):   const apiKey = process.env.EXPO_PUBLIC_SENDDAILYHABITEMAIL_API_KEY;
+lambdas/sendAllDailyHabitEmails/index.mjs    (trishu patel on 11/11/2024 at 11:56):   const response = await fetch(url, {
+lambdas/sendAllDailyHabitEmails/index.mjs    (trishu patel on 11/11/2024 at 11:56):     method: "POST",
+lambdas/sendAllDailyHabitEmails/index.mjs    (trishu patel on 11/11/2024 at 11:56):     headers: {
+lambdas/sendAllDailyHabitEmails/index.mjs    (trishu patel on 11/11/2024 at 11:56):       "x-api-key": apiKey,
+lambdas/sendAllDailyHabitEmails/index.mjs    (trishu patel on 11/11/2024 at 11:56):     },
+lambdas/sendAllDailyHabitEmails/index.mjs    (trishu patel on 11/11/2024 at 11:56):     body: JSON.stringify({
+lambdas/sendAllDailyHabitEmails/index.mjs    (trishu patel on 11/11/2024 at 11:56):       user: user,
+lambdas/sendAllDailyHabitEmails/index.mjs    (trishu patel on 11/11/2024 at 11:56):     }),
+lambdas/sendAllDailyHabitEmails/index.mjs    (trishu patel on 11/11/2024 at 11:56):   });
+lambdas/sendAllDailyHabitEmails/index.mjs    (trishu patel on 11/11/2024 at 11:56):   if (response.ok) {
+lambdas/sendAllDailyHabitEmails/index.mjs    (trishu patel on 11/11/2024 at 11:56):     console.log(`Email was sent to ${user.email}`);
+lambdas/sendAllDailyHabitEmails/index.mjs    (trishu patel on 11/11/2024 at 11:56):     return;
+lambdas/sendAllDailyHabitEmails/index.mjs    (trishu patel on 11/11/2024 at 11:56):   }
+lambdas/sendAllDailyHabitEmails/index.mjs    (trishu patel on 11/11/2024 at 11:56):   console.log(`Unable to send email to ${user.email}`);
+lambdas/sendAllDailyHabitEmails/index.mjs    (trishu patel on 11/11/2024 at 11:56): };
+lambdas/sendAllDailyHabitEmails/index.mjs    (trishu patel on 11/11/2024 at 11:56): export const handler = async () => {
+lambdas/sendAllDailyHabitEmails/index.mjs    (trishu patel on 11/11/2024 at 11:56):   const habits = await fetchHabits();
+lambdas/sendAllDailyHabitEmails/index.mjs    (trishu patel on 11/11/2024 at 11:56):   const users = await fetchUsers();
+lambdas/sendAllDailyHabitEmails/index.mjs    (trishu patel on 11/11/2024 at 11:56):   const emailPromises = users.map((user) => sendDailyEmail(user, habits));
+lambdas/sendAllDailyHabitEmails/index.mjs    (trishu patel on 11/11/2024 at 11:56):   await Promise.all(emailPromises);
+lambdas/sendAllDailyHabitEmails/index.mjs    (trishu patel on 11/11/2024 at 11:56):   return {
+lambdas/sendAllDailyHabitEmails/index.mjs    (trishu patel on 11/11/2024 at 11:56):     statusCode: 200,
+lambdas/sendAllDailyHabitEmails/index.mjs    (trishu patel on 11/11/2024 at 11:56):   };
+lambdas/sendAllDailyHabitEmails/index.mjs    (trishu patel on 11/11/2024 at 11:56): };
