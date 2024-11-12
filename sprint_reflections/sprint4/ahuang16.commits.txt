@@ -1,0 +1,470 @@
+package.json (amy-huang16 on 11/07/2024 at 13:47):     "react-native-maps": "1.14.0",
+index.ts     (amy-huang16 on 11/06/2024 at 17:50): type ValidAvatar = {
+index.ts     (amy-huang16 on 11/06/2024 at 17:50):   emoji: string;
+index.ts     (amy-huang16 on 11/06/2024 at 17:50):   background: string;
+index.ts     (amy-huang16 on 11/06/2024 at 17:50): };
+index.ts     (amy-huang16 on 11/06/2024 at 17:50): type NullAvatar = {
+index.ts     (amy-huang16 on 11/06/2024 at 17:50):   emoji: null;
+index.ts     (amy-huang16 on 11/06/2024 at 17:50):   background: null;
+index.ts     (amy-huang16 on 11/06/2024 at 17:50): };
+index.ts     (amy-huang16 on 11/06/2024 at 17:50): export type Avatar = ValidAvatar | NullAvatar;
+index.ts     (amy-huang16 on 11/06/2024 at 17:50):   avatar: Avatar;
+index.tsx    (amy-huang16 on 11/06/2024 at 17:50):     color: "#4a3f4c",
+users.ts     (amy-huang16 on 11/06/2024 at 17:50): import { Avatar, Location, SolSyncUser } from "@/types";
+users.ts     (amy-huang16 on 11/06/2024 at 17:50):     avatar: {
+users.ts     (amy-huang16 on 11/06/2024 at 17:50):       emoji: userData.emoji,
+users.ts     (amy-huang16 on 11/06/2024 at 17:50):       background: userData.background,
+users.ts     (amy-huang16 on 11/06/2024 at 17:50):     },
+users.ts     (amy-huang16 on 11/06/2024 at 17:50):   avatar: Avatar,
+users.ts     (amy-huang16 on 11/06/2024 at 17:50):     emoji: avatar.emoji,
+users.ts     (amy-huang16 on 11/06/2024 at 17:50):     background: avatar.background,
+ResetLocation.tsx (amy-huang16 on 11/07/2024 at 13:47): import { NativeStackScreenProps } from "@react-navigation/native-stack";
+ResetLocation.tsx (amy-huang16 on 11/07/2024 at 13:47): import { useEffect, useState } from "react";
+ResetLocation.tsx (amy-huang16 on 11/07/2024 at 13:47): import {
+ResetLocation.tsx (amy-huang16 on 11/07/2024 at 13:47):   ActivityIndicator,
+ResetLocation.tsx (amy-huang16 on 11/07/2024 at 13:47):   Keyboard,
+ResetLocation.tsx (amy-huang16 on 11/07/2024 at 13:47):   SafeAreaView,
+ResetLocation.tsx (amy-huang16 on 11/07/2024 at 13:47):   StyleSheet,
+ResetLocation.tsx (amy-huang16 on 11/07/2024 at 13:47):   Text,
+ResetLocation.tsx (amy-huang16 on 11/07/2024 at 13:47):   TouchableOpacity,
+ResetLocation.tsx (amy-huang16 on 11/07/2024 at 13:47):   TouchableWithoutFeedback,
+ResetLocation.tsx (amy-huang16 on 11/07/2024 at 13:47):   View,
+ResetLocation.tsx (amy-huang16 on 11/07/2024 at 13:47): } from "react-native";
+ResetLocation.tsx (amy-huang16 on 11/07/2024 at 13:47): import MapView, { Marker } from "react-native-maps";
+ResetLocation.tsx (amy-huang16 on 11/07/2024 at 13:47): import { default as IonIcons } from "react-native-vector-icons/Ionicons";
+ResetLocation.tsx (amy-huang16 on 11/07/2024 at 13:47): import useUser from "@/hooks/useUser";
+ResetLocation.tsx (amy-huang16 on 11/07/2024 at 13:47): import { upsertUser } from "@/server";
+ResetLocation.tsx (amy-huang16 on 11/07/2024 at 13:47): import { Location, SolSyncUser } from "@/types";
+ResetLocation.tsx (amy-huang16 on 11/07/2024 at 13:47): import getLocationFromDevice from "@/utils/getLocationFromDevice";
+ResetLocation.tsx (amy-huang16 on 11/07/2024 at 13:47): import { ProfileStackParamList } from ".";
+ResetLocation.tsx (amy-huang16 on 11/07/2024 at 13:47): type ResetLocationScreenProps = NativeStackScreenProps<
+ResetLocation.tsx (amy-huang16 on 11/07/2024 at 13:47):   ProfileStackParamList,
+ResetLocation.tsx (amy-huang16 on 11/07/2024 at 13:47):   "ResetLocation"
+ResetLocation.tsx (amy-huang16 on 11/07/2024 at 13:47): >;
+ResetLocation.tsx (amy-huang16 on 11/07/2024 at 13:47): const getDefaultLocation = async (
+ResetLocation.tsx (amy-huang16 on 11/07/2024 at 13:47):   user: SolSyncUser | null,
+ResetLocation.tsx (amy-huang16 on 11/07/2024 at 13:47): ): Promise<Location> => {
+ResetLocation.tsx (amy-huang16 on 11/07/2024 at 13:47):   try {
+ResetLocation.tsx (amy-huang16 on 11/07/2024 at 13:47):     const currentLoc = await getLocationFromDevice();
+ResetLocation.tsx (amy-huang16 on 11/07/2024 at 13:47):     if (currentLoc.latitude && currentLoc.longitude) {
+ResetLocation.tsx (amy-huang16 on 11/07/2024 at 13:47):       // Use device location if available
+ResetLocation.tsx (amy-huang16 on 11/07/2024 at 13:47):       return {
+ResetLocation.tsx (amy-huang16 on 11/07/2024 at 13:47):         latitude: currentLoc.latitude,
+ResetLocation.tsx (amy-huang16 on 11/07/2024 at 13:47):         longitude: currentLoc.longitude,
+ResetLocation.tsx (amy-huang16 on 11/07/2024 at 13:47):       };
+ResetLocation.tsx (amy-huang16 on 11/07/2024 at 13:47):     } else if (user?.location.latitude && user?.location.longitude) {
+ResetLocation.tsx (amy-huang16 on 11/07/2024 at 13:47):       // Else use user's stored location
+ResetLocation.tsx (amy-huang16 on 11/07/2024 at 13:47):       return user.location;
+ResetLocation.tsx (amy-huang16 on 11/07/2024 at 13:47):     }
+ResetLocation.tsx (amy-huang16 on 11/07/2024 at 13:47):   } catch (error) {
+ResetLocation.tsx (amy-huang16 on 11/07/2024 at 13:47):     console.log(error);
+ResetLocation.tsx (amy-huang16 on 11/07/2024 at 13:47):   }
+ResetLocation.tsx (amy-huang16 on 11/07/2024 at 13:47):   // Default to UTK coordinates if no location is available
+ResetLocation.tsx (amy-huang16 on 11/07/2024 at 13:47):   return {
+ResetLocation.tsx (amy-huang16 on 11/07/2024 at 13:47):     latitude: 35.9544,
+ResetLocation.tsx (amy-huang16 on 11/07/2024 at 13:47):     longitude: -83.9295,
+ResetLocation.tsx (amy-huang16 on 11/07/2024 at 13:47):   };
+ResetLocation.tsx (amy-huang16 on 11/07/2024 at 13:47): };
+ResetLocation.tsx (amy-huang16 on 11/07/2024 at 13:47): export default function ResetLocation({
+ResetLocation.tsx (amy-huang16 on 11/07/2024 at 13:47):   navigation,
+ResetLocation.tsx (amy-huang16 on 11/07/2024 at 13:47): }: ResetLocationScreenProps) {
+ResetLocation.tsx (amy-huang16 on 11/07/2024 at 13:47):   const { user, userIsLoading, reloadUser } = useUser();
+ResetLocation.tsx (amy-huang16 on 11/07/2024 at 13:47):   const [location, setLocation] = useState<Location | null>(null);
+ResetLocation.tsx (amy-huang16 on 11/07/2024 at 13:47):   const [loading, setLoading] = useState(true);
+ResetLocation.tsx (amy-huang16 on 11/07/2024 at 13:47):   useEffect(() => {
+ResetLocation.tsx (amy-huang16 on 11/07/2024 at 13:47):     // Fetch the default location only once when component mounts
+ResetLocation.tsx (amy-huang16 on 11/07/2024 at 13:47):     const fetchLocation = async () => {
+ResetLocation.tsx (amy-huang16 on 11/07/2024 at 13:47):       const defaultlocation = await getDefaultLocation(user);
+ResetLocation.tsx (amy-huang16 on 11/07/2024 at 13:47):       setLocation(defaultlocation);
+ResetLocation.tsx (amy-huang16 on 11/07/2024 at 13:47):       setLoading(false);
+ResetLocation.tsx (amy-huang16 on 11/07/2024 at 13:47):     };
+ResetLocation.tsx (amy-huang16 on 11/07/2024 at 13:47):     fetchLocation();
+ResetLocation.tsx (amy-huang16 on 11/07/2024 at 13:47):   }, [user]);
+ResetLocation.tsx (amy-huang16 on 11/07/2024 at 13:47):   if (userIsLoading || loading) {
+ResetLocation.tsx (amy-huang16 on 11/07/2024 at 13:47):     return (
+ResetLocation.tsx (amy-huang16 on 11/07/2024 at 13:47):       <View style={styles.container}>
+ResetLocation.tsx (amy-huang16 on 11/07/2024 at 13:47):         <ActivityIndicator size="small" color="#000000" />
+ResetLocation.tsx (amy-huang16 on 11/07/2024 at 13:47):       </View>
+ResetLocation.tsx (amy-huang16 on 11/07/2024 at 13:47):     );
+ResetLocation.tsx (amy-huang16 on 11/07/2024 at 13:47):   }
+ResetLocation.tsx (amy-huang16 on 11/07/2024 at 13:47):   if (!user) {
+ResetLocation.tsx (amy-huang16 on 11/07/2024 at 13:47):     return <Text>Please log in to edit your location</Text>;
+ResetLocation.tsx (amy-huang16 on 11/07/2024 at 13:47):   }
+ResetLocation.tsx (amy-huang16 on 11/07/2024 at 13:47):   const handleSubmit = async () => {
+ResetLocation.tsx (amy-huang16 on 11/07/2024 at 13:47):     if (location) {
+ResetLocation.tsx (amy-huang16 on 11/07/2024 at 13:47):       await upsertUser(
+ResetLocation.tsx (amy-huang16 on 11/07/2024 at 13:47):         user,
+ResetLocation.tsx (amy-huang16 on 11/07/2024 at 13:47):         user.email,
+ResetLocation.tsx (amy-huang16 on 11/07/2024 at 13:47):         location,
+ResetLocation.tsx (amy-huang16 on 11/07/2024 at 13:47):         user.displayName,
+ResetLocation.tsx (amy-huang16 on 11/07/2024 at 13:47):         user.avatar,
+ResetLocation.tsx (amy-huang16 on 11/07/2024 at 13:47):       );
+ResetLocation.tsx (amy-huang16 on 11/07/2024 at 13:47):       await reloadUser();
+ResetLocation.tsx (amy-huang16 on 11/07/2024 at 13:47):     }
+ResetLocation.tsx (amy-huang16 on 11/07/2024 at 13:47):     navigation.navigate("AuthorizedProfile");
+ResetLocation.tsx (amy-huang16 on 11/07/2024 at 13:47):   };
+ResetLocation.tsx (amy-huang16 on 11/07/2024 at 13:47):   return (
+ResetLocation.tsx (amy-huang16 on 11/07/2024 at 13:47):     <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+ResetLocation.tsx (amy-huang16 on 11/07/2024 at 13:47):       <SafeAreaView style={styles.container}>
+ResetLocation.tsx (amy-huang16 on 11/07/2024 at 13:47):         <Text style={styles.header}>Reset Your Location</Text>
+ResetLocation.tsx (amy-huang16 on 11/07/2024 at 13:47):         {/* MapView with onPress for selecting location */}
+ResetLocation.tsx (amy-huang16 on 11/07/2024 at 13:47):         {location && (
+ResetLocation.tsx (amy-huang16 on 11/07/2024 at 13:47):           <MapView
+ResetLocation.tsx (amy-huang16 on 11/07/2024 at 13:47):             style={styles.map}
+ResetLocation.tsx (amy-huang16 on 11/07/2024 at 13:47):             initialRegion={{
+ResetLocation.tsx (amy-huang16 on 11/07/2024 at 13:47):               latitude: location.latitude ?? 35.9544,
+ResetLocation.tsx (amy-huang16 on 11/07/2024 at 13:47):               longitude: location.longitude ?? -83.9295,
+ResetLocation.tsx (amy-huang16 on 11/07/2024 at 13:47):               latitudeDelta: 0.0922,
+ResetLocation.tsx (amy-huang16 on 11/07/2024 at 13:47):               longitudeDelta: 0.0421,
+ResetLocation.tsx (amy-huang16 on 11/07/2024 at 13:47):             }}
+ResetLocation.tsx (amy-huang16 on 11/07/2024 at 13:47):             onPress={(e) => {
+ResetLocation.tsx (amy-huang16 on 11/07/2024 at 13:47):               const { latitude, longitude } = e.nativeEvent.coordinate;
+ResetLocation.tsx (amy-huang16 on 11/07/2024 at 13:47):               setLocation({ latitude, longitude });
+ResetLocation.tsx (amy-huang16 on 11/07/2024 at 13:47):             }}
+ResetLocation.tsx (amy-huang16 on 11/07/2024 at 13:47):           >
+ResetLocation.tsx (amy-huang16 on 11/07/2024 at 13:47):             {location.latitude !== null && location.longitude !== null && (
+ResetLocation.tsx (amy-huang16 on 11/07/2024 at 13:47):               <Marker coordinate={location} />
+ResetLocation.tsx (amy-huang16 on 11/07/2024 at 13:47):             )}
+ResetLocation.tsx (amy-huang16 on 11/07/2024 at 13:47):           </MapView>
+ResetLocation.tsx (amy-huang16 on 11/07/2024 at 13:47):         )}
+ResetLocation.tsx (amy-huang16 on 11/07/2024 at 13:47):         {/* Save and Cancel Buttons */}
+ResetLocation.tsx (amy-huang16 on 11/07/2024 at 13:47):         <TouchableOpacity
+ResetLocation.tsx (amy-huang16 on 11/07/2024 at 13:47):           style={styles.cancelButton}
+ResetLocation.tsx (amy-huang16 on 11/07/2024 at 13:47):           onPress={() => navigation.navigate("AuthorizedProfile")}
+ResetLocation.tsx (amy-huang16 on 11/07/2024 at 13:47):         >
+ResetLocation.tsx (amy-huang16 on 11/07/2024 at 13:47):           <IonIcons
+ResetLocation.tsx (amy-huang16 on 11/07/2024 at 13:47):             name="close"
+ResetLocation.tsx (amy-huang16 on 11/07/2024 at 13:47):             size={25}
+ResetLocation.tsx (amy-huang16 on 11/07/2024 at 13:47):             color="white"
+ResetLocation.tsx (amy-huang16 on 11/07/2024 at 13:47):             style={{ marginHorizontal: 6 }}
+ResetLocation.tsx (amy-huang16 on 11/07/2024 at 13:47):           />
+ResetLocation.tsx (amy-huang16 on 11/07/2024 at 13:47):           <Text style={styles.buttonText}>Cancel</Text>
+ResetLocation.tsx (amy-huang16 on 11/07/2024 at 13:47):         </TouchableOpacity>
+ResetLocation.tsx (amy-huang16 on 11/07/2024 at 13:47):         <TouchableOpacity style={styles.saveButton} onPress={handleSubmit}>
+ResetLocation.tsx (amy-huang16 on 11/07/2024 at 13:47):           <IonIcons
+ResetLocation.tsx (amy-huang16 on 11/07/2024 at 13:47):             name="checkmark-sharp"
+ResetLocation.tsx (amy-huang16 on 11/07/2024 at 13:47):             size={25}
+ResetLocation.tsx (amy-huang16 on 11/07/2024 at 13:47):             color="white"
+ResetLocation.tsx (amy-huang16 on 11/07/2024 at 13:47):             style={{ marginHorizontal: 6 }}
+ResetLocation.tsx (amy-huang16 on 11/07/2024 at 13:47):           />
+ResetLocation.tsx (amy-huang16 on 11/07/2024 at 13:47):           <Text style={styles.buttonText}>Save</Text>
+ResetLocation.tsx (amy-huang16 on 11/07/2024 at 13:47):         </TouchableOpacity>
+ResetLocation.tsx (amy-huang16 on 11/07/2024 at 13:47):       </SafeAreaView>
+ResetLocation.tsx (amy-huang16 on 11/07/2024 at 13:47):     </TouchableWithoutFeedback>
+ResetLocation.tsx (amy-huang16 on 11/07/2024 at 13:47):   );
+ResetLocation.tsx (amy-huang16 on 11/07/2024 at 13:47): }
+ResetLocation.tsx (amy-huang16 on 11/07/2024 at 13:47): const styles = StyleSheet.create({
+ResetLocation.tsx (amy-huang16 on 11/07/2024 at 13:47):   container: {
+ResetLocation.tsx (amy-huang16 on 11/07/2024 at 13:47):     flex: 1,
+ResetLocation.tsx (amy-huang16 on 11/07/2024 at 13:47):     backgroundColor: "#fff",
+ResetLocation.tsx (amy-huang16 on 11/07/2024 at 13:47):     alignItems: "center",
+ResetLocation.tsx (amy-huang16 on 11/07/2024 at 13:47):     padding: "2%",
+ResetLocation.tsx (amy-huang16 on 11/07/2024 at 13:47):   },
+ResetLocation.tsx (amy-huang16 on 11/07/2024 at 13:47):   header: {
+ResetLocation.tsx (amy-huang16 on 11/07/2024 at 13:47):     fontSize: 20,
+ResetLocation.tsx (amy-huang16 on 11/07/2024 at 13:47):     fontWeight: "bold",
+ResetLocation.tsx (amy-huang16 on 11/07/2024 at 13:47):     color: "#4a3f4c",
+ResetLocation.tsx (amy-huang16 on 11/07/2024 at 13:47):     paddingBottom: "5%",
+ResetLocation.tsx (amy-huang16 on 11/07/2024 at 13:47):   },
+ResetLocation.tsx (amy-huang16 on 11/07/2024 at 13:47):   input: {
+ResetLocation.tsx (amy-huang16 on 11/07/2024 at 13:47):     width: "90%",
+ResetLocation.tsx (amy-huang16 on 11/07/2024 at 13:47):     height: 50,
+ResetLocation.tsx (amy-huang16 on 11/07/2024 at 13:47):     borderColor: "#ccc",
+ResetLocation.tsx (amy-huang16 on 11/07/2024 at 13:47):     borderWidth: 1,
+ResetLocation.tsx (amy-huang16 on 11/07/2024 at 13:47):     borderRadius: 8,
+ResetLocation.tsx (amy-huang16 on 11/07/2024 at 13:47):     paddingHorizontal: 10,
+ResetLocation.tsx (amy-huang16 on 11/07/2024 at 13:47):     marginBottom: "5%",
+ResetLocation.tsx (amy-huang16 on 11/07/2024 at 13:47):     paddingLeft: "5%",
+ResetLocation.tsx (amy-huang16 on 11/07/2024 at 13:47):   },
+ResetLocation.tsx (amy-huang16 on 11/07/2024 at 13:47):   map: {
+ResetLocation.tsx (amy-huang16 on 11/07/2024 at 13:47):     flex: 1,
+ResetLocation.tsx (amy-huang16 on 11/07/2024 at 13:47):     width: "100%",
+ResetLocation.tsx (amy-huang16 on 11/07/2024 at 13:47):   },
+ResetLocation.tsx (amy-huang16 on 11/07/2024 at 13:47):     color: "#4a3f4c",
+ResetLocation.tsx (amy-huang16 on 11/07/2024 at 13:47):   },
+ResetLocation.tsx (amy-huang16 on 11/07/2024 at 13:47):   // Buttons
+ResetLocation.tsx (amy-huang16 on 11/07/2024 at 13:47):   buttonText: {
+ResetLocation.tsx (amy-huang16 on 11/07/2024 at 13:47):     color: "#fff",
+ResetLocation.tsx (amy-huang16 on 11/07/2024 at 13:47):     fontSize: 16,
+ResetLocation.tsx (amy-huang16 on 11/07/2024 at 13:47):     fontWeight: "600",
+ResetLocation.tsx (amy-huang16 on 11/07/2024 at 13:47):   },
+ResetLocation.tsx (amy-huang16 on 11/07/2024 at 13:47):   saveButton: {
+ResetLocation.tsx (amy-huang16 on 11/07/2024 at 13:47):     backgroundColor: "#b38acb", // Light purple color
+ResetLocation.tsx (amy-huang16 on 11/07/2024 at 13:47):     width: "90%",
+ResetLocation.tsx (amy-huang16 on 11/07/2024 at 13:47):     paddingVertical: 10,
+ResetLocation.tsx (amy-huang16 on 11/07/2024 at 13:47):     borderRadius: 8,
+ResetLocation.tsx (amy-huang16 on 11/07/2024 at 13:47):     alignItems: "center",
+ResetLocation.tsx (amy-huang16 on 11/07/2024 at 13:47):     marginTop: 12,
+ResetLocation.tsx (amy-huang16 on 11/07/2024 at 13:47):     flexDirection: "row",
+ResetLocation.tsx (amy-huang16 on 11/07/2024 at 13:47):     justifyContent: "center",
+ResetLocation.tsx (amy-huang16 on 11/07/2024 at 13:47):   },
+ResetLocation.tsx (amy-huang16 on 11/07/2024 at 13:47):   cancelButton: {
+ResetLocation.tsx (amy-huang16 on 11/07/2024 at 13:47):     backgroundColor: "#f4a58a", // Light orange color
+ResetLocation.tsx (amy-huang16 on 11/07/2024 at 13:47):     width: "90%",
+ResetLocation.tsx (amy-huang16 on 11/07/2024 at 13:47):     paddingVertical: 10,
+ResetLocation.tsx (amy-huang16 on 11/07/2024 at 13:47):     borderRadius: 8,
+ResetLocation.tsx (amy-huang16 on 11/07/2024 at 13:47):     alignItems: "center",
+ResetLocation.tsx (amy-huang16 on 11/07/2024 at 13:47):     marginTop: 12,
+ResetLocation.tsx (amy-huang16 on 11/07/2024 at 13:47):     flexDirection: "row",
+ResetLocation.tsx (amy-huang16 on 11/07/2024 at 13:47):     justifyContent: "center",
+ResetLocation.tsx (amy-huang16 on 11/07/2024 at 13:47):   },
+ResetLocation.tsx (amy-huang16 on 11/07/2024 at 13:47): });
+EditProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):   FlatList,
+EditProfile.tsx (amy-huang16 on 11/06/2024 at 17:50): import { default as IonIcons } from "react-native-vector-icons/Ionicons";
+EditProfile.tsx (amy-huang16 on 11/06/2024 at 17:50): import { Avatar } from "@/types";
+EditProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):   emoji: z.string().nullable(),
+EditProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):   background: z.string().nullable(),
+EditProfile.tsx (amy-huang16 on 11/06/2024 at 17:50): const emojis = [
+EditProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):   "😀",
+EditProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):   "😊",
+EditProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):   "😇",
+EditProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):   "😘",
+EditProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):   "😎",
+EditProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):   "🥳",
+EditProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):   "😴",
+EditProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):   "🤠",
+EditProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):   "🌻",
+EditProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):   "☀️",
+EditProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):   "🌙",
+EditProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):   "🌟",
+EditProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):   "🌈",
+EditProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):   "❤️",
+EditProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):   "🤖",
+EditProfile.tsx (amy-huang16 on 11/06/2024 at 17:50): ];
+EditProfile.tsx (amy-huang16 on 11/06/2024 at 17:50): const colors = [
+EditProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):   "#FF677D", // Pastel Red
+EditProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):   "#FFDFBA", // Pastel Orange
+EditProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):   "#F8ECA0", // Darker Pastel Yellow
+EditProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):   "#BAFFC9", // Pastel Green
+EditProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):   "#BAE1FF", // Pastel Blue
+EditProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):   "#FFABAB", // Light Pastel Red
+EditProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):   "#FFC3A0", // Light Pastel Coral
+EditProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):   "#F7B7E6", // Pastel pink
+EditProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):   "#D3C5FF", // Light Pastel Purple
+EditProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):   "#D3D3D3", // Light Gray
+EditProfile.tsx (amy-huang16 on 11/06/2024 at 17:50): ];
+EditProfile.tsx (amy-huang16 on 11/06/2024 at 17:50): type EmojiPickerProps = {
+EditProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):   value: string | null;
+EditProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):   onChange: (emoji: string) => void;
+EditProfile.tsx (amy-huang16 on 11/06/2024 at 17:50): };
+EditProfile.tsx (amy-huang16 on 11/06/2024 at 17:50): const EmojiPicker: React.FC<EmojiPickerProps> = ({ value, onChange }) => {
+EditProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):   return (
+EditProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):     <FlatList
+EditProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):       data={emojis}
+EditProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):       keyExtractor={(item) => item}
+EditProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):       numColumns={5}
+EditProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):       renderItem={({ item }) => (
+EditProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):         <TouchableOpacity
+EditProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):           onPress={() => onChange(item)}
+EditProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):           style={[
+EditProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):             styles.emojiItem,
+EditProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):             item === value && styles.selectedEmojiItem, // Apply border if selected
+EditProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):           ]}
+EditProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):         >
+EditProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):           <Text style={styles.emojiText}>{item}</Text>
+EditProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):         </TouchableOpacity>
+EditProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):       )}
+EditProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):     />
+EditProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):   );
+EditProfile.tsx (amy-huang16 on 11/06/2024 at 17:50): };
+EditProfile.tsx (amy-huang16 on 11/06/2024 at 17:50): type ColorPickerProps = {
+EditProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):   value: string | null;
+EditProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):   onChange: (color: string) => void;
+EditProfile.tsx (amy-huang16 on 11/06/2024 at 17:50): };
+EditProfile.tsx (amy-huang16 on 11/06/2024 at 17:50): const ColorPicker: React.FC<ColorPickerProps> = ({ value, onChange }) => {
+EditProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):   return (
+EditProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):     <FlatList
+EditProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):       data={colors}
+EditProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):       keyExtractor={(item) => item}
+EditProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):       numColumns={5}
+EditProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):       renderItem={({ item }) => (
+EditProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):         <TouchableOpacity
+EditProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):           onPress={() => onChange(item)}
+EditProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):           style={[
+EditProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):             styles.colorItem,
+EditProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):             { backgroundColor: item },
+EditProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):             item === value && styles.selectedColorItem,
+EditProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):           ]}
+EditProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):         />
+EditProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):       )}
+EditProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):     />
+EditProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):   );
+EditProfile.tsx (amy-huang16 on 11/06/2024 at 17:50): };
+EditProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):       emoji: user?.avatar.emoji,
+EditProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):       background: user?.avatar.background,
+EditProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):     const { displayName, emoji, background } = data;
+EditProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):     let newAvatar: Avatar;
+EditProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):     if (!emoji) {
+EditProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):       newAvatar = { emoji: null, background: null }; // NullAvatar
+EditProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):     } else {
+EditProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):       newAvatar = {
+EditProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):         emoji: emoji,
+EditProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):         background: background || colors[0], // ValidAvatar with fallback color
+EditProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):       };
+EditProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):     }
+EditProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):     await upsertUser(user, user.email, user.location, displayName, newAvatar);
+EditProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):         <Text style={styles.header}>Edit Your Profile</Text>
+EditProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):         {/* Edit Name */}
+EditProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):         {/* Emoji Icon Picker */}
+EditProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):         <Text style={styles.fieldTitle}>Profile Icon</Text>
+EditProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):         <View style={styles.avatarContainer}>
+EditProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):           <Controller
+EditProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):             control={control}
+EditProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):             name="emoji"
+EditProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):             render={({ field: { onChange, value } }) => (
+EditProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):               <EmojiPicker value={value} onChange={onChange} />
+EditProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):             )}
+EditProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):           />
+EditProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):           <View style={styles.line} />
+EditProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):           <Controller
+EditProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):             control={control}
+EditProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):             name="background"
+EditProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):             render={({ field: { onChange, value } }) => (
+EditProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):               <ColorPicker value={value} onChange={onChange} />
+EditProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):             )}
+EditProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):           />
+EditProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):         </View>
+EditProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):         {/* Save and Cancel Buttons */}
+EditProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):           style={styles.cancelButton}
+EditProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):           onPress={() => navigation.navigate("AuthorizedProfile")}
+EditProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):           <IonIcons
+EditProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):             name="close"
+EditProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):             size={25}
+EditProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):             color="white"
+EditProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):             style={{ marginHorizontal: 6 }}
+EditProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):           />
+EditProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):           <Text style={styles.buttonText}>Cancel</Text>
+EditProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):           style={styles.saveButton}
+EditProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):           onPress={handleSubmit(onSubmit)}
+EditProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):           <IonIcons
+EditProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):             name="checkmark-sharp"
+EditProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):             size={25}
+EditProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):             color="white"
+EditProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):             style={{ marginHorizontal: 6 }}
+EditProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):           />
+EditProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):           <Text style={styles.buttonText}>Save</Text>
+EditProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):     fontSize: 20,
+EditProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):     fontWeight: "bold",
+EditProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):     color: "#4a3f4c",
+EditProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):     paddingTop: "10%",
+EditProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):     paddingLeft: "7%",
+EditProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):     color: "#5A5A5A",
+EditProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):     width: "90%",
+EditProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):     paddingLeft: "5%",
+EditProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):     width: "90%",
+EditProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):     flexDirection: "row",
+EditProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):     justifyContent: "center",
+EditProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):     width: "90%",
+EditProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):     flexDirection: "row",
+EditProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):     justifyContent: "center",
+EditProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):   },
+EditProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):   // Emoji Picker
+EditProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):   avatarContainer: {
+EditProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):     width: "90%",
+EditProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):     justifyContent: "center",
+EditProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):     padding: 20,
+EditProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):     borderColor: "#ccc",
+EditProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):     borderWidth: 1,
+EditProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):     borderRadius: 8,
+EditProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):     marginBottom: "3%",
+EditProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):   },
+EditProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):   emojiItem: {
+EditProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):     width: 50,
+EditProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):     height: 50,
+EditProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):     alignItems: "center",
+EditProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):     justifyContent: "center",
+EditProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):     margin: 5,
+EditProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):   },
+EditProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):   selectedEmojiItem: {
+EditProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):     borderWidth: 2,
+EditProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):     borderRadius: 50,
+EditProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):     borderColor: "#4a3f4c",
+EditProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):   },
+EditProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):   emojiText: {
+EditProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):     fontSize: 30,
+EditProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):     marginLeft: 2,
+EditProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):   },
+EditProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):   line: {
+EditProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):     height: 1,
+EditProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):     backgroundColor: "#ccc",
+EditProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):   },
+EditProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):   // Color Picker
+EditProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):   colorItem: {
+EditProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):     width: 40,
+EditProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):     height: 40,
+EditProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):     borderRadius: 20,
+EditProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):     margin: 10,
+EditProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):   },
+EditProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):   selectedColorItem: {
+EditProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):     borderWidth: 2,
+EditProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):     borderColor: "#4a3f4c",
+SignUp.tsx   (amy-huang16 on 11/06/2024 at 17:50):       const avatar = {
+SignUp.tsx   (amy-huang16 on 11/06/2024 at 17:50):         emoji: null,
+SignUp.tsx   (amy-huang16 on 11/06/2024 at 17:50):         background: null,
+SignUp.tsx   (amy-huang16 on 11/06/2024 at 17:50):       };
+SignUp.tsx   (amy-huang16 on 11/06/2024 at 17:50):         avatar,
+SignUp.tsx   (amy-huang16 on 11/06/2024 at 17:50):       await upsertUser(solSyncUser, email, location, displayName, avatar);
+index.tsx    (amy-huang16 on 11/07/2024 at 13:47): import ResetLocation from "./ResetLocation";
+index.tsx    (amy-huang16 on 11/07/2024 at 13:47):   ResetLocation: undefined;
+index.tsx    (amy-huang16 on 11/07/2024 at 13:47):           <Stack.Screen
+index.tsx    (amy-huang16 on 11/07/2024 at 13:47):             name="ResetLocation"
+index.tsx    (amy-huang16 on 11/07/2024 at 13:47):             component={ResetLocation}
+index.tsx    (amy-huang16 on 11/07/2024 at 13:47):             options={{ headerShown: false, presentation: "modal" }}
+index.tsx    (amy-huang16 on 11/07/2024 at 13:47):           />
+pnpm-lock.yaml (amy-huang16 on 11/07/2024 at 13:47):       react-native-maps:
+pnpm-lock.yaml (amy-huang16 on 11/07/2024 at 13:47):         specifier: 1.14.0
+pnpm-lock.yaml (amy-huang16 on 11/07/2024 at 13:47):         version: 1.14.0(react-native@0.74.5(@babel/core@7.26.0)(@babel/preset-env@7.26.0(@babel/core@7.26.0))(@types/react@18.2.79)(react@18.2.0))(react@18.2.0)
+pnpm-lock.yaml (amy-huang16 on 11/07/2024 at 13:47):   '@types/geojson@7946.0.14':
+pnpm-lock.yaml (amy-huang16 on 11/07/2024 at 13:47):     resolution: {integrity: sha512-WCfD5Ht3ZesJUsONdhvm84dmzWOiOzOAqOncN0++w0lBw1o8OuDNJF2McvvCef/yBqb/HYRahp1BYtODFQ8bRg==}
+pnpm-lock.yaml (amy-huang16 on 11/07/2024 at 13:47):   react-native-maps@1.14.0:
+pnpm-lock.yaml (amy-huang16 on 11/07/2024 at 13:47):     resolution: {integrity: sha512-ai7h4UdRLGPFCguz1fI8n4sKLEh35nZXHAH4nSWyAeHGrN8K9GjICu9Xd4Q5Ok4h+WwrM6Xz5pGbF3Qm1tO6iQ==}
+pnpm-lock.yaml (amy-huang16 on 11/07/2024 at 13:47):     engines: {node: '>=18'}
+pnpm-lock.yaml (amy-huang16 on 11/07/2024 at 13:47):     peerDependencies:
+pnpm-lock.yaml (amy-huang16 on 11/07/2024 at 13:47):       react: '>= 17.0.1'
+pnpm-lock.yaml (amy-huang16 on 11/07/2024 at 13:47):       react-native: '>= 0.64.3'
+pnpm-lock.yaml (amy-huang16 on 11/07/2024 at 13:47):       react-native-web: '>= 0.11'
+pnpm-lock.yaml (amy-huang16 on 11/07/2024 at 13:47):     peerDependenciesMeta:
+pnpm-lock.yaml (amy-huang16 on 11/07/2024 at 13:47):       react-native-web:
+pnpm-lock.yaml (amy-huang16 on 11/07/2024 at 13:47):         optional: true
+pnpm-lock.yaml (amy-huang16 on 11/07/2024 at 13:47):   '@types/geojson@7946.0.14': {}
+pnpm-lock.yaml (amy-huang16 on 11/07/2024 at 13:47):   react-native-maps@1.14.0(react-native@0.74.5(@babel/core@7.26.0)(@babel/preset-env@7.26.0(@babel/core@7.26.0))(@types/react@18.2.79)(react@18.2.0))(react@18.2.0):
+pnpm-lock.yaml (amy-huang16 on 11/07/2024 at 13:47):     dependencies:
+pnpm-lock.yaml (amy-huang16 on 11/07/2024 at 13:47):       '@types/geojson': 7946.0.14
+pnpm-lock.yaml (amy-huang16 on 11/07/2024 at 13:47):       react: 18.2.0
+pnpm-lock.yaml (amy-huang16 on 11/07/2024 at 13:47):       react-native: 0.74.5(@babel/core@7.26.0)(@babel/preset-env@7.26.0(@babel/core@7.26.0))(@types/react@18.2.79)(react@18.2.0)
+AuthorizedProfile.tsx (amy-huang16 on 11/07/2024 at 13:47):   const { user, userIsLoading } = useUser();
+AuthorizedProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):       <View
+AuthorizedProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):         style={[
+AuthorizedProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):           styles.circle,
+AuthorizedProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):           { backgroundColor: user.avatar.background || "white" }, // Set chosen or default color
+AuthorizedProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):         ]}
+AuthorizedProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):       >
+AuthorizedProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):         {user.avatar.emoji ? (
+AuthorizedProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):           <Text style={styles.emojiText}>{user.avatar.emoji}</Text>
+AuthorizedProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):         ) : (
+AuthorizedProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):           <FAIcon name="user-circle" size={120} color="gray"></FAIcon>
+AuthorizedProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):         )}
+AuthorizedProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):       </View>
+AuthorizedProfile.tsx (amy-huang16 on 11/07/2024 at 13:47):         onPress={() => navigation.navigate("ResetLocation")}
+AuthorizedProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):     color: "#4a3f4c",
+AuthorizedProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):   // Avatar Icon
+AuthorizedProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):   circle: {
+AuthorizedProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):     width: 120,
+AuthorizedProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):     height: 120,
+AuthorizedProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):     borderRadius: 100, // Makes it a circle
+AuthorizedProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):     justifyContent: "center",
+AuthorizedProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):     alignItems: "center",
+AuthorizedProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):   },
+AuthorizedProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):   emojiText: {
+AuthorizedProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):     fontSize: 50,
+AuthorizedProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):     marginLeft: 4,
+AuthorizedProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):   },
+AuthorizedProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):   // Info Boxes
+AuthorizedProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):   // Buttons
+AuthorizedProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):   requestDateButton: {
+AuthorizedProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):     marginTop: 10,
+AuthorizedProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):   locationButton: {
+AuthorizedProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):     backgroundColor: "#b38acb", // Light purple color
+AuthorizedProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):   logOutButton: {
+AuthorizedProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):     backgroundColor: "#f4a58a", // Light orange color
+AuthorizedProfile.tsx (amy-huang16 on 11/06/2024 at 17:50):     marginTop: 10,
