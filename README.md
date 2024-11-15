@@ -36,7 +36,7 @@ The initial inspiration for this product was the Hindu practice known as Agnihot
 2. Obtain a copy of the .env file from one of the SolSync team members and place it in the root directory of the project
 3. Run `pnpm install` to install all dependencies
 4. Run `pnpm start` to start the app. If you run into problems with this command, run `npx expo start` instead.
-5. As of November 13th, 2024, the Expo Go app only supports Expo SDK version 52 or above. This app uses Expo version 51. To test the app, you must have a MacBook with XCode installed to run the iOS emulator. Once you have ran `pnpm start` or `npx expo start`, follow thw instructions on the command line to open the app on your emulator.
+5. As of November 13th, 2024, the Expo Go app only supports Expo SDK version 52 or above. This app uses Expo version 51. To test the app, you must have a MacBook with XCode installed to run the iOS emulator. Once you have ran `pnpm start` or `npx expo start`, follow the instructions on the command line to open the app on your emulator.
 
 ## Usage
 
